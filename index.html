@@ -77,7 +77,23 @@
         .save-btn { background: #3498db; color: #fff; }
 
         @media (max-width: 600px) {
-            #lang-selector { top: auto; bottom: 120px; right: 50%; transform: translateX(50%); }
+            /* Posiciona as bandeiras no topo em celulares */
+            #lang-selector { 
+                top: 15px; 
+                bottom: auto; 
+                right: 50%; 
+                transform: translateX(50%); 
+                gap: 8px; 
+            }
+            
+            #question { 
+                font-size: 1.3rem; 
+            }
+            
+            /* Ajuste opcional para o header não bater nas bandeiras */
+            #ui-header {
+                margin-top: 40px;
+            }
         }
     </style>
 </head>
