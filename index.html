@@ -8,6 +8,12 @@
     <meta property="og:title" content="Pixel Click: Global Challenge">
 <meta property="og:description" content="Consegue bater o recorde mundial de reflexos?">
 <meta property="og:image" content="link-de-uma-print-do-seu-jogo.png">
+<script>
+  window.aiptag = window.aiptag || {cmd: []};
+  aiptag.cmd.display = aiptag.cmd.display || [];
+  aiptag.cmd.player = aiptag.cmd.player || [];
+</script>
+<script async src="https://api.adinplay.com/libs/aiptag/pub/XXXXX/XXXXX/tag.min.js"></script>
     <style>
         :root { 
             --bg-color: #121212; 
@@ -151,9 +157,14 @@
     <h1 id="ui-over-title" style="color:#ff4757">GAME OVER!</h1>
     <p style="font-size: 1.5rem">Score: <span id="final-score">0</span></p>
 
-    <div id="ad-gameover" style="width: 300px; height: 250px; background: rgba(255,255,255,0.05); margin: 15px auto; display: flex; align-items: center; justify-content: center; border: 1px dashed #333;">
-        <span style="color: #444; font-size: 10px;">ANÚNCIO</span>
-    </div>
+    <div id="ad-gameover" style="width: 300px; height: 250px; margin: 15px auto;">
+    <div id="pixel-click-game-over-ad"></div>
+    <script>
+        aiptag.cmd.display.push(function() { 
+            adpDisplay('pixel-click-game-over-ad'); 
+        });
+    </script>
+</div>
 
     <div id="new-record-ui" style="display:none">
         <p style="color: var(--accent); font-weight: bold;">NOVO RECORDE MUNDIAL!</p>
@@ -327,15 +338,19 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         }
 
         function over() {
-            clearInterval(timer);
-            document.getElementById('final-score').textContent = score;
-            document.getElementById('screen-over').style.display = 'flex';
-            
-            // 4. VERIFICAÇÃO DE RECORDE: Só mostra o campo de salvar se superar o recorde mundial
-            if (score > globalBest) {
-                document.getElementById('new-record-ui').style.display = 'block';
-            }
-        }
+    clearInterval(timer);
+    document.getElementById('final-score').textContent = score;
+    document.getElementById('screen-over').style.display = 'flex';
+    
+    // Atualiza o anúncio da AdinPlay
+    if (typeof aiptag !== "undefined") {
+        aiptag.cmd.display.push(function() { adpDisplay('pixel-click-game-over-ad'); });
+    }
+
+    if (score > globalBest) {
+        document.getElementById('new-record-ui').style.display = 'block';
+    }
+}
 
         async function saveToRanking() {
             const handle = document.getElementById('insta-handle').value || "@anon";
