@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Click: Global Stroop Fixed</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root { 
+            --bg-color: #121212; 
+            --border-normal: 4px solid #fff; 
+            --accent: #2ed573; 
+            --accent-glow: 0 0 15px #2ed573;
+        }
+        
+        body { 
+            background-color: var(--bg-color); 
+            color: white; 
+            font-family: 'Courier New', monospace; 
+            margin: 0; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        #lang-selector { position: absolute; top: 15px; right: 15px; display: flex; gap: 12px; z-index: 200; }
+        .lang-btn { width: 40px; height: 30px; cursor: pointer; filter: grayscale(0.8); transition: 0.3s; border: 2px solid transparent; }
+        .lang-btn.active { filter: grayscale(0); transform: scale(1.2); border-color: white; }
+        .lang-btn img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+
+        #game-container { 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            width: 90%;
+            max-width: 400px;
+        }
+
+        #ui-header { width: 100%; display: flex; justify-content: space-between; font-size: 1.3rem; margin-bottom: 10px; font-weight: bold;}
+        #timer-box { width: 100%; height: 22px; border: var(--border-normal); background: #333; margin-bottom: 25px; position: relative; overflow: hidden; }
+        #timer-bar { height: 100%; width: 100%; background: var(--accent); position: absolute; left: 0; top: 0; }
+        
+        #question { font-size: 1.6rem; text-align: center; height: 80px; font-weight: bold; margin-bottom: 20px; display: flex; align-items: center; justify-content: center;}
+        #question-color-text { margin-left: 10px; padding: 5px 10px; background: rgba(255,255,255,0.1); border-radius: 4px;}
+
+        #grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; margin-bottom: 20px; }
+        .btn { aspect-ratio: 1/1; border: var(--border-normal); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: bold; cursor: pointer; text-transform: uppercase; color: #fff; text-shadow: 2px 2px #000; }
+        
+        #opt-0 { background: #ff4757; } #opt-1 { background: #2e86de; } 
+        #opt-2 { background: #2ed573; } #opt-3 { background: #eccc68; color: #000; text-shadow: none;}
+
+        #champion-spotlight {
+            width: 100%;
+            background: #1a1a1a;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-top: 2px solid #333;
+        }
+
+        #champ-title { font-size: 0.9rem; color: var(--accent); margin: 0 0 5px 0; font-weight: bold; text-shadow: var(--accent-glow); text-transform: uppercase; }
+        #champ-info { font-size: 1.4rem; font-weight: bold; display: flex; align-items: center; gap: 12px; }
+        #champ-score { color: #feca57; }
+
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.96); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; text-align: center; padding: 20px; }
+        input { padding: 12px; font-size: 1.2rem; margin: 15px 0; width: 85%; max-width: 260px; text-align: center; background: #222; color: #fff; border: 2px solid var(--accent); font-family: inherit;}
+        button { padding: 15px 20px; font-size: 1.1rem; cursor: pointer; font-family: inherit; margin-top: 10px; border: 4px solid #000; font-weight: bold; width: 85%; max-width: 260px; text-transform: uppercase; }
+        .retry-btn { background: var(--accent); color: #000; }
+        .save-btn { background: #3498db; color: #fff; }
+
+        @media (max-width: 600px) {
+            #lang-selector { top: auto; bottom: 120px; right: 50%; transform: translateX(50%); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="lang-selector">
+        <div class="lang-btn active" onclick="setLang('pt')" id="btn-pt"><img src="https://flagcdn.com/w80/br.png" alt="Brazil"></div>
+        <div class="lang-btn" onclick="setLang('en')" id="btn-en"><img src="https://flagcdn.com/w80/gb.png" alt="UK"></div>
+        <div class="lang-btn" onclick="setLang('fr')" id="btn-fr"><img src="https://flagcdn.com/w80/fr.png" alt="France"></div>
+        <div class="lang-btn" onclick="setLang('es')" id="btn-es"><img src="https://flagcdn.com/w80/es.png" alt="Spain"></div>
+    </div>
+
+    <div id="game-container">
+        <div id="ui-header"><span id="ui-score-label">PONTOS: <b id="score">0</b></span></div>
+        <div id="timer-box"><div id="timer-bar"></div></div>
+        <div id="question"><span id="q-prefix">CLIQUE NA COR:</span> <span id="question-color-text">---</span></div>
+        <div id="grid">
+            <div class="btn" id="opt-0" onclick="check(0)"></div>
+            <div class="btn" id="opt-1" onclick="check(1)"></div>
+            <div class="btn" id="opt-2" onclick="check(2)"></div>
+            <div class="btn" id="opt-3" onclick="check(3)"></div>
+        </div>
+    </div>
+
+    <div id="champion-spotlight">
+        <p id="champ-title">👑 ATUAL CAMPEÃO 👑</p>
+        <div id="champ-info">
+            <span id="champ-name">@aguardando</span>
+            <span id="champ-score">0 pts</span>
+        </div>
+    </div>
+
+    <div id="screen-start" class="overlay">
+        <h1 id="ui-title">PIXEL CLICK</h1>
+        <p id="ui-desc">Confie na PALAVRA, não na COR!</p>
+        <button onclick="start()" class="retry-btn" id="ui-start-btn">JOGAR</button>
+    </div>
+
+    <div id="screen-over" class="overlay" style="display:none">
+        <h1 id="ui-over-title" style="color:#ff4757">GAME OVER!</h1>
+        <p style="font-size: 1.5rem">Score: <span id="final-score">0</span></p>
+        <div id="new-record-ui" style="display:none">
+            <p style="color: var(--accent); font-weight: bold;">NOVO RECORDE MUNDIAL!</p>
+            <input type="text" id="insta-handle" placeholder="@seu_instagram">
+            <button onclick="saveToRanking()" class="save-btn">SALVAR RECORDE</button>
+        </div>
+        <button onclick="start()" class="retry-btn" id="ui-retry-btn">REPETIR</button>
+    </div>
+
+    <script>
+        // 2. CONFIGURAÇÃO: Insira suas credenciais aqui
+        // Substitua estas linhas no seu código:
+const SUPABASE_URL = 'https://jsjzpilzmpxestbrhado.supabase.co'; 
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzanpwaWx6bXB4ZXN0YnJoYWRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3OTc0NDAsImV4cCI6MjA5MDM3MzQ0MH0.0WXO31A9lYJLMYWnQqlvFArTn4WNN-umhhD23OefgT0'; // Copie a chave completa do seu painel
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        const langs = {
+            pt: { title: "PIXEL CLICK", desc: "Confie na PALAVRA, não na COR!", start: "JOGAR", score: "PONTOS", qPrefix: "CLIQUE NA COR:", champTitle: "👑 ATUAL CAMPEÃO 👑", waiting: "@aguardando", over: "FIM DE JOGO!", save: "SALVAR", retry: "REPETIR", colors: ["VERMELHO", "AZUL", "VERDE", "AMARELO"], even: "PAR?", odd: "ÍMPAR?" },
+            en: { title: "PIXEL CLICK", desc: "Trust the WORD, not the COLOR!", start: "START", score: "SCORE", qPrefix: "CLICK THE COLOR:", champTitle: "👑 CURRENT CHAMPION 👑", waiting: "@waiting", over: "GAME OVER!", save: "SAVE", retry: "RETRY", colors: ["RED", "BLUE", "GREEN", "YELLOW"], even: "EVEN?", odd: "ODD?" },
+            fr: { title: "PIXEL CLICK", desc: "Croyez le MOT, pas la COULEUR!", start: "JOUER", score: "POINTS", qPrefix: "CLIQUEZ COULEUR:", champTitle: "👑 CHAMPION ACTUEL 👑", waiting: "@en_attente", over: "FIN DE JEU!", save: "SAUVER", retry: "REJOUER", colors: ["ROUGE", "BLEU", "VERT", "JAUNE"], even: "PAIR?", odd: "IMPAIR?" },
+            es: { title: "PIXEL CLICK", desc: "¡Confía en la PALABRA, no el COLOR!", start: "JUGAR", score: "PUNTOS", qPrefix: "CLIC EN COLOR:", champTitle: "👑 CAMPEÓN ACTUAL 👑", waiting: "@esperando", over: "¡FIN DEL JUEGO!", save: "GUARDAR", retry: "REPETIR", colors: ["ROJO", "AZUL", "VERDE", "AMARILLO"], even: "¿PAR?", odd: "¿IMPAR?" }
+        };
+
+        let currentLang = 'pt', score = 0, timer, correctIdx, currentSpeed = 4000, globalBest = 0;
+        const colorValues = ["#ff4757", "#2e86de", "#2ed573", "#eccc68"];
+
+        updateChampionUI();
+
+        function setLang(l) {
+            currentLang = l;
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-' + l).classList.add('active');
+            document.getElementById('ui-title').textContent = langs[l].title;
+            document.getElementById('ui-desc').textContent = langs[l].desc;
+            document.getElementById('ui-start-btn').textContent = langs[l].start;
+            document.getElementById('ui-score-label').firstChild.textContent = langs[l].score + ": ";
+            document.getElementById('q-prefix').textContent = langs[l].qPrefix;
+            document.getElementById('ui-over-title').textContent = langs[l].over;
+            document.getElementById('ui-retry-btn').textContent = langs[l].retry;
+            document.getElementById('champ-title').textContent = langs[l].champTitle;
+            updateChampionUI();
+        }
+
+        async function updateChampionUI() {
+            // 3. BUSCAR RECORDE: Pega o maior valor do banco de dados
+            const { data, error } = await supabaseClient
+                .from('ranking')
+                .select('name, points')
+                .order('points', { ascending: false })
+                .limit(1);
+
+            if (data && data.length > 0) {
+                globalBest = data[0].points;
+                document.getElementById('champ-name').textContent = data[0].name;
+                document.getElementById('champ-score').textContent = data[0].points + " pts";
+            } else {
+                document.getElementById('champ-name').textContent = langs[currentLang].waiting;
+                document.getElementById('champ-score').textContent = "0 pts";
+            }
+        }
+
+        function start() {
+            score = 0; currentSpeed = 4000;
+            document.getElementById('score').textContent = score;
+            document.getElementById('screen-start').style.display = 'none';
+            document.getElementById('screen-over').style.display = 'none';
+            document.getElementById('new-record-ui').style.display = 'none';
+            next();
+        }
+
+        function next() {
+            const r = Math.random();
+            const stroopChance = Math.min(score / 40, 0.7); 
+            if (r < 0.3) genMath(); 
+            else if (r < 0.3 + stroopChance) genColors(); 
+            else genLogic();
+            resetTimer();
+        }
+
+        function genMath() {
+            let n1, n2, res, opLabel;
+            const randOp = Math.random();
+            if (score > 20 && randOp > 0.7) { 
+                n1 = Math.floor(Math.random() * 10) + 1; n2 = Math.floor(Math.random() * 6) + 1;
+                res = n1 * n2; opLabel = "x";
+            } else if (score > 8 && randOp > 0.4) {
+                n1 = Math.floor(Math.random() * (15 + score)) + 5; n2 = Math.floor(Math.random() * n1) + 1;
+                res = n1 - n2; opLabel = "-";
+            } else {
+                n1 = Math.floor(Math.random() * (10 + score)) + 1; n2 = Math.floor(Math.random() * (10 + score)) + 1;
+                res = n1 + n2; opLabel = "+";
+            }
+            document.getElementById('question-color-text').textContent = `${n1} ${opLabel} ${n2}`;
+            document.getElementById('question-color-text').style.color = "white";
+            let opts = new Set([res]);
+            while(opts.size < 4) {
+                let fake = res + (Math.floor(Math.random() * 15) - 7);
+                if (fake >= 0 && fake !== res) opts.add(fake);
+            }
+            render(Array.from(opts), res);
+        }
+
+        function genColors() {
+            correctIdx = Math.floor(Math.random() * 4);
+            let fontColorIdx;
+            do { fontColorIdx = Math.floor(Math.random() * 4); } while (fontColorIdx === correctIdx);
+            const qSpan = document.getElementById('question-color-text');
+            qSpan.textContent = langs[currentLang].colors[correctIdx];
+            qSpan.style.color = colorValues[fontColorIdx];
+            for (let i = 0; i < 4; i++) {
+                document.getElementById(`opt-${i}`).textContent = langs[currentLang].colors[Math.floor(Math.random() * 4)];
+            }
+        }
+
+        function genLogic() {
+            const findEven = Math.random() > 0.5;
+            const qSpan = document.getElementById('question-color-text');
+            qSpan.textContent = findEven ? langs[currentLang].even : langs[currentLang].odd;
+            qSpan.style.color = "white";
+            let opts = []; let correct;
+            if (findEven) {
+                correct = (Math.floor(Math.random() * 30) * 2);
+                while(opts.length < 3) {
+                    let n = Math.floor(Math.random() * 60);
+                    if (n % 2 !== 0 && !opts.includes(n)) opts.push(n);
+                }
+            } else {
+                correct = (Math.floor(Math.random() * 30) * 2) + 1;
+                while(opts.length < 3) {
+                    let n = Math.floor(Math.random() * 60);
+                    if (n % 2 === 0 && !opts.includes(n)) opts.push(n);
+                }
+            }
+            opts.push(correct);
+            render(opts, correct);
+        }
+
+        function render(arr, correct) {
+            let shuffled = arr.sort(() => Math.random() - 0.5);
+            correctIdx = shuffled.indexOf(correct);
+            for(let i=0; i<4; i++) document.getElementById(`opt-${i}`).textContent = shuffled[i];
+        }
+
+        function check(idx) {
+            if (idx === correctIdx) {
+                score++;
+                document.getElementById('score').textContent = score;
+                currentSpeed = Math.max(850, 4000 - (score * 95));
+                next();
+            } else over();
+        }
+
+        function resetTimer() {
+            clearInterval(timer);
+            let startT = Date.now();
+            const bar = document.getElementById('timer-bar');
+            timer = setInterval(() => {
+                let elapsed = Date.now() - startT;
+                let timePerc = 100 - (elapsed / currentSpeed * 100);
+                bar.style.width = timePerc + '%';
+                if (timePerc > 50) bar.style.backgroundColor = "#2ed573";
+                else if (timePerc > 25) bar.style.backgroundColor = "#f1c40f";
+                else bar.style.backgroundColor = "#ff4757";
+                if (timePerc <= 0) over();
+            }, 30);
+        }
+
+        function over() {
+            clearInterval(timer);
+            document.getElementById('final-score').textContent = score;
+            document.getElementById('screen-over').style.display = 'flex';
+            
+            // 4. VERIFICAÇÃO DE RECORDE: Só mostra o campo de salvar se superar o recorde mundial
+            if (score > globalBest) {
+                document.getElementById('new-record-ui').style.display = 'block';
+            }
+        }
+
+        async function saveToRanking() {
+            const handle = document.getElementById('insta-handle').value || "@anon";
+            
+            // 5. ATUALIZAÇÃO ÚNICA: Apaga registros antigos e insere o novo recordista
+            // Para maior segurança, deletamos todos os registros antes de inserir o novo campeão
+            await supabaseClient.from('ranking').delete().neq('points', -1); 
+            
+            const { error } = await supabaseClient
+                .from('ranking')
+                .insert([{ name: handle, points: score }]);
+
+            if (!error) {
+                updateChampionUI();
+                document.getElementById('new-record-ui').style.display = 'none';
+                alert("Novo Recorde Mundial salvo!");
+            }
+        }
+    </script>
+</body>
+</html>
