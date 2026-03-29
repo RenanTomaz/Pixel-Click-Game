@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pixel Click: Global Stroop Fixed</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta property="og:title" content="Pixel Click: Global Challenge">
+<meta property="og:description" content="Consegue bater o recorde mundial de reflexos?">
+<meta property="og:image" content="link-de-uma-print-do-seu-jogo.png">
     <style>
         :root { 
             --bg-color: #121212; 
@@ -140,15 +143,23 @@
     </div>
 
     <div id="screen-over" class="overlay" style="display:none">
-        <h1 id="ui-over-title" style="color:#ff4757">GAME OVER!</h1>
-        <p style="font-size: 1.5rem">Score: <span id="final-score">0</span></p>
-        <div id="new-record-ui" style="display:none">
-            <p style="color: var(--accent); font-weight: bold;">NOVO RECORDE MUNDIAL!</p>
-            <input type="text" id="insta-handle" placeholder="@instagram">
-            <button onclick="saveToRanking()" class="save-btn">SALVAR RECORDE</button>
-        </div>
-        <button onclick="start()" class="retry-btn" id="ui-retry-btn">REPETIR</button>
+    <h1 id="ui-over-title" style="color:#ff4757">GAME OVER!</h1>
+    <p style="font-size: 1.5rem">Score: <span id="final-score">0</span></p>
+
+    <div id="ad-gameover" style="width: 300px; height: 250px; background: rgba(255,255,255,0.05); margin: 15px auto; display: flex; align-items: center; justify-content: center; border: 1px dashed #333;">
+        <span style="color: #444; font-size: 10px;">ANÚNCIO</span>
     </div>
+
+    <div id="new-record-ui" style="display:none">
+        <p style="color: var(--accent); font-weight: bold;">NOVO RECORDE MUNDIAL!</p>
+        <input type="text" id="insta-handle" placeholder="@instagram">
+        <button onclick="saveToRanking()" class="save-btn">SALVAR RECORDE</button>
+    </div>
+    <button onclick="start()" class="retry-btn" id="ui-retry-btn">REPETIR</button>
+    <button onclick="shareGame()" class="retry-btn" id="ui-share-btn" style="margin-top: 10px;">
+    DESAFIE UM AMIGO
+</button>
+</div>
 
     <script>
         // 2. CONFIGURAÇÃO: Insira suas credenciais aqui
@@ -158,11 +169,12 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         const langs = {
-            pt: { title: "PIXEL CLICK", desc: "Confie na PALAVRA, não na COR!", start: "JOGAR", score: "PONTOS", qPrefix: "CLIQUE NA COR:", champTitle: "👑 ATUAL CAMPEÃO 👑", waiting: "@aguardando", over: "FIM DE JOGO!", save: "SALVAR", retry: "REPETIR", colors: ["VERMELHO", "AZUL", "VERDE", "AMARELO"], even: "PAR?", odd: "ÍMPAR?" },
-            en: { title: "PIXEL CLICK", desc: "Trust the WORD, not the COLOR!", start: "START", score: "SCORE", qPrefix: "CLICK THE COLOR:", champTitle: "👑 CURRENT CHAMPION 👑", waiting: "@waiting", over: "GAME OVER!", save: "SAVE", retry: "RETRY", colors: ["RED", "BLUE", "GREEN", "YELLOW"], even: "EVEN?", odd: "ODD?" },
-            fr: { title: "PIXEL CLICK", desc: "Croyez le MOT, pas la COULEUR!", start: "JOUER", score: "POINTS", qPrefix: "CLIQUEZ COULEUR:", champTitle: "👑 CHAMPION ACTUEL 👑", waiting: "@en_attente", over: "FIN DE JEU!", save: "SAUVER", retry: "REJOUER", colors: ["ROUGE", "BLEU", "VERT", "JAUNE"], even: "PAIR?", odd: "IMPAIR?" },
-            es: { title: "PIXEL CLICK", desc: "¡Confía en la PALABRA, no el COLOR!", start: "JUGAR", score: "PUNTOS", qPrefix: "CLIC EN COLOR:", champTitle: "👑 CAMPEÓN ACTUAL 👑", waiting: "@esperando", over: "¡FIN DEL JUEGO!", save: "GUARDAR", retry: "REPETIR", colors: ["ROJO", "AZUL", "VERDE", "AMARILLO"], even: "¿PAR?", odd: "¿IMPAR?" }
-        };
+    pt: { title: "PIXEL CLICK", desc: "Confie na PALAVRA, não na COR!", start: "JOGAR", score: "PONTOS", qPrefix: "CLIQUE NA COR:", champTitle: "👑 ATUAL CAMPEÃO 👑", waiting: "@aguardando", over: "FIM DE JOGO!", save: "SALVAR", retry: "REPETIR", colors: ["VERMELHO", "AZUL", "VERDE", "AMARELO"], even: "PAR?", odd: "ÍMPAR?", share: "DESAFIE UM AMIGO" },
+    en: { title: "PIXEL CLICK", desc: "Trust the WORD, not the COLOR!", start: "START", score: "SCORE", qPrefix: "CLICK THE COLOR:", champTitle: "👑 CURRENT CHAMPION 👑", waiting: "@waiting", over: "GAME OVER!", save: "SAVE", retry: "RETRY", colors: ["RED", "BLUE", "GREEN", "YELLOW"], even: "EVEN?", odd: "ODD?", share: "CHALLENGE A FRIEND" },
+    fr: { title: "PIXEL CLICK", desc: "Croyez le MOT, pas la COULEUR!", start: "JOUER", score: "POINTS", qPrefix: "CLIQUEZ COULEUR:", champTitle: "👑 CHAMPION ACTUEL 👑", waiting: "@en_attente", over: "FIN DE JEU!", save: "SAUVER", retry: "REJOUER", colors: ["ROUGE", "BLEU", "VERT", "JAUNE"], even: "PAIR?", odd: "IMPAIR?", share: "DÉFIER UN AMI" },
+    es: { title: "PIXEL CLICK", desc: "¡Confía en la PALABRA, no el COLOR!", start: "JUGAR", score: "PUNTOS", qPrefix: "CLIC EN COLOR:", champTitle: "👑 CAMPEÓN ACTUAL 👑", waiting: "@esperando", over: "¡FIN DEL JUEGO!", save: "GUARDAR", retry: "REPETIR", colors: ["ROJO", "AZUL", "VERDE", "AMARILLO"], even: "¿PAR?", odd: "¿IMPAR?", share: "DESAFÍA A UN AMIGO" }
+};
+        
 
         let currentLang = 'pt', score = 0, timer, correctIdx, currentSpeed = 4000, globalBest = 0;
         const colorValues = ["#ff4757", "#2e86de", "#2ed573", "#eccc68"];
@@ -181,6 +193,7 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
             document.getElementById('ui-over-title').textContent = langs[l].over;
             document.getElementById('ui-retry-btn').textContent = langs[l].retry;
             document.getElementById('champ-title').textContent = langs[l].champTitle;
+            document.getElementById('ui-share-btn').textContent = langs[l].share;
             updateChampionUI();
         }
 
@@ -336,6 +349,31 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
                 alert("Novo Recorde Mundial salvo!");
             }
         }
+        function shareGame() {
+    // Textos personalizados por idioma
+    const shareMsgs = {
+        pt: `Fiz ${score} pontos no Pixel Click! Duvido você bater meu recorde mundial. Jogue aqui:`,
+        en: `I scored ${score} points on Pixel Click! I bet you can't beat my world record. Play here:`,
+        fr: `J'ai marqué ${score} points sur Pixel Click ! Je parie que tu ne podras pas battre mon record. Joue ici :`,
+        es: `¡Hice ${score} puntos en Pixel Click! Te desafio a superar mi récord mundial. Juega aquí:`
+    };
+
+    const text = shareMsgs[currentLang] || shareMsgs.en;
+    const url = window.location.href;
+
+    if (navigator.share) {
+        // Abre o menu nativo do celular (iMessage, WhatsApp, Instagram, etc)
+        navigator.share({
+            title: 'Pixel Click Challenge',
+            text: text,
+            url: url
+        }).catch(err => console.log("Erro ao compartilhar"));
+    } else {
+        // Caso o navegador seja antigo ou PC, abre o link do WhatsApp como reserva
+        const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text + " " + url)}`;
+        window.open(whatsappUrl, '_blank');
+    }
+}
     </script>
 </body>
 </html>
