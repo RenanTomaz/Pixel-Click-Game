@@ -17,18 +17,19 @@
         }
         
         body { 
-            background-color: var(--bg-color); 
-            color: white; 
-            font-family: 'Courier New', monospace; 
-            margin: 0; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-            user-select: none;
-            touch-action: manipulation;
-        }
+    background-color: var(--bg-color); 
+    color: white; 
+    font-family: 'Courier New', monospace; 
+    margin: 0; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center;
+    justify-content: space-between; /* Distribui o conteúdo entre o topo e o fundo */
+    height: 100vh;
+    overflow: hidden;
+    user-select: none;
+    touch-action: manipulation;
+}
 
         #lang-selector { position: absolute; top: 15px; right: 15px; display: flex; gap: 12px; z-index: 200; }
         .lang-btn { width: 40px; height: 30px; cursor: pointer; filter: grayscale(0.8); transition: 0.3s; border: 2px solid transparent; }
@@ -59,15 +60,19 @@
         #opt-2 { background: #2ed573; } #opt-3 { background: #eccc68; color: #000; text-shadow: none;}
 
         #champion-spotlight {
-            width: 100%;
-            background: #1a1a1a;
-            padding: 5px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            border-top: 2px solid #333;
-        }
+    width: 90%; /* Deixa de ocupar 100% da largura para parecer um card */
+    max-width: 400px; /* Limita o tamanho em ecrãs grandes */
+    background: #1a1a1a;
+    padding: 15px; /* Aumentei o espaço interno */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #333; /* Borda em todos os lados para o efeito de card */
+    border-radius: 12px; /* Cantos arredondados */
+    margin-bottom: 25px; /* ESTE PARÂMETRO SOBE A BARRA NA TELA */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5); /* Sombra para destaque */
+}
 
         #champ-title { font-size: 0.9rem; color: var(--accent); margin: 0 0 5px 0; font-weight: bold; text-shadow: var(--accent-glow); text-transform: uppercase; }
         #champ-info { font-size: 1.4rem; font-weight: bold; display: flex; align-items: center; gap: 12px; }
