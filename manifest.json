@@ -1,0 +1,18 @@
+{
+  "short_name": "Pixel Click",
+  "name": "Pixel Click: Global Challenge",
+  "description": "Teste os seus reflexos neste desafio Stroop definitivo.",
+  "icons": [
+    {
+      "src": "https://renantomaz.github.io/Pixel-Click-Game/thumb.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/Pixel-Click-Game/",
+  "display": "standalone",
+  "theme_color": "#121212",
+  "background_color": "#121212",
+  "orientation": "portrait"
+}
