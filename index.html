@@ -7,7 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <meta property="og:title" content="Pixel Click: Global Challenge">
 <meta property="og:description" content="Consegue bater o recorde mundial de reflexos?">
-<meta property="og:image" content="link-de-uma-print-do-seu-jogo.png">
+<meta property="og:image" content="https://renantomaz.github.io/Pixel-Click-Game/thumb.png">    
 <script>
   window.aiptag = window.aiptag || {cmd: []};
   aiptag.cmd.display = aiptag.cmd.display || [];
@@ -342,9 +342,11 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     document.getElementById('final-score').textContent = score;
     document.getElementById('screen-over').style.display = 'flex';
     
-    // Atualiza o anúncio da AdinPlay
-    if (typeof aiptag !== "undefined") {
-        aiptag.cmd.display.push(function() { adpDisplay('pixel-click-game-over-ad'); });
+    // Chamada segura para AdinPlay
+    if (typeof aiptag !== "undefined" && typeof adpDisplay === "function") {
+        aiptag.cmd.display.push(function() { 
+            adpDisplay('pixel-click-game-over-ad'); 
+        });
     }
 
     if (score > globalBest) {
@@ -353,22 +355,30 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 }
 
         async function saveToRanking() {
-            const handle = document.getElementById('insta-handle').value || "@anon";
-            
-            // 5. ATUALIZAÇÃO ÚNICA: Apaga registros antigos e insere o novo recordista
-            // Para maior segurança, deletamos todos os registros antes de inserir o novo campeão
-            await supabaseClient.from('ranking').delete().neq('points', -1); 
-            
-            const { error } = await supabaseClient
-                .from('ranking')
-                .insert([{ name: handle, points: score }]);
+    const handle = document.getElementById('insta-handle').value || "@anon";
+    const saveBtn = document.querySelector('.save-btn');
+    
+    // Feedback visual imediato no botão
+    saveBtn.textContent = "...";
+    saveBtn.disabled = true;
 
-            if (!error) {
-                updateChampionUI();
-                document.getElementById('new-record-ui').style.display = 'none';
-                alert("Novo Recorde Mundial salvo!");
-            }
-        }
+    // Apaga registros antigos e insere o novo recordista
+    await supabaseClient.from('ranking').delete().neq('points', -1); 
+    
+    const { error } = await supabaseClient
+        .from('ranking')
+        .insert([{ name: handle, points: score }]);
+
+    if (!error) {
+        await updateChampionUI();
+        document.getElementById('new-record-ui').innerHTML = 
+            `<p style="color: var(--accent); font-weight: bold;">RECORD SAVED!</p>`;
+        // Removemos o alert() daqui
+    } else {
+        saveBtn.textContent = "ERRO!";
+        saveBtn.disabled = false;
+    }
+}
         function shareGame() {
     // Textos personalizados por idioma
     const shareMsgs = {
