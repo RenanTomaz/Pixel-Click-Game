@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <script>(function(s){s.dataset.zone='10808578',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pixel Click: Global Stroop Fixed</title>
@@ -168,29 +167,14 @@
     <h1 id="ui-over-title" style="color:#ff4757">GAME OVER!</h1>
     <p style="font-size: 1.5rem">Score: <span id="final-score">0</span></p>
 
-    <div id="ad-container-over" style="
-        width: 320px; 
-        min-height: 250px; 
-        background: rgba(255,255,255,0.05); 
-        margin: 15px auto; 
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        border: 1px dashed #555;
-        color: #555;
-        font-size: 0.8rem;
-    ">
-        Ads
-    </div>
+    <div id="ad-gameover" style="width: 300px; height: 250px; margin: 15px auto;">
+    <div id="pixel-click-game-over-ad"></div>
+</div>
 
     <div id="new-record-ui" style="display:none; min-height: 150px; margin-bottom: 20px;">
-        <p style="color: var(--accent); font-weight: bold; margin-bottom: 10px;">&nbsp;</p>
-        <input type="text" id="insta-handle" style="margin-bottom: 10px;">
-        <button onclick="saveToRanking()" class="save-btn">&nbsp;</button>
-    </div>
-
-    <button onclick="start()" class="retry-btn" id="ui-retry-btn">REPETIR</button>
-    <button onclick="shareGame()" class="retry-btn" id="ui-share-btn">DESAFIE UM AMIGO</button>
+    <p style="color: var(--accent); font-weight: bold; margin-bottom: 10px;">&nbsp;</p>
+    <input type="text" id="insta-handle" style="margin-bottom: 10px;">
+    <button onclick="saveToRanking()" class="save-btn">&nbsp;</button>
 </div>
 
 <button onclick="start()" class="retry-btn" id="ui-retry-btn">REPETIR</button>
@@ -380,7 +364,7 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     clearInterval(timer);
     document.getElementById('final-score').textContent = score;
     document.getElementById('screen-over').style.display = 'flex';
-
+    
 
     if (score > globalBest) {
         const ui = langs[currentLang];
