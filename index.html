@@ -9,12 +9,6 @@
     <link rel="manifest" href="manifest.json">
 <meta property="og:description" content="Consegue bater o recorde mundial de reflexos?">
 <meta property="og:image" content="https://renantomaz.github.io/Pixel-Click-Game/thumb.png">    
-<script>
-  window.aiptag = window.aiptag || {cmd: []};
-  aiptag.cmd.display = aiptag.cmd.display || [];
-  aiptag.cmd.player = aiptag.cmd.player || [];
-</script>
-<script async src="https://api.adinplay.com/libs/aiptag/pub/XXXXX/XXXXX/tag.min.js"></script>
     <style>
         :root { 
             --bg-color: #121212; 
@@ -173,19 +167,29 @@
     <h1 id="ui-over-title" style="color:#ff4757">GAME OVER!</h1>
     <p style="font-size: 1.5rem">Score: <span id="final-score">0</span></p>
 
-    <div id="ad-gameover" style="width: 300px; height: 250px; margin: 15px auto;">
-    <div id="pixel-click-game-over-ad"></div>
-    <script>
-        aiptag.cmd.display.push(function() { 
-            adpDisplay('pixel-click-game-over-ad'); 
-        });
-    </script>
-</div>
+    <div id="ad-container-over" style="
+        width: 320px; 
+        min-height: 250px; 
+        background: rgba(255,255,255,0.05); 
+        margin: 15px auto; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        border: 1px dashed #555;
+        color: #555;
+        font-size: 0.8rem;
+    ">
+        Ads
+    </div>
 
     <div id="new-record-ui" style="display:none; min-height: 150px; margin-bottom: 20px;">
-    <p style="color: var(--accent); font-weight: bold; margin-bottom: 10px;">&nbsp;</p>
-    <input type="text" id="insta-handle" style="margin-bottom: 10px;">
-    <button onclick="saveToRanking()" class="save-btn">&nbsp;</button>
+        <p style="color: var(--accent); font-weight: bold; margin-bottom: 10px;">&nbsp;</p>
+        <input type="text" id="insta-handle" style="margin-bottom: 10px;">
+        <button onclick="saveToRanking()" class="save-btn">&nbsp;</button>
+    </div>
+
+    <button onclick="start()" class="retry-btn" id="ui-retry-btn">REPETIR</button>
+    <button onclick="shareGame()" class="retry-btn" id="ui-share-btn">DESAFIE UM AMIGO</button>
 </div>
 
 <button onclick="start()" class="retry-btn" id="ui-retry-btn">REPETIR</button>
@@ -375,13 +379,7 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     clearInterval(timer);
     document.getElementById('final-score').textContent = score;
     document.getElementById('screen-over').style.display = 'flex';
-    
-    // Chamada segura para AdinPlay
-    if (typeof aiptag !== "undefined" && typeof adpDisplay === "function") {
-        aiptag.cmd.display.push(function() { 
-            adpDisplay('pixel-click-game-over-ad'); 
-        });
-    }
+
 
     if (score > globalBest) {
         const ui = langs[currentLang];
