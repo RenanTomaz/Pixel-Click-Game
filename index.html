@@ -63,7 +63,7 @@
         .btn { aspect-ratio: 1/1; border: var(--border-normal); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: bold; cursor: pointer; text-transform: uppercase; color: #fff; text-shadow: 2px 2px #000; }
         
         #opt-0 { background: #ff4757; } #opt-1 { background: #2e86de; } 
-        #opt-2 { background: #2ed573; } #opt-3 { background: #eccc68; color: #000; text-shadow: none;}
+        #opt-2 { background: #2ed573; } #opt-3 { background: #eccc68; }
 
         #champion-spotlight {
     width: 80%; /* Deixa de ocupar 100% da largura para parecer um card */
@@ -200,7 +200,7 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 };
         
 
-        let currentLang = 'pt', score = 0, timer, correctIdx, currentSpeed = 4000, globalBest = 0;
+        let currentLang = 'pt', score = 0, timer, correctIdx, currentSpeed = 8000, globalBest = 0;
         const colorValues = ["#ff4757", "#2e86de", "#2ed573", "#eccc68"];
 
         updateChampionUI();
@@ -257,7 +257,7 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         }
 
         function start() {
-            score = 0; currentSpeed = 4000;
+            score = 0; currentSpeed = 8000;
             document.getElementById('score').textContent = score;
             document.getElementById('screen-start').style.display = 'none';
             document.getElementById('screen-over').style.display = 'none';
@@ -342,7 +342,7 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
             if (idx === correctIdx) {
                 score++;
                 document.getElementById('score').textContent = score;
-                currentSpeed = Math.max(850, 4000 - (score * 95));
+                currentSpeed = Math.max(850, 8000 - (score * 95));
                 next();
             } else over();
         }
