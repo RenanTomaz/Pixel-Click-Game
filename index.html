@@ -8,7 +8,7 @@
     <meta property="og:title" content="Pixel Click: Global Challenge">
     <link rel="manifest" href="manifest.json">
 <meta property="og:description" content="Consegue bater o recorde mundial de reflexos?">
-<meta property="og:image" content="https://renantomaz.github.io/Pixel-Click-Game/thumb.png">  
+<meta property="og:image" content="https://www.pixelclick.fun/thumb.png"> 
     <style>
         :root { 
             --bg-color: #121212; 
@@ -367,17 +367,19 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
             }, 30);
         }
 
-        function over() {
+        async function over() { // 1. Adicionado 'async' aqui
     clearInterval(timer);
     document.getElementById('final-score').textContent = score;
     document.getElementById('screen-over').style.display = 'flex';
     
+    // 2. ADICIONE ESTA LINHA ABAIXO:
+    // Ela força o jogo a ler o recorde mais recente do Supabase antes de comparar
+    await updateChampionUI(); 
 
     if (score > globalBest) {
         const ui = langs[currentLang];
         const recordContainer = document.getElementById('new-record-ui');
         
-        // Atualiza os textos dinâmicos do recorde mundial
         recordContainer.querySelector('p').textContent = ui.newRecord;
         document.getElementById('insta-handle').placeholder = ui.placeholder;
         recordContainer.querySelector('.save-btn').textContent = ui.saveBtn;
