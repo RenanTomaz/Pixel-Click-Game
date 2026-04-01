@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pixel Click: Global Stroop Fixed</title>
+    <title>Pixel Click: Global Challenge</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <meta property="og:title" content="Pixel Click: Global Challenge">
     <link rel="manifest" href="manifest.json">
 <meta property="og:description" content="Consegue bater o recorde mundial de reflexos?">
-<meta property="og:image" content="https://renantomaz.github.io/Pixel-Click-Game/thumb.png">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1551620120717470"
-     crossorigin="anonymous"></script>   
+<meta property="og:image" content="https://renantomaz.github.io/Pixel-Click-Game/thumb.png">  
     <style>
         :root { 
             --bg-color: #121212; 
@@ -171,8 +169,13 @@
     <h1 id="ui-over-title" style="color:#ff4757">GAME OVER!</h1>
     <p style="font-size: 1.5rem">Score: <span id="final-score">0</span></p>
 
-    <div id="ad-gameover" style="width: 300px; height: 250px; margin: 15px auto;">
-    <div id="pixel-click-game-over-ad"></div>
+    <div id="ad-gameover" style="width: 300px; height: 250px; margin: 15px auto; display: flex; align-items: center; justify-content: center;">
+        <script async="async" data-cfasync="false" src="https://pl29034466.profitablecpmratenetwork.com/9e602a11ebb3cfb33a5dc7857f0e7e8e/invoke.js"></script>
+        <div id="container-9e602a11ebb3cfb33a5dc7857f0e7e8e"></div>
+    </div>
+
+    <button onclick="start()" class="retry-btn" id="ui-retry-btn">REPETIR</button>
+    <button onclick="shareGame()" class="retry-btn" id="ui-share-btn">DESAFIE UM AMIGO</button>
 </div>
 
     <div id="new-record-ui" style="display:none; min-height: 150px; margin-bottom: 20px;">
@@ -195,10 +198,10 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         const langs = {
-    pt: { title: "PIXEL CLICK", desc: "Confie na PALAVRA, não na COR!", start: "JOGAR", score: "PONTOS", qPrefix: "CLIQUE NA COR:", champTitle: "ATUAL CAMPEÃO", waiting: "@aguardando", over: "FIM DE JOGO!", save: "SALVAR", retry: "REPETIR", colors: ["VERMELHO", "AZUL", "VERDE", "AMARELO"], even: "PAR?", odd: "ÍMPAR?", share: "DESAFIE UM AMIGO", newRecord: "NOVO RECORDE MUNDIAL!", placeholder: "@instagram", saveBtn: "SALVAR RECORDE", recordSaved: "RECORDE SALVO!" },
-    en: { title: "PIXEL CLICK", desc: "Trust the WORD, not the COLOR!", start: "START", score: "SCORE", qPrefix: "CLICK THE COLOR:", champTitle: "CURRENT CHAMPION", waiting: "@waiting", over: "GAME OVER!", save: "SAVE", retry: "RETRY", colors: ["RED", "BLUE", "GREEN", "YELLOW"], even: "EVEN?", odd: "ODD?", share: "CHALLENGE A FRIEND", newRecord: "NEW WORLD RECORD!", placeholder: "@instagram", saveBtn: "SAVE RECORD", recordSaved: "RECORD SAVED!" },
-    fr: { title: "PIXEL CLICK", desc: "Croyez le MOT, pas la COULEUR!", start: "JOUER", score: "POINTS", qPrefix: "CLIQUEZ COULEUR:", champTitle: "CHAMPION ACTUEL", waiting: "@en_attente", over: "FIN DE JEU!", save: "SAUVER", retry: "REJOUER", colors: ["ROUGE", "BLEU", "VERT", "JAUNE"], even: "PAIR?", odd: "IMPAIR?", share: "DÉFIER UN AMI", newRecord: "NOUVEAU RECORD MONDIAL !", placeholder: "@instagram", saveBtn: "ENREGISTRER", recordSaved: "RECORD ENREGISTRÉ!" },
-    es: { title: "PIXEL CLICK", desc: "¡Confía en la PALABRA, no el COLOR!", start: "JUGAR", score: "PUNTOS", qPrefix: "CLIC EN COLOR:", champTitle: "CAMPEÓN ACTUAL", waiting: "@esperando", over: "¡FIN DEL JUEGO!", save: "GUARDAR", retry: "REPETIR", colors: ["ROJO", "AZUL", "VERDE", "AMARILLO"], even: "¿PAR?", odd: "¿IMPAR?", share: "DESAFÍA A UN AMIGO", newRecord: "¡NUEVO RÉCORD MUNDIAL!", placeholder: "@instagram", saveBtn: "GUARDAR RÉCORD", recordSaved: "¡RÉCORD GUARDADO!" }
+    pt: { title: "PIXEL CLICK", desc: "Confie na PALAVRA, não na COR!", start: "JOGAR", score: "PONTOS", qPrefix: "CLIQUE NA COR:", champTitle: "ATUAL CAMPEÃO", waiting: "@aguardando", over: "FIM DE JOGO!", save: "SALVAR", retry: "REPETIR", colors: ["VERMELHO", "AZUL", "VERDE", "AMARELO"], even: "PAR", odd: "ÍMPAR", share: "DESAFIE UM AMIGO", newRecord: "NOVO RECORDE MUNDIAL!", placeholder: "@nome", saveBtn: "SALVAR RECORDE", recordSaved: "RECORDE SALVO!" },
+    en: { title: "PIXEL CLICK", desc: "Trust the WORD, not the COLOR!", start: "START", score: "SCORE", qPrefix: "CLICK THE COLOR:", champTitle: "CURRENT CHAMPION", waiting: "@waiting", over: "GAME OVER!", save: "SAVE", retry: "RETRY", colors: ["RED", "BLUE", "GREEN", "YELLOW"], even: "EVEN", odd: "ODD", share: "CHALLENGE A FRIEND", newRecord: "NEW WORLD RECORD!", placeholder: "@name", saveBtn: "SAVE RECORD", recordSaved: "RECORD SAVED!" },
+    fr: { title: "PIXEL CLICK", desc: "Croyez le MOT, pas la COULEUR!", start: "JOUER", score: "POINTS", qPrefix: "CLIQUEZ COULEUR:", champTitle: "CHAMPION ACTUEL", waiting: "@en_attente", over: "FIN DE JEU!", save: "SAUVER", retry: "REJOUER", colors: ["ROUGE", "BLEU", "VERT", "JAUNE"], even: "PAIR", odd: "IMPAIR", share: "DÉFIER UN AMI", newRecord: "NOUVEAU RECORD MONDIAL !", placeholder: "@nom", saveBtn: "ENREGISTRER", recordSaved: "RECORD ENREGISTRÉ!" },
+    es: { title: "PIXEL CLICK", desc: "¡Confía en la PALABRA, no el COLOR!", start: "JUGAR", score: "PUNTOS", qPrefix: "CLIC EN COLOR:", champTitle: "CAMPEÓN ACTUAL", waiting: "@esperando", over: "¡FIN DEL JUEGO!", save: "GUARDAR", retry: "REPETIR", colors: ["ROJO", "AZUL", "VERDE", "AMARILLO"], even: "PAR", odd: "IMPAR", share: "DESAFÍA A UN AMIGO", newRecord: "¡NUEVO RÉCORD MUNDIAL!", placeholder: "@nombre", saveBtn: "GUARDAR RÉCORD", recordSaved: "¡RÉCORD GUARDADO!" }
 };
         
 
@@ -411,10 +414,10 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         function shareGame() {
     // Textos personalizados por idioma
     const shareMsgs = {
-        pt: `Fiz ${score} pontos no Pixel Click! Duvido você bater meu recorde mundial. Jogue aqui:`,
-        en: `I scored ${score} points on Pixel Click! I bet you can't beat my world record. Play here:`,
+        pt: `Fiz ${score} pontos no Pixel Click! Duvido você bater o meu recorde. Jogue aqui:`,
+        en: `I scored ${score} points on Pixel Click! I bet you can't beat my record. Play here:`,
         fr: `J'ai marqué ${score} points sur Pixel Click ! Je parie que tu ne podras pas battre mon record. Joue ici :`,
-        es: `¡Hice ${score} puntos en Pixel Click! Te desafio a superar mi récord mundial. Juega aquí:`
+        es: `¡Hice ${score} puntos en Pixel Click! Te desafio a superar mi récord. Juega aquí:`
     };
 
     const text = shareMsgs[currentLang] || shareMsgs.en;
@@ -434,7 +437,5 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     }
 }
     </script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1551620120717470"
-     crossorigin="anonymous"></script>
 </body>
 </html>
