@@ -171,40 +171,26 @@
     </div>
 
     <div id="screen-over" class="overlay" style="display:none">
-    <h1 id="ui-over-title" style="color:#ff4757">GAME OVER!</h1>
-    <p style="font-size: 1.5rem">Score: <span id="final-score">0</span></p>
+        <h1 id="ui-over-title" style="color:#ff4757">GAME OVER!</h1>
+        <p style="font-size: 1.5rem">Score: <span id="final-score">0</span></p>
 
-    <div id="ad-gameover" style="
-    width: 300px; 
-    height: 250px; 
-    margin: 15px auto; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    overflow: hidden; /* Corta qualquer coisa que tente ser maior que 250px */
-    background: rgba(255,255,255,0.03); /* Fundo sutil para manter o espaço */
-">
-    <script async="async" data-cfasync="false" src="https://pl29034466.profitablecpmratenetwork.com/9e602a11ebb3cfb33a5dc7857f0e7e8e/invoke.js"></script>
-    <div id="container-9e602a11ebb3cfb33a5dc7857f0e7e8e"></div>
-</div>
+        <div id="ad-gameover" style="width: 300px; height: 250px; margin: 15px auto; display: flex; align-items: center; justify-content: center; overflow: hidden; background: rgba(255,255,255,0.03);">
+            <script async="async" data-cfasync="false" src="https://pl29034466.profitablecpmratenetwork.com/9e602a11ebb3cfb33a5dc7857f0e7e8e/invoke.js"></script>
+            <div id="container-9e602a11ebb3cfb33a5dc7857f0e7e8e"></div>
+        </div>
 
-    <button onclick="start()" class="retry-btn" id="ui-retry-btn">REPETIR</button>
-    <button onclick="shareGame()" class="retry-btn" id="ui-share-btn">DESAFIE UM AMIGO</button>
-</div>
+        <div id="new-record-ui" style="display:none; min-height: 150px; width: 100%;">
+            <p style="color: var(--accent); font-weight: bold; margin-bottom: 10px;">NOVO RECORDE!</p>
+            <input type="text" id="insta-handle">
+            <button onclick="saveToRanking()" class="save-btn">SALVAR</button>
+        </div>
 
-    <div id="new-record-ui" style="display:none; min-height: 150px; margin-bottom: 20px;">
-    <p style="color: var(--accent); font-weight: bold; margin-bottom: 10px;">&nbsp;</p>
-    <input type="text" id="insta-handle" style="margin-bottom: 10px;">
-    <button onclick="saveToRanking()" class="save-btn">&nbsp;</button>
-</div>
-
-<button onclick="start()" class="retry-btn" id="ui-retry-btn">REPETIR</button>
-<button onclick="shareGame()" class="retry-btn" id="ui-share-btn">
-    DESAFIE UM AMIGO
-</button>
-</div>
+        <button onclick="start()" class="retry-btn" id="ui-retry-btn">REPETIR</button>
+        <button onclick="shareGame()" class="retry-btn" id="ui-share-btn">DESAFIE UM AMIGO</button>
+    </div>
 
     <script>
+        // O seu código JavaScript continua igual daqui para baixo...
         // 2. CONFIGURAÇÃO: Insira suas credenciais aqui
         // Substitua estas linhas no seu código:
 const SUPABASE_URL = 'https://jsjzpilzmpxestbrhado.supabase.co'; 
