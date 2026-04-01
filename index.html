@@ -205,7 +205,7 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 };
         
 
-        let currentLang = 'pt', score = 0, timer, correctIdx, currentSpeed = 8000, globalBest = 0;
+        let currentLang = 'pt', score = 0, timer, correctIdx, currentSpeed = 6000, globalBest = 0;
         const colorValues = ["#ff4757", "#2e86de", "#2ed573", "#eccc68"];
 
         updateChampionUI();
@@ -262,7 +262,7 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         }
 
         function start() {
-            score = 0; currentSpeed = 8000;
+            score = 0; currentSpeed = 6000;
             document.getElementById('score').textContent = score;
             document.getElementById('screen-start').style.display = 'none';
             document.getElementById('screen-over').style.display = 'none';
@@ -347,7 +347,7 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
             if (idx === correctIdx) {
                 score++;
                 document.getElementById('score').textContent = score;
-                currentSpeed = Math.max(850, 8000 - (score * 95));
+                currentSpeed = Math.max(850, 6000 - (score * 95));
                 next();
             } else over();
         }
