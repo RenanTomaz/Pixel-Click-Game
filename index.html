@@ -167,7 +167,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 5px auto; /* Zero no topo para colar nos cards */
+    margin: 0 auto 0 auto; /* Zero no topo para colar nos cards */
     text-align: center;
 }
 
@@ -184,21 +184,6 @@
     </style>
 </head>
 <body>
-<div class="ad-banner-container">
-        <p style="font-size: 0.7rem; color: #444; margin-bottom: 0Xpx; letter-spacing: 1px;">ADVERTISEMENT</p>
-        <div class="ad-box">
-            <script type="text/javascript">
-                atOptions = {
-                    'key' : '1af5eed8d5a813d46ac266bce36c9450',
-                    'format' : 'iframe',
-                    'height' : 250,
-                    'width' : 300,
-                    'params' : {}
-                };
-            </script>
-            <script type="text/javascript" src="https://www.highperformanceformat.com/1af5eed8d5a813d46ac266bce36c9450/invoke.js"></script>
-        </div>
-    </div>
     <div id="lang-selector">
         <div class="lang-btn active" onclick="setLang('pt')" id="btn-pt"><img src="https://flagcdn.com/w80/br.png" alt="Brasil"></div>
         <div class="lang-btn" onclick="setLang('en')" id="btn-en"><img src="https://flagcdn.com/w80/gb.png" alt="UK"></div>
@@ -226,10 +211,42 @@
 
     <script>
         const hubLangs = {
-            pt: { subtitle: "Escolha o seu desafio", stroop: "PIXEL STROOP", pixelDesc: "Treine seu raciocínio contra o caos das cores e números.", triviaTag: "PIXEL TRIVIA", triviaDesc: "Escolha seu tema favorito e teste seus conhecimentos em tempo recorde.", play: "JOGAR", locked: "EM BREVE" },
-            en: { subtitle: "Choose your challenge", stroop: "PIXEL STROOP", pixelDesc: "Train your reasoning against the chaos of colors and numbers.", triviaTag: "PIXEL TRIVIA", triviaDesc: "Pick your favorite theme and test your knowledge in record time.", play: "PLAY", locked: "COMING SOON" },
-            fr: { subtitle: "Choisissez votre défi", stroop: "PIXEL STROOP", pixelDesc: "Entraînez votre raisonnement contre le chaos des couleurs et des chiffres.", triviaTag: "PIXEL TRIVIA", triviaDesc: "Choisissez votre thème préféré et testez vos connaissances en temps record.", play: "JOUER", locked: "BIENTÔT" },
-            es: { subtitle: "Elige tu desafío", stroop: "PIXEL STROOP", pixelDesc: "Entrena tu razonamiento contra el caos de los colores e números.", triviaTag: "PIXEL TRIVIA", triviaDesc: "Elige tu tema favorito y pon a prueba tus conocimientos en tiempo récord.", play: "JUGAR", locked: "PRÓXIMAMENTE" }
+            pt: { 
+                subtitle: "Escolha o seu desafio", 
+                stroop: "PIXEL STROOP", 
+                pixelDesc: "Desafio de números e cores contra o tempo.", 
+                triviaTag: "PIXEL TRIVIA", 
+                triviaDesc: "Escolha seu tema favorito e teste seus conhecimentos contra o tempo.", // Atualizado
+                play: "JOGAR", 
+                locked: "EM BREVE" 
+            },
+            en: { 
+                subtitle: "Choose your challenge", 
+                stroop: "PIXEL STROOP", 
+                pixelDesc: "Numbers and colors challenge against the clock.", 
+                triviaTag: "PIXEL TRIVIA", 
+                triviaDesc: "Pick your favorite theme and test your knowledge against the clock.", // Atualizado
+                play: "PLAY", 
+                locked: "COMING SOON" 
+            },
+            fr: { 
+                subtitle: "Choisissez votre défi", 
+                stroop: "PIXEL STROOP", 
+                pixelDesc: "Défi de chiffres et de couleurs contre a montre.", 
+                triviaTag: "PIXEL TRIVIA", 
+                triviaDesc: "Choisissez votre thème préféré et testez vos connaissances contre a montre.", // Atualizado
+                play: "JOUER", 
+                locked: "BIENTÔT" 
+            },
+            es: { 
+                subtitle: "Elige tu desafío", 
+                stroop: "PIXEL STROOP", 
+                pixelDesc: "Desafío de números y colores contra el reloj.", 
+                triviaTag: "PIXEL TRIVIA", 
+                triviaDesc: "Elige tu tema favorito y pon a prueba tus conocimientos contra el reloj.", // Atualizado
+                play: "JUGAR", 
+                locked: "PRÓXIMAMENTE" 
+            }
         };
 
         function setLang(l) {
