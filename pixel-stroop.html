@@ -212,18 +212,13 @@
         <h1 id="ui-over-title" style="color:#ff4757">GAME OVER!</h1>
         <p style="font-size: 1.5rem">Score: <span id="final-score">0</span></p>
 
-        <div id="ad-gameover" style="width: 300px; height: 250px; margin: 15px auto; display: flex; align-items: center; justify-content: center; overflow: hidden; background: rgba(255,255,255,0.03);">
-            <script async="async" data-cfasync="false" src="https://pl29034466.profitablecpmratenetwork.com/9e602a11ebb3cfb33a5dc7857f0e7e8e/invoke.js"></script>
-            <div id="container-9e602a11ebb3cfb33a5dc7857f0e7e8e"></div>
-        </div>
-
         <div id="new-record-ui" style="display:none; min-height: 150px; width: 100%;">
             <p style="color: var(--accent); font-weight: bold; margin-bottom: 10px;">NOVO RECORDE!</p>
             <input type="text" id="insta-handle">
             <button onclick="saveToRanking()" class="save-btn">SALVAR</button>
         </div>
 
-        <button onclick="location.href=location.pathname+'?v='+Math.random();" class="retry-btn" id="ui-retry-btn">REPETIR</button>
+        <button onclick="window.location.reload();" class="retry-btn" id="ui-retry-btn">REPETIR</button>
         <button onclick="shareGame()" class="retry-btn" id="ui-share-btn">DESAFIE UM AMIGO</button>
     </div>
 
