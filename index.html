@@ -77,40 +77,8 @@
             background: transparent; 
         }
 
-        .game-card::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            z-index: -2;
-            border-radius: 20px;
-            padding: 6px; 
-            background: linear-gradient(to right, 
-                var(--g-red) 0%, var(--g-red) 25%, 
-                var(--g-blue) 25%, var(--g-blue) 50%, 
-                var(--g-yellow) 50%, var(--g-yellow) 75%, 
-                var(--g-green) 75%, var(--g-green) 100%);
-            
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            mask-composite: exclude;
-            
-            transition: 0.3s;
-        }
-
-        .game-card::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: var(--card-inner);
-            z-index: -1;
-            border-radius: 20px;
-        }
-
         .game-card:hover { transform: translateY(-8px) scale(1.02); }
-        .game-card:hover::before { filter: brightness(1.3); }
 
-        .card-trivia { opacity: 0.7; cursor: not-allowed; }
 
         /* Estilo dos Subtítulos (UNIFICADO PARA AZUL) */
         .tag { 
@@ -143,8 +111,6 @@
         
         .play-btn:active { transform: translateY(3px); }
 
-        .trivia-btn { background: #444; color: #888; border-color: #222; }
-
         #ad-hub {
             width: 300px;
             height: 250px;
@@ -160,27 +126,6 @@
             .hub-container { flex-direction: column; align-items: center; margin-top: 10vh; }
             #lang-selector { top: 5px; left: 50%; transform: translateX(-50%); }
         }
-        /* Container do Banner abaixo dos cards */
-.ad-banner-container {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 0 auto; /* Zero no topo para colar nos cards */
-    text-align: center;
-}
-
-.ad-box {
-    background: #1a1a1a;
-    padding: 10px;
-    /* Borda removida conforme solicitado */
-    border: none; 
-    border-radius: 15px;
-    display: inline-block;
-    min-width: 300px;
-    min-height: 250px;
-}
     </style>
 </head>
 <body>
@@ -192,62 +137,62 @@
     </div>
 
     <div class="hub-container">
-        <div class="game-card card-pixel" onclick="location.href='pixel-stroop.html'">
-            <div>
-                <div id="ui-stroop-tag" class="tag">PIXEL STROOP</div>
-                <p id="ui-pixel-desc">Treine seu raciocínio contra o caos das cores e números.</p>
-            </div>
-            <button class="play-btn" id="ui-pixel-btn">JOGAR</button>
+    <div class="game-card card-pixel" onclick="location.href='pixel-stroop.html'">
+        <div>
+            <div id="ui-stroop-tag" class="tag">PIXEL STROOP</div>
+            <p id="ui-pixel-desc">Treine seu raciocínio contra o caos das cores e números.</p>
         </div>
-
-        <div class="game-card card-trivia">
-            <div>
-                <div id="ui-trivia-tag" class="tag">PIXEL TRIVIA</div>
-                <p id="ui-trivia-desc">Escolha seu tema favorito e teste seus conhecimentos em tempo recorde.</p>
-            </div>
-            <button class="play-btn trivia-btn" id="ui-trivia-btn" disabled>EM BREVE</button>
-        </div>
+        <button class="play-btn" id="ui-pixel-btn">JOGAR</button>
     </div>
+
+    <div class="game-card card-trivia" onclick="location.href='pixel-trivia.html'" style="cursor: pointer;">
+    <div>
+        <div id="ui-trivia-tag" class="tag">PIXEL TRIVIA</div>
+        <p id="ui-trivia-desc">Escolha seu tema favorito e teste seus conhecimentos em tempo recorde.</p>
+    </div>
+    <button class="play-btn trivia-btn" id="ui-trivia-btn">JOGAR</button>
+</div>
+</div>
 
     <script>
         const hubLangs = {
-            pt: { 
-                subtitle: "Escolha o seu desafio", 
-                stroop: "PIXEL STROOP", 
-                pixelDesc: "Desafio de números e cores contra o tempo.", 
-                triviaTag: "PIXEL TRIVIA", 
-                triviaDesc: "Escolha seu tema favorito e teste seus conhecimentos contra o tempo.", // Atualizado
-                play: "JOGAR", 
-                locked: "EM BREVE" 
-            },
-            en: { 
-                subtitle: "Choose your challenge", 
-                stroop: "PIXEL STROOP", 
-                pixelDesc: "Numbers and colors challenge against the clock.", 
-                triviaTag: "PIXEL TRIVIA", 
-                triviaDesc: "Pick your favorite theme and test your knowledge against the clock.", // Atualizado
-                play: "PLAY", 
-                locked: "COMING SOON" 
-            },
-            fr: { 
-                subtitle: "Choisissez votre défi", 
-                stroop: "PIXEL STROOP", 
-                pixelDesc: "Défi de chiffres et de couleurs contre a montre.", 
-                triviaTag: "PIXEL TRIVIA", 
-                triviaDesc: "Choisissez votre thème préféré et testez vos connaissances contre a montre.", // Atualizado
-                play: "JOUER", 
-                locked: "BIENTÔT" 
-            },
-            es: { 
-                subtitle: "Elige tu desafío", 
-                stroop: "PIXEL STROOP", 
-                pixelDesc: "Desafío de números y colores contra el reloj.", 
-                triviaTag: "PIXEL TRIVIA", 
-                triviaDesc: "Elige tu tema favorito y pon a prueba tus conocimientos contra el reloj.", // Atualizado
-                play: "JUGAR", 
-                locked: "PRÓXIMAMENTE" 
-            }
-        };
+    pt: { 
+        subtitle: "Escolha seu desafio", 
+        stroop: "PIXEL STROOP", 
+        pixelDesc: "Desafio de números e cores contra o relógio.", 
+        triviaTag: "PIXEL TRIVIA", 
+        triviaDesc: "Escolha seu tema favorito e teste seus conhecimentos contra o relógio.",
+        play: "JOGAR", 
+        locked: "JOGAR" // MUDADO DE "EM BREVE" PARA "JOGAR"
+    },
+    en: { 
+        subtitle: "Choose your challenge", 
+        stroop: "PIXEL STROOP", 
+        pixelDesc: "Color and number challenge against the clock.", 
+        triviaTag: "PIXEL TRIVIA", 
+        triviaDesc: "Pick your favorite topic and test your knowledge against the clock.",
+        play: "PLAY", 
+        locked: "PLAY" // MUDADO DE "COMING SOON" PARA "PLAY"
+    },
+    fr: { 
+        subtitle: "Choisissez votre défi", 
+        stroop: "PIXEL STROOP", 
+        pixelDesc: "Défi de couleurs et de chiffres contre la montre.", 
+        triviaTag: "PIXEL TRIVIA", 
+        triviaDesc: "Choisissez votre sujet préféré et testez vos connaissances contre la montre.",
+        play: "JOUER", 
+        locked: "JOUER" // MUDADO DE "BIENTÔT" PARA "JOUER"
+    },
+    es: { 
+        subtitle: "Elige tu desafío", 
+        stroop: "PIXEL STROOP", 
+        pixelDesc: "Desafío de números y colores contra el reloj.", 
+        triviaTag: "PIXEL TRIVIA", 
+        triviaDesc: "Elige tu tema favorito y pon a prueba tus conocimientos contra el reloj.",
+        play: "JUGAR", 
+        locked: "JUGAR" // MUDADO DE "PRÓXIMAMENTE" PARA "JUGAR"
+    }
+};
 
         function setLang(l) {
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));

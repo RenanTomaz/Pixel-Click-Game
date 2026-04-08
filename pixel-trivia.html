@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-select=none">
+    <title>Pixel Click: Trivia Global</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        :root { 
+            --bg-color: #121212; 
+            --border-normal: 4px solid #fff; 
+            --accent: #3498db; 
+            --accent-glow: 0 0 15px #3498db;
+        }
+
+        body { 
+            background-color: var(--bg-color); 
+            color: white; 
+            font-family: 'Courier New', monospace; 
+            margin: 0; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            justify-content: flex-start; /* Permite que o conteúdo comece no topo e role */
+            min-height: 100vh; 
+            overflow-y: auto; 
+            padding-bottom: 40px; /* Respiro no final da página */
+        }
+
+        /* --- Navegação --- */
+        #home-button {
+            position: absolute; top: 15px; left: 15px; width: 40px; height: 30px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; z-index: 200; color: white; border: none; background: none;
+        }
+
+        #lang-selector { position: absolute; top: 15px; right: 15px; display: flex; gap: 12px; z-index: 200; }
+        .lang-btn { width: 40px; height: 30px; cursor: pointer; filter: grayscale(0.8); border: 2px solid transparent; }
+        .lang-btn.active { filter: grayscale(0); border-color: white; }
+        .lang-btn img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* --- Container --- */
+        #game-container { 
+            display: flex; flex-direction: column; align-items: center; 
+            width: 95%; max-width: 400px; 
+            margin-top: 80px; /* Evita bater nos ícones do topo */
+        }
+
+        #ui-header { width: 100%; display: flex; justify-content: space-between; font-size: 1.3rem; margin-bottom: 10px; font-weight: bold; }
+
+        /* Barra de Tempo Robusta */
+        #timer-box { 
+            width: 100%; 
+            height: 25px; 
+            min-height: 25px; 
+            border: var(--border-normal); 
+            background: #333; 
+            margin-bottom: 20px; 
+            position: relative; 
+            overflow: hidden;
+            flex-shrink: 0; /* Impede que a barra seja espremida */
+        }
+        #timer-bar { height: 100%; width: 100%; background: var(--accent); position: absolute; left: 0; top: 0; }
+        
+        /* Pergunta Centralizada */
+        #question { 
+            font-size: 1.4rem; 
+            text-align: center; 
+            min-height: 120px; 
+            font-weight: bold; 
+            margin-bottom: 0px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Grid de Respostas Estilo Stroop */
+        #grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 12px; 
+            width: 100%; 
+            margin-bottom: 20px; 
+        }
+
+        .btn { 
+            aspect-ratio: 1/1; 
+            min-height: 140px; /* Mantém o tamanho do botão */
+            border: var(--border-normal); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 1.1rem; 
+            font-weight: bold; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            color: #fff; 
+            text-align: center; /* Centraliza o texto */
+            padding: 10px;
+            box-sizing: border-box;
+            word-wrap: break-word; /* Quebra palavras longas */
+        }
+        
+        #opt-0 { background: #ff4757; } #opt-1 { background: #2e86de; } 
+        #opt-2 { background: #2ed573; } #opt-3 { background: #eccc68; }
+
+        /* Menu de Categorias */
+        #menu-categories { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+        .cat-btn { background: #1a1a1a; border: var(--border-normal); color: white; padding: 18px; font-family: inherit; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        .cat-btn:hover { background: var(--accent); }
+
+        /* Overlays */
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.98); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; text-align: center; padding: 20px; }
+        .retry-btn { padding: 15px; font-size: 1.1rem; cursor: pointer; font-family: inherit; border: 4px solid #000; font-weight: bold; width: 85%; max-width: 260px; text-transform: uppercase; background: var(--accent); color: #fff; margin-top: 15px; }
+
+        @media (max-width: 600px) {
+            #lang-selector { top: 5px; left: 50%; transform: translateX(-50%); }
+            #home-button { top: 5px; left: 10px; }
+            #game-container { margin-top: 60px; }
+            .btn { font-size: 0.9rem; min-height: 120px; }
+        }
+
+                /* --- Estilo Identêntico ao Pixel Stroop --- */
+#champion-spotlight {
+    width: 95%; 
+    max-width: 400px; 
+    background: #1a1a1a;
+    padding: 15px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #333; 
+    border-radius: 12px; 
+    margin: 20px 0; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    box-sizing: border-box;
+}
+
+#champ-title { 
+    font-size: 0.9rem; 
+    color: var(--accent); 
+    margin: 0 0 5px 0; 
+    font-weight: bold; 
+    text-shadow: var(--accent-glow); 
+    text-transform: uppercase; 
+}
+
+#champ-info { 
+    font-size: 1.4rem; 
+    font-weight: bold; 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+}
+
+#champ-score { 
+    color: #feca57; /* Dourado do Champion Spotlight */
+}
+/* Overlay Centralizada Estilo Stroop */
+.overlay { 
+    position: fixed; 
+    inset: 0; 
+    background: rgba(0,0,0,0.96); 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; /* Centralização total */
+    z-index: 1000; 
+    text-align: center; 
+    padding: 20px; 
+    overflow-y: auto; 
+}
+
+/* Botões do Overlay */
+.overlay button { 
+    padding: 15px 20px; 
+    font-size: 1.1rem; 
+    cursor: pointer; 
+    font-family: inherit; 
+    margin-top: 15px !important; /* Espaçamento idêntico */
+    border: 4px solid #000; 
+    font-weight: bold; 
+    width: 85%; 
+    max-width: 260px; 
+    text-transform: uppercase; 
+}
+
+.retry-btn { background: var(--accent); color: #fff; }
+.save-btn { background: #3498db; color: #fff; }
+
+/* Campo de Input do Recorde */
+input#insta-handle { 
+    padding: 12px; 
+    font-size: 1.2rem; 
+    margin: 15px 0; 
+    width: 85%; 
+    max-width: 260px; 
+    text-align: center; 
+    background: #222; 
+    color: #fff; 
+    border: 2px solid var(--accent); 
+    font-family: inherit;
+    /* Ajustes para perfeição: */
+    box-sizing: border-box; /* Garante que a largura seja exata */
+    outline: none;         /* Remove a borda azul padrão ao clicar */
+}
+
+/* Efeito de foco (opcional, para dar um brilho ao clicar) */
+input#insta-handle:focus {
+    box-shadow: var(--accent-glow);
+}
+    </style>
+</head>
+<body>
+
+    <button id="home-button" onclick="location.href='index.html'">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    </button>
+
+    <div id="game-container">
+        <div id="ui-header" style="display: none;">
+            <span>PONTOS: <b id="score">0</b></span>
+        </div>
+        <div id="timer-box" style="display: none;"><div id="timer-bar"></div></div>
+        
+        <div id="question">ESCOLHA UMA CATEGORIA</div>
+
+        <div id="menu-categories">
+    <button id="cat-natureza" class="cat-btn" onclick="startTrivia('natureza')">NATUREZA</button>
+    <button id="cat-ciencia" class="cat-btn" onclick="startTrivia('ciencia')">CIÊNCIA</button>
+    <button id="cat-historia" class="cat-btn" onclick="startTrivia('historia')">HISTÓRIA</button>
+    <button id="cat-geografia" class="cat-btn" onclick="startTrivia('geografia')">GEOGRAFIA</button>
+    <button id="cat-entretenimento" class="cat-btn" onclick="startTrivia('entretenimento')">ENTRETENIMENTO</button>
+    <button id="cat-esportes" class="cat-btn" onclick="startTrivia('esportes')">ESPORTES</button>
+</div>
+
+        <div id="grid" style="display: none;">
+            <div class="btn" id="opt-0" onclick="checkAnswer(0)"></div>
+            <div class="btn" id="opt-1" onclick="checkAnswer(1)"></div>
+            <div class="btn" id="opt-2" onclick="checkAnswer(2)"></div>
+            <div class="btn" id="opt-3" onclick="checkAnswer(3)"></div>
+        </div>
+    </div>
+
+    <div id="champion-spotlight">
+    <p id="champ-title">ATUAL CAMPEÃO</p>
+    <div id="champ-info">
+        <span id="champ-name">@aguardando</span>
+        <span id="champ-score">0 pts</span>
+    </div>
+</div>
+
+    <div id="screen-start" class="overlay">
+        <h1 style="color: var(--accent);">PIXEL TRIVIA</h1>
+        <p>Responda antes que o tempo acabe!</p>
+        <button onclick="hideStart()" class="action-btn retry-btn">JOGAR</button>
+    </div>
+
+    <div id="screen-over" class="overlay" style="display:none">
+    <h1 id="ui-over-title" style="color:#ff4757">GAME OVER!</h1>
+    <p style="font-size: 1.5rem">Score: <span id="final-score">0</span></p>
+
+    <div id="new-record-ui" style="display:none; width: 100%;">
+        <p style="color: var(--accent); font-weight: bold; margin-bottom: 10px;">NOVO RECORDE!</p>
+        <input type="text" id="insta-handle" placeholder="@nome">
+        <button onclick="saveToRanking()" class="save-btn">SALVAR</button>
+    </div>
+
+    <button onclick="window.location.reload();" class="retry-btn">REPETIR</button>
+    <button onclick="shareGame()" class="retry-btn" id="ui-share-btn">DESAFIE UM AMIGO</button>
+</div>
+
+    <script src="natureza.js"></script>
+    <script src="ciencia.js"></script>
+    <script src="historia.js"></script>
+    <script src="geografia.js"></script>
+    <script src="entretenimento.js"></script>
+    <script src="esportes.js"></script>
+
+    <script>
+        
+        // Supabase Mock (Substitua pelas suas chaves reais se quiser ranking)
+        const SUPABASE_URL = 'https://jsjzpilzmpxestbrhado.supabase.co'; 
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzanpwaWx6bXB4ZXN0YnJoYWRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3OTc0NDAsImV4cCI6MjA5MDM3MzQ0MH0.0WXO31A9lYJLMYWnQqlvFArTn4WNN-umhhD23OefgT0'; // Copie a chave completa do seu painel
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let score = 0, timeLeft = 100, gameActive = false, pool = [], currentQuestion, difficulty = 0.15, globalBest = 0;
+        
+        // INICIALIZAÇÃO DO SPOTLIGHT
+        updateChampionUI();
+
+        async function updateChampionUI() {
+    if (!supabaseClient) return;
+    try {
+        const { data } = await supabaseClient
+            .from('ranking_trivia')
+            .select('name, points')
+            .order('points', { ascending: false })
+            .limit(1);
+
+        if (data && data.length > 0) {
+            globalBest = data[0].points;
+            document.getElementById('champ-name').textContent = data[0].name;
+            document.getElementById('champ-score').textContent = data[0].points + " pts";
+        }
+    } catch (e) { console.error("Erro ao carregar ranking"); }
+}
+
+        function hideStart() {
+            document.getElementById('screen-start').style.display = 'none';
+        }
+
+        function setLang(l) {
+    currentLang = l;
+    
+    // Atualiza o visual das bandeiras
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    const btn = document.getElementById('btn-' + l);
+    if(btn) btn.classList.add('active');
+
+    const ui = triviaLangs[l];
+
+    // Tradução da interface e cabeçalho
+    if(!gameActive) {
+        document.getElementById('question').innerText = ui.choose;
+    }
+    document.getElementById('ui-score-label').innerHTML = `${ui.score}: <b id="score">${score}</b>`;
+
+    // Tradução dos temas (Botões de categoria)
+    document.getElementById('cat-natureza').innerText = ui["cat-natureza"];
+    document.getElementById('cat-ciencia').innerText = ui["cat-ciencia"];
+    document.getElementById('cat-historia').innerText = ui["cat-historia"];
+    document.getElementById('cat-geografia').innerText = ui["cat-geografia"];
+    document.getElementById('cat-entretenimento').innerText = ui["cat-entretenimento"];
+    document.getElementById('cat-esportes').innerText = ui["cat-esportes"];
+
+    // Tradução dos textos de Game Over
+    document.querySelector('#screen-over h1').innerText = ui.over;
+    
+    // Tradução dos botões da overlay (Retry e Share)
+    const retryBtn = document.getElementById('ui-retry-btn');
+    const shareBtn = document.getElementById('ui-share-btn');
+    if(retryBtn) retryBtn.innerText = ui.retry;
+    if(shareBtn) shareBtn.innerText = ui.share;
+}
+
+        function startTrivia(cat) {
+            // Acessa as variáveis globais carregadas pelos arquivos .js
+            const dataMap = {
+                'natureza': typeof naturezaData !== 'undefined' ? naturezaData : [],
+                'ciencia': typeof cienciaData !== 'undefined' ? cienciaData : [],
+                'historia': typeof historiaData !== 'undefined' ? historiaData : [],
+                'geografia': typeof geografiaData !== 'undefined' ? geografiaData : [],
+                'entretenimento': typeof entretenimentoData !== 'undefined' ? entretenimentoData : [],
+                'esportes': typeof esportesData !== 'undefined' ? esportesData : []
+            };
+
+            pool = dataMap[cat];
+
+            if (!pool || pool.length === 0) {
+                alert("Erro ao carregar perguntas desta categoria!");
+                return;
+            }
+
+            document.getElementById('menu-categories').style.display = 'none';
+            document.getElementById('ui-header').style.display = 'flex';
+            document.getElementById('timer-box').style.display = 'block';
+            document.getElementById('grid').style.display = 'grid';
+            
+            gameActive = true;
+            score = 0;
+            timeLeft = 100;
+            difficulty = 0.1; // Velocidade inicial
+            document.getElementById('score').innerText = score;
+            loadNextQuestion();
+            gameLoop();
+        }
+
+        function loadNextQuestion() {
+    if(!gameActive) return;
+
+    // 1. Pega a pergunta aleatória original
+    const rawQuestion = pool[Math.floor(Math.random() * pool.length)];
+    
+    // 2. Cria uma cópia das opções para não alterar o banco de dados original
+    let optionsWithIndex = rawQuestion.options.map((opt, index) => {
+        return { text: opt, originalIndex: index };
+    });
+
+    // 3. Embaralha as opções (Algoritmo Fisher-Yates)
+    for (let i = optionsWithIndex.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [optionsWithIndex[i], optionsWithIndex[j]] = [optionsWithIndex[j], optionsWithIndex[i]];
+    }
+
+    // 4. Salva qual é o novo índice da resposta correta
+    currentQuestion = {
+        q: rawQuestion.q,
+        options: optionsWithIndex.map(item => item.text),
+        correct: optionsWithIndex.findIndex(item => item.originalIndex === rawQuestion.correct)
+    };
+
+    // 5. Renderiza na tela
+    document.getElementById('question').innerText = currentQuestion.q;
+    for(let i=0; i<4; i++) {
+        const btn = document.getElementById(`opt-${i}`);
+        btn.innerText = currentQuestion.options[i];
+    }
+}
+
+        function checkAnswer(idx) {
+    if(!gameActive) return;
+
+    if(idx === currentQuestion.correct) {
+        score++;
+        document.getElementById('score').innerText = score; // Atualiza o número direto
+        timeLeft = 100; 
+        difficulty += 0.002; 
+        loadNextQuestion();
+    } else {
+        endGame();
+    }
+}
+
+        function gameLoop() {
+    if(!gameActive) return;
+
+    timeLeft -= difficulty;
+    
+    // Garante que a barra não passe de 100%
+    const displayWidth = Math.min(timeLeft, 100);
+    document.getElementById('timer-bar').style.width = displayWidth + "%";
+    
+    // Cores de alerta
+    const bar = document.getElementById('timer-bar');
+    if (timeLeft > 50) bar.style.backgroundColor = "#2ed573";
+    else if (timeLeft > 25) bar.style.backgroundColor = "#ffa300";
+    else bar.style.backgroundColor = "#ff4757";
+
+    if(timeLeft <= 0) endGame();
+    else requestAnimationFrame(gameLoop);
+}
+
+        function endGame() {
+    gameActive = false;
+    document.getElementById('screen-over').style.display = 'flex';
+    document.getElementById('final-score').innerText = score;
+
+    // Mostra o campo de recorde apenas se superar o campeão mundial atual
+    if (score > globalBest && score > 0) {
+        document.getElementById('new-record-ui').style.display = 'block';
+    } else {
+        document.getElementById('new-record-ui').style.display = 'none';
+    }
+}
+
+async function saveToRanking() {
+    const nameInput = document.getElementById('insta-handle');
+    const name = nameInput.value.trim().substring(0, 20) || "@nome";
+    const saveBtn = document.querySelector('.save-btn');
+
+    saveBtn.disabled = true;
+    saveBtn.textContent = "...";
+
+    try {
+        // Mantém apenas o Rei da Montanha (apaga todos antes de inserir)
+        await supabaseClient.from('ranking_trivia').delete().gte('points', 0); 
+        
+        const { error } = await supabaseClient
+            .from('ranking_trivia')
+            .insert([{ name: name, points: score }]);
+
+        if (!error) {
+            document.getElementById('champ-name').textContent = name;
+            document.getElementById('champ-score').textContent = score + " pts";
+            globalBest = score;
+            document.getElementById('new-record-ui').innerHTML = 
+                `<p style="color: var(--accent); font-weight: bold; margin-top: 20px;">CAMPEÃO ATUALIZADO!</p>`;
+        } else {
+            saveBtn.disabled = false;
+            saveBtn.textContent = "ERRO!";
+        }
+    } catch (err) {
+        saveBtn.disabled = false;
+        saveBtn.textContent = "SALVAR";
+    }
+}
+
+    // Lógica para mostrar input de recorde
+    if (score > globalBest && score > 0) {
+        document.getElementById('new-record-ui').style.display = 'block';
+    } else {
+        document.getElementById('new-record-ui').style.display = 'none';
+    }
+
+        // Bloqueia clique direito e gestos de zoom para mobile
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        function shareGame() {
+    // Textos personalizados por idioma
+    const shareMsgs = {
+        pt: `Fiz ${score} pontos no Pixel Click! Duvido você bater o meu recorde. Jogue aqui:`,
+        en: `I scored ${score} points on Pixel Click! I bet you can't beat my record. Play here:`,
+        fr: `J'ai marqué ${score} points sur Pixel Click ! Je parie que tu ne podras pas battre mon record. Joue ici :`,
+        es: `¡Hice ${score} puntos en Pixel Click! Te desafio a superar mi récord. Juega aquí:`
+    };
+
+    const text = shareMsgs[currentLang] || shareMsgs.en;
+    const url = window.location.href;
+
+    if (navigator.share) {
+        // Abre o menu nativo do celular (iMessage, WhatsApp, Instagram, etc)
+        navigator.share({
+            title: 'Pixel Click Challenge',
+            text: text,
+            url: url
+        }).catch(err => console.log("Erro ao compartilhar"));
+    } else {
+        // Caso o navegador seja antigo ou PC, abre o link do WhatsApp como reserva
+        const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text + " " + url)}`;
+        window.open(whatsappUrl, '_blank');
+    }
+}
+function setLang(l) {
+    currentLang = l;
+    
+    // Atualiza classes das bandeiras
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    const activeBtn = document.getElementById('btn-' + l);
+    if(activeBtn) activeBtn.classList.add('active');
+
+    const ui = triviaLangs[l];
+
+    // Tradução da Pergunta inicial / Instrução
+    if(!gameActive) {
+        document.getElementById('question').innerText = ui.choose;
+    }
+
+    // Tradução do Label de Score (Mantendo o número atual)
+    document.getElementById('ui-score-label').innerHTML = `${ui.score}: <b id="score">${score}</b>`;
+
+    // Tradução dos Botões de Categoria (Usando os IDs que criamos)
+    document.getElementById('cat-natureza').innerText = ui.cat-natureza;
+    document.getElementById('cat-ciencia').innerText = ui.cat-ciencia;
+    document.getElementById('cat-historia').innerText = ui.cat-historia;
+    document.getElementById('cat-geografia').innerText = ui.cat-geografia;
+    document.getElementById('cat-entretenimento').innerText = ui.cat-entretenimento;
+    document.getElementById('cat-esportes').innerText = ui.cat-esportes;
+
+    // Tradução do Overlay de Fim de Jogo
+    document.querySelector('#screen-over h1').innerText = ui.over;
+    // Se você tiver IDs nos botões da overlay, use-os. Exemplo:
+    const retryBtns = document.querySelectorAll('.retry-btn');
+    retryBtns.forEach(btn => {
+        if(btn.onclick && btn.onclick.toString().includes('reload')) btn.innerText = ui.retry;
+    });
+}
+    </script>
+</body>
+</html>

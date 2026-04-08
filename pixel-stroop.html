@@ -86,9 +86,43 @@
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
 }
 
-        #champ-title { font-size: 0.9rem; color: var(--accent); margin: 0 0 5px 0; font-weight: bold; text-shadow: var(--accent-glow); text-transform: uppercase; }
-        #champ-info { font-size: 1.4rem; font-weight: bold; display: flex; align-items: center; gap: 12px; }
-        #champ-score { color: #feca57; }
+        /* --- Estilo Identêntico ao Pixel Stroop --- */
+#champion-spotlight {
+    width: 95%; 
+    max-width: 400px; 
+    background: #1a1a1a;
+    padding: 15px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #333; 
+    border-radius: 12px; 
+    margin: 20px 0; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    box-sizing: border-box;
+}
+
+#champ-title { 
+    font-size: 0.9rem; 
+    color: var(--accent); 
+    margin: 0 0 5px 0; 
+    font-weight: bold; 
+    text-shadow: var(--accent-glow); 
+    text-transform: uppercase; 
+}
+
+#champ-info { 
+    font-size: 1.4rem; 
+    font-weight: bold; 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+}
+
+#champ-score { 
+    color: #feca57; /* Dourado do Champion Spotlight */
+}
 
         .overlay { 
     position: fixed; 
@@ -96,12 +130,15 @@
     background: rgba(0,0,0,0.96); 
     display: flex; 
     flex-direction: column; 
+    /* Centraliza horizontalmente */
     align-items: center; 
-    justify-content: flex-start; /* Alinhado ao topo */
+    /* CENTRALIZA VERTICALMENTE (Mude de flex-start para center) */
+    justify-content: center; 
     z-index: 100; 
     text-align: center; 
-    padding: 40px 20px; /* Mais espaço no topo para não bater no notch do celular */
-    overflow-y: auto; /* Garante que o scroll funcione */
+    /* Remova ou ajuste o padding de topo para não deslocar o centro */
+    padding: 20px; 
+    overflow-y: auto; 
 }
         input { padding: 12px; font-size: 1.2rem; margin: 15px 0; width: 85%; max-width: 260px; text-align: center; background: #222; color: #fff; border: 2px solid var(--accent); font-family: inherit;}
         button { padding: 15px 20px; font-size: 1.1rem; cursor: pointer; font-family: inherit; margin-top: 10px; border: 4px solid #000; font-weight: bold; width: 85%; max-width: 260px; text-transform: uppercase; }
@@ -195,16 +232,15 @@
     </div>
 
     <div id="champion-spotlight">
-        <p id="champ-title">ATUAL CAMPEÃO</p>
-        <div id="champ-info">
-            <span id="champ-name">@aguardando</span>
-            <span id="champ-score">0 pts</span>
-        </div>
+    <p id="champ-title">ATUAL CAMPEÃO</p>
+    <div id="champ-info">
+        <span id="champ-name">@aguardando</span>
+        <span id="champ-score">0 pts</span>
     </div>
-
+</div>
     <div id="screen-start" class="overlay">
-        <h1 id="ui-title">PIXEL STROOP</h1>
-        <p id="ui-desc">Confie na PALAVRA, não na COR!</p>
+        <h1 style="color: var(--accent);">PIXEL STROOP</h1>
+        <p>Confie na PALAVRA, não na COR!</p>
         <button onclick="start()" class="retry-btn" id="ui-start-btn">JOGAR</button>
     </div>
 
@@ -212,11 +248,11 @@
         <h1 id="ui-over-title" style="color:#ff4757">GAME OVER!</h1>
         <p style="font-size: 1.5rem">Score: <span id="final-score">0</span></p>
 
-        <div id="new-record-ui" style="display:none; min-height: 150px; width: 100%;">
-            <p style="color: var(--accent); font-weight: bold; margin-bottom: 10px;">NOVO RECORDE!</p>
-            <input type="text" id="insta-handle">
-            <button onclick="saveToRanking()" class="save-btn">SALVAR</button>
-        </div>
+        <div id="new-record-ui" style="display:none; width: 100%;">
+    <p style="color: var(--accent); font-weight: bold; margin-bottom: 10px;">NOVO RECORDE!</p>
+    <input type="text" id="insta-handle" placeholder="@nome">
+    <button onclick="saveToRanking()" class="save-btn">SALVAR</button>
+</div>
 
         <button onclick="window.location.reload();" class="retry-btn" id="ui-retry-btn">REPETIR</button>
         <button onclick="shareGame()" class="retry-btn" id="ui-share-btn">DESAFIE UM AMIGO</button>
@@ -231,10 +267,10 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         const langs = {
-    pt: { title: "PIXEL CLICK", desc: "Confie na PALAVRA, não na COR!", start: "JOGAR", score: "PONTOS", qPrefix: "CLIQUE NA COR:", champTitle: "ATUAL CAMPEÃO", waiting: "@aguardando", over: "FIM DE JOGO!", save: "SALVAR", retry: "REPETIR", colors: ["VERMELHO", "AZUL", "VERDE", "AMARELO"], even: "PAR", odd: "ÍMPAR", share: "DESAFIE UM AMIGO", newRecord: "NOVO RECORDE MUNDIAL!", placeholder: "@nome", saveBtn: "SALVAR RECORDE", recordSaved: "RECORDE SALVO!" },
-    en: { title: "PIXEL CLICK", desc: "Trust the WORD, not the COLOR!", start: "START", score: "SCORE", qPrefix: "CLICK THE COLOR:", champTitle: "CURRENT CHAMPION", waiting: "@waiting", over: "GAME OVER!", save: "SAVE", retry: "RETRY", colors: ["RED", "BLUE", "GREEN", "YELLOW"], even: "EVEN", odd: "ODD", share: "CHALLENGE A FRIEND", newRecord: "NEW WORLD RECORD!", placeholder: "@name", saveBtn: "SAVE RECORD", recordSaved: "RECORD SAVED!" },
-    fr: { title: "PIXEL CLICK", desc: "Croyez le MOT, pas la COULEUR!", start: "JOUER", score: "POINTS", qPrefix: "CLIQUEZ COULEUR:", champTitle: "CHAMPION ACTUEL", waiting: "@en_attente", over: "FIN DE JEU!", save: "SAUVER", retry: "REJOUER", colors: ["ROUGE", "BLEU", "VERT", "JAUNE"], even: "PAIR", odd: "IMPAIR", share: "DÉFIER UN AMI", newRecord: "NOUVEAU RECORD MONDIAL !", placeholder: "@nom", saveBtn: "ENREGISTRER", recordSaved: "RECORD ENREGISTRÉ!" },
-    es: { title: "PIXEL CLICK", desc: "¡Confía en la PALABRA, no el COLOR!", start: "JUGAR", score: "PUNTOS", qPrefix: "CLIC EN COLOR:", champTitle: "CAMPEÓN ACTUAL", waiting: "@esperando", over: "¡FIN DEL JUEGO!", save: "GUARDAR", retry: "REPETIR", colors: ["ROJO", "AZUL", "VERDE", "AMARILLO"], even: "PAR", odd: "IMPAR", share: "DESAFÍA A UN AMIGO", newRecord: "¡NUEVO RÉCORD MUNDIAL!", placeholder: "@nombre", saveBtn: "GUARDAR RÉCORD", recordSaved: "¡RÉCORD GUARDADO!" }
+    pt: { title: "PIXEL CLICK", desc: "Confie na PALAVRA, não na COR!", start: "JOGAR", score: "PONTOS", qPrefix: "CLIQUE NA COR:", champTitle: "ATUAL CAMPEÃO", waiting: "@aguardando", over: "FIM DE JOGO!", save: "SALVAR", retry: "REPETIR", colors: ["VERMELHO", "AZUL", "VERDE", "AMARELO"], even: "PAR", odd: "ÍMPAR", share: "DESAFIE UM AMIGO", newRecord: "NOVO RECORDE!", placeholder: "@nome", saveBtn: "SALVAR RECORDE", recordSaved: "RECORDE SALVO!" },
+    en: { title: "PIXEL CLICK", desc: "Trust the WORD, not the COLOR!", start: "START", score: "SCORE", qPrefix: "CLICK THE COLOR:", champTitle: "CURRENT CHAMPION", waiting: "@waiting", over: "GAME OVER!", save: "SAVE", retry: "RETRY", colors: ["RED", "BLUE", "GREEN", "YELLOW"], even: "EVEN", odd: "ODD", share: "CHALLENGE A FRIEND", newRecord: "NEW RECORD!", placeholder: "@name", saveBtn: "SAVE RECORD", recordSaved: "RECORD SAVED!" },
+    fr: { title: "PIXEL CLICK", desc: "Croyez le MOT, pas la COULEUR!", start: "JOUER", score: "POINTS", qPrefix: "CLIQUEZ COULEUR:", champTitle: "CHAMPION ACTUEL", waiting: "@en_attente", over: "FIN DE JEU!", save: "SAUVER", retry: "REJOUER", colors: ["ROUGE", "BLEU", "VERT", "JAUNE"], even: "PAIR", odd: "IMPAIR", share: "DÉFIER UN AMI", newRecord: "NOUVEAU RECORD!", placeholder: "@nom", saveBtn: "ENREGISTRER", recordSaved: "RECORD ENREGISTRÉ!" },
+    es: { title: "PIXEL CLICK", desc: "¡Confía en la PALABRA, no el COLOR!", start: "JUGAR", score: "PUNTOS", qPrefix: "CLIC EN COLOR:", champTitle: "CAMPEÓN ACTUAL", waiting: "@esperando", over: "¡FIN DEL JUEGO!", save: "GUARDAR", retry: "REPETIR", colors: ["ROJO", "AZUL", "VERDE", "AMARILLO"], even: "PAR", odd: "IMPAR", share: "DESAFÍA A UN AMIGO", newRecord: "¡NUEVO RÉCORD!", placeholder: "@nombre", saveBtn: "GUARDAR RÉCORD", recordSaved: "¡RÉCORD GUARDADO!" }
 };
         
 

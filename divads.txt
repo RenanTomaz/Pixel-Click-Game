@@ -1,0 +1,14 @@
+<div class="ad-banner-container">
+        <p style="font-size: 0.7rem; color: #444; margin-bottom: 0Xpx; letter-spacing: 1px;">ADVERTISEMENT</p>
+        <div class="ad-box">
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : '1af5eed8d5a813d46ac266bce36c9450',
+                    'format' : 'iframe',
+                    'height' : 250,
+                    'width' : 300,
+                    'params' : {}
+                };
+            </script>
+        </div>
+    </div>
