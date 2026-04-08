@@ -204,6 +204,42 @@
         height: 25px;
     }
 }
+/* Container da Moeda */
+.pix-support-container {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.pix-support-container:hover {
+    transform: scale(1.1);
+}
+
+/* Estilo da Moeda com animação */
+.pixel-coin {
+    font-size: 2.2rem;
+    margin-bottom: 5px;
+    filter: drop-shadow(0 0 8px #f1c40f);
+    animation: coinBounce 1.5s infinite ease-in-out;
+}
+
+.pix-label {
+    font-size: 0.75rem;
+    color: #f1c40f; /* Dourado igual ao recorde */
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'Courier New', monospace;
+}
+
+/* Efeito de pulo */
+@keyframes coinBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
     </style>
 </head>
 <body>
@@ -245,18 +281,37 @@
     </div>
 
     <div id="screen-over" class="overlay" style="display:none">
-        <h1 id="ui-over-title" style="color:#ff4757">GAME OVER!</h1>
-        <p style="font-size: 1.5rem">Score: <span id="final-score">0</span></p>
+    <h1 id="ui-over-title" style="color:#ff4757">GAME OVER!</h1>
+    <p style="font-size: 1.5rem">Score: <span id="final-score">0</span></p>
 
-        <div id="new-record-ui" style="display:none; width: 100%;">
-    <p style="color: var(--accent); font-weight: bold; margin-bottom: 10px;">NOVO RECORDE!</p>
-    <input type="text" id="insta-handle" placeholder="@nome">
-    <button onclick="saveToRanking()" class="save-btn">SALVAR</button>
-</div>
-
-        <button onclick="window.location.reload();" class="retry-btn" id="ui-retry-btn">REPETIR</button>
-        <button onclick="shareGame()" class="retry-btn" id="ui-share-btn">DESAFIE UM AMIGO</button>
+    <div id="new-record-ui" style="display:none; width: 100%;">
+        <p style="color: var(--accent); font-weight: bold; margin-bottom: 10px;">NOVO RECORDE!</p>
+        <input type="text" id="insta-handle" placeholder="@nome">
+        <button onclick="saveToRanking()" class="save-btn">SALVAR</button>
     </div>
+
+    <button onclick="window.location.reload();" class="retry-btn" id="ui-retry-btn">REPETIR</button>
+    <button onclick="shareGame()" class="retry-btn" id="ui-share-btn">DESAFIE UM AMIGO</button>
+
+    <div class="pix-support-container" onclick="openPix()">
+    <div class="pixel-coin">🪙</div>
+    <div class="pix-label">Gostou deste jogo?</div>
+    <div class="pix-label">Então apoie o Dev</div>
+</div>
+        <div id="pix-overlay" class="overlay" style="display:none; z-index: 2000;">
+    <h2 style="color: #f1c40f;">APOIE O DESENVOLVEDOR</h2>
+    <p style="font-size: 0.9rem; margin-bottom: 20px;">Sua ajuda mantém o servidor ativo!</p>
+    
+    <div style="background: #222; padding: 15px; width: 85%; max-width: 300px;">
+        <p style="font-size: 0.8rem; margin: 0 0 10px 0; color: #aaa;">CHAVE PIX:</p>
+        <code id="pix-key" style="font-size: 1rem; color: #fff; word-break: break-all;">46d2ae23-3ebc-46f0-9a23-a868df805228</code>
+    </div>
+
+    <button onclick="copyPix()" class="save-btn" style="margin-top: 20px;">COPIAR CHAVE</button>
+    <button onclick="closePix()" class="retry-btn" style="background: #555;">VOLTAR</button>
+</div>
+    </a>
+</div>
 
     <script>
         // O seu código JavaScript continua igual daqui para baixo...
@@ -506,6 +561,34 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text + " " + url)}`;
         window.open(whatsappUrl, '_blank');
     }
+}
+// Abre a janela do Pix
+function openPix() {
+    document.getElementById('pix-overlay').style.display = 'flex';
+}
+
+// Fecha a janela do Pix
+function closePix() {
+    document.getElementById('pix-overlay').style.display = 'none';
+}
+
+// Copia a chave e dá feedback visual
+function copyPix(e) {
+    const key = document.getElementById('pix-key').innerText;
+    const btn = e.target;
+    
+    navigator.clipboard.writeText(key).then(() => {
+        const originalText = btn.innerText;
+        btn.innerText = "COPIADO!";
+        btn.style.background = "#2ed573"; // Verde de sucesso
+        
+        setTimeout(() => {
+            btn.innerText = originalText;
+            btn.style.background = "#3498db"; // Volta ao azul original
+        }, 2000);
+    }).catch(err => {
+        alert("Erro ao copiar: " + key);
+    });
 }
     </script>
 </body>

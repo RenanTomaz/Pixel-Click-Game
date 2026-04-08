@@ -213,6 +213,41 @@ input#insta-handle {
 input#insta-handle:focus {
     box-shadow: var(--accent-glow);
 }
+/* Container da Moeda */
+.pix-support-container {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.pix-support-container:hover {
+    transform: scale(1.1);
+}
+
+/* Estilo da Moeda com animação de pulo */
+.pixel-coin {
+    font-size: 2.2rem;
+    margin-bottom: 5px;
+    filter: drop-shadow(0 0 8px #f1c40f);
+    animation: coinBounce 1.5s infinite ease-in-out;
+}
+
+.pix-label {
+    font-size: 0.75rem;
+    color: #f1c40f; /* Mesmo dourado do Spotlight */
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Animação do pulo */
+@keyframes coinBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
     </style>
 </head>
 <body>
@@ -272,6 +307,25 @@ input#insta-handle:focus {
 
     <button onclick="window.location.reload();" class="retry-btn">REPETIR</button>
     <button onclick="shareGame()" class="retry-btn" id="ui-share-btn">DESAFIE UM AMIGO</button>
+
+        <div class="pix-support-container" onclick="openPix()">
+    <div class="pixel-coin">🪙</div>
+    <div class="pix-label">Gostou deste jogo?</div>
+    <div class="pix-label">Então apoie o Dev</div>
+</div>
+        <div id="pix-overlay" class="overlay" style="display:none; z-index: 2000;">
+    <h2 style="color: #f1c40f;">APOIE O DESENVOLVEDOR</h2>
+    <p style="font-size: 0.9rem; margin-bottom: 20px;">Sua ajuda mantém o servidor ativo!</p>
+    
+    <div style="background: #222; padding: 15px; width: 85%; max-width: 300px;">
+        <p style="font-size: 0.8rem; margin: 0 0 10px 0; color: #aaa;">CHAVE PIX:</p>
+        <code id="pix-key" style="font-size: 1rem; color: #fff; word-break: break-all;">46d2ae23-3ebc-46f0-9a23-a868df805228</code>
+    </div>
+
+    <button onclick="copyPix()" class="save-btn" style="margin-top: 20px;">COPIAR CHAVE</button>
+    <button onclick="closePix()" class="retry-btn" style="background: #555;">VOLTAR</button>
+</div>
+    </a>
 </div>
 
     <script src="natureza.js"></script>
@@ -556,6 +610,28 @@ function setLang(l) {
     const retryBtns = document.querySelectorAll('.retry-btn');
     retryBtns.forEach(btn => {
         if(btn.onclick && btn.onclick.toString().includes('reload')) btn.innerText = ui.retry;
+    });
+}
+function openPix() {
+    document.getElementById('pix-overlay').style.display = 'flex';
+}
+
+function closePix() {
+    document.getElementById('pix-overlay').style.display = 'none';
+}
+
+function copyPix() {
+    const key = document.getElementById('pix-key').innerText;
+    navigator.clipboard.writeText(key).then(() => {
+        const btn = event.target;
+        const originalText = btn.innerText;
+        btn.innerText = "COPIADO!";
+        btn.style.background = "#2ed573";
+        
+        setTimeout(() => {
+            btn.innerText = originalText;
+            btn.style.background = "#3498db";
+        }, 2000);
     });
 }
     </script>
