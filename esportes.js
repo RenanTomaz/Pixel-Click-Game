@@ -3,7 +3,7 @@ const esportesData = [
     { q: "QUEM É O REI DO FUTEBOL", options: ["ZICO", "PELÉ", "NEYMAR", "RONALDO"], correct: 1 },
     { q: "QUAL O NOME DO ESTÁDIO MAIS FAMOSO DO RIO DE JANEIRO", options: ["MINEIRÃO", "MARACANÃ", "MORUMBI", "BEIRA-RIO"], correct: 1 },
     { q: "DE QUANTOS EM QUANTOS ANOS OCORRE A COPA DO MUNDO", options: ["2 ANOS", "4 ANOS", "5 ANOS", "6 ANOS"], correct: 1 },
-    { q: "QUAL O NOME DO JOGADOR CHAMADO 'FENÔMENO'", options: ["RONALDINHO GAÚCHO", "RONALDO NAZÁRIO", "CRISTIANO RONALDO", "ROBINFO"], correct: 1 },
+    { q: "QUAL O NOME DO JOGADOR CHAMADO 'FENÔMENO'", options: ["RONALDINHO GAÚCHO", "RONALDO NAZÁRIO", "CRISTIANO RONALDO", "ROBINHO"], correct: 1 },
     { q: "QUAL TIME O PELÉ JOGOU A MAIOR PARTE DA CARREIRA", options: ["FLAMENGO", "SANTOS", "CORINTHIANS", "PALMEIRAS"], correct: 1 },
     { q: "QUEM FOI O CAPITÃO DO TETRA EM 1994", options: ["DUNGA", "CAFÚ", "ROMÁRIO", "BEBETO"], correct: 0 },
     { q: "QUAL O NOME DO JOGADOR CONHECIDO PELO 'DRIBRE DA VACA'", options: ["PELÉ", "NEYMAR", "GARRINCHA", "DENÍLSON"], correct: 2 },
