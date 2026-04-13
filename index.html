@@ -230,6 +230,34 @@
         }
         setLang('pt');
     </script>
+    <script>
+    let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // Previne o Chrome de mostrar o prompt automático
+        e.preventDefault();
+        deferredPrompt = e;
+        // Mostra o botão de download no canto superior
+        installBtn.style.display = 'block';
+
+        installBtn.addEventListener('click', () => {
+            installBtn.style.display = 'none';
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('Usuário instalou o Pixel Click');
+                }
+                deferredPrompt = null;
+            });
+        });
+    });
+
+    // Esconde o botão se o app já estiver instalado
+    window.addEventListener('appinstalled', () => {
+        installBtn.style.display = 'none';
+    });
+</script>
     <footer style="margin-top: 50px; text-align: center; font-family: sans-serif; color: #888; font-size: 12px; padding: 20px;">
     <p>Pixel Click é uma plataforma de <strong>jogos</strong> focada em desafios de agilidade mental e conhecimentos gerais. 
     Divirta-se com o <strong>Pixel Stroop</strong>, um teste de reflexos baseado em psicologia cognitiva, ou teste seu QI no <strong>Pixel Trivia</strong>, 
