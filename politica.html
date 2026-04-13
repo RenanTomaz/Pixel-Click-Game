@@ -5,31 +5,161 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Política de Privacidade | Pixel Click</title>
     <style>
-        body { background-color: #121212; color: #ccc; font-family: sans-serif; line-height: 1.6; padding: 40px 20px; max-width: 800px; margin: auto; }
-        h1 { color: white; font-family: 'Courier New', monospace; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
-        h2 { color: #3498db; font-family: 'Courier New', monospace; margin-top: 30px; }
-        a { color: #3498db; text-decoration: none; }
+        :root { 
+            --bg-color: #121212; 
+            --accent: #3498db; 
+        }
+        body { 
+            background-color: var(--bg-color); 
+            color: #ccc; 
+            font-family: sans-serif; 
+            line-height: 1.6; 
+            margin: 0; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            min-height: 100vh;
+        }
+        
+        /* Container do Texto */
+        #policy-container { padding: 80px 20px 40px 20px; max-width: 800px; width: 100%; box-sizing: border-box; }
+        
+        h1 { color: white; font-family: 'Courier New', monospace; border-bottom: 2px solid var(--accent); padding-bottom: 10px; }
+        h2 { color: var(--accent); font-family: 'Courier New', monospace; margin-top: 30px; }
+        a { color: var(--accent); text-decoration: none; }
         a:hover { text-decoration: underline; }
-        .back-link { display: inline-block; margin-bottom: 20px; font-weight: bold; }
+
+        /* Navegação */
+        #home-button { position: fixed; top: 15px; left: 15px; width: 40px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10001 !important; transition: 0.3s; color: white; }
+        #home-button:hover { transform: scale(1.1); color: var(--accent); }
+        
+        #lang-selector { position: fixed; top: 15px; right: 15px; display: flex; gap: 12px; z-index: 10001 !important; }
+        .lang-btn { width: 40px; height: 30px; cursor: pointer; filter: grayscale(0.8); transition: 0.3s; border: 2px solid transparent; }
+        .lang-btn.active { filter: grayscale(0); transform: scale(1.2); border-color: white; }
+        .lang-btn img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Footer Ajustado */
+        .game-footer { width: 100%; margin-top: auto; padding: 30px 20px; background-color: #161616; border-top: 1px solid #333; text-align: center; box-sizing: border-box; }
+        .footer-content p { color: #888; font-size: 13px; margin: 5px 0; }
+
+        @media (max-width: 600px) {
+            #lang-selector { top: 5px; left: 50%; right: auto; transform: translateX(-50%); }
+            #home-button { top: 5px; left: 10px; }
+            #policy-container { padding-top: 60px; }
+        }
     </style>
 </head>
 <body>
-    <a href="index.html" class="back-link">← Voltar ao Jogo</a>
-    <h1>Política de Privacidade</h1>
-    <p>A sua privacidade é importante para nós. Esta política explica como o <strong>Pixel Click</strong> lida com seus dados.</p>
 
-    <h2>1. Coleta de Dados</h2>
-    <p>Não coletamos informações de identificação pessoal (como nome ou e-mail) a menos que você as forneça voluntariamente. Coletamos dados técnicos básicos como seu endereço IP, tipo de navegador e recordes obtidos nos jogos para fins de estatística e ranking local.</p>
+    <div id="home-button" onclick="location.href='index.html'">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    </div>
 
-    <h2>2. Cookies</h2>
-    <p>Utilizamos cookies para salvar suas preferências (como o idioma escolhido) e seus recordes pessoais. Também podemos utilizar serviços de terceiros (como Google Analytics) que utilizam cookies para analisar o tráfego do site.</p>
+    <div id="lang-selector">
+        <div class="lang-btn" onclick="setLang('pt')" id="btn-pt"><img src="https://flagcdn.com/w80/br.png"></div>
+        <div class="lang-btn" onclick="setLang('en')" id="btn-en"><img src="https://flagcdn.com/w80/gb.png"></div>
+        <div class="lang-btn" onclick="setLang('fr')" id="btn-fr"><img src="https://flagcdn.com/w80/fr.png"></div>
+        <div class="lang-btn" onclick="setLang('es')" id="btn-es"><img src="https://flagcdn.com/w80/es.png"></div>
+    </div>
 
-    <h2>3. Uso das Informações</h2>
-    <p>As informações coletadas são usadas exclusivamente para melhorar a experiência do usuário, garantir o funcionamento dos jogos e analisar o desempenho da plataforma.</p>
+    <div id="policy-container">
+        <h1 id="ui-title">Política de Privacidade</h1>
+        <div id="ui-content">
+            </div>
+        <p id="ui-date" style="margin-top: 50px; font-size: 0.8rem; color: #555;"></p>
+    </div>
 
-    <h2>4. Consentimento</h2>
-    <p>Ao utilizar nosso site, você concorda com a nossa política de privacidade.</p>
-    
-    <p style="margin-top: 50px; font-size: 0.8rem;">Última atualização: Abril de 2026.</p>
+    <footer class="game-footer">
+        <div class="footer-content">
+            <p id="footer-text"></p>
+            <p id="footer-subtext"></p>
+        </div>
+    </footer>
+
+    <script>
+        const translations = {
+            pt: {
+                title: "Política de Privacidade",
+                date: "Última atualização: Abril de 2026.",
+                footerMain: "<strong>Pixel Click®</strong> - Desafios de Agilidade e Conhecimento",
+                footerSub: "Desenvolvido para testar os seus limites.",
+                html: `
+                    <p>A sua privacidade é importante para nós. Esta política explica como o <strong>Pixel Click</strong> lida com seus dados.</p>
+                    <h2>1. Coleta de Dados</h2>
+                    <p>Não coletamos informações de identificação pessoal (como nome ou e-mail) a menos que você as forneça voluntariamente. Coletamos dados técnicos básicos como seu endereço IP e recordes obtidos nos jogos para fins de estatística e ranking local.</p>
+                    <h2>2. Cookies</h2>
+                    <p>Utilizamos cookies para salvar suas preferências (como o idioma escolhido) e seus recordes pessoais.</p>
+                    <h2>3. Uso das Informações</h2>
+                    <p>As informações coletadas são usadas exclusivamente para melhorar a experiência do usuário e garantir o funcionamento dos jogos.</p>
+                    <h2>4. Consentimento</h2>
+                    <p>Ao utilizar nosso site, você concorda com a nossa política de privacidade.</p>`
+            },
+            en: {
+                title: "Privacy Policy",
+                date: "Last update: April 2026.",
+                footerMain: "<strong>Pixel Click®</strong> - Agility and Knowledge Challenges",
+                footerSub: "Developed to test your limits.",
+                html: `
+                    <p>Your privacy is important to us. This policy explains how <strong>Pixel Click</strong> handles your data.</p>
+                    <h2>1. Data Collection</h2>
+                    <p>We do not collect personally identifiable information (such as name or email) unless you provide it voluntarily. We collect basic technical data like your IP address and game records for statistics and local ranking purposes.</p>
+                    <h2>2. Cookies</h2>
+                    <p>We use cookies to save your preferences (such as chosen language) and your personal records.</p>
+                    <h2>3. Information Use</h2>
+                    <p>The information collected is used exclusively to improve the user experience and ensure the operation of the games.</p>
+                    <h2>4. Consent</h2>
+                    <p>By using our site, you agree to our privacy policy.</p>`
+            },
+            fr: {
+                title: "Politique de Confidentialité",
+                date: "Dernière mise à jour : Avril 2026.",
+                footerMain: "<strong>Pixel Click®</strong> - Défis d'Agilité et de Connaissances",
+                footerSub: "Développé pour tester vos limites.",
+                html: `
+                    <p>Votre vie privée est importante pour nous. Cette politique explique comment <strong>Pixel Click</strong> gère vos données.</p>
+                    <h2>1. Collecte de Données</h2>
+                    <p>Nous ne collectons pas d'informations d'identification personnelle. Nous collectons des données techniques de base comme votre adresse IP et vos scores pour des statistiques et le classement local.</p>
+                    <h2>2. Cookies</h2>
+                    <p>Nous utilisons des cookies pour enregistrer vos préférences et vos records personnels.</p>
+                    <h2>3. Utilisation des Informations</h2>
+                    <p>Les informations collectées são usadas exclusivamente para melhorar a experiência do usuário.</p>
+                    <h2>4. Consentement</h2>
+                    <p>En utilisant notre site, vous acceptez notre politique de confidentialité.</p>`
+            },
+            es: {
+                title: "Política de Privacidad",
+                date: "Última actualización: Abril de 2026.",
+                footerMain: "<strong>Pixel Click®</strong> - Desafíos de Agilidad y Conocimiento",
+                footerSub: "Desarrollado para poner a prueba tus límites.",
+                html: `
+                    <p>Su privacidad es importante para nosotros. Esta política explica cómo <strong>Pixel Click</strong> maneja sus datos.</p>
+                    <h2>1. Recolección de Datos</h2>
+                    <p>No recolectamos información de identificación personal. Recolectamos datos técnicos básicos como su dirección IP y récords para fines de estadísticas y ranking local.</p>
+                    <h2>2. Cookies</h2>
+                    <p>Utilizamos cookies para guardar sus preferencias y sus récords personales.</p>
+                    <h2>3. Uso de la Información</h2>
+                    <p>La información recolectada se utiliza exclusivamente para mejorar la experiencia del usuario.</p>
+                    <h2>4. Consentimiento</h2>
+                    <p>Al utilizar nuestro sitio, usted acepta nuestra política de privacidad.</p>`
+            }
+        };
+
+        function setLang(lang) {
+            localStorage.setItem('userLanguage', lang);
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-' + lang).classList.add('active');
+
+            const ui = translations[lang];
+            document.getElementById('ui-title').innerText = ui.title;
+            document.getElementById('ui-content').innerHTML = ui.html;
+            document.getElementById('ui-date').innerText = ui.date;
+            
+            document.getElementById('footer-text').innerHTML = ui.footerMain;
+            document.getElementById('footer-subtext').innerText = ui.footerSub;
+        }
+
+        const savedLang = localStorage.getItem('userLanguage') || 'pt';
+        setLang(savedLang);
+    </script>
 </body>
 </html>
