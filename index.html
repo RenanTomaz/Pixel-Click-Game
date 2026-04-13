@@ -135,17 +135,41 @@
             .hub-container { flex-direction: column; align-items: center; margin-top: 10vh; }
             #lang-selector { top: 5px; left: 50%; transform: translateX(-50%); }
         }
-        #installBtn:hover {
-    background: white !important;
-    color: black !important;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        #installBtn {
+    width: 40px;
+    height: 30px;
+    background: transparent;
+    border: 2px solid white;
+    cursor: pointer;
+    display: none; /* O JS mudará para 'flex' quando necessário */
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+    padding: 0;
+}
+
+#installBtn:hover {
+    background: white;
+}
+
+#installBtn:hover svg path {
+    stroke: black; /* Inverte a cor da seta no hover */
+}
+
+/* Garante que o seletor de idiomas continue alinhado */
+#lang-selector {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
     </style>
 </head>
 <body>
     <div id="lang-selector">
-        <button id="installBtn" style="display: none; background: none; border: 2px solid white; color: white; cursor: pointer; font-family: 'Courier New', monospace; font-weight: bold; padding: 0 10px; height: 30px; font-size: 0.8rem; transition: 0.3s;">
-        DOWNLOAD
+    <button id="installBtn" title="Instalar App" style="display: none;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 5V19M12 19L5 12M12 19L19 12" stroke="white" stroke-width="3" stroke-linecap="square"/>
+        </svg>
     </button>
         <div class="lang-btn active" onclick="setLang('pt')" id="btn-pt"><img src="https://flagcdn.com/w80/br.png" alt="Brasil"></div>
         <div class="lang-btn" onclick="setLang('en')" id="btn-en"><img src="https://flagcdn.com/w80/gb.png" alt="UK"></div>
@@ -231,33 +255,35 @@
         setLang('pt');
     </script>
     <script>
-    let deferredPrompt;
-    const installBtn = document.getElementById('installBtn');
+        let deferredPrompt;
+        const installBtn = document.getElementById('installBtn');
 
-    window.addEventListener('beforeinstallprompt', (e) => {
-        // Previne o Chrome de mostrar o prompt automático
-        e.preventDefault();
-        deferredPrompt = e;
-        // Mostra o botão de download no canto superior
-        installBtn.style.display = 'block';
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Previne o Chrome de mostrar o banner automático
+            e.preventDefault();
+            deferredPrompt = e;
+            // Mostra o botão de seta
+            installBtn.style.display = 'flex';
 
-        installBtn.addEventListener('click', () => {
-            installBtn.style.display = 'none';
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                    console.log('Usuário instalou o Pixel Click');
-                }
-                deferredPrompt = null;
+            installBtn.addEventListener('click', () => {
+                // Esconde o botão após clicar
+                installBtn.style.display = 'none';
+                // Mostra o prompt de instalação
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('Usuário aceitou a instalação');
+                    }
+                    deferredPrompt = null;
+                });
             });
         });
-    });
 
-    // Esconde o botão se o app já estiver instalado
-    window.addEventListener('appinstalled', () => {
-        installBtn.style.display = 'none';
-    });
-</script>
+        // Esconde o botão se o app já foi instalado
+        window.addEventListener('appinstalled', () => {
+            installBtn.style.display = 'none';
+        });
+    </script>
     <footer style="margin-top: 50px; text-align: center; font-family: sans-serif; color: #888; font-size: 12px; padding: 20px;">
     <p>Pixel Click é uma plataforma de <strong>jogos</strong> focada em desafios de agilidade mental e conhecimentos gerais. 
     Divirta-se com o <strong>Pixel Stroop</strong>, um teste de reflexos baseado em psicologia cognitiva, ou teste seu QI no <strong>Pixel Trivia</strong>, 
