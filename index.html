@@ -135,10 +135,18 @@
             .hub-container { flex-direction: column; align-items: center; margin-top: 10vh; }
             #lang-selector { top: 5px; left: 50%; transform: translateX(-50%); }
         }
+        #installBtn:hover {
+    background: white !important;
+    color: black !important;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
     </style>
 </head>
 <body>
     <div id="lang-selector">
+        <button id="installBtn" style="display: none; background: none; border: 2px solid white; color: white; cursor: pointer; font-family: 'Courier New', monospace; font-weight: bold; padding: 0 10px; height: 30px; font-size: 0.8rem; transition: 0.3s;">
+        DOWNLOAD
+    </button>
         <div class="lang-btn active" onclick="setLang('pt')" id="btn-pt"><img src="https://flagcdn.com/w80/br.png" alt="Brasil"></div>
         <div class="lang-btn" onclick="setLang('en')" id="btn-en"><img src="https://flagcdn.com/w80/gb.png" alt="UK"></div>
         <div class="lang-btn" onclick="setLang('fr')" id="btn-fr"><img src="https://flagcdn.com/w80/fr.png" alt="França"></div>
