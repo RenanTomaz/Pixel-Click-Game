@@ -4,12 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pixel Click: Stroop Challenge</title>
-<meta property="og:title" content="Pixel Click: Stroop Challenge">
+    <meta property="og:title" content="Pixel Click: Stroop Challenge">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <meta property="og:title" content="Pixel Click: Global Challenge">
     <link rel="manifest" href="manifest.json">
-<meta property="og:description" content="Consegue bater o recorde mundial de reflexos?">
-<meta property="og:image" content="https://www.pixelclick.fun/thumb.png"> 
+    <meta property="og:description" content="Consegue bater o recorde mundial de reflexos?">
+    <meta property="og:image" content="https://www.pixelclick.fun/thumb.png"> 
     <style>
         :root { 
     --bg-color: #121212; 
@@ -244,16 +243,17 @@
 </head>
 <body>
 <div id="home-button" onclick="location.href='index.html'">
-        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-        </svg>
-    </div>
-    <div id="lang-selector">
-        <div class="lang-btn active" onclick="setLang('pt')" id="btn-pt"><img src="https://flagcdn.com/w80/br.png" alt="Brazil"></div>
-        <div class="lang-btn" onclick="setLang('en')" id="btn-en"><img src="https://flagcdn.com/w80/gb.png" alt="UK"></div>
-        <div class="lang-btn" onclick="setLang('fr')" id="btn-fr"><img src="https://flagcdn.com/w80/fr.png" alt="France"></div>
-        <div class="lang-btn" onclick="setLang('es')" id="btn-es"><img src="https://flagcdn.com/w80/es.png" alt="Spain"></div>
-    </div>
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+    </svg>
+</div>
+
+<div id="lang-selector">
+    <div class="lang-btn active" onclick="setLang('pt')" id="btn-pt"><img src="https://flagcdn.com/w80/br.png" alt="Brazil"></div>
+    <div class="lang-btn" onclick="setLang('en')" id="btn-en"><img src="https://flagcdn.com/w80/gb.png" alt="UK"></div>
+    <div class="lang-btn" onclick="setLang('fr')" id="btn-fr"><img src="https://flagcdn.com/w80/fr.png" alt="France"></div>
+    <div class="lang-btn" onclick="setLang('es')" id="btn-es"><img src="https://flagcdn.com/w80/es.png" alt="Spain"></div>
+</div>
 
     <div id="game-container">
         <div id="ui-header"><span id="ui-score-label">PONTOS: <b id="score">0</b></span></div>
