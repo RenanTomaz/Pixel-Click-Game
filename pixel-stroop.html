@@ -574,21 +574,18 @@ function closePix() {
 }
 
 // Copia a chave e dá feedback visual
-function copyPix(e) {
+function copyPix() {
     const key = document.getElementById('pix-key').innerText;
-    const btn = e.target;
-    
     navigator.clipboard.writeText(key).then(() => {
+        const btn = event.target;
         const originalText = btn.innerText;
         btn.innerText = "COPIADO!";
-        btn.style.background = "#2ed573"; // Verde de sucesso
+        btn.style.background = "#2ed573";
         
         setTimeout(() => {
             btn.innerText = originalText;
-            btn.style.background = "#3498db"; // Volta ao azul original
+            btn.style.background = "#3498db";
         }, 2000);
-    }).catch(err => {
-        alert("Erro ao copiar: " + key);
     });
 }
     </script>
