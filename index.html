@@ -162,6 +162,56 @@
     align-items: center;
     gap: 12px;
 }
+.game-footer {
+    width: 100%;
+    /* O SEGREDO: Ocupa todo o espaço sobrando acima dele, empurrando-se para o fim */
+    margin-top: auto; 
+    
+    padding: 30px 20px;
+    background-color: #161616;
+    border-top: 1px solid #333;
+    text-align: center;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    
+    /* Garante que ele fique acima de fundos mas abaixo de overlays de sistema */
+    position: relative;
+    z-index: 10;
+}
+
+.footer-content p {
+    color: #888;
+    font-size: 13px;
+    margin: 5px 0;
+    line-height: 1.4;
+}
+
+.footer-content a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 12px;
+    transition: 0.3s;
+}
+
+.footer-content a:hover {
+    text-decoration: underline;
+}
+
+/* Ajuste importante para o BODY */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ocupa no mínimo a altura total da tela */
+    margin: 0;
+}
+
+/* Ajuste para não sumir no mobile */
+@media (max-width: 600px) {
+    .game-footer {
+        padding: 20px 10px;
+        margin-top: 40px;
+    }
+}
     </style>
 </head>
 <body>
@@ -292,12 +342,12 @@
             installBtn.style.display = 'none';
         });
     </script>
-    <footer style="margin-top: 50px; text-align: center; font-family: sans-serif; color: #888; font-size: 12px; padding: 20px; width: 100%;">
-    <p>
-        Pixel Click® é uma plataforma de <strong>jogos casuais</strong> focada em desafios de agilidade mental e conhecimentos gerais. 
-        <br>
-        <a href="politica.html" style="color: #555; text-decoration: underline; margin-top: 10px; display: inline-block;">Política de Privacidade</a>
-    </p>
+    <footer class="game-footer">
+    <div class="footer-content">
+        <p><strong>Pixel Click®</strong> - Jogos de Agilidade e Conhecimento</p>
+        <p>Desenvolvido para testar os seus limites.</p>
+        <a href="politica.html">Política de Privacidade</a>
+    </div>
 </footer>
     <script>
   if ('serviceWorker' in navigator) {
