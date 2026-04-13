@@ -30,10 +30,27 @@
 
         /* --- Navegação --- */
         #home-button {
-            position: absolute; top: 15px; left: 15px; width: 40px; height: 30px;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; z-index: 200; color: white; border: none; background: none;
-        }
+    position: absolute;
+    top: 15px; /* Alinhado com as bandeiras */
+    left: 15px;
+    width: 40px; /* Mantém a área de clique */
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 200;
+    transition: 0.3s;
+    background: transparent; /* Fundo transparente */
+    border: none; /* REMOVE A BORDA QUADRADA */
+    color: white; /* Cor inicial do ícone */
+    z-index: 10001 !important;
+}
+#home-button:hover {
+    background: var(--accent);
+    color: black;
+    transform: scale(1.1);
+}
 
         #lang-selector { position: absolute; top: 15px; right: 15px; display: flex; gap: 12px; z-index: 200; }
         .lang-btn { width: 40px; height: 30px; cursor: pointer; filter: grayscale(0.8); border: 2px solid transparent; }
@@ -118,7 +135,12 @@
 
         @media (max-width: 600px) {
             #lang-selector { top: 5px; left: 50%; transform: translateX(-50%); }
-            #home-button { top: 5px; left: 10px; }
+            #home-button {
+        top: 5px;
+        left: 10px; /* Ajustado para não bater no notch/bordas */
+        width: 35px;
+        height: 25px;
+    }
             #game-container { margin-top: 60px; }
             .btn { font-size: 0.9rem; min-height: 120px; }
         }
