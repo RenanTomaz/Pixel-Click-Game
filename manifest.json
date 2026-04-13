@@ -1,18 +1,16 @@
 {
-  "short_name": "Pixel Click",
-  "name": "Pixel Click: Desafio contra o tempo",
-  "description": "Teste seu raciocínio neste desafio contra o tempo.",
+  "name": "Pixel Click",
+  "short_name": "PixelClick",
+  "description": "Jogos de agilidade e raciocínio.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
   "icons": [
     {
-      "src": "https://renantomaz.github.io/Pixel-Click-Game/thumb.png",
+      "src": "thumb.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     }
-  ],
-  "start_url": "/Pixel-Click-Game/",
-  "display": "standalone",
-  "theme_color": "#121212",
-  "background_color": "#121212",
-  "orientation": "portrait"
+  ]
 }
