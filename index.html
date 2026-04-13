@@ -224,5 +224,12 @@
     Divirta-se com o <strong>Pixel Stroop</strong>, um teste de reflexos baseado em psicologia cognitiva, ou teste seu QI no <strong>Pixel Trivia</strong>, 
     nosso quiz temático com recordes em tempo real. Jogue grátis, sem download, e desafie jogadores do Brasil e do mundo.</p>
 </footer>
+    <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js')
+      .then(() => console.log("PWA: Service Worker Registrado!"))
+      .catch(err => console.log("PWA: Erro no registro", err));
+  }
+</script>
 </body>
 </html>
