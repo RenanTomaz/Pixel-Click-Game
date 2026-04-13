@@ -262,7 +262,11 @@ body {
         triviaTag: "PIXEL TRIVIA", 
         triviaDesc: "Escolha seu tema favorito e teste seus conhecimentos contra o relógio.",
         play: "JOGAR", 
-        locked: "JOGAR" // MUDADO DE "EM BREVE" PARA "JOGAR"
+        locked: "JOGAR",
+        // Tradução do Footer
+        footerMain: "<strong>Pixel Click®</strong> - Desafios de Agilidade e Conhecimento",
+        footerSub: "Desenvolvido para testar os seus limites.",
+        footerPolicy: "Política de Privacidade"
     },
     en: { 
         subtitle: "Choose your challenge", 
@@ -271,7 +275,11 @@ body {
         triviaTag: "PIXEL TRIVIA", 
         triviaDesc: "Pick your favorite topic and test your knowledge against the clock.",
         play: "PLAY", 
-        locked: "PLAY" // MUDADO DE "COMING SOON" PARA "PLAY"
+        locked: "PLAY",
+        // Tradução do Footer
+        footerMain: "<strong>Pixel Click®</strong> - Agility and Knowledge Challenges",
+        footerSub: "Developed to test your limits.",
+        footerPolicy: "Privacy Policy"
     },
     fr: { 
         subtitle: "Choisissez votre défi", 
@@ -280,7 +288,11 @@ body {
         triviaTag: "PIXEL TRIVIA", 
         triviaDesc: "Choisissez votre sujet préféré et testez vos connaissances contre la montre.",
         play: "JOUER", 
-        locked: "JOUER" // MUDADO DE "BIENTÔT" PARA "JOUER"
+        locked: "JOUER",
+        // Tradução do Footer
+        footerMain: "<strong>Pixel Click®</strong> - Défis d'agilité et de conhecimentos",
+        footerSub: "Développé para tester vos limites.",
+        footerPolicy: "Politique de Confidentialité"
     },
     es: { 
         subtitle: "Elige tu desafío", 
@@ -289,28 +301,51 @@ body {
         triviaTag: "PIXEL TRIVIA", 
         triviaDesc: "Elige tu tema favorito y pon a prueba tus conocimientos contra el reloj.",
         play: "JUGAR", 
-        locked: "JUGAR" // MUDADO DE "PRÓXIMAMENTE" PARA "JUGAR"
+        locked: "JUGAR",
+        // Tradução do Footer
+        footerMain: "<strong>Pixel Click®</strong> - Desafíos de Agilidad y Conocimiento",
+        footerSub: "Desarrollado para poner a prueba tus límites.",
+        footerPolicy: "Política de Privacidad"
     }
 };
 
         function setLang(l) {
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('btn-' + l).classList.add('active');
-            const ui = hubLangs[l];
-            
-            if(document.getElementById('ui-hub-subtitle')) {
-                document.getElementById('ui-hub-subtitle').textContent = ui.subtitle;
-            }
-            
-            document.getElementById('ui-stroop-tag').textContent = ui.stroop;
-            document.getElementById('ui-pixel-desc').textContent = ui.pixelDesc;
-            document.getElementById('ui-pixel-btn').textContent = ui.play;
-            
-            document.getElementById('ui-trivia-tag').textContent = ui.triviaTag;
-            document.getElementById('ui-trivia-desc').textContent = ui.triviaDesc;
-            document.getElementById('ui-trivia-btn').textContent = ui.locked;
-        }
-        setLang('pt');
+    // 1. Atualiza visualmente os botões de bandeira
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    const activeBtn = document.getElementById('btn-' + l);
+    if(activeBtn) activeBtn.classList.add('active');
+
+    // 2. Pega o dicionário de tradução do idioma escolhido
+    const ui = hubLangs[l];
+    
+    // 3. Traduz os elementos do Hub (Subtítulo e Cards)
+    if(document.getElementById('ui-hub-subtitle')) {
+        document.getElementById('ui-hub-subtitle').textContent = ui.subtitle;
+    }
+    
+    document.getElementById('ui-stroop-tag').textContent = ui.stroop;
+    document.getElementById('ui-pixel-desc').textContent = ui.pixelDesc;
+    document.getElementById('ui-pixel-btn').textContent = ui.play;
+    
+    document.getElementById('ui-trivia-tag').textContent = ui.triviaTag;
+    document.getElementById('ui-trivia-desc').textContent = ui.triviaDesc;
+    document.getElementById('ui-trivia-btn').textContent = ui.locked;
+
+    // 4. TRADUÇÃO DO FOOTER (Adicione estas linhas abaixo)
+    if(document.getElementById('footer-text')) {
+        document.getElementById('footer-text').innerHTML = ui.footerMain;
+    }
+    if(document.getElementById('footer-subtext')) {
+        document.getElementById('footer-subtext').innerText = ui.footerSub;
+    }
+    if(document.getElementById('footer-policy')) {
+        document.getElementById('footer-policy').innerText = ui.footerPolicy;
+    }
+}
+
+// Inicializa com o idioma salvo ou português por padrão
+const savedLang = localStorage.getItem('userLanguage') || 'pt';
+setLang(savedLang);
     </script>
     <script>
         let deferredPrompt;
@@ -344,9 +379,9 @@ body {
     </script>
     <footer class="game-footer">
     <div class="footer-content">
-        <p><strong>Pixel Click®</strong> - Jogos de Agilidade e Conhecimento</p>
-        <p>Desenvolvido para testar os seus limites.</p>
-        <a href="politica.html">Política de Privacidade</a>
+        <p id="footer-text"><strong>Pixel Click®</strong> - Desafios de Agilidade e Conhecimento</p>
+        <p id="footer-subtext">Desenvolvido para testar os seus limites.</p>
+        <a href="politica.html" id="footer-policy">Política de Privacidade</a>
     </div>
 </footer>
     <script>
