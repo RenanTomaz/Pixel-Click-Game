@@ -558,26 +558,17 @@ async function saveToRanking() {
         // Bloqueia clique direito e gestos de zoom para mobile
         document.addEventListener('contextmenu', event => event.preventDefault());
         function shareGame() {
-    // Textos personalizados por idioma
-    const shareMsgs = {
-        pt: `Fiz ${score} pontos no Pixel Click! Duvido você bater o meu recorde. Jogue aqui:`,
-        en: `I scored ${score} points on Pixel Click! I bet you can't beat my record. Play here:`,
-        fr: `J'ai marqué ${score} points sur Pixel Click ! Je parie que tu ne podras pas battre mon record. Joue ici :`,
-        es: `¡Hice ${score} puntos en Pixel Click! Te desafio a superar mi récord. Juega aquí:`
-    };
-
-    const text = shareMsgs[currentLang] || shareMsgs.en;
-    const url = window.location.href;
+    // Na Trivia a variável é 'score', no Stroop era 'finalScore'
+    const text = `Fiz ${score} pontos no Pixel Trivia! Consegue superar meu recorde? 🧠🎮`;
+    const url = "https://pixelclick.fun/pixel-trivia.html";
 
     if (navigator.share) {
-        // Abre o menu nativo do celular (iMessage, WhatsApp, Instagram, etc)
         navigator.share({
-            title: 'Pixel Click Challenge',
+            title: 'Pixel Click',
             text: text,
             url: url
-        }).catch(err => console.log("Erro ao compartilhar"));
+        }).catch(err => console.log("Erro ao compartilhar", err));
     } else {
-        // Caso o navegador seja antigo ou PC, abre o link do WhatsApp como reserva
         const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text + " " + url)}`;
         window.open(whatsappUrl, '_blank');
     }
