@@ -263,6 +263,13 @@ input#insta-handle:focus {
             <span>PONTOS: <b id="score">0</b></span>
         </div>
         <div id="timer-box" style="display: none;"><div id="timer-bar"></div></div>
+
+        
+    <div id="screen-start" class="overlay">
+        <h1 style="color: var(--accent);">PIXEL TRIVIA</h1>
+        <p>Responda antes que o tempo acabe!</p>
+        <button onclick="hideStart()" class="action-btn retry-btn">JOGAR</button>
+    </div>
         
         <div id="question">ESCOLHA UMA CATEGORIA</div>
 
@@ -290,12 +297,6 @@ input#insta-handle:focus {
         <span id="champ-score">0 pts</span>
     </div>
 </div>
-
-    <div id="screen-start" class="overlay">
-        <h1 style="color: var(--accent);">PIXEL TRIVIA</h1>
-        <p>Responda antes que o tempo acabe!</p>
-        <button onclick="hideStart()" class="action-btn retry-btn">JOGAR</button>
-    </div>
 
     <div id="screen-over" class="overlay" style="display:none">
     <h1 id="ui-over-title" style="color:#ff4757">GAME OVER!</h1>
