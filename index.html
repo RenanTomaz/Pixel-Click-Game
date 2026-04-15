@@ -128,9 +128,26 @@
         }
 
         @media (max-width: 700px) {
-    .hub-container { 
-        margin-top: 100px; /* Espaço suficiente para o seletor centralizado */
-        gap: 20px;
+    .hub-container {
+        display: flex; /* Muda de grid para flex no mobile */
+        flex-direction: row; /* Alinha lado a lado */
+        overflow-x: auto; /* Habilita o deslize lateral */
+        scroll-snap-type: x mandatory; /* Faz o card "travar" no meio ao deslizar */
+        gap: 15px;
+        padding: 20px;
+        margin-top: 100px;
+        justify-content: flex-start;
+        -webkit-overflow-scrolling: touch; /* Deslize suave no iOS */
+    }
+    .game-card {
+        min-width: 85vw; /* Cada card ocupa 85% da largura da tela */
+        scroll-snap-align: center; /* Centraliza o card no foco */
+        height: auto;
+    }
+    
+    /* Esconde a barra de rolagem para um visual mais limpo */
+    .hub-container::-webkit-scrollbar {
+        display: none;
     }
     
     #lang-selector { 
