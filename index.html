@@ -194,6 +194,55 @@
             margin-top: 20px;
         }
     }
+    #ui-hub-subtitle {
+    font-size: 1.2rem;
+    color: #eee;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: bold;
+    margin: 40px auto 10px auto; 
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.hub-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    width: 95%;
+    max-width: 1100px;
+    margin: 20px auto 40px auto; /* Reduzido para aproximar do título */
+    align-items: stretch;
+    flex-grow: 1;
+}
+
+@media (max-width: 700px) {
+    #ui-hub-subtitle {
+        margin-top: 110px; /* Desce o texto para baixo das bandeiras no mobile */
+        font-size: 1rem;
+    }
+
+    .hub-container {
+        display: flex !important; /* Força o modo flex para o carrossel */
+        flex-direction: row !important;
+        overflow-x: auto !important;
+        scroll-snap-type: x mandatory;
+        gap: 15px;
+        padding: 20px 40px; /* Padding maior nas laterais para o efeito de "espreitadela" */
+        margin-top: 0px; 
+        justify-content: flex-start;
+        -webkit-overflow-scrolling: touch;
+        /* Máscara para indicar que há conteúdo dos lados */
+        mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+        -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+    }
+
+    .game-card {
+        min-width: 75vw; /* Diminuído para que o próximo card apareça claramente no canto */
+        scroll-snap-align: center;
+        height: auto;
+    }
+}
 </style>
 </head>
 <body>
@@ -216,7 +265,7 @@
     <div class="lang-btn" onclick="setLang('fr')" id="btn-fr"><img src="https://flagcdn.com/w40/fr.png" alt="França"></div>
     <div class="lang-btn" onclick="setLang('es')" id="btn-es"><img src="https://flagcdn.com/w40/es.png" alt="Espanha"></div>
 </div>
-
+<h2 id="ui-hub-subtitle">Escolha o seu jogo</h2>
     <div class="hub-container">
     <div class="game-card card-pixel" onclick="location.href='pixel-stroop.html'">
         <div>
@@ -246,7 +295,7 @@
     <script>
        const hubLangs = {
     pt: { 
-        subtitle: "Escolha seu desafio", 
+        subtitle: "Escolha seu jogo", 
         stroop: "PIXEL STROOP", 
         pixelDesc: "Desafio de números e cores contra o relógio.", 
         triviaTag: "PIXEL TRIVIA", 
@@ -259,7 +308,7 @@
         footerPolicy: "Política de Privacidade"
     },
     en: { 
-        subtitle: "Choose your challenge", 
+        subtitle: "Choose your game", 
         stroop: "PIXEL STROOP", 
         pixelDesc: "Color and number challenge against the clock.", 
         triviaTag: "PIXEL TRIVIA", 
@@ -272,7 +321,7 @@
         footerPolicy: "Privacy Policy"
     },
     fr: { 
-        subtitle: "Choisissez votre défi", 
+        subtitle: "Choisissez votre jeu", 
         stroop: "PIXEL STROOP", 
         pixelDesc: "Défi de couleurs et de chiffres contre la montre.", 
         triviaTag: "PIXEL TRIVIA", 
@@ -285,7 +334,7 @@
         footerPolicy: "Politique de Confidentialité"
     },
     es: { 
-        subtitle: "Elige tu desafío", 
+        subtitle: "Elige tu juego", 
         stroop: "PIXEL STROOP", 
         pixelDesc: "Desafío de números y colores contra el reloj.", 
         triviaTag: "PIXEL TRIVIA", 
