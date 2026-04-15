@@ -18,223 +18,183 @@
 <link rel="apple-touch-icon" href="favicon.png">
     
     <style>
-        :root { 
-            --bg-color: #121212; 
-            --card-inner: #161616;
-            /* UNIFICADO: O verde foi substituído pelo azul em todo o Hub */
-            --accent-trivia: #3498db; 
-            
-            /* Cores do Gradiente (25% cada) */
-            --g-red: #ff4757;
-            --g-blue: #2e86de;
-            --g-yellow: #eccc68;
-            --g-green: #2ed573;
-        }
+    :root { 
+        --bg-color: #121212; 
+        --card-inner: #161616;
+        --accent-trivia: #3498db; 
+        --g-red: #ff4757;
+        --g-blue: #2e86de;
+        --g-yellow: #eccc68;
+        --g-green: #2ed573;
+    }
 
-        body { 
-            background-color: var(--bg-color); 
-            color: white; 
-            font-family: 'Courier New', monospace; 
-            margin: 0; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center;
-            justify-content: flex-start;
-            min-height: 100vh; 
-            overflow-y: auto;
-            user-select: none;
-        }
+    body { 
+        background-color: var(--bg-color); 
+        color: white; 
+        font-family: 'Courier New', monospace; 
+        margin: 0; 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center;
+        min-height: 100vh; /* Garante altura total para empurrar o footer */
+        overflow-y: auto;
+        user-select: none;
+    }
 
-        #lang-selector { position: absolute; top: 15px; right: 15px; display: flex; gap: 12px; z-index: 200; }
-        .lang-btn { width: 40px; height: 30px; cursor: pointer; filter: grayscale(0.8); transition: 0.3s; border: 2px solid transparent; }
-        .lang-btn.active { filter: grayscale(0); transform: scale(1.2); border-color: white; }
-        .lang-btn img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+    #lang-selector { position: absolute; top: 15px; right: 15px; display: flex; gap: 12px; z-index: 200; }
+    .lang-btn { width: 40px; height: 30px; cursor: pointer; filter: grayscale(0.8); transition: 0.3s; border: 2px solid transparent; }
+    .lang-btn.active { filter: grayscale(0); transform: scale(1.2); border-color: white; }
+    .lang-btn img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
 
-        .logo-container { width: 100%; display: flex; justify-content: center; margin-top: 60px; }
-        .main-logo { max-width: 120px; height: auto; filter: drop-shadow(0 0 10px rgba(255,255,255,0.3)); transition: 0.3s; }
-        
-        #ui-hub-subtitle { font-size: 1.1rem; color: #aaa; margin-top: 5px; margin-bottom: 10px; text-align: center; }
+    .logo-container { width: 100%; display: flex; justify-content: center; margin-top: 60px; }
+    .main-logo { max-width: 120px; height: auto; filter: drop-shadow(0 0 10px rgba(255,255,255,0.3)); transition: 0.3s; }
+    
+    #ui-hub-subtitle { font-size: 1.1rem; color: #aaa; margin-top: 5px; margin-bottom: 10px; text-align: center; }
 
-        .hub-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 25px;
-    width: 95%;
-    max-width: 1100px;
-    margin: 120px auto 40px auto; /* Aumentado de 8vh para 120px fixos */
-    align-items: stretch;
-}
-
-        /* ESTILIZAÇÃO DA BORDA EM GRADIENTE */
-        .game-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%; 
-    padding: 40px 30px;
-    background: var(--card-inner); /* Adicionado fundo caso estivesse transparente */
-    border: 2px solid #222;
-    border-radius: 30px;
-    transition: 0.3s;
-}
-/* Efeito de hover com as cores que você já definiu */
-.card-pixel:hover { border-color: var(--g-red); box-shadow: 0 0 15px rgba(255, 71, 87, 0.2); }
-.card-trivia:hover { border-color: var(--g-blue); box-shadow: 0 0 15px rgba(46, 134, 222, 0.2); }
-.card-genius:hover { border-color: var(--g-yellow); box-shadow: 0 0 15px rgba(236, 204, 104, 0.2); }
-
-        .game-card:hover { transform: translateY(-8px) scale(1.02); }
-
-
-        /* Estilo dos Subtítulos (UNIFICADO PARA AZUL) */
-        .tag { 
-            font-weight: 900; 
-            margin-bottom: 20px; 
-            font-size: 1.2rem; 
-            letter-spacing: 2px; 
-            text-transform: uppercase;
-            color: var(--accent-trivia); /* Cor unificada */
-            text-shadow: 0 0 10px rgba(52, 152, 219, 0.3);
-        }
-        
-        p { font-size: 0.9rem; color: #ccc; margin-bottom: 25px; line-height: 1.5; flex-grow: 1; }
-
-        /* Botões UNIFICADOS */
-        .play-btn {
-            width: 100%;
-            padding: 15px;
-            font-size: 1.1rem;
-            font-family: inherit;
-            font-weight: bold;
-            text-transform: uppercase;
-            border: 4px solid #000;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: 0.2s;
-            background: var(--accent-trivia); /* Cor unificada */
-            color: #fff;
-        }
-        
-        .play-btn:active { transform: translateY(3px); }
-
-        #ad-hub {
-            width: 300px;
-            height: 250px;
-            margin: 30px auto;
-            background: rgba(255,255,255,0.03);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px dashed #444;
-        }
-
-        @media (max-width: 700px) {
     .hub-container {
-        display: flex; /* Muda de grid para flex no mobile */
-        flex-direction: row; /* Alinha lado a lado */
-        overflow-x: auto; /* Habilita o deslize lateral */
-        scroll-snap-type: x mandatory; /* Faz o card "travar" no meio ao deslizar */
-        gap: 15px;
-        padding: 20px;
-        margin-top: 100px;
-        justify-content: flex-start;
-        -webkit-overflow-scrolling: touch; /* Deslize suave no iOS */
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+        width: 95%;
+        max-width: 1100px;
+        margin: 140px auto 40px auto; /* Aumentado para 140px para evitar sobreposição das bandeiras */
+        align-items: stretch;
+        flex-grow: 1; /* Faz o container ocupar o espaço disponível e empurrar o footer */
     }
+
     .game-card {
-        min-width: 85vw; /* Cada card ocupa 85% da largura da tela */
-        scroll-snap-align: center; /* Centraliza o card no foco */
-        height: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%; 
+        padding: 40px 30px;
+        background: var(--card-inner);
+        border: 2px solid #222;
+        border-radius: 30px;
+        transition: 0.3s;
+        box-sizing: border-box;
+    }
+
+    .card-pixel:hover { border-color: var(--g-red); box-shadow: 0 0 15px rgba(255, 71, 87, 0.2); }
+    .card-trivia:hover { border-color: var(--g-blue); box-shadow: 0 0 15px rgba(46, 134, 222, 0.2); }
+    .card-genius:hover { border-color: var(--g-yellow); box-shadow: 0 0 15px rgba(236, 204, 104, 0.2); }
+
+    .game-card:hover { transform: translateY(-8px) scale(1.02); }
+
+    .tag { 
+        font-weight: 900; 
+        margin-bottom: 20px; 
+        font-size: 1.2rem; 
+        letter-spacing: 2px; 
+        text-transform: uppercase;
+        color: var(--accent-trivia); 
+        text-shadow: 0 0 10px rgba(52, 152, 219, 0.3);
     }
     
-    /* Esconde a barra de rolagem para um visual mais limpo */
-    .hub-container::-webkit-scrollbar {
+    p { font-size: 0.9rem; color: #ccc; margin-bottom: 25px; line-height: 1.5; flex-grow: 1; }
+
+    .play-btn {
+        width: 100%;
+        padding: 15px;
+        font-size: 1.1rem;
+        font-family: inherit;
+        font-weight: bold;
+        text-transform: uppercase;
+        border: 4px solid #000;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: 0.2s;
+        background: var(--accent-trivia); 
+        color: #fff;
+    }
+    
+    .play-btn:active { transform: translateY(3px); }
+
+    #ad-hub {
+        width: 300px;
+        height: 250px;
+        margin: 30px auto;
+        background: rgba(255,255,255,0.03);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px dashed #444;
+    }
+
+    @media (max-width: 700px) {
+        .hub-container {
+            display: flex;
+            flex-direction: row;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 15px;
+            padding: 20px;
+            margin-top: 110px; /* Ajuste para não bater nas bandeiras no mobile */
+            justify-content: flex-start;
+            -webkit-overflow-scrolling: touch;
+            flex-grow: 0; /* No mobile, o carrossel não precisa crescer para empurrar o footer */
+        }
+        .game-card {
+            min-width: 85vw;
+            scroll-snap-align: center;
+            height: auto;
+        }
+        .hub-container::-webkit-scrollbar { display: none; }
+        
+        #lang-selector { 
+            top: 10px; 
+            background: rgba(18, 18, 18, 0.8); 
+            padding: 5px 15px;
+            border-radius: 20px;
+            left: 50%;
+            right: auto;
+            transform: translateX(-50%);
+        }
+    }
+
+    #installBtn {
+        width: 40px;
+        height: 30px;
+        background: transparent;
+        border: 2px solid white;
+        cursor: pointer;
         display: none;
+        align-items: center;
+        justify-content: center;
+        transition: 0.3s;
+        padding: 0;
     }
-    
-    #lang-selector { 
-        top: 10px; 
-        background: rgba(18, 18, 18, 0.8); /* Fundo sutil para legibilidade */
-        padding: 5px 15px;
-        border-radius: 20px;
-    }
-}
-        #installBtn {
-    width: 40px;
-    height: 30px;
-    background: transparent;
-    border: 2px solid white;
-    cursor: pointer;
-    display: none; /* O JS mudará para 'flex' quando necessário */
-    align-items: center;
-    justify-content: center;
-    transition: 0.3s;
-    padding: 0;
-}
 
-#installBtn:hover {
-    background: white;
-}
+    #installBtn:hover { background: white; }
+    #installBtn:hover svg path { stroke: black; }
 
-#installBtn:hover svg path {
-    stroke: black; /* Inverte a cor da seta no hover */
-}
+    #lang-selector { display: flex; align-items: center; gap: 12px; }
 
-/* Garante que o seletor de idiomas continue alinhado */
-#lang-selector {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-.game-footer {
-    width: 100%;
-    /* O SEGREDO: Ocupa todo o espaço sobrando acima dele, empurrando-se para o fim */
-    margin-top: auto; 
-    
-    padding: 30px 20px;
-    background-color: #161616;
-    border-top: 1px solid #333;
-    text-align: center;
-    box-sizing: border-box;
-    font-family: sans-serif;
-    
-    /* Garante que ele fique acima de fundos mas abaixo de overlays de sistema */
-    position: relative;
-    z-index: 10;
-}
-
-.footer-content p {
-    color: #888;
-    font-size: 13px;
-    margin: 5px 0;
-    line-height: 1.4;
-}
-
-.footer-content a {
-    color: var(--accent);
-    text-decoration: none;
-    font-size: 12px;
-    transition: 0.3s;
-}
-
-.footer-content a:hover {
-    text-decoration: underline;
-}
-
-/* Ajuste importante para o BODY */
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh; /* Ocupa no mínimo a altura total da tela */
-    margin: 0;
-}
-
-/* Ajuste para não sumir no mobile */
-@media (max-width: 600px) {
     .game-footer {
-        padding: 20px 10px;
-        margin-top: 40px;
+        width: 100%;
+        margin-top: auto; /* Empurra o footer para o fim da tela */
+        padding: 30px 20px;
+        background-color: #161616;
+        border-top: 1px solid #333;
+        text-align: center;
+        box-sizing: border-box;
+        font-family: sans-serif;
+        position: relative;
+        z-index: 10;
+        flex-shrink: 0; /* Impede o footer de encolher */
     }
-}
-    </style>
+
+    .footer-content p { color: #888; font-size: 13px; margin: 5px 0; line-height: 1.4; }
+    .footer-content a { color: var(--accent-trivia); text-decoration: none; font-size: 12px; transition: 0.3s; }
+    .footer-content a:hover { text-decoration: underline; }
+
+    @media (max-width: 600px) {
+        .game-footer {
+            padding: 20px 10px;
+            margin-top: 20px;
+        }
+    }
+</style>
 </head>
 <body>
     <div id="cookie-banner" style="display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 600px; background: #161616; border: 2px solid white; padding: 20px; z-index: 1000; border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.5); flex-direction: column; align-items: center; gap: 15px; text-align: center;">
