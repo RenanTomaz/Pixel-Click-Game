@@ -56,35 +56,31 @@
         #ui-hub-subtitle { font-size: 1.1rem; color: #aaa; margin-top: 5px; margin-bottom: 10px; text-align: center; }
 
         .hub-container {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            align-items: stretch;
-            justify-content: center;
-            gap: 25px;
-            width: 95%;
-            max-width: 900px;
-            margin: 10vh auto 0 auto; /* O terceiro valor (0) tira o espaço de baixo dos cards */
-        }
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    width: 95%;
+    max-width: 1100px;
+    margin: 120px auto 40px auto; /* Aumentado de 8vh para 120px fixos */
+    align-items: stretch;
+}
 
         /* ESTILIZAÇÃO DA BORDA EM GRADIENTE */
         .game-card {
-            flex: 1;
-            min-width: 280px;
-            max-width: 400px;
-            position: relative;
-            padding: 40px 30px;
-            text-align: center;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer;
-            z-index: 1;
-            border-radius: 30px;
-            background: transparent; 
-        }
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%; 
+    padding: 40px 30px;
+    background: var(--card-inner); /* Adicionado fundo caso estivesse transparente */
+    border: 2px solid #222;
+    border-radius: 30px;
+    transition: 0.3s;
+}
+/* Efeito de hover com as cores que você já definiu */
+.card-pixel:hover { border-color: var(--g-red); box-shadow: 0 0 15px rgba(255, 71, 87, 0.2); }
+.card-trivia:hover { border-color: var(--g-blue); box-shadow: 0 0 15px rgba(46, 134, 222, 0.2); }
+.card-genius:hover { border-color: var(--g-yellow); box-shadow: 0 0 15px rgba(236, 204, 104, 0.2); }
 
         .game-card:hover { transform: translateY(-8px) scale(1.02); }
 
@@ -132,9 +128,18 @@
         }
 
         @media (max-width: 700px) {
-            .hub-container { flex-direction: column; align-items: center; margin-top: 10vh; }
-            #lang-selector { top: 5px; left: 50%; transform: translateX(-50%); }
-        }
+    .hub-container { 
+        margin-top: 100px; /* Espaço suficiente para o seletor centralizado */
+        gap: 20px;
+    }
+    
+    #lang-selector { 
+        top: 10px; 
+        background: rgba(18, 18, 18, 0.8); /* Fundo sutil para legibilidade */
+        padding: 5px 15px;
+        border-radius: 20px;
+    }
+}
         #installBtn {
     width: 40px;
     height: 30px;
@@ -389,8 +394,7 @@ setLang(savedLang);
     </script>
     <footer class="game-footer">
     <div class="footer-content">
-        <p id="footer-text"><strong>Pixel Click®</strong> - Desafios de Agilidade e Conhecimento</p>
-        <p id="footer-subtext">Desenvolvido para testar os seus limites.</p>
+        <p id="footer-text"><strong>Pixel Click®</strong> - Jogos de Raciocínio e Conhecimento</p>
         <a href="politica.html" id="footer-policy">Política de Privacidade</a>
     </div>
 </footer>
