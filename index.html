@@ -56,17 +56,16 @@
         #ui-hub-subtitle { font-size: 1.1rem; color: #aaa; margin-top: 5px; margin-bottom: 10px; text-align: center; }
 
         .hub-container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: stretch;
-    justify-content: center;
-    gap: 25px;
-    width: 95%;
-    max-width: 900px;
-    /* ALTERE A LINHA ABAIXO */
-    margin: 20px auto 0 auto; /* Antes era 10vh, mudei para 20px */
-}
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: stretch;
+            justify-content: center;
+            gap: 25px;
+            width: 95%;
+            max-width: 900px;
+            margin: 10vh auto 0 auto; /* O terceiro valor (0) tira o espaço de baixo dos cards */
+        }
 
         /* ESTILIZAÇÃO DA BORDA EM GRADIENTE */
         .game-card {
@@ -133,11 +132,7 @@
         }
 
         @media (max-width: 700px) {
-            .hub-container { 
-        flex-direction: column; 
-        align-items: center; 
-        margin-top: 20px; /* Altere de 10vh para 20px */
-    }
+            .hub-container { flex-direction: column; align-items: center; margin-top: 10vh; }
             #lang-selector { top: 5px; left: 50%; transform: translateX(-50%); }
         }
         #installBtn {
@@ -239,18 +234,7 @@ body {
     <div class="lang-btn" onclick="setLang('fr')" id="btn-fr"><img src="https://flagcdn.com/w40/fr.png" alt="França"></div>
     <div class="lang-btn" onclick="setLang('es')" id="btn-es"><img src="https://flagcdn.com/w40/es.png" alt="Espanha"></div>
 </div>
-<div style="display: flex; justify-content: center; margin: 80px 0 0 0; position: relative; z-index: 9999;">
-    <script type="text/javascript">
-        atOptions = {
-            'key' : '1af5eed8d5a813d46ac266bce36c9450',
-            'format' : 'iframe',
-            'height' : 250,
-            'width' : 300,
-            'params' : {}
-        };
-    </script>
-    <script type="text/javascript" src="https://www.highperformanceformat.com/1af5eed8d5a813d46ac266bce36c9450/invoke.js"></script>
-</div>
+
     <div class="hub-container">
     <div class="game-card card-pixel" onclick="location.href='pixel-stroop.html'">
         <div>
@@ -267,19 +251,28 @@ body {
     </div>
     <button class="play-btn trivia-btn" id="ui-trivia-btn">JOGAR</button>
 </div>
+<div class="game-card card-genius" onclick="location.href='pixel-genius.html'" style="cursor: pointer;">
+    <div>
+        <div id="ui-genius-tag" class="tag">PIXEL GENIUS</div>
+        <p id="ui-genius-desc">Memorize a sequência de cores e luzes neste desafio clássico de memória.</p>
+    </div>
+    <button class="play-btn" id="ui-genius-btn">JOGAR</button>
+</div>
+
 </div>
 
     <script>
-        const hubLangs = {
+       const hubLangs = {
     pt: { 
         subtitle: "Escolha seu desafio", 
         stroop: "PIXEL STROOP", 
         pixelDesc: "Desafio de números e cores contra o relógio.", 
         triviaTag: "PIXEL TRIVIA", 
         triviaDesc: "Escolha seu tema favorito e teste seus conhecimentos contra o relógio.",
+        geniusTag: "PIXEL GENIUS",
+        geniusDesc: "Memorize a sequência de cores e luzes neste desafio de memória.",
         play: "JOGAR", 
         locked: "JOGAR",
-        // Tradução do Footer
         footerMain: "<strong>Pixel Click®</strong> - Desafios de Agilidade e Conhecimento",
         footerSub: "Desenvolvido para testar os seus limites.",
         footerPolicy: "Política de Privacidade"
@@ -290,9 +283,10 @@ body {
         pixelDesc: "Color and number challenge against the clock.", 
         triviaTag: "PIXEL TRIVIA", 
         triviaDesc: "Pick your favorite topic and test your knowledge against the clock.",
+        geniusTag: "PIXEL GENIUS",
+        geniusDesc: "Memorize the sequence of colors and lights in this memory challenge.",
         play: "PLAY", 
         locked: "PLAY",
-        // Tradução do Footer
         footerMain: "<strong>Pixel Click®</strong> - Agility and Knowledge Challenges",
         footerSub: "Developed to test your limits.",
         footerPolicy: "Privacy Policy"
@@ -303,9 +297,10 @@ body {
         pixelDesc: "Défi de couleurs et de chiffres contre la montre.", 
         triviaTag: "PIXEL TRIVIA", 
         triviaDesc: "Choisissez votre sujet préféré et testez vos connaissances contre la montre.",
+        geniusTag: "PIXEL GENIUS",
+        geniusDesc: "Mémorisez la séquence de couleurs et de lumières dans ce défi de mémoire.",
         play: "JOUER", 
         locked: "JOUER",
-        // Tradução do Footer
         footerMain: "<strong>Pixel Click®</strong> - Défis d'agilité et de conhecimentos",
         footerSub: "Développé para tester vos limites.",
         footerPolicy: "Politique de Confidentialité"
@@ -316,12 +311,13 @@ body {
         pixelDesc: "Desafío de números y colores contra el reloj.", 
         triviaTag: "PIXEL TRIVIA", 
         triviaDesc: "Elige tu tema favorito y pon a prueba tus conocimientos contra el reloj.",
+        geniusTag: "PIXEL GENIUS",
+        geniusDesc: "Memoriza la secuencia de colores y luces en este desafío de memoria.",
         play: "JUGAR", 
         locked: "JUGAR",
-        // Tradução do Footer
         footerMain: "<strong>Pixel Click®</strong> - Desafíos de Agilidad y Conocimiento",
         footerSub: "Desarrollado para poner a prueba tus límites.",
-        footerPolicy: "Política de Privacidad"
+        footerPolicy: "Política de Privacidade"
     }
 };
 
@@ -345,7 +341,12 @@ body {
     
     document.getElementById('ui-trivia-tag').textContent = ui.triviaTag;
     document.getElementById('ui-trivia-desc').textContent = ui.triviaDesc;
-    document.getElementById('ui-trivia-btn').textContent = ui.locked;
+    document.getElementById('ui-trivia-btn').textContent = ui.play;
+    
+    if(document.getElementById('ui-genius-tag')) {
+        document.getElementById('ui-genius-tag').textContent = ui.geniusTag;
+        document.getElementById('ui-genius-desc').textContent = ui.geniusDesc;
+        document.getElementById('ui-genius-btn').textContent = ui.play;}
 
     // 4. TRADUÇÃO DO FOOTER (Adicione estas linhas abaixo)
     if(document.getElementById('footer-text')) {
@@ -395,7 +396,8 @@ setLang(savedLang);
     </script>
     <footer class="game-footer">
     <div class="footer-content">
-        <p id="footer-text"><strong>Pixel Click®</strong> - Jogos de agilidade e conhecimento.</p>
+        <p id="footer-text"><strong>Pixel Click®</strong> - Desafios de Agilidade e Conhecimento</p>
+        <p id="footer-subtext">Desenvolvido para testar os seus limites.</p>
         <a href="politica.html" id="footer-policy">Política de Privacidade</a>
     </div>
 </footer>
