@@ -320,33 +320,30 @@ input#insta-handle:focus {
     </div>
 </div>
 
-    <div id="screen-over" class="overlay" style="display:none; flex-direction: column; align-items: center; justify-content: center;">
-    
-    <div id="ad-gameover" style="margin-bottom: 20px; min-height: 250px; display: flex; align-items: center; justify-content: center; width: 100%;">
-        <div style="background: rgba(255,255,255,0.05); border: 1px dashed #444; padding: 5px; border-radius: 8px;">
-            <script type="text/javascript">
-                atOptions = {
-                    'key' : '1af5eed8d5a813d46ac266bce36c9450',
-                    'format' : 'iframe',
-                    'height' : 250,
-                    'width' : 300,
-                    'params' : {}
-                };
-            </script>
-            <script type="text/javascript" src="https://www.highperformanceformat.com/1af5eed8d5a813d46ac266bce36c9450/invoke.js"></script>
-        </div>
+     <div id="screen-over" class="overlay" style="display:none">
+        <div id="ad-gameover" style="margin: 20px auto; min-height: 250px; display: flex; align-items: center; justify-content: center; width: 100%;">
+    <div style="background: rgba(255,255,255,0.05); border: 1px dashed #444; padding: 5px; border-radius: 8px;">
+        <script type="text/javascript">
+            atOptions = {
+                'key' : '1af5eed8d5a813d46ac266bce36c9450',
+                'format' : 'iframe',
+                'height' : 250,
+                'width' : 300,
+                'params' : {}
+            };
+        </script>
+        <script type="text/javascript" src="https://www.highperformanceformat.com/1af5eed8d5a813d46ac266bce36c9450/invoke.js"></script>
     </div>
-
-    <h1 id="ui-over-title" style="color:#ff4757; margin: 10px 0; width: 100%; text-align: center;">GAME OVER!</h1>
-    
-    <p style="font-size: 1.5rem; margin: 5px 0;">Pontos: <span id="final-score">0</span></p>
-        <div id="new-record-ui" style="display:none; width: 100%;">
+</div>
+    <h1 id="ui-over-title" style="color:#ff4757">GAME OVER!</h1>
+    <p style="font-size: 1.5rem">Pontos: <span id="final-score">0</span></p>
+    <div id="new-record-ui" style="display:none; width: 100%;">
         <p style="color: var(--accent); font-weight: bold; margin-bottom: 10px;">NOVO RECORDE!</p>
         <input type="text" id="insta-handle" placeholder="@nome">
         <button onclick="saveToRanking()" class="save-btn">SALVAR</button>
+    </div>
         <button onclick="window.location.reload();" class="retry-btn" id="ui-retry-btn">REPETIR</button>
         <button onclick="shareGame()" class="retry-btn" id="ui-share-btn">DESAFIE UM AMIGO</button>
-    </div>
     </div>
 
         <!-- <div class="pix-support-container" onclick="openPix()">
