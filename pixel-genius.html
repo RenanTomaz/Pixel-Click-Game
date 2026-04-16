@@ -207,172 +207,166 @@
 </div>
 
     <script>
-const SUPABASE_URL = 'https://jsjzpilzmpxestbrhado.supabase.co'; 
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzanpwaWx6bXB4ZXN0YnJoYWRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3OTc0NDAsImV4cCI6MjA5MDM3MzQ0MH0.0WXO31A9lYJLMYWnQqlvFArTn4WNN-umhhD23OefgT0'; // Copie a chave completa do seu painel
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const SUPABASE_URL = 'https://jsjzpilzmpxestbrhado.supabase.co'; 
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzanpwaWx6bXB4ZXN0YnJoYWRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3OTc0NDAsImV4cCI6MjA5MDM3MzQ0MH0.0WXO31A9lYJLMYWnQqlvFArTn4WNN-umhhD23OefgT0';
+    
+    // Inicialização segura: Independente de carregamento externo
+    let supabaseClient = (typeof supabase !== 'undefined') ? supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
-        let sequence = [], userSequence = [], score = 0, gameActive = false, isShowing = false, globalBest = 0;
-        let currentLang = 'pt'; // ADICIONE ESTA LINHA
-        updateChampionUI();
+    let sequence = [], userSequence = [], score = 0, gameActive = false, isShowing = false, globalBest = 0;
+    let currentLang = 'pt'; 
 
-        async function updateChampionUI() {
-    try {
-        const { data, error } = await supabaseClient
-            .from('ranking_genius')
-            .select('name, points')
-            .order('points', { ascending: false })
-            .limit(1);
+    // Carregamento inicial rápido
+    window.onload = updateChampionUI;
 
-        if (data && data[0]) {
-            globalBest = data[0].points;
-            document.getElementById('champ-name').textContent = data[0].name;
-            document.getElementById('champ-score').textContent = data[0].points + " pts";
+    async function updateChampionUI() {
+        // 1. Carrega recorde local imediatamente (Instantâneo)
+        const localName = localStorage.getItem('genius_best_name') || "@aguardando";
+        const localScore = parseInt(localStorage.getItem('genius_best_score')) || 0;
+        
+        document.getElementById('champ-name').textContent = localName;
+        document.getElementById('champ-score').textContent = localScore + " pts";
+        globalBest = localScore;
+
+        // 2. Tenta buscar o recorde mundial sem travar o jogo
+        if (supabaseClient) {
+            try {
+                const { data } = await supabaseClient
+                    .from('ranking_genius')
+                    .select('name, points')
+                    .order('points', { ascending: false })
+                    .limit(1);
+
+                if (data && data[0] && data[0].points > globalBest) {
+                    globalBest = data[0].points;
+                    document.getElementById('champ-name').textContent = data[0].name;
+                    document.getElementById('champ-score').textContent = data[0].points + " pts";
+                }
+            } catch (err) { console.warn("Modo offline: Supabase indisponível."); }
         }
-    } catch (err) {
-        console.error("Erro ao carregar campeão:", err);
     }
-}
 
-        function startGame() {
-            document.getElementById('screen-start').style.display = 'none';
-            gameActive = true;
-            nextRound();
+    function startGame() {
+        document.getElementById('screen-start').style.display = 'none';
+        score = 0;
+        sequence = [];
+        document.getElementById('score').innerText = score;
+        gameActive = true;
+        nextRound();
+    }
+
+    function nextRound() {
+        userSequence = [];
+        sequence.push(Math.floor(Math.random() * 4));
+        showSequence();
+    }
+
+    async function showSequence() {
+        isShowing = true;
+        document.getElementById('question').innerText = "OBSERVE...";
+        for (let id of sequence) {
+            await flash(id);
+            await new Promise(r => setTimeout(r, 300));
         }
+        isShowing = false;
+        document.getElementById('question').innerText = "SUA VEZ!";
+    }
 
-        function nextRound() {
-            userSequence = [];
-            sequence.push(Math.floor(Math.random() * 4));
-            showSequence();
-        }
-
-        async function showSequence() {
-            isShowing = true;
-            document.getElementById('question').innerText = "OBSERVE...";
-            for (let id of sequence) {
-                await flash(id);
-                await new Promise(r => setTimeout(r, 300));
-            }
-            isShowing = false;
-            document.getElementById('question').innerText = "SUA VEZ!";
-        }
-
-        function flash(id) {
-            return new Promise(r => {
-                const btn = document.getElementById(`opt-${id}`);
+    function flash(id) {
+        return new Promise(r => {
+            const btn = document.getElementById(`opt-${id}`);
+            if(btn) {
                 btn.classList.add('active');
                 setTimeout(() => { btn.classList.remove('active'); r(); }, 500);
-            });
-        }
-
-        function userClick(id) {
-            if (!gameActive || isShowing) return;
-            flash(id);
-            userSequence.push(id);
-            const step = userSequence.length - 1;
-
-            if (userSequence[step] !== sequence[step]) {
-                endGame();
-                return;
-            }
-
-            if (userSequence.length === sequence.length) {
-                score++;
-                document.getElementById('score').innerText = score;
-                setTimeout(nextRound, 1000);
-            }
-        }
-
-        async function endGame() {
-    gameActive = false;
-    document.getElementById('final-score').innerText = score;
-    document.getElementById('screen-over').style.display = 'flex';
-    
-    // Essencial: Atualiza o recorde global antes de verificar se o usuário bateu
-    await updateChampionUI(); 
-
-    if (score > globalBest && score > 0) {
-        document.getElementById('new-record-ui').style.display = 'block';
+            } else r();
+        });
     }
-}
 
-        async function saveToRanking() {
-    const nameInput = document.getElementById('insta-handle');
-    const name = nameInput.value.trim().substring(0, 20) || "@anonimo";
-    const saveBtn = document.querySelector('.save-btn');
+    function userClick(id) {
+        if (!gameActive || isShowing) return;
+        flash(id);
+        userSequence.push(id);
+        const step = userSequence.length - 1;
 
-    // Feedback visual de carregamento
-    saveBtn.disabled = true;
-    saveBtn.textContent = "...";
-
-    try {
-        // 1. Remove o campeão antigo (limpa a tabela)
-        await supabaseClient
-            .from('ranking_genius')
-            .delete()
-            .gte('points', 0); 
-
-        // 2. Insere o novo recordista absoluto
-        const { error } = await supabaseClient
-            .from('ranking_genius')
-            .insert([{ name: name, points: score }]);
-
-        if (!error) {
-            // Atualiza o Spotlight visualmente sem precisar de dar refresh
-            document.getElementById('champ-name').textContent = name;
-            document.getElementById('champ-score').textContent = score + " pts";
-            globalBest = score;
-
-            // Esconde o formulário de recorde para evitar duplicados
-            document.getElementById('new-record-ui').innerHTML = 
-                `<p style="color: var(--accent); font-weight: bold; margin-top: 20px;">RECORDE SALVO!</p>`;
-        } else {
-            throw error;
+        if (userSequence[step] !== sequence[step]) {
+            endGame();
+            return;
         }
-    } catch (err) {
-        console.error("Erro ao salvar:", err);
-        saveBtn.disabled = false;
-        saveBtn.textContent = "ERRO AO SALVAR";
-    }
-}
 
-        function openPix() { document.getElementById('pix-overlay').style.display = 'flex'; }
-        function closePix() { document.getElementById('pix-overlay').style.display = 'none'; }
-        function copyPix() {
-    const key = document.getElementById('pix-key').innerText;
-    navigator.clipboard.writeText(key).then(() => {
-        const btn = event.target;
-        const originalText = btn.innerText;
-        btn.innerText = "COPIADO!";
-        btn.style.background = "#2ed573";
+        if (userSequence.length === sequence.length) {
+            score++;
+            document.getElementById('score').innerText = score;
+            setTimeout(nextRound, 1000);
+        }
+    }
+
+    async function endGame() {
+        gameActive = false;
+        document.getElementById('final-score').innerText = score;
+        document.getElementById('screen-over').style.display = 'flex';
         
-        setTimeout(() => {
-            btn.innerText = originalText;
-            btn.style.background = "#3498db";
-        }, 2000);
-    });
-}
-function shareGame() {
-    const shareMsgs = {
-        pt: `Cheguei ao nível ${score} no Pixel Genius! Duvido você superar a minha memória.`,
-        en: `I reached level ${score} on Pixel Genius! I bet you can't beat my memory.`
-    };
-    
-    // Tenta pegar o idioma atual, se não existir, usa 'pt'
-    const text = shareMsgs[currentLang] || shareMsgs['pt'];
-    const url = window.location.href;
-
-    if (navigator.share) {
-        navigator.share({
-            title: 'Pixel Genius Challenge',
-            text: text,
-            url: url
-        }).catch(err => console.log("Erro ao compartilhar"));
-    } else {
-        const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text + " " + url)}`;
-        window.open(whatsappUrl, '_blank');
+        // Verifica contra o melhor score já registrado (local ou global)
+        if (score > globalBest && score > 0) {
+            document.getElementById('new-record-ui').style.display = 'block';
+        }
     }
-}
-    </script>
+
+    async function saveToRanking() {
+        const nameInput = document.getElementById('insta-handle');
+        const name = nameInput.value.trim().substring(0, 20) || "@anonimo";
+        const saveBtn = document.querySelector('.save-btn');
+
+        saveBtn.disabled = true;
+        saveBtn.textContent = "...";
+
+        // Salva Localmente (Independência total)
+        localStorage.setItem('genius_best_score', score);
+        localStorage.setItem('genius_best_name', name);
+
+        // Tenta sincronizar com o Supabase sem bloquear a UI
+        if (supabaseClient) {
+            try {
+                await supabaseClient.from('ranking_genius').delete().gte('points', 0); 
+                await supabaseClient.from('ranking_genius').insert([{ name: name, points: score }]);
+            } catch (err) { console.error("Erro ao sincronizar ranking."); }
+        }
+
+        updateChampionUI();
+        document.getElementById('new-record-ui').innerHTML = 
+            `<p style="color: var(--accent); font-weight: bold; margin-top: 20px;">RECORDE SALVO!</p>`;
+    }
+
+    function openPix() { document.getElementById('pix-overlay').style.display = 'flex'; }
+    function closePix() { document.getElementById('pix-overlay').style.display = 'none'; }
+    
+    function copyPix() {
+        const key = document.getElementById('pix-key').innerText;
+        navigator.clipboard.writeText(key).then(() => {
+            const btn = event.target;
+            const originalText = btn.innerText;
+            btn.innerText = "COPIADO!";
+            btn.style.background = "#2ed573";
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.style.background = "#3498db";
+            }, 2000);
+        });
+    }
+
+    function shareGame() {
+        const shareMsgs = {
+            pt: `Cheguei ao nível ${score} no Pixel Genius! Duvido você superar a minha memória.`,
+            en: `I reached level ${score} on Pixel Genius! I bet you can't beat my memory.`
+        };
+        const text = shareMsgs[currentLang] || shareMsgs['pt'];
+        const url = window.location.href;
+        if (navigator.share) {
+            navigator.share({ title: 'Pixel Genius Challenge', text: text, url: url }).catch(e => {});
+        } else {
+            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text + " " + url)}`, '_blank');
+        }
+    }
+</script>
     <footer style="margin-top: 50px; text-align: center; font-family: sans-serif; color: #888; font-size: 12px; padding: 20px;">
     <p>O <strong>Pixel Genius</strong> é um desafio de memória sequencial inspirado em testes clássicos de retenção visual. Como parte da plataforma Pixel Click®, este jogo foca no fortalecimento da memória de curto prazo e na concentração progressiva.</p>
 </footer>
