@@ -170,146 +170,144 @@
     </div>
 
     <script>
-        const SUPABASE_URL = 'https://jsjzpilzmpxestbrhado.supabase.co'; 
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzanpwaWx6bXB4ZXN0YnJoYWRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3OTc0NDAsImV4cCI6MjA5MDM3MzQ0MH0.0WXO31A9lYJLMYWnQqlvFArTn4WNN-umhhD23OefgT0';
-        
-        let supabaseClient = null;
-        let sequence = [], userSequence = [], score = 0, gameActive = false, isShowing = false, globalBest = 0;
-        let currentLang = 'pt'; 
+    const SUPABASE_URL = 'https://jsjzpilzmpxestbrhado.supabase.co'; 
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzanpwaWx6bXB4ZXN0YnJoYWRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3OTc0NDAsImV4cCI6MjA5MDM3MzQ0MH0.0WXO31A9lYJLMYWnQqlvFArTn4WNN-umhhD23OefgT0';
+    
+    let supabaseClient = null;
+    let sequence = [], userSequence = [], score = 0, gameActive = false, isShowing = false, globalBest = 0;
+    let currentLang = 'pt'; 
 
-        window.onload = function() {
+    window.onload = function() {
+        try {
+            if (typeof supabase !== 'undefined') {
+                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            }
+        } catch (e) { console.warn("Supabase não carregado."); }
+        updateChampionUI(); 
+        setTimeout(loadAdsterra, 2000); 
+    };
+
+    async function updateChampionUI() {
+        // Busca apenas do Supabase agora
+        if (supabaseClient) {
             try {
-                if (typeof supabase !== 'undefined') {
-                    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                const { data } = await supabaseClient
+                    .from('ranking_genius')
+                    .select('name, points')
+                    .order('points', { ascending: false })
+                    .limit(1);
+
+                if (data && data[0]) {
+                    globalBest = data[0].points;
+                    document.getElementById('champ-name').textContent = data[0].name;
+                    document.getElementById('champ-score').textContent = data[0].points + " pts";
+                } else {
+                    document.getElementById('champ-name').textContent = "@aguardando";
+                    document.getElementById('champ-score').textContent = "0 pts";
                 }
-            } catch (e) { console.warn("Supabase não carregado."); }
-            updateChampionUI(); 
-        };
-
-        async function updateChampionUI() {
-            // 1. Carrega recorde local imediatamente
-            const localName = localStorage.getItem('genius_best_name') || "@aguardando";
-            const localScore = parseInt(localStorage.getItem('genius_best_score')) || 0;
-            
-            document.getElementById('champ-name').textContent = localName;
-            document.getElementById('champ-score').textContent = localScore + " pts";
-            globalBest = localScore;
-
-            // 2. Tenta buscar o mundial no Supabase
-            if (supabaseClient) {
-                try {
-                    const { data } = await supabaseClient
-                        .from('ranking_genius')
-                        .select('name, points')
-                        .order('points', { ascending: false })
-                        .limit(1);
-
-                    if (data && data[0] && data[0].points > globalBest) {
-                        globalBest = data[0].points;
-                        document.getElementById('champ-name').textContent = data[0].name;
-                        document.getElementById('champ-score').textContent = data[0].points + " pts";
-                    }
-                } catch (err) { console.warn("Modo offline: Supabase indisponível."); }
+            } catch (err) { 
+                console.warn("Erro ao buscar ranking mundial."); 
             }
         }
+    }
 
-        function startGame() {
-            document.getElementById('screen-start').style.display = 'none';
-            score = 0; sequence = [];
+    function startGame() {
+        document.getElementById('screen-start').style.display = 'none';
+        score = 0; sequence = [];
+        document.getElementById('score').innerText = score;
+        gameActive = true;
+        nextRound();
+    }
+
+    function nextRound() {
+        userSequence = [];
+        sequence.push(Math.floor(Math.random() * 4));
+        showSequence();
+    }
+
+    async function showSequence() {
+        isShowing = true;
+        document.getElementById('question').innerText = "OBSERVE...";
+        for (let id of sequence) {
+            await flash(id);
+            await new Promise(r => setTimeout(r, 300));
+        }
+        isShowing = false;
+        document.getElementById('question').innerText = "SUA VEZ!";
+    }
+
+    function flash(id) {
+        return new Promise(r => {
+            const btn = document.getElementById(`opt-${id}`);
+            if(btn) {
+                btn.classList.add('active');
+                setTimeout(() => { btn.classList.remove('active'); r(); }, 500);
+            } else r();
+        });
+    }
+
+    function userClick(id) {
+        if (!gameActive || isShowing) return;
+        flash(id);
+        userSequence.push(id);
+        const step = userSequence.length - 1;
+
+        if (userSequence[step] !== sequence[step]) {
+            endGame(); return;
+        }
+
+        if (userSequence.length === sequence.length) {
+            score++;
             document.getElementById('score').innerText = score;
-            gameActive = true;
-            nextRound();
+            setTimeout(nextRound, 1000);
         }
+    }
 
-        function nextRound() {
-            userSequence = [];
-            sequence.push(Math.floor(Math.random() * 4));
-            showSequence();
+    function endGame() {
+        gameActive = false;
+        document.getElementById('final-score').innerText = score;
+        document.getElementById('screen-over').style.display = 'flex';
+        if (score > globalBest && score > 0) {
+            document.getElementById('new-record-ui').style.display = 'block';
         }
+    }
 
-        async function showSequence() {
-            isShowing = true;
-            document.getElementById('question').innerText = "OBSERVE...";
-            for (let id of sequence) {
-                await flash(id);
-                await new Promise(r => setTimeout(r, 300));
-            }
-            isShowing = false;
-            document.getElementById('question').innerText = "SUA VEZ!";
-        }
+    async function saveToRanking() {
+        const nameInput = document.getElementById('insta-handle');
+        const name = nameInput.value.trim().substring(0, 20) || "@anonimo";
+        const saveBtn = document.querySelector('.save-btn');
+        saveBtn.disabled = true; saveBtn.textContent = "...";
 
-        function flash(id) {
-            return new Promise(r => {
-                const btn = document.getElementById(`opt-${id}`);
-                if(btn) {
-                    btn.classList.add('active');
-                    setTimeout(() => { btn.classList.remove('active'); r(); }, 500);
-                } else r();
-            });
-        }
-
-        function userClick(id) {
-            if (!gameActive || isShowing) return;
-            flash(id);
-            userSequence.push(id);
-            const step = userSequence.length - 1;
-
-            if (userSequence[step] !== sequence[step]) {
-                endGame(); return;
-            }
-
-            if (userSequence.length === sequence.length) {
-                score++;
-                document.getElementById('score').innerText = score;
-                setTimeout(nextRound, 1000);
+        // Sincroniza apenas com Supabase, sem LocalStorage
+        if (supabaseClient) {
+            try {
+                // Remove recorde anterior e insere o novo (lógica de recordista único)
+                await supabaseClient.from('ranking_genius').delete().gte('points', 0); 
+                await supabaseClient.from('ranking_genius').insert([{ name: name, points: score }]);
+            } catch (err) {
+                console.error("Erro ao salvar ranking.");
             }
         }
 
-        function endGame() {
-            gameActive = false;
-            document.getElementById('final-score').innerText = score;
-            document.getElementById('screen-over').style.display = 'flex';
-            if (score > globalBest && score > 0) {
-                document.getElementById('new-record-ui').style.display = 'block';
-            }
+        updateChampionUI();
+        document.getElementById('new-record-ui').innerHTML = 
+            `<p style="color: var(--accent); font-weight: bold; margin-top: 20px;">RECORDE SALVO!</p>`;
+    }
+
+    function shareGame() {
+        const text = `Fiz ${score} pontos no Pixel Genius! Duvido você superar a minha memória.`;
+        const url = window.location.href;
+        if (navigator.share) {
+            navigator.share({ title: 'Pixel Genius', text: text, url: url }).catch(() => {});
+        } else {
+            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text + " " + url)}`, '_blank');
         }
+    }
 
-        async function saveToRanking() {
-            const nameInput = document.getElementById('insta-handle');
-            const name = nameInput.value.trim().substring(0, 20) || "@anonimo";
-            const saveBtn = document.querySelector('.save-btn');
-            saveBtn.disabled = true; saveBtn.textContent = "...";
-
-            // Salva Localmente
-            localStorage.setItem('genius_best_score', score);
-            localStorage.setItem('genius_best_name', name);
-
-            // Sincroniza com Supabase
-            if (supabaseClient) {
-                try {
-                    await supabaseClient.from('ranking_genius').delete().gte('points', 0); 
-                    await supabaseClient.from('ranking_genius').insert([{ name: name, points: score }]);
-                } catch (err) {}
-            }
-
-            updateChampionUI();
-            document.getElementById('new-record-ui').innerHTML = 
-                `<p style="color: var(--accent); font-weight: bold; margin-top: 20px;">RECORDE SALVO!</p>`;
-        }
-
-        function shareGame() {
-            const text = `Fiz ${score} pontos no Pixel Genius! Duvido você superar a minha memória.`;
-            const url = window.location.href;
-            if (navigator.share) {
-                navigator.share({ title: 'Pixel Genius', text: text, url: url }).catch(() => {});
-            } else {
-                window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text + " " + url)}`, '_blank');
-            }
-        }
-
-        function openPix() { document.getElementById('pix-overlay').style.display = 'flex'; }
-        function closePix() { document.getElementById('pix-overlay').style.display = 'none'; }
-        function copyPix() {
+    function openPix() { document.getElementById('pix-overlay').style.display = 'flex'; }
+    function closePix() { document.getElementById('pix-overlay').style.display = 'none'; }
+    
+    function copyPix() {
         const key = document.getElementById('pix-key').innerText;
         navigator.clipboard.writeText(key).then(() => {
             const btn = event.target;
@@ -322,31 +320,24 @@
             }, 2000);
         });
     }
-        // Função para carregar o anúncio sem travar o início do jogo
-function loadAdsterra() {
-    const container = document.getElementById('ad-container');
-    if(!container) return;
 
-    window.atOptions = {
-        'key' : '1af5eed8d5a813d46ac266bce36c9450',
-        'format' : 'iframe',
-        'height' : 250,
-        'width' : 300,
-        'params' : {}
-    };
+    function loadAdsterra() {
+        const container = document.getElementById('ad-container');
+        if(!container) return;
 
-    const adScript = document.createElement('script');
-    adScript.src = "//www.highperformanceformat.com/1af5eed8d5a813d46ac266bce36c9450/invoke.js";
-    adScript.type = "text/javascript";
-    container.appendChild(adScript);
-}
+        window.atOptions = {
+            'key' : '1af5eed8d5a813d46ac266bce36c9450',
+            'format' : 'iframe',
+            'height' : 250,
+            'width' : 300,
+            'params' : {}
+        };
 
-// Chame a função dentro do seu window.onload atual
-const originalOnload = window.onload;
-window.onload = function() {
-    if (originalOnload) originalOnload(); // Mantém o que você já tinha (Supabase, etc)
-    setTimeout(loadAdsterra, 2000); // Carrega o anúncio após 2 segundos
-};
-    </script>
+        const adScript = document.createElement('script');
+        adScript.src = "//www.highperformanceformat.com/1af5eed8d5a813d46ac266bce36c9450/invoke.js";
+        adScript.type = "text/javascript";
+        container.appendChild(adScript);
+    }
+</script>
 </body>
 </html>
