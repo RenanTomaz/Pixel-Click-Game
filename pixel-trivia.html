@@ -320,8 +320,24 @@ input#insta-handle:focus {
     </div>
 </div>
 
-    <div id="screen-over" class="overlay" style="display:none">
-    <h1 id="ui-over-title" style="color:#ff4757">GAME OVER!</h1>
+    <div id="screen-over" class="overlay" style="display:none; flex-direction: column; align-items: center; justify-content: center;">
+    
+    <div id="ad-gameover-wrapper" style="width: 100%; display: flex; justify-content: center; margin-bottom: 20px; min-height: 250px;">
+        <div style="background: rgba(255,255,255,0.03); border: 1px dashed #444; padding: 2px; border-radius: 8px;">
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : '1af5eed8d5a813d46ac266bce36c9450',
+                    'format' : 'iframe',
+                    'height' : 250,
+                    'width' : 300,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="https://www.highperformanceformat.com/1af5eed8d5a813d46ac266bce36c9450/invoke.js"></script>
+        </div>
+    </div>
+
+    <h1 id="ui-over-title" style="color:#ff4757; margin-top: 0;">GAME OVER!</h1>
     <p style="font-size: 1.5rem">Pontos: <span id="final-score">0</span></p>
 
     <div id="new-record-ui" style="display:none; width: 100%;">
@@ -334,24 +350,13 @@ input#insta-handle:focus {
     <button onclick="shareGame()" class="retry-btn" id="ui-share-btn">DESAFIE UM AMIGO</button>
 
     <div class="pix-support-container" onclick="openPix()">
-    <div class="pixel-coin">🪙</div>
-    <div class="pix-label">Gostou deste jogo?</div>
-    <div class="pix-label">Então apoie o Dev</div>
-</div>
-        <div id="pix-overlay" class="overlay" style="display:none; z-index: 2000;">
-    <h2 style="color: #f1c40f;">APOIE O DESENVOLVEDOR</h2>
-    <p style="font-size: 0.9rem; margin-bottom: 20px;">Sua ajuda mantém o servidor ativo!</p>
-    
-    <div style="background: white; padding: 15px; width: 85%; max-width: 240px; border-radius: 12px; display: flex; justify-content: center; align-items: center; margin: 0 auto; box-shadow: 0 0 15px rgba(255,255,255,0.2);">
-        <img src="pix.png" alt="QR Code Pix" style="width: 100%; height: auto; display: block;">
+        <div class="pixel-coin">🪙</div>
+        <div class="pix-label">Gostou deste jogo?</div>
+        <div class="pix-label">Então apoie o Dev</div>
     </div>
 
-    <span id="pix-key" style="display: none;">46d2ae23-3ebc-46f0-9a23-a868df805228</span>
-
-    <div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 25px;">
-        <button onclick="copyPix(event)" class="save-btn" style="width: 85%; max-width: 260px;">COPIAR CHAVE</button>
-        <button onclick="closePix()" class="retry-btn" style="background: #555; width: 85%; max-width: 260px;">VOLTAR</button>
-    </div>
+    <div id="pix-overlay" class="overlay" style="display:none; z-index: 2000;">
+        </div>
 </div>
 
     <script src="natureza.js"></script>
