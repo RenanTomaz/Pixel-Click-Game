@@ -355,26 +355,35 @@
     }
 
     async function updateChampionUI() {
-        // Busca recorde exclusivamente do Supabase
-        if (supabaseClient) {
-            try {
-                const { data } = await supabaseClient
-                    .from('ranking')
-                    .select('name, points')
-                    .order('points', { ascending: false })
-                    .limit(1);
+    // 1. Verifica se o cliente Supabase existe
+    if (supabaseClient) {
+        try {
+            // 2. Busca o primeiro lugar na tabela 'ranking'
+            const { data, error } = await supabaseClient
+                .from('ranking') // Nome da sua tabela
+                .select('name, points')
+                .order('points', { ascending: false })
+                .limit(1);
 
-                if (data && data.length > 0) {
-                    globalBest = data[0].points;
-                    document.getElementById('champ-name').textContent = data[0].name;
-                    document.getElementById('champ-score').textContent = data[0].points + " pts";
-                } else {
-                    document.getElementById('champ-name').textContent = langs[currentLang].waiting;
-                    document.getElementById('champ-score').textContent = "0 pts";
-                }
-            } catch (e) { console.warn("Supabase offline."); }
+            if (error) throw error;
+
+            // 3. Verifica se retornou algum dado
+            if (data && data.length > 0) {
+                globalBest = data[0].points;
+                document.getElementById('champ-name').textContent = data[0].name;
+                document.getElementById('champ-score').textContent = data[0].points + " pts";
+            } else {
+                // Caso a tabela esteja vazia
+                document.getElementById('champ-name').textContent = langs[currentLang].waiting;
+                document.getElementById('champ-score').textContent = "0 pts";
+                globalBest = 0;
+            }
+        } catch (e) { 
+            console.warn("Erro Supabase:", e.message);
+            document.getElementById('champ-name').textContent = "Offline";
         }
     }
+}
 
     function start() {
         score = 0; currentSpeed = 6000;
