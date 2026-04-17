@@ -569,7 +569,7 @@ function loadAdsterra() {
 // Chame a função dentro do seu window.onload atual
 const originalOnload = window.onload;
 window.onload = function() {
-    if (originalOnload) originalOnload(); // Mantém o que você já tinha (Supabase, etc)
+    if (originalOnload) originalOnload(); // Mantém o que você já tinha (Supabase,  etc)
     setTimeout(loadAdsterra, 2000); // Carrega o anúncio após 2 segundos
 };
 </script>
