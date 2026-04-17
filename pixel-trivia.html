@@ -321,17 +321,7 @@ input#insta-handle:focus {
 </div>
 
     <div id="screen-over" class="overlay" style="display:none; flex-direction: column; align-items: center; justify-content: center;">
-    <script>
-  atOptions = {
-    'key' : '1af5eed8d5a813d46ac266bce36c9450',
-    'format' : 'iframe',
-    'height' : 250,
-    'width' : 300,
-    'params' : {}
-  };
-</script>
-<script src="https://www.highperformanceformat.com/1af5eed8d5a813d46ac266bce36c9450/invoke.js"></script>
-
+   <div id="ad-container" style="min-height: 250px;"></div>
     <h1 id="ui-over-title" style="color:#ff4757; margin-top: 0;">GAME OVER!</h1>
     <p style="font-size: 1.5rem">Pontos: <span id="final-score">0</span></p>
 
@@ -568,6 +558,31 @@ input#insta-handle:focus {
             }, 2000);
         });
     }
+        // Função para carregar o anúncio sem travar o início do jogo
+function loadAdsterra() {
+    const container = document.getElementById('ad-container');
+    if(!container) return;
+
+    window.atOptions = {
+        'key' : '1af5eed8d5a813d46ac266bce36c9450',
+        'format' : 'iframe',
+        'height' : 250,
+        'width' : 300,
+        'params' : {}
+    };
+
+    const adScript = document.createElement('script');
+    adScript.src = "//www.highperformanceformat.com/1af5eed8d5a813d46ac266bce36c9450/invoke.js";
+    adScript.type = "text/javascript";
+    container.appendChild(adScript);
+}
+
+// Chame a função dentro do seu window.onload atual
+const originalOnload = window.onload;
+window.onload = function() {
+    if (originalOnload) originalOnload(); // Mantém o que você já tinha (Supabase, etc)
+    setTimeout(loadAdsterra, 2000); // Carrega o anúncio após 2 segundos
+};
 </script>
 </body>
     <footer style="margin-top: 50px; text-align: center; font-family: sans-serif; color: #888; font-size: 12px; padding: 20px;">
