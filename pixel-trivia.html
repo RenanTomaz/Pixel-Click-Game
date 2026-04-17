@@ -365,37 +365,46 @@ input#insta-handle:focus {
     const SUPABASE_URL = 'https://jsjzpilzmpxestbrhado.supabase.co'; 
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzanpwaWx6bXB4ZXN0YnJoYWRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3OTc0NDAsImV4cCI6MjA5MDM3MzQ0MH0.0WXO31A9lYJLMYWnQqlvFArTn4WNN-umhhD23OefgT0';
     
-    // Inicialização segura
-    let supabaseClient = (typeof supabase !== 'undefined') ? supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
-
+    let supabaseClient = null;
     let score = 0, timeLeft = 100, gameActive = false, pool = [], currentQuestion, difficulty = 0.15, globalBest = 0;
     
     // Carregamento inicial: Supabase + Anúncios
     window.onload = function() {
+        // Inicialização do cliente Supabase garantida
+        if (typeof supabase !== 'undefined') {
+            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        } else {
+            console.error("Supabase SDK não encontrado.");
+        }
+        
         updateChampionUI();
         setTimeout(loadAdsterra, 2000);
     };
 
     async function updateChampionUI() {
-        // Busca o recordista mundial diretamente no Supabase
         if (supabaseClient) {
             try {
-                const { data } = await supabaseClient
+                const { data, error } = await supabaseClient
                     .from('ranking_trivia')
                     .select('name, points')
                     .order('points', { ascending: false })
                     .limit(1);
+
+                if (error) throw error;
 
                 if (data && data.length > 0) {
                     globalBest = data[0].points;
                     document.getElementById('champ-name').textContent = data[0].name;
                     document.getElementById('champ-score').textContent = data[0].points + " pts";
                 } else {
+                    // Estado padrão se a tabela estiver vazia
+                    globalBest = 0;
                     document.getElementById('champ-name').textContent = "@aguardando";
                     document.getElementById('champ-score').textContent = "0 pts";
                 }
             } catch (e) { 
-                console.warn("Modo offline: Supabase indisponível."); 
+                console.warn("Erro ao buscar ranking mundial:", e.message); 
+                document.getElementById('champ-name').textContent = "Offline";
             }
         }
     }
@@ -507,7 +516,6 @@ input#insta-handle:focus {
         document.getElementById('final-score').innerText = score;
         document.getElementById('screen-over').style.display = 'flex';
         
-        // Compara apenas com o recorde global do Supabase
         if (score > globalBest && score > 0) {
             document.getElementById('new-record-ui').style.display = 'block';
         } else {
@@ -522,16 +530,16 @@ input#insta-handle:focus {
         saveBtn.disabled = true;
         saveBtn.textContent = "...";
 
-        // Envia apenas para o Supabase
         if (supabaseClient) {
             try {
+                // Remove todos e insere o novo (lógica de recordista absoluto único)
                 await supabaseClient.from('ranking_trivia').delete().gte('points', 0); 
                 await supabaseClient.from('ranking_trivia').insert([{ name: name, points: score }]);
             } catch (err) {
-                console.error("Erro ao salvar recorde.");
+                console.error("Erro ao salvar recorde:", err);
             }
         }
-        
+       
         updateChampionUI();
         document.getElementById('new-record-ui').innerHTML = 
             `<p style="color: var(--accent); font-weight: bold; margin-top: 20px;">RECORDE SALVO!</p>`;
@@ -552,7 +560,7 @@ input#insta-handle:focus {
     function openPix() { document.getElementById('pix-overlay').style.display = 'flex'; }
     function closePix() { document.getElementById('pix-overlay').style.display = 'none'; }
 
-    function copyPix() {
+    function copyPix(event) {
         const key = document.getElementById('pix-key').innerText;
         navigator.clipboard.writeText(key).then(() => {
             const btn = event.target;
