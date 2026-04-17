@@ -169,7 +169,7 @@
     <div id="screen-start" class="overlay">
         <h1 style="color: var(--accent);">PIXEL GENIUS</h1>
         <p>Memorize a sequência de luzes!</p>
-        <button onclick="startGame()" class="retry-btn">JOGAR</button>
+        <button onclick="startGame()" class="action-btn retry-btn">JOGAR</button>
     </div>
 
     <div id="screen-over" class="overlay" style="display:none; flex-direction: column; align-items: center; justify-content: center;">
@@ -214,18 +214,26 @@
     <script>
     const SUPABASE_URL = 'https://jsjzpilzmpxestbrhado.supabase.co'; 
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzanpwaWx6bXB4ZXN0YnJoYWRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3OTc0NDAsImV4cCI6MjA5MDM3MzQ0MH0.0WXO31A9lYJLMYWnQqlvFArTn4WNN-umhhD23OefgT0';
-    
-    // Inicialização segura: Independente de carregamento externo
-    let supabaseClient = (typeof supabase !== 'undefined') ? supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
+    // 1. INICIALIZAÇÃO INDEPENDENTE
+    let supabaseClient = null;
     let sequence = [], userSequence = [], score = 0, gameActive = false, isShowing = false, globalBest = 0;
     let currentLang = 'pt'; 
 
-    // Carregamento inicial rápido
-    window.onload = updateChampionUI;
+    // Inicializa o banco sem bloquear o carregamento da página
+    window.onload = function() {
+        try {
+            if (typeof supabase !== 'undefined') {
+                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            }
+        } catch (e) {
+            console.warn("Supabase offline. Usando ranking local.");
+        }
+        updateChampionUI(); 
+    };
 
     async function updateChampionUI() {
-        // 1. Carrega recorde local imediatamente (Instantâneo)
+        // Mostra recorde local imediatamente
         const localName = localStorage.getItem('genius_best_name') || "@aguardando";
         const localScore = parseInt(localStorage.getItem('genius_best_score')) || 0;
         
@@ -233,7 +241,7 @@
         document.getElementById('champ-score').textContent = localScore + " pts";
         globalBest = localScore;
 
-        // 2. Tenta buscar o recorde mundial sem travar o jogo
+        // Tenta buscar o recorde mundial em segundo plano
         if (supabaseClient) {
             try {
                 const { data } = await supabaseClient
@@ -247,12 +255,16 @@
                     document.getElementById('champ-name').textContent = data[0].name;
                     document.getElementById('champ-score').textContent = data[0].points + " pts";
                 }
-            } catch (err) { console.warn("Modo offline: Supabase indisponível."); }
+            } catch (err) { /* Erro silencioso para não travar o jogo */ }
         }
     }
 
+    // --- LÓGICA DO JOGO ---
+
     function startGame() {
-        document.getElementById('screen-start').style.display = 'none';
+        const startScreen = document.getElementById('screen-start');
+        if (startScreen) startScreen.style.display = 'none';
+        
         score = 0;
         sequence = [];
         document.getElementById('score').innerText = score;
@@ -305,12 +317,11 @@
         }
     }
 
-    async function endGame() {
+    function endGame() {
         gameActive = false;
         document.getElementById('final-score').innerText = score;
         document.getElementById('screen-over').style.display = 'flex';
         
-        // Verifica contra o melhor score já registrado (local ou global)
         if (score > globalBest && score > 0) {
             document.getElementById('new-record-ui').style.display = 'block';
         }
@@ -324,16 +335,16 @@
         saveBtn.disabled = true;
         saveBtn.textContent = "...";
 
-        // Salva Localmente (Independência total)
+        // Salva localmente
         localStorage.setItem('genius_best_score', score);
         localStorage.setItem('genius_best_name', name);
 
-        // Tenta sincronizar com o Supabase sem bloquear a UI
+        // Envia para o servidor se disponível
         if (supabaseClient) {
             try {
                 await supabaseClient.from('ranking_genius').delete().gte('points', 0); 
                 await supabaseClient.from('ranking_genius').insert([{ name: name, points: score }]);
-            } catch (err) { console.error("Erro ao sincronizar ranking."); }
+            } catch (err) { console.warn("Erro de conexão com o servidor."); }
         }
 
         updateChampionUI();
