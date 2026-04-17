@@ -382,29 +382,25 @@ input#insta-handle:focus {
     };
 
     async function updateChampionUI() {
+        // Busca apenas do Supabase agora
         if (supabaseClient) {
             try {
-                const { data, error } = await supabaseClient
+                const { data } = await supabaseClient
                     .from('ranking_trivia')
                     .select('name, points')
                     .order('points', { ascending: false })
                     .limit(1);
 
-                if (error) throw error;
-
-                if (data && data.length > 0) {
+                if (data && data[0]) {
                     globalBest = data[0].points;
                     document.getElementById('champ-name').textContent = data[0].name;
                     document.getElementById('champ-score').textContent = data[0].points + " pts";
                 } else {
-                    // Estado padrão se a tabela estiver vazia
-                    globalBest = 0;
                     document.getElementById('champ-name').textContent = "@aguardando";
                     document.getElementById('champ-score').textContent = "0 pts";
                 }
-            } catch (e) { 
-                console.warn("Erro ao buscar ranking mundial:", e.message); 
-                document.getElementById('champ-name').textContent = "Offline";
+            } catch (err) { 
+                console.warn("Erro ao buscar ranking mundial."); 
             }
         }
     }
@@ -525,20 +521,25 @@ input#insta-handle:focus {
 
     async function saveToRanking() {
         const nameInput = document.getElementById('insta-handle');
-        const name = nameInput.value.trim().substring(0, 20) || "@nome";
+        const name = nameInput.value.trim().substring(0, 20) || "@anonimo";
         const saveBtn = document.querySelector('.save-btn');
-        saveBtn.disabled = true;
-        saveBtn.textContent = "...";
+        saveBtn.disabled = true; saveBtn.textContent = "...";
 
+        // Sincroniza apenas com Supabase, sem LocalStorage
         if (supabaseClient) {
             try {
-                // Remove todos e insere o novo (lógica de recordista absoluto único)
+                // Remove recorde anterior e insere o novo (lógica de recordista único)
                 await supabaseClient.from('ranking_trivia').delete().gte('points', 0); 
                 await supabaseClient.from('ranking_trivia').insert([{ name: name, points: score }]);
             } catch (err) {
-                console.error("Erro ao salvar recorde:", err);
+                console.error("Erro ao salvar ranking.");
             }
         }
+
+        updateChampionUI();
+        document.getElementById('new-record-ui').innerHTML = 
+            `<p style="color: var(--accent); font-weight: bold; margin-top: 20px;">RECORDE SALVO!</p>`;
+    }
        
         updateChampionUI();
         document.getElementById('new-record-ui').innerHTML = 
