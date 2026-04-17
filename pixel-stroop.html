@@ -355,35 +355,28 @@
     }
 
     async function updateChampionUI() {
-    // 1. Verifica se o cliente Supabase existe
-    if (supabaseClient) {
-        try {
-            // 2. Busca o primeiro lugar na tabela 'ranking'
-            const { data, error } = await supabaseClient
-                .from('ranking') // Nome da sua tabela
-                .select('name, points')
-                .order('points', { ascending: false })
-                .limit(1);
+        // Busca apenas do Supabase agora
+        if (supabaseClient) {
+            try {
+                const { data } = await supabaseClient
+                    .from('ranking')
+                    .select('name, points')
+                    .order('points', { ascending: false })
+                    .limit(1);
 
-            if (error) throw error;
-
-            // 3. Verifica se retornou algum dado
-            if (data && data.length > 0) {
-                globalBest = data[0].points;
-                document.getElementById('champ-name').textContent = data[0].name;
-                document.getElementById('champ-score').textContent = data[0].points + " pts";
-            } else {
-                // Caso a tabela esteja vazia
-                document.getElementById('champ-name').textContent = langs[currentLang].waiting;
-                document.getElementById('champ-score').textContent = "0 pts";
-                globalBest = 0;
+                if (data && data[0]) {
+                    globalBest = data[0].points;
+                    document.getElementById('champ-name').textContent = data[0].name;
+                    document.getElementById('champ-score').textContent = data[0].points + " pts";
+                } else {
+                    document.getElementById('champ-name').textContent = "...";
+                    document.getElementById('champ-score').textContent = "- pts";
+                }
+            } catch (err) { 
+                console.warn("Erro ao buscar ranking mundial."); 
             }
-        } catch (e) { 
-            console.warn("Erro Supabase:", e.message);
-            document.getElementById('champ-name').textContent = "Offline";
         }
     }
-}
 
     function start() {
         score = 0; currentSpeed = 6000;
@@ -503,22 +496,25 @@
     }
 
     async function saveToRanking() {
-        const handle = document.getElementById('insta-handle').value || "@anon";
+        const nameInput = document.getElementById('insta-handle');
+        const name = nameInput.value.trim().substring(0, 20) || "@anonimo";
         const saveBtn = document.querySelector('.save-btn');
-        saveBtn.textContent = "...";
-        saveBtn.disabled = true;
+        saveBtn.disabled = true; saveBtn.textContent = "...";
 
-        // Salva apenas no Supabase
+        // Sincroniza apenas com Supabase, sem LocalStorage
         if (supabaseClient) {
             try {
-                await supabaseClient.from('ranking').delete().neq('points', -1); 
-                await supabaseClient.from('ranking').insert([{ name: handle, points: score }]);
-            } catch (e) { console.error("Erro ao salvar no banco."); }
+                // Remove recorde anterior e insere o novo (lógica de recordista único)
+                await supabaseClient.from('ranking').delete().gte('points', 0); 
+                await supabaseClient.from('ranking').insert([{ name: name, points: score }]);
+            } catch (err) {
+                console.error("Erro ao salvar ranking.");
+            }
         }
 
         updateChampionUI();
         document.getElementById('new-record-ui').innerHTML = 
-            `<p style="color: var(--accent); font-weight: bold;">RECORDE SALVO!</p>`;
+            `<p style="color: var(--accent); font-weight: bold; margin-top: 20px;">RECORDE SALVO!</p>`;
     }
 
     function shareGame() {
