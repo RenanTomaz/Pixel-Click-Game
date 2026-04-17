@@ -309,7 +309,7 @@
     const SUPABASE_URL = 'https://jsjzpilzmpxestbrhado.supabase.co'; 
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzanpwaWx6bXB4ZXN0YnJoYWRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3OTc0NDAsImV4cCI6MjA5MDM3MzQ0MH0.0WXO31A9lYJLMYWnQqlvFArTn4WNN-umhhD23OefgT0';
     
-    // Inicialização segura: Só cria o cliente se a biblioteca estiver carregada
+    // Inicialização segura
     let supabaseClient = (typeof supabase !== 'undefined') ? supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
     const langs = {
@@ -322,8 +322,11 @@
     let currentLang = 'pt', score = 0, timer, correctIdx, currentSpeed = 6000, globalBest = 0;
     const colorValues = ["#ff4757", "#2e86de", "#2ed573", "#eccc68"];
 
-    // Carregamento inicial independente
-    window.onload = updateChampionUI;
+    // Carregamento inicial corrigido
+    window.onload = function() {
+        updateChampionUI();
+        setTimeout(loadAdsterra, 2000);
+    };
 
     function setLang(l) {
         currentLang = l;
@@ -343,15 +346,7 @@
     }
 
     async function updateChampionUI() {
-        // Primeiro, carrega o recorde local (Instantâneo)
-        const localName = localStorage.getItem('pixel_best_name') || langs[currentLang].waiting;
-        const localScore = parseInt(localStorage.getItem('pixel_best_score')) || 0;
-        
-        document.getElementById('champ-name').textContent = localName;
-        document.getElementById('champ-score').textContent = localScore + " pts";
-        globalBest = localScore;
-
-        // Tenta buscar o recorde mundial sem travar a execução
+        // Busca recorde exclusivamente do Supabase
         if (supabaseClient) {
             try {
                 const { data } = await supabaseClient
@@ -361,11 +356,12 @@
                     .limit(1);
 
                 if (data && data.length > 0) {
-                    if (data[0].points > globalBest) {
-                        globalBest = data[0].points;
-                        document.getElementById('champ-name').textContent = data[0].name;
-                        document.getElementById('champ-score').textContent = data[0].points + " pts";
-                    }
+                    globalBest = data[0].points;
+                    document.getElementById('champ-name').textContent = data[0].name;
+                    document.getElementById('champ-score').textContent = data[0].points + " pts";
+                } else {
+                    document.getElementById('champ-name').textContent = langs[currentLang].waiting;
+                    document.getElementById('champ-score').textContent = "0 pts";
                 }
             } catch (e) { console.warn("Supabase offline."); }
         }
@@ -482,13 +478,9 @@
         document.getElementById('final-score').textContent = score;
         document.getElementById('screen-over').style.display = 'flex';
         
-        // Verifica contra o recorde local primeiro
-        const localBest = parseInt(localStorage.getItem('pixel_best_score')) || 0;
-        
-        if (score > localBest || score > globalBest) {
-            const ui = langs[currentLang];
-            const recordContainer = document.getElementById('new-record-ui');
-            recordContainer.style.display = 'block';
+        // Verifica apenas contra o recorde global do Supabase
+        if (score > globalBest && score > 0) {
+            document.getElementById('new-record-ui').style.display = 'block';
         }
     }
 
@@ -498,16 +490,12 @@
         saveBtn.textContent = "...";
         saveBtn.disabled = true;
 
-        // Salva Localmente Imediatamente
-        localStorage.setItem('pixel_best_score', score);
-        localStorage.setItem('pixel_best_name', handle);
-
-        // Tenta salvar no Supabase sem bloquear a UI
+        // Salva apenas no Supabase
         if (supabaseClient) {
             try {
                 await supabaseClient.from('ranking').delete().neq('points', -1); 
                 await supabaseClient.from('ranking').insert([{ name: handle, points: score }]);
-            } catch (e) {}
+            } catch (e) { console.error("Erro ao salvar no banco."); }
         }
 
         updateChampionUI();
@@ -547,31 +535,22 @@
             }, 2000);
         });
     }
-        // Função para carregar o anúncio sem travar o início do jogo
-function loadAdsterra() {
-    const container = document.getElementById('ad-container');
-    if(!container) return;
 
-    window.atOptions = {
-        'key' : '1af5eed8d5a813d46ac266bce36c9450',
-        'format' : 'iframe',
-        'height' : 250,
-        'width' : 300,
-        'params' : {}
-    };
-
-    const adScript = document.createElement('script');
-    adScript.src = "//www.highperformanceformat.com/1af5eed8d5a813d46ac266bce36c9450/invoke.js";
-    adScript.type = "text/javascript";
-    container.appendChild(adScript);
-}
-
-// Chame a função dentro do seu window.onload atual
-const originalOnload = window.onload;
-window.onload = function() {
-    if (originalOnload) originalOnload(); // Mantém o que você já tinha (Supabase,  etc)
-    setTimeout(loadAdsterra, 2000); // Carrega o anúncio após 2 segundos
-};
+    function loadAdsterra() {
+        const container = document.getElementById('ad-container');
+        if(!container) return;
+        window.atOptions = {
+            'key' : '1af5eed8d5a813d46ac266bce36c9450',
+            'format' : 'iframe',
+            'height' : 250,
+            'width' : 300,
+            'params' : {}
+        };
+        const adScript = document.createElement('script');
+        adScript.src = "//www.highperformanceformat.com/1af5eed8d5a813d46ac266bce36c9450/invoke.js";
+        adScript.type = "text/javascript";
+        container.appendChild(adScript);
+    }
 </script>
     <footer style="margin-top: 50px; text-align: center; font-family: sans-serif; color: #888; font-size: 12px; padding: 20px;">
     <p>O <strong>Pixel Stroop</strong> é baseado em um famoso teste psicológico de cores para desafiar a concentração. Como parte da plataforma Pixel Click®, este jogo foca em alta performance cognitiva e diversão rápida no navegador.</p>
