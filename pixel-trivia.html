@@ -356,24 +356,19 @@ input#insta-handle:focus {
     const SUPABASE_URL = 'https://jsjzpilzmpxestbrhado.supabase.co'; 
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzanpwaWx6bXB4ZXN0YnJoYWRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3OTc0NDAsImV4cCI6MjA5MDM3MzQ0MH0.0WXO31A9lYJLMYWnQqlvFArTn4WNN-umhhD23OefgT0';
     
-    // Inicialização segura: Independente de carregamento externo
+    // Inicialização segura
     let supabaseClient = (typeof supabase !== 'undefined') ? supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
     let score = 0, timeLeft = 100, gameActive = false, pool = [], currentQuestion, difficulty = 0.15, globalBest = 0;
     
-    // Carregamento inicial rápido
-    window.onload = updateChampionUI;
+    // Carregamento inicial: Supabase + Anúncios
+    window.onload = function() {
+        updateChampionUI();
+        setTimeout(loadAdsterra, 2000);
+    };
 
     async function updateChampionUI() {
-        // Primeiro, carrega o recorde local (Instantâneo)
-        const localName = localStorage.getItem('trivia_best_name') || "@aguardando";
-        const localScore = parseInt(localStorage.getItem('trivia_best_score')) || 0;
-        
-        document.getElementById('champ-name').textContent = localName;
-        document.getElementById('champ-score').textContent = localScore + " pts";
-        globalBest = localScore;
-
-        // Tenta buscar o recorde mundial sem travar a execução
+        // Busca o recordista mundial diretamente no Supabase
         if (supabaseClient) {
             try {
                 const { data } = await supabaseClient
@@ -383,13 +378,16 @@ input#insta-handle:focus {
                     .limit(1);
 
                 if (data && data.length > 0) {
-                    if (data[0].points > globalBest) {
-                        globalBest = data[0].points;
-                        document.getElementById('champ-name').textContent = data[0].name;
-                        document.getElementById('champ-score').textContent = data[0].points + " pts";
-                    }
+                    globalBest = data[0].points;
+                    document.getElementById('champ-name').textContent = data[0].name;
+                    document.getElementById('champ-score').textContent = data[0].points + " pts";
+                } else {
+                    document.getElementById('champ-name').textContent = "@aguardando";
+                    document.getElementById('champ-score').textContent = "0 pts";
                 }
-            } catch (e) { console.warn("Modo offline: Supabase indisponível."); }
+            } catch (e) { 
+                console.warn("Modo offline: Supabase indisponível."); 
+            }
         }
     }
 
@@ -499,8 +497,9 @@ input#insta-handle:focus {
         gameActive = false;
         document.getElementById('final-score').innerText = score;
         document.getElementById('screen-over').style.display = 'flex';
-        const localBest = parseInt(localStorage.getItem('trivia_best_score')) || 0;
-        if (score > localBest || score > globalBest) {
+        
+        // Compara apenas com o recorde global do Supabase
+        if (score > globalBest && score > 0) {
             document.getElementById('new-record-ui').style.display = 'block';
         } else {
             document.getElementById('new-record-ui').style.display = 'none';
@@ -514,17 +513,16 @@ input#insta-handle:focus {
         saveBtn.disabled = true;
         saveBtn.textContent = "...";
 
-        // Salva Localmente Imediatamente
-        localStorage.setItem('trivia_best_score', score);
-        localStorage.setItem('trivia_best_name', name);
-
-        // Tenta salvar no Supabase sem bloquear a UI
+        // Envia apenas para o Supabase
         if (supabaseClient) {
             try {
                 await supabaseClient.from('ranking_trivia').delete().gte('points', 0); 
                 await supabaseClient.from('ranking_trivia').insert([{ name: name, points: score }]);
-            } catch (err) {}
+            } catch (err) {
+                console.error("Erro ao salvar recorde.");
+            }
         }
+        
         updateChampionUI();
         document.getElementById('new-record-ui').innerHTML = 
             `<p style="color: var(--accent); font-weight: bold; margin-top: 20px;">RECORDE SALVO!</p>`;
@@ -558,31 +556,24 @@ input#insta-handle:focus {
             }, 2000);
         });
     }
-        // Função para carregar o anúncio sem travar o início do jogo
-function loadAdsterra() {
-    const container = document.getElementById('ad-container');
-    if(!container) return;
 
-    window.atOptions = {
-        'key' : '1af5eed8d5a813d46ac266bce36c9450',
-        'format' : 'iframe',
-        'height' : 250,
-        'width' : 300,
-        'params' : {}
-    };
+    function loadAdsterra() {
+        const container = document.getElementById('ad-container');
+        if(!container) return;
 
-    const adScript = document.createElement('script');
-    adScript.src = "//www.highperformanceformat.com/1af5eed8d5a813d46ac266bce36c9450/invoke.js";
-    adScript.type = "text/javascript";
-    container.appendChild(adScript);
-}
+        window.atOptions = {
+            'key' : '1af5eed8d5a813d46ac266bce36c9450',
+            'format' : 'iframe',
+            'height' : 250,
+            'width' : 300,
+            'params' : {}
+        };
 
-// Chame a função dentro do seu window.onload atual
-const originalOnload = window.onload;
-window.onload = function() {
-    if (originalOnload) originalOnload(); // Mantém o que você já tinha (Supabase, etc)
-    setTimeout(loadAdsterra, 2000); // Carrega o anúncio após 2 segundos
-};
+        const adScript = document.createElement('script');
+        adScript.src = "//www.highperformanceformat.com/1af5eed8d5a813d46ac266bce36c9450/invoke.js";
+        adScript.type = "text/javascript";
+        container.appendChild(adScript);
+    }
 </script>
 </body>
     <footer style="margin-top: 50px; text-align: center; font-family: sans-serif; color: #888; font-size: 12px; padding: 20px;">
