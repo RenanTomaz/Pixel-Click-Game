@@ -281,6 +281,8 @@
     </div>
 
     <div id="screen-over" class="overlay" style="display:none">
+    <div id="ad-delayed-container" style="width: 100%; display: flex; justify-content: center; margin-bottom: 20px; min-height: 250px;">
+    </div>
     <h1 id="ui-over-title" style="color:#ff4757">GAME OVER!</h1>
     <p style="font-size: 1.5rem">Pontos: <span id="final-score">0</span></p>
 
@@ -589,6 +591,43 @@ function copyPix() {
     });
 }
     </script>
+    <script>
+    // Função para carregar o anúncio de forma dinâmica
+    function loadDelayedAd() {
+        const container = document.getElementById('ad-delayed-container');
+        
+        if (container) {
+            // 1. Configura as opções do anúncio
+            const scriptOptions = document.createElement('script');
+            scriptOptions.type = 'text/javascript';
+            scriptOptions.text = `
+                atOptions = {
+                    'key' : '1af5eed8d5a813d46ac266bce36c9450',
+                    'format' : 'iframe',
+                    'height' : 250,
+                    'width' : 300,
+                    'params' : {}
+                };
+            `;
+
+            // 2. Cria o script que chama o anúncio (invoke.js)
+            const scriptInvoke = document.createElement('script');
+            scriptInvoke.type = 'text/javascript';
+            scriptInvoke.src = 'https://www.highperformanceformat.com/1af5eed8d5a813d46ac266bce36c9450/invoke.js';
+
+            // 3. Injeta no container
+            container.appendChild(scriptOptions);
+            container.appendChild(scriptInvoke);
+            
+            console.log("Anúncio carregado com 2 segundos de atraso.");
+        }
+    }
+
+    // Executa após o carregamento total da página + 2 segundos
+    window.addEventListener('load', function() {
+        setTimeout(loadDelayedAd, 2000); // 2000ms = 2 segundos
+    });
+</script>
     <footer style="margin-top: 50px; text-align: center; font-family: sans-serif; color: #888; font-size: 12px; padding: 20px;">
     <p>O <strong>Pixel Stroop</strong> é baseado em um famoso teste psicológico de cores para desafiar a concentração. Como parte da plataforma Pixel Click®, este jogo foca na performance cognitiva.</p>
 </footer>
