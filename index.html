@@ -3,24 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>Pixel Click</title>
+    <title>Pixel Click | Hub de Jogos</title>
     
     <meta name="description" content="Desafie seu cérebro no Pixel Click! Teste seus conhecimentos com jogos rápidos, gratuitos e competitivos.">
-    
-    <meta name="keywords" content="pixel click, pixel stroop, pixel trivia, jogos de agilidade mental, quiz, jogos de navegador grátis, desafio contra o relógio">
-
     <meta property="og:title" content="Pixel Click - Qual o seu recorde hoje?">
     <meta property="og:description" content="Teste os seus reflexos e o seu conhecimento com jogos viciantes!">
-    <meta property="og:image" content="pixelclick.fun/thumb.png">
+    <meta property="og:image" content="https://pixelclick.fun/thumb.png">
     <link rel="icon" type="image/png" href="favicon.png">
-
-<link rel="apple-touch-icon" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
+    <link rel="manifest" href="manifest.json">
     
     <style>
     :root { 
         --bg-color: #121212; 
-        --card-inner: #161616;
+        --card-inner: #1a1a1a;
         --accent-trivia: #3498db; 
         --g-red: #ff4757;
         --g-blue: #2e86de;
@@ -36,414 +32,267 @@
         display: flex; 
         flex-direction: column; 
         align-items: center;
-        min-height: 100vh; /* Garante altura total para empurrar o footer */
-        overflow-y: auto;
+        min-height: 100vh;
         user-select: none;
     }
 
-    #lang-selector { position: absolute; top: 15px; right: 15px; display: flex; gap: 12px; z-index: 200; }
-    .lang-btn { width: 40px; height: 30px; cursor: pointer; filter: grayscale(0.8); transition: 0.3s; border: 2px solid transparent; }
-    .lang-btn.active { filter: grayscale(0); transform: scale(1.2); border-color: white; }
-    .lang-btn img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+    /* --- Top Bar & Lang --- */
+    #top-bar {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 15px 20px;
+        box-sizing: border-box;
+        position: absolute;
+        top: 0;
+        z-index: 1000;
+    }
 
-    .logo-container { width: 100%; display: flex; justify-content: center; margin-top: 60px; }
-    .main-logo { max-width: 120px; height: auto; filter: drop-shadow(0 0 10px rgba(255,255,255,0.3)); transition: 0.3s; }
+    #lang-selector { display: flex; align-items: center; gap: 10px; }
+    .lang-btn { width: 35px; height: 25px; cursor: pointer; filter: grayscale(0.8); transition: 0.3s; border: 2px solid transparent; border-radius: 4px; overflow: hidden; }
+    .lang-btn.active { filter: grayscale(0); transform: scale(1.1); border-color: white; }
+    .lang-btn img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* --- Logo Area --- */
+    header {
+        margin-top: 70px;
+        text-align: center;
+    }
+
+    .main-logo { 
+    font-size: 3rem; 
+    font-weight: 900; 
+    letter-spacing: -2px; 
+    margin: 0;
+    background: linear-gradient(to bottom, #fff, #888);
     
-    #ui-hub-subtitle { font-size: 1.1rem; color: #aaa; margin-top: 5px; margin-bottom: 10px; text-align: center; }
+    /* Adicione estas duas linhas abaixo: */
+    -webkit-background-clip: text; /* Prefixo para navegadores Chrome/Safari */
+    background-clip: text;         /* Propriedade padrão para compatibilidade */
+    
+    -webkit-text-fill-color: transparent;
+}
 
+    #ui-hub-subtitle {
+        font-size: 1rem;
+        color: #eee;
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        font-weight: bold;
+        margin-top: 10px;
+        opacity: 0.8;
+    }
+
+    /* --- Cards Grid --- */
     .hub-container {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 25px;
-        width: 95%;
+        width: 90%;
         max-width: 1100px;
-        margin: 140px auto 40px auto; /* Aumentado para 140px para evitar sobreposição das bandeiras */
-        align-items: stretch;
-        flex-grow: 1; /* Faz o container ocupar o espaço disponível e empurrar o footer */
+        margin: 50px auto;
+        flex-grow: 1;
     }
 
     .game-card {
+        background: var(--card-inner);
+        border: 2px solid #333;
+        border-radius: 24px;
+        padding: 40px 30px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        height: 100%; 
-        padding: 40px 30px;
-        background: var(--card-inner);
-        border: 2px solid #222;
-        border-radius: 30px;
-        transition: 0.3s;
-        box-sizing: border-box;
+        transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
     }
 
-    .card-pixel:hover { border-color: var(--g-red); box-shadow: 0 0 15px rgba(255, 71, 87, 0.2); }
-    .card-trivia:hover { border-color: var(--g-blue); box-shadow: 0 0 15px rgba(46, 134, 222, 0.2); }
-    .card-genius:hover { border-color: var(--g-yellow); box-shadow: 0 0 15px rgba(236, 204, 104, 0.2); }
+    .game-card:hover { transform: translateY(-10px); }
 
-    .game-card:hover { transform: translateY(-8px) scale(1.02); }
+    /* Cores Temáticas nos Cards */
+    .card-pixel:hover { border-color: var(--g-red); box-shadow: 0 10px 30px rgba(255, 71, 87, 0.15); }
+    .card-trivia:hover { border-color: var(--g-blue); box-shadow: 0 10px 30px rgba(52, 152, 219, 0.15); }
+    .card-genius:hover { border-color: var(--g-yellow); box-shadow: 0 10px 30px rgba(236, 204, 104, 0.15); }
 
-    .tag { 
-        font-weight: 900; 
-        margin-bottom: 20px; 
-        font-size: 1.2rem; 
-        letter-spacing: 2px; 
-        text-transform: uppercase;
-        color: var(--accent-trivia); 
-        text-shadow: 0 0 10px rgba(52, 152, 219, 0.3);
-    }
-    
-    p { font-size: 0.9rem; color: #ccc; margin-bottom: 25px; line-height: 1.5; flex-grow: 1; }
+    .tag { font-size: 1.4rem; font-weight: 900; margin-bottom: 10px; letter-spacing: 1px; }
+    .card-pixel .tag { color: var(--g-red); }
+    .card-trivia .tag { color: var(--g-blue); }
+    .card-genius .tag { color: var(--g-yellow); }
+
+    p { font-size: 0.95rem; color: #aaa; line-height: 1.6; margin-bottom: 30px; font-family: sans-serif; }
 
     .play-btn {
         width: 100%;
-        padding: 15px;
-        font-size: 1.1rem;
-        font-family: inherit;
+        padding: 16px;
+        font-size: 1rem;
+        font-family: 'Courier New', monospace;
         font-weight: bold;
-        text-transform: uppercase;
-        border: 4px solid #000;
+        border: none;
         border-radius: 12px;
         cursor: pointer;
-        transition: 0.2s;
-        background: var(--accent-trivia); 
-        color: #fff;
+        background: #fff;
+        color: #000;
+        transition: 0.3s;
     }
     
-    .play-btn:active { transform: translateY(3px); }
+    .game-card:hover .play-btn { background: white; transform: scale(1.05); }
 
-    #ad-hub {
-        width: 300px;
-        height: 250px;
-        margin: 30px auto;
-        background: rgba(255,255,255,0.03);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px dashed #444;
-    }
+    /* --- Mobile Styles --- */
+    @media (max-width: 750px) {
+        header { margin-top: 100px; }
+        .main-logo { font-size: 2.2rem; }
 
-    @media (max-width: 700px) {
         .hub-container {
             display: flex;
-            flex-direction: row;
             overflow-x: auto;
             scroll-snap-type: x mandatory;
-            gap: 15px;
-            padding: 20px;
-            margin-top: 110px; /* Ajuste para não bater nas bandeiras no mobile */
-            justify-content: flex-start;
+            gap: 20px;
+            padding: 20px 10% 50px 10%;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 20px;
             -webkit-overflow-scrolling: touch;
-            flex-grow: 0; /* No mobile, o carrossel não precisa crescer para empurrar o footer */
         }
+
         .game-card {
-            min-width: 85vw;
+            min-width: 80vw;
             scroll-snap-align: center;
-            height: auto;
         }
-        .hub-container::-webkit-scrollbar { display: none; }
-        
-        #lang-selector { 
-            top: 10px; 
-            background: rgba(18, 18, 18, 0.8); 
-            padding: 5px 15px;
-            border-radius: 20px;
-            left: 50%;
-            right: auto;
-            transform: translateX(-50%);
-        }
+
+        #top-bar { justify-content: center; background: rgba(18,18,18,0.9); position: fixed; }
     }
 
-    #installBtn {
-        width: 40px;
-        height: 30px;
-        background: transparent;
-        border: 2px solid white;
-        cursor: pointer;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        transition: 0.3s;
-        padding: 0;
-    }
-
-    #installBtn:hover { background: white; }
-    #installBtn:hover svg path { stroke: black; }
-
-    #lang-selector { display: flex; align-items: center; gap: 12px; }
-
+    /* --- Footer --- */
     .game-footer {
         width: 100%;
-        margin-top: auto; /* Empurra o footer para o fim da tela */
-        padding: 30px 20px;
-        background-color: #161616;
-        border-top: 1px solid #333;
+        padding: 40px 20px;
+        background: #0f0f0f;
         text-align: center;
-        box-sizing: border-box;
-        font-family: sans-serif;
-        position: relative;
-        z-index: 10;
-        flex-shrink: 0; /* Impede o footer de encolher */
+        border-top: 1px solid #222;
     }
+    .game-footer p { margin: 0; font-size: 14px; color: #666; }
+    .game-footer a { color: #888; text-decoration: none; font-size: 12px; margin-top: 10px; display: inline-block; }
 
-    .footer-content p { color: #888; font-size: 13px; margin: 5px 0; line-height: 1.4; }
-    .footer-content a { color: var(--accent-trivia); text-decoration: none; font-size: 12px; transition: 0.3s; }
-    .footer-content a:hover { text-decoration: underline; }
-
-    @media (max-width: 600px) {
-        .game-footer {
-            padding: 20px 10px;
-            margin-top: 20px;
-        }
+    #installBtn {
+        width: 35px; height: 35px; border: 2px solid #fff; border-radius: 50%;
+        display: none; align-items: center; justify-content: center;
+        cursor: pointer; background: transparent; margin-right: 10px;
     }
-    #ui-hub-subtitle {
-    font-size: 1.2rem;
-    color: #eee;
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-weight: bold;
-    margin: 40px auto 10px auto; 
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-}
-
-.hub-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 25px;
-    width: 95%;
-    max-width: 1100px;
-    margin: 20px auto 40px auto; /* Reduzido para aproximar do título */
-    align-items: stretch;
-    flex-grow: 1;
-}
-
-@media (max-width: 700px) {
-    #ui-hub-subtitle {
-        margin-top: 110px; /* Desce o texto para baixo das bandeiras no mobile */
-        font-size: 1rem;
-    }
-
-    .hub-container {
-        display: flex !important; /* Força o modo flex para o carrossel */
-        flex-direction: row !important;
-        overflow-x: auto !important;
-        scroll-snap-type: x mandatory;
-        gap: 15px;
-        padding: 20px 40px; /* Padding maior nas laterais para o efeito de "espreitadela" */
-        margin-top: 0px; 
-        justify-content: flex-start;
-        -webkit-overflow-scrolling: touch;
-        /* Máscara para indicar que há conteúdo dos lados */
-        mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
-        -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
-    }
-
-    .game-card {
-        min-width: 75vw; /* Diminuído para que o próximo card apareça claramente no canto */
-        scroll-snap-align: center;
-        height: auto;
-    }
-}
-</style>
+    </style>
 </head>
 <body>
-    <div id="cookie-banner" style="display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 600px; background: #161616; border: 2px solid white; padding: 20px; z-index: 1000; border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.5); flex-direction: column; align-items: center; gap: 15px; text-align: center;">
-    <p style="margin: 0; font-family: sans-serif; font-size: 14px; color: #ccc;">
-        Utilizamos cookies para melhorar sua experiência, salvar seus recordes e analisar tráfego. Ao continuar, você concorda com nossa política.
-    </p>
-    <button onclick="acceptCookies()" style="background: white; color: black; border: none; padding: 10px 30px; font-weight: bold; cursor: pointer; border-radius: 8px; font-family: 'Courier New', monospace; text-transform: uppercase;">
-        Aceitar
-    </button>
-</div>
-    <div id="lang-selector">
-    <button id="installBtn" title="Instalar App">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 5V19M12 19L5 12M12 19L19 12" stroke="white" stroke-width="3" stroke-linecap="square"/>
-        </svg>
-    </button>
-    <div class="lang-btn active" onclick="setLang('pt')" id="btn-pt"><img src="https://flagcdn.com/w40/br.png" alt="Brasil"></div>
-    <div class="lang-btn" onclick="setLang('en')" id="btn-en"><img src="https://flagcdn.com/w40/gb.png" alt="UK"></div>
-    <div class="lang-btn" onclick="setLang('fr')" id="btn-fr"><img src="https://flagcdn.com/w40/fr.png" alt="França"></div>
-    <div class="lang-btn" onclick="setLang('es')" id="btn-es"><img src="https://flagcdn.com/w40/es.png" alt="Espanha"></div>
-</div>
-<h2 id="ui-hub-subtitle">Escolha o seu jogo</h2>
-    <div class="hub-container">
-    <div class="game-card card-pixel" onclick="location.href='pixel-stroop.html'">
-        <div>
-            <div id="ui-stroop-tag" class="tag">PIXEL STROOP</div>
-            <p id="ui-pixel-desc">Treine seu raciocínio contra o caos das cores e números.</p>
+
+    <div id="top-bar">
+        <button id="installBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M12 5V19M12 19L5 12M12 19L19 12"/></svg>
+        </button>
+        <div id="lang-selector">
+            <div class="lang-btn" onclick="setLang('pt')" id="btn-pt"><img src="https://flagcdn.com/w40/br.png"></div>
+            <div class="lang-btn" onclick="setLang('en')" id="btn-en"><img src="https://flagcdn.com/w40/gb.png"></div>
+            <div class="lang-btn" onclick="setLang('fr')" id="btn-fr"><img src="https://flagcdn.com/w40/fr.png"></div>
+            <div class="lang-btn" onclick="setLang('es')" id="btn-es"><img src="https://flagcdn.com/w40/es.png"></div>
         </div>
-        <button class="play-btn" id="ui-pixel-btn">JOGAR</button>
     </div>
 
-    <div class="game-card card-trivia" onclick="location.href='pixel-trivia.html'" style="cursor: pointer;">
-    <div>
-        <div id="ui-trivia-tag" class="tag">PIXEL TRIVIA</div>
-        <p id="ui-trivia-desc">Escolha seu tema favorito e teste seus conhecimentos em tempo recorde.</p>
-    </div>
-    <button class="play-btn trivia-btn" id="ui-trivia-btn">JOGAR</button>
-</div>
-<div class="game-card card-genius" onclick="location.href='pixel-genius.html'" style="cursor: pointer;">
-    <div>
-        <div id="ui-genius-tag" class="tag">PIXEL GENIUS</div>
-        <p id="ui-genius-desc">Memorize a sequência de cores e luzes neste desafio clássico de memória.</p>
-    </div>
-    <button class="play-btn" id="ui-genius-btn">JOGAR</button>
-</div>
+    <header>
+        <h1 class="main-logo">PIXEL CLICK</h1>
+        <div id="ui-hub-subtitle">ESCOLHA SEU DESAFIO</div>
+    </header>
 
-</div>
+    <div class="hub-container">
+        <div class="game-card card-pixel" onclick="location.href='pixel-stroop.html'">
+            <div>
+                <div id="ui-stroop-tag" class="tag">PIXEL STROOP</div>
+                <p id="ui-pixel-desc">Teste seus reflexos e ignore o conflito entre cores e palavras.</p>
+            </div>
+            <button class="play-btn" id="ui-pixel-btn">JOGAR</button>
+        </div>
+
+        <div class="game-card card-trivia" onclick="location.href='pixel-trivia.html'">
+            <div>
+                <div id="ui-trivia-tag" class="tag">PIXEL TRIVIA</div>
+                <p id="ui-trivia-desc">Um quiz rápido sobre diversos temas. Quão longe sua mente consegue ir?</p>
+            </div>
+            <button class="play-btn" id="ui-trivia-btn">JOGAR</button>
+        </div>
+
+        <div class="game-card card-genius" onclick="location.href='pixel-genius.html'">
+            <div>
+                <div id="ui-genius-tag" class="tag">PIXEL GENIUS</div>
+                <p id="ui-genius-desc">O clássico desafio de memória. Siga a sequência e não erre a luz.</p>
+            </div>
+            <button class="play-btn" id="ui-genius-btn">JOGAR</button>
+        </div>
+    </div>
+
+    <footer class="game-footer">
+        <p id="footer-text">Pixel Click® - Jogos de Raciocínio</p>
+        <a href="politica.html" id="footer-policy">Política de Privacidade</a>
+    </footer>
+
+    <div id="cookie-banner" style="display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px; background: #1a1a1a; border: 1px solid #333; padding: 20px; z-index: 2000; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); text-align: center;">
+        <p style="margin: 0 0 15px 0; font-family: sans-serif; font-size: 13px; color: #bbb;">Utilizamos cookies para salvar seus recordes locais e melhorar sua experiência.</p>
+        <button onclick="acceptCookies()" style="background: #fff; color: #000; border: none; padding: 10px 25px; font-weight: bold; cursor: pointer; border-radius: 8px; font-family: sans-serif;">ACEITAR</button>
+    </div>
 
     <script>
-       const hubLangs = {
-    pt: { 
-        subtitle: "Escolha seu jogo", 
-        stroop: "PIXEL STROOP", 
-        pixelDesc: "Desafio de números e cores contra o relógio.", 
-        triviaTag: "PIXEL TRIVIA", 
-        triviaDesc: "Escolha seu tema favorito e teste seus conhecimentos contra o relógio.",
-        geniusTag: "PIXEL GENIUS",
-        geniusDesc: "Memorize a sequência de cores e luzes neste desafio de memória.",
-        play: "JOGAR", 
-        locked: "JOGAR",
-        footerMain: "<strong>Pixel Click®</strong> - Jogos de Raciocínio e Conhecimento",
-        footerPolicy: "Política de Privacidade"
-    },
-    en: { 
-        subtitle: "Choose your game", 
-        stroop: "PIXEL STROOP", 
-        pixelDesc: "Color and number challenge against the clock.", 
-        triviaTag: "PIXEL TRIVIA", 
-        triviaDesc: "Pick your favorite topic and test your knowledge against the clock.",
-        geniusTag: "PIXEL GENIUS",
-        geniusDesc: "Memorize the sequence of colors and lights in this memory challenge.",
-        play: "PLAY", 
-        locked: "PLAY",
-        footerMain: "<strong>Pixel Click®</strong> - Reasoning and Knowledge Games",
-        footerPolicy: "Privacy Policy"
-    },
-    fr: { 
-        subtitle: "Choisissez votre jeu", 
-        stroop: "PIXEL STROOP", 
-        pixelDesc: "Défi de couleurs et de chiffres contre la montre.", 
-        triviaTag: "PIXEL TRIVIA", 
-        triviaDesc: "Choisissez votre sujet préféré et testez vos connaissances contre la montre.",
-        geniusTag: "PIXEL GENIUS",
-        geniusDesc: "Mémorisez la séquence de couleurs et de lumières dans ce défi de mémoire.",
-        play: "JOUER", 
-        locked: "JOUER",
-        footerMain: "<strong>Pixel Click®</strong> - Jeux de Raisonnement et de Connaissances",
-        footerPolicy: "Politique de Confidentialité"
-    },
-    es: { 
-        subtitle: "Elige tu juego", 
-        stroop: "PIXEL STROOP", 
-        pixelDesc: "Desafío de números y colores contra el reloj.", 
-        triviaTag: "PIXEL TRIVIA", 
-        triviaDesc: "Elige tu tema favorito y pon a prueba tus conocimientos contra el reloj.",
-        geniusTag: "PIXEL GENIUS",
-        geniusDesc: "Memoriza la secuencia de colores y luces en este desafío de memoria.",
-        play: "JUGAR", 
-        locked: "JUGAR",
-        footerMain: "<strong>Pixel Click®</strong> - Juegos de Razonamiento y Conocimiento",
-        footerPolicy: "Política de Privacidade"
-    }
-};
+    const hubLangs = {
+        pt: { subtitle: "ESCOLHA SEU DESAFIO", stroop: "PIXEL STROOP", pixelDesc: "Teste seus reflexos e ignore o conflito entre cores e palavras.", triviaTag: "PIXEL TRIVIA", triviaDesc: "Um quiz rápido sobre diversos temas. Quão longe sua mente consegue ir?", geniusTag: "PIXEL GENIUS", geniusDesc: "O clássico desafio de memória. Siga a sequência e não erre a luz.", play: "JOGAR", footerMain: "Pixel Click® - Jogos de Raciocínio", footerPolicy: "Política de Privacidade" },
+        en: { subtitle: "CHOOSE YOUR CHALLENGE", stroop: "PIXEL STROOP", pixelDesc: "Test your reflexes and ignore the conflict between colors and words.", triviaTag: "PIXEL TRIVIA", triviaDesc: "A fast-paced quiz on various topics. How far can your mind go?", geniusTag: "PIXEL GENIUS", geniusDesc: "The classic memory challenge. Follow the sequence and don't miss the light.", play: "PLAY NOW", footerMain: "Pixel Click® - Brain Games", footerPolicy: "Privacy Policy" },
+        fr: { subtitle: "CHOISISSEZ VOTRE DÉFI", stroop: "PIXEL STROOP", pixelDesc: "Testez vos réflexes et ignorez le conflit entre couleurs et mots.", triviaTag: "PIXEL TRIVIA", triviaDesc: "Un quiz rapide sur divers sujets. Jusqu'où votre esprit peut-il aller?", geniusTag: "PIXEL GENIUS", geniusDesc: "Le défi classique de mémoire. Suivez la séquence et ne manquez pas la lumière.", play: "JOUER", footerMain: "Pixel Click® - Jeux de Réflexion", footerPolicy: "Politique de Confidentialité" },
+        es: { subtitle: "ELIGE TU DESAFÍO", stroop: "PIXEL STROOP", pixelDesc: "Pon a prueba teus reflexos e ignora o conflito entre cores e palavras.", triviaTag: "PIXEL TRIVIA", triviaDesc: "Un quiz rápido sobre diversos temas. ¿Qué tan lejos pode ir sua mente?", geniusTag: "PIXEL GENIUS", geniusDesc: "O clássico desafio de memória. Siga a sequência e não erre a luz.", play: "JUGAR", footerMain: "Pixel Click® - Juegos Mentales", footerPolicy: "Política de Privacidad" }
+    };
 
-        function setLang(l) {
-    // 1. Atualiza visualmente os botões de bandeira
-    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-    const activeBtn = document.getElementById('btn-' + l);
-    if(activeBtn) activeBtn.classList.add('active');
+    function setLang(l) {
+        localStorage.setItem('userLanguage', l);
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('btn-' + l).classList.add('active');
 
-    // 2. Pega o dicionário de tradução do idioma escolhido
-    const ui = hubLangs[l];
-    
-    // 3. Traduz os elementos do Hub (Subtítulo e Cards)
-    if(document.getElementById('ui-hub-subtitle')) {
+        const ui = hubLangs[l];
         document.getElementById('ui-hub-subtitle').textContent = ui.subtitle;
-    }
-    
-    document.getElementById('ui-stroop-tag').textContent = ui.stroop;
-    document.getElementById('ui-pixel-desc').textContent = ui.pixelDesc;
-    document.getElementById('ui-pixel-btn').textContent = ui.play;
-    
-    document.getElementById('ui-trivia-tag').textContent = ui.triviaTag;
-    document.getElementById('ui-trivia-desc').textContent = ui.triviaDesc;
-    document.getElementById('ui-trivia-btn').textContent = ui.play;
-    
-    if(document.getElementById('ui-genius-tag')) {
+        document.getElementById('ui-stroop-tag').textContent = ui.stroop;
+        document.getElementById('ui-pixel-desc').textContent = ui.pixelDesc;
+        document.getElementById('ui-pixel-btn').textContent = ui.play;
+        document.getElementById('ui-trivia-tag').textContent = ui.triviaTag;
+        document.getElementById('ui-trivia-desc').textContent = ui.triviaDesc;
+        document.getElementById('ui-trivia-btn').textContent = ui.play;
         document.getElementById('ui-genius-tag').textContent = ui.geniusTag;
         document.getElementById('ui-genius-desc').textContent = ui.geniusDesc;
-        document.getElementById('ui-genius-btn').textContent = ui.play;}
-
-    // 4. TRADUÇÃO DO FOOTER (Adicione estas linhas abaixo)
-    if(document.getElementById('footer-text')) {
-        document.getElementById('footer-text').innerHTML = ui.footerMain;
+        document.getElementById('ui-genius-btn').textContent = ui.play;
+        document.getElementById('footer-text').textContent = ui.footerMain;
+        document.getElementById('footer-policy').textContent = ui.footerPolicy;
     }
-    if(document.getElementById('footer-policy')) {
-        document.getElementById('footer-policy').innerText = ui.footerPolicy;
-    }
-}
 
-// Inicializa com o idioma salvo ou português por padrão
-const savedLang = localStorage.getItem('userLanguage') || 'pt';
-setLang(savedLang);
-    </script>
-    <script>
-        let deferredPrompt;
-        const installBtn = document.getElementById('installBtn');
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            // Previne o Chrome de mostrar o banner automático
-            e.preventDefault();
-            deferredPrompt = e;
-            // Mostra o botão de seta
-            installBtn.style.display = 'flex';
-
-            installBtn.addEventListener('click', () => {
-                // Esconde o botão após clicar
-                installBtn.style.display = 'none';
-                // Mostra o prompt de instalação
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('Usuário aceitou a instalação');
-                    }
-                    deferredPrompt = null;
-                });
-            });
-        });
-
-        // Esconde o botão se o app já foi instalado
-        window.addEventListener('appinstalled', () => {
-            installBtn.style.display = 'none';
-        });
-    </script>
-    <footer class="game-footer">
-    <div class="footer-content">
-        <p id="footer-text"><strong>Pixel Click®</strong> - Jogos de Raciocínio e Conhecimento</p>
-        <a href="politica.html" id="footer-policy">Política de Privacidade</a>
-    </div>
-</footer>
-    <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js')
-      .then(() => console.log("PWA: Service Worker Registrado!"))
-      .catch(err => console.log("PWA: Erro no registro", err));
-  }
-</script>
-    <script>
     function acceptCookies() {
-        // Salva a preferência por 30 dias
         localStorage.setItem('cookiesAccepted', 'true');
         document.getElementById('cookie-banner').style.display = 'none';
     }
 
-    window.onload = function() {
-        // Verifica se já foi aceito
+    window.onload = () => {
+        const savedLang = localStorage.getItem('userLanguage') || 'pt';
+        setLang(savedLang);
         if (!localStorage.getItem('cookiesAccepted')) {
-            document.getElementById('cookie-banner').style.display = 'flex';
+            document.getElementById('cookie-banner').style.display = 'block';
         }
     };
-</script>
+
+    // PWA Install Logic
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        document.getElementById('installBtn').style.display = 'flex';
+    });
+
+    document.getElementById('installBtn').addEventListener('click', async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') deferredPrompt = null;
+        }
+    });
+    </script>
 </body>
 </html>
