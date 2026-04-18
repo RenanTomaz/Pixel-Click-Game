@@ -281,9 +281,11 @@
     </div>
 
     <div id="screen-over" class="overlay" style="display:none">
-    <div id="ad-delayed-container" style="width: 100%; display: flex; justify-content: center; margin-bottom: 20px; min-height: 250px;">
-    </div>
-    <h1 id="ui-over-title" style="color:#ff4757">GAME OVER!</h1>
+    <div id="ad-delayed-container" style="width: 300px; height: 250px; min-width: 300px; min-height: 250px; margin: 50px auto 20px auto; display: flex; justify-content: center; align-items: center; position: relative; background: #1c1c1c; border: 2px solid #333; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); overflow: hidden;">
+    <span style="color: #333; font-size: 10px;">...</span>
+</div>
+
+    <h1 id="ui-over-title" style="color:#ff4757; margin-top: 10px;">GAME OVER!</h1>
     <p style="font-size: 1.5rem">Pontos: <span id="final-score">0</span></p>
 
     <div id="new-record-ui" style="display:none; width: 100%;">
@@ -296,9 +298,10 @@
     <button onclick="shareGame()" class="retry-btn" id="ui-share-btn">DESAFIE UM AMIGO</button>
 
     <div class="pix-support-container" onclick="openPix()">
-    <div class="pixel-coin">🪙</div>
-    <div class="pix-label">Gostou deste jogo?</div>
-    <div class="pix-label">Então apoie o Dev</div>
+        <div class="pixel-coin">🪙</div>
+        <div class="pix-label">Gostou deste jogo?</div>
+        <div class="pix-label">Então apoie o Dev</div>
+    </div>
 </div>
         <div id="pix-overlay" class="overlay" style="display:none; z-index: 2000;">
     <h2 style="color: #f1c40f;">APOIE O DESENVOLVEDOR</h2>
@@ -592,40 +595,47 @@ function copyPix() {
 }
     </script>
     <script>
-    // Função para carregar o anúncio de forma dinâmica
     function loadDelayedAd() {
         const container = document.getElementById('ad-delayed-container');
+        if (!container) return;
+
+        container.innerHTML = ''; 
+
+        const iframe = document.createElement('iframe');
+        iframe.width = "300";
+        iframe.height = "250";
+        iframe.frameBorder = "0";
+        iframe.scrolling = "no";
+        iframe.style.border = "none";
+        iframe.style.display = "block";
         
-        if (container) {
-            // 1. Configura as opções do anúncio
-            const scriptOptions = document.createElement('script');
-            scriptOptions.type = 'text/javascript';
-            scriptOptions.text = `
-                atOptions = {
-                    'key' : '1af5eed8d5a813d46ac266bce36c9450',
-                    'format' : 'iframe',
-                    'height' : 250,
-                    'width' : 300,
-                    'params' : {}
-                };
-            `;
+        container.appendChild(iframe);
 
-            // 2. Cria o script que chama o anúncio (invoke.js)
-            const scriptInvoke = document.createElement('script');
-            scriptInvoke.type = 'text/javascript';
-            scriptInvoke.src = 'https://www.highperformanceformat.com/1af5eed8d5a813d46ac266bce36c9450/invoke.js';
+        const adContent = `
+            <html>
+                <body style="margin:0; padding:0; background:transparent; display:flex; justify-content:center; align-items:center;">
+                    <script type="text/javascript">
+                        atOptions = {
+                            'key' : '1af5eed8d5a813d46ac266bce36c9450',
+                            'format' : 'iframe',
+                            'height' : 250,
+                            'width' : 300,
+                            'params' : {}
+                        };
+                    <\/script>
+                    <script type="text/javascript" src="https://www.highperformanceformat.com/1af5eed8d5a813d46ac266bce36c9450/invoke.js"><\/script>
+                </body>
+            </html>
+        `;
 
-            // 3. Injeta no container
-            container.appendChild(scriptOptions);
-            container.appendChild(scriptInvoke);
-            
-            console.log("Anúncio carregado com 2 segundos de atraso.");
-        }
+        const doc = iframe.contentWindow.document;
+        doc.open();
+        doc.write(adContent);
+        doc.close();
     }
 
-    // Executa após o carregamento total da página + 2 segundos
-    window.addEventListener('load', function() {
-        setTimeout(loadDelayedAd, 2000); // 2000ms = 2 segundos
+    window.addEventListener('load', () => {
+        setTimeout(loadDelayedAd, 2000);
     });
 </script>
     <footer style="margin-top: 50px; text-align: center; font-family: sans-serif; color: #888; font-size: 12px; padding: 20px;">
