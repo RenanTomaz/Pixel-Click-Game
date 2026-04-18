@@ -4,31 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-select=none">
     <title>Pixel Click: Genius Challenge</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <style>
         :root { 
-            --bg-color: #121212; 
-            --border-normal: 4px solid #fff; 
-            --accent: #3498db; 
-            --accent-glow: 0 0 15px #3498db;
-        }
+    --bg-color: #121212; 
+    --border-normal: 4px solid #fff; 
+    --accent: #3498db; /* Mudado de #2ed573 para o azul do Hub */
+    --accent-glow: 0 0 15px #3498db;
+}
 
         body { 
-            background-color: var(--bg-color); 
-            color: white; 
-            font-family: 'Courier New', monospace; 
-            margin: 0; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center;
-            justify-content: flex-start; 
-            min-height: 100vh; 
-            overflow-y: auto; 
-            user-select: none;
-            touch-action: manipulation;
-        }
+    background-color: var(--bg-color); 
+    color: white; 
+    font-family: 'Courier New', monospace; 
+    margin: 0; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center;
+    justify-content: flex-start; /* Alinha ao topo para permitir rolagem natural */
+    min-height: 100vh; 
+    overflow-y: auto; /* Habilita a rolagem para os anúncios abaixo */
+    user-select: none;
+    touch-action: manipulation;
+}
 
+        /* Reutilizando Estilo de Navegação do Trivia */
         #home-button {
             position: absolute; top: 15px; left: 15px; width: 40px; height: 30px;
             display: flex; align-items: center; justify-content: center;
@@ -43,6 +44,7 @@
 
         #ui-header { width: 100%; display: flex; justify-content: space-between; font-size: 1.3rem; margin-bottom: 10px; font-weight: bold; }
 
+        /* Barra de Tempo do Trivia */
         #timer-box { 
             width: 100%; height: 25px; border: var(--border-normal); 
             background: #333; margin-bottom: 20px; position: relative; overflow: hidden;
@@ -54,6 +56,7 @@
             font-weight: bold; display: flex; align-items: center; justify-content: center; width: 100%;
         }
 
+        /* Grid Genius Adaptado do Trivia */
         #grid { 
             display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; margin-bottom: 20px; 
         }
@@ -63,44 +66,78 @@
         }
         .btn.active { opacity: 1; filter: brightness(1.5); transform: scale(0.98); box-shadow: 0 0 20px white; }
         
-        #opt-0 { background: #ff4757; } 
-        #opt-1 { background: #2e86de; } 
-        #opt-2 { background: #2ed573; } 
-        #opt-3 { background: #eccc68; }
+        /* Cores Clássicas Genius */
+        #opt-0 { background: #ff4757; } /* Vermelho */
+        #opt-1 { background: #2e86de; } /* Azul */
+        #opt-2 { background: #2ed573; } /* Verde */
+        #opt-3 { background: #eccc68; } /* Amarelo */
 
+        /* Spotlight e Overlays Migrados */
         #champion-spotlight {
-            width: 95%; max-width: 400px; background: #1a1a1a; padding: 15px; 
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            border: 2px solid #333; border-radius: 12px; margin: 20px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            box-sizing: border-box;
-        }
-        #champ-title { 
-            font-size: 0.9rem; color: var(--accent); margin: 0 0 5px 0; 
-            font-weight: bold; text-shadow: var(--accent-glow); text-transform: uppercase; 
-        }        
-        #champ-info { font-size: 1.4rem; font-weight: bold; display: flex; align-items: center; gap: 12px; }       
-        #champ-score { color: #feca57; }
-
+    width: 95%; 
+    max-width: 400px; 
+    background: #1a1a1a;
+    padding: 15px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #333; 
+    border-radius: 12px; 
+    margin: 20px 0; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    box-sizing: border-box;
+}
+#champ-title { 
+    font-size: 0.9rem; 
+    color: var(--accent); 
+    margin: 0 0 5px 0; 
+    font-weight: bold; 
+    text-shadow: var(--accent-glow); 
+    text-transform: uppercase; 
+    }        
+#champ-info { 
+    font-size: 1.4rem; 
+    font-weight: bold; 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+    }       
+#champ-score { 
+    color: #feca57; /* Dourado do Champion Spotlight */
+}
         .overlay { 
-            position: fixed; inset: 0; background: rgba(0,0,0,0.96); 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            z-index: 100; text-align: center; padding: 20px; overflow-y: auto; 
-        }
+    position: fixed; 
+    inset: 0; 
+    background: rgba(0,0,0,0.96); 
+    display: flex; 
+    flex-direction: column; 
+    /* Centraliza horizontalmente */
+    align-items: center; 
+    /* CENTRALIZA VERTICALMENTE (Mude de flex-start para center) */
+    justify-content: center; 
+    z-index: 100; 
+    text-align: center; 
+    /* Remova ou ajuste o padding de topo para não deslocar o centro */
+    padding: 20px; 
+    overflow-y: auto; 
+}
 
-        input { padding: 12px; font-size: 1.2rem; margin: 15px 0; width: 85%; max-width: 260px; text-align: center; background: #222; color: #fff; border: 2px solid var(--accent); font-family: inherit;}
+                input { padding: 12px; font-size: 1.2rem; margin: 15px 0; width: 85%; max-width: 260px; text-align: center; background: #222; color: #fff; border: 2px solid var(--accent); font-family: inherit;}
         button { padding: 15px 20px; font-size: 1.1rem; cursor: pointer; font-family: inherit; margin-top: 10px; border: 4px solid #000; font-weight: bold; width: 85%; max-width: 260px; text-transform: uppercase; }
         .retry-btn { background: var(--accent); color: #fff; }
         .save-btn { background: #3498db; color: #fff; }
+        input#insta-handle { padding: 12px; font-size: 1.2rem; margin: 15px 0; width: 85%; max-width: 260px; text-align: center; background: #222; color: #fff; border: 2px solid var(--accent); }
 
-        .pix-support-container { margin-top: 25px; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.2s; }
-        .pix-support-container:hover { transform: scale(1.1); }
-        .pixel-coin { font-size: 2.2rem; margin-bottom: 5px; filter: drop-shadow(0 0 8px #f1c40f); animation: coinBounce 1.5s infinite ease-in-out; }
-        .pix-label { font-size: 0.75rem; color: #f1c40f; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+        /* Estilo da Moeda Pix */
+        .pix-support-container { margin-top: 25px; display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+        .pixel-coin { font-size: 2.2rem; filter: drop-shadow(0 0 8px #f1c40f); animation: coinBounce 1.5s infinite ease-in-out; }
+        .pix-label { font-size: 0.75rem; color: #f1c40f; font-weight: bold; text-transform: uppercase; }
         @keyframes coinBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
     </style>
 </head>
 
-<body>
+    <body>
     <div id="home-button" onclick="location.href='index.html'">
         <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
     </div>
@@ -122,222 +159,225 @@
     </div>
 
     <div id="champion-spotlight">
-        <p id="champ-title">RECORDISTA ATUAL</p>
-        <div id="champ-info">
-            <span id="champ-name">Carregando</span>
-            <span id="champ-score">0 pts</span>
-        </div>
+    <p id="champ-title">ATUAL CAMPEÃO</p>
+    <div id="champ-info">
+        <span id="champ-name">@aguardando</span>
+        <span id="champ-score">0 pts</span>
     </div>
+</div>
 
     <div id="screen-start" class="overlay">
         <h1 style="color: var(--accent);">PIXEL GENIUS</h1>
         <p>Memorize a sequência de luzes!</p>
-        <button onclick="startGame()" class="action-btn retry-btn">JOGAR</button>
+        <button onclick="startGame()" class="retry-btn">JOGAR</button>
     </div>
 
-  <div id="screen-over" class="overlay" style="display:none; flex-direction: column; align-items: center; justify-content: center;">
-    <div id="ad-container" style="min-height: 250px;"></div>
-        <h1 id="ui-over-title" style="color:#ff4757; margin-top: 0;">GAME OVER!</h1>
-        <p style="font-size: 1.5rem">Pontos: <span id="final-score">0</span></p>
+    <div id="screen-over" class="overlay" style="display:none">
+    <h1 id="ui-over-title" style="color:#ff4757">GAME OVER!</h1>
+    <p style="font-size: 1.5rem">Pontos: <span id="final-score">0</span></p>
 
-        <div id="new-record-ui" style="display:none; width: 100%;">
-            <p style="color: var(--accent); font-weight: bold; margin-bottom: 10px;">NOVO RECORDE!</p>
-            <input type="text" id="insta-handle" placeholder="Seu nome">
-            <button onclick="saveToRanking()" class="save-btn">SALVAR</button>
-        </div>
-
-        <button onclick="window.location.reload();" class="retry-btn">REPETIR</button>
-        <button onclick="shareGame()" class="retry-btn">DESAFIE UM AMIGO</button>
-
-        <div class="pix-support-container" onclick="openPix()">
-            <div class="pixel-coin">🪙</div>
-            <div class="pix-label">Gostou do jogo?</div>
-            <div class="pix-label">Então apoie o Dev</div>
-        </div>
+    <div id="new-record-ui" style="display:none; width: 100%;">
+        <p style="color: var(--accent); font-weight: bold; margin-bottom: 10px;">NOVO RECORDE!</p>
+        <input type="text" id="insta-handle" placeholder="@nome">
+        <button onclick="saveToRanking()" class="save-btn">SALVAR</button>
     </div>
 
-    <div id="pix-overlay" class="overlay" style="display:none; z-index: 2000;">
-        <h2 style="color: #f1c40f;">APOIE O DESENVOLVEDOR</h2>
-        <p style="font-size: 0.9rem; margin-bottom: 20px;">Sua ajuda mantém o servidor ativo!</p>
-        <div style="background: white; padding: 15px; width: 85%; max-width: 240px; border-radius: 12px; display: flex; justify-content: center; align-items: center; margin: 0 auto; box-shadow: 0 0 15px rgba(255,255,255,0.2);">
-            <img src="pix.png" alt="QR Code Pix" style="width: 100%; height: auto; display: block;">
-        </div>
-        <span id="pix-key" style="display: none;">46d2ae23-3ebc-46f0-9a23-a868df805228</span>
-        <div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 25px;">
-            <button onclick="copyPix(event)" class="save-btn" style="width: 85%; max-width: 260px;">COPIAR CHAVE</button>
-            <button onclick="closePix()" class="retry-btn" style="background: #555; width: 85%; max-width: 260px;">VOLTAR</button>
-        </div>
+    <button onclick="window.location.reload();" class="retry-btn" id="ui-retry-btn">REPETIR</button>
+    <button onclick="shareGame()" class="retry-btn" id="ui-share-btn">DESAFIE UM AMIGO</button>
+
+    <div class="pix-support-container" onclick="openPix()">
+    <div class="pixel-coin">🪙</div>
+    <div class="pix-label">Gostou deste jogo?</div>
+    <div class="pix-label">Então apoie o Dev</div>
+</div>
+        <div id="pix-overlay" class="overlay" style="display:none; z-index: 2000;">
+    <h2 style="color: #f1c40f;">APOIE O DESENVOLVEDOR</h2>
+    <p style="font-size: 0.9rem; margin-bottom: 20px;">Sua ajuda mantém o servidor ativo!</p>
+    
+    <div style="background: white; padding: 15px; width: 85%; max-width: 240px; border-radius: 12px; display: flex; justify-content: center; align-items: center; margin: 0 auto; box-shadow: 0 0 15px rgba(255,255,255,0.2);">
+        <img src="pix.png" alt="QR Code Pix" style="width: 100%; height: auto; display: block;">
     </div>
+
+    <span id="pix-key" style="display: none;">46d2ae23-3ebc-46f0-9a23-a868df805228</span>
+
+    <div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 25px;">
+        <button onclick="copyPix(event)" class="save-btn" style="width: 85%; max-width: 260px;">COPIAR CHAVE</button>
+        <button onclick="closePix()" class="retry-btn" style="background: #555; width: 85%; max-width: 260px;">VOLTAR</button>
+    </div>
+</div>
 
     <script>
-    const SUPABASE_URL = 'https://jsjzpilzmpxestbrhado.supabase.co'; 
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzanpwaWx6bXB4ZXN0YnJoYWRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3OTc0NDAsImV4cCI6MjA5MDM3MzQ0MH0.0WXO31A9lYJLMYWnQqlvFArTn4WNN-umhhD23OefgT0';
-    
-    let supabaseClient = null;
-    let sequence = [], userSequence = [], score = 0, gameActive = false, isShowing = false, globalBest = 0;
-    let currentLang = 'pt'; 
+const SUPABASE_URL = 'https://jsjzpilzmpxestbrhado.supabase.co'; 
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzanpwaWx6bXB4ZXN0YnJoYWRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3OTc0NDAsImV4cCI6MjA5MDM3MzQ0MH0.0WXO31A9lYJLMYWnQqlvFArTn4WNN-umhhD23OefgT0'; // Copie a chave completa do seu painel
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    window.onload = function() {
-        try {
-            if (typeof supabase !== 'undefined') {
-                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-            }
-        } catch (e) { console.warn("Supabase não carregado."); }
-        updateChampionUI(); 
-        setTimeout(loadAdsterra, 2000); 
-    };
+        let sequence = [], userSequence = [], score = 0, gameActive = false, isShowing = false, globalBest = 0;
+        let currentLang = 'pt'; // ADICIONE ESTA LINHA
+        updateChampionUI();
 
-    async function updateChampionUI() {
-        // Busca apenas do Supabase agora
-        if (supabaseClient) {
-            try {
-                const { data } = await supabaseClient
-                    .from('ranking_genius')
-                    .select('name, points')
-                    .order('points', { ascending: false })
-                    .limit(1);
+        async function updateChampionUI() {
+    try {
+        const { data, error } = await supabaseClient
+            .from('ranking_genius')
+            .select('name, points')
+            .order('points', { ascending: false })
+            .limit(1);
 
-                if (data && data[0]) {
-                    globalBest = data[0].points;
-                    document.getElementById('champ-name').textContent = data[0].name;
-                    document.getElementById('champ-score').textContent = data[0].points + " pts";
-                } else {
-                    document.getElementById('champ-name').textContent = "@aguardando";
-                    document.getElementById('champ-score').textContent = "0 pts";
-                }
-            } catch (err) { 
-                console.warn("Erro ao buscar ranking mundial."); 
-            }
+        if (data && data[0]) {
+            globalBest = data[0].points;
+            document.getElementById('champ-name').textContent = data[0].name;
+            document.getElementById('champ-score').textContent = data[0].points + " pts";
         }
+    } catch (err) {
+        console.error("Erro ao carregar campeão:", err);
     }
+}
 
-    function startGame() {
-        document.getElementById('screen-start').style.display = 'none';
-        score = 0; sequence = [];
-        document.getElementById('score').innerText = score;
-        gameActive = true;
-        nextRound();
-    }
-
-    function nextRound() {
-        userSequence = [];
-        sequence.push(Math.floor(Math.random() * 4));
-        showSequence();
-    }
-
-    async function showSequence() {
-        isShowing = true;
-        document.getElementById('question').innerText = "OBSERVE...";
-        for (let id of sequence) {
-            await flash(id);
-            await new Promise(r => setTimeout(r, 300));
+        function startGame() {
+            document.getElementById('screen-start').style.display = 'none';
+            gameActive = true;
+            nextRound();
         }
-        isShowing = false;
-        document.getElementById('question').innerText = "SUA VEZ!";
-    }
 
-    function flash(id) {
-        return new Promise(r => {
-            const btn = document.getElementById(`opt-${id}`);
-            if(btn) {
+        function nextRound() {
+            userSequence = [];
+            sequence.push(Math.floor(Math.random() * 4));
+            showSequence();
+        }
+
+        async function showSequence() {
+            isShowing = true;
+            document.getElementById('question').innerText = "OBSERVE...";
+            for (let id of sequence) {
+                await flash(id);
+                await new Promise(r => setTimeout(r, 300));
+            }
+            isShowing = false;
+            document.getElementById('question').innerText = "SUA VEZ!";
+        }
+
+        function flash(id) {
+            return new Promise(r => {
+                const btn = document.getElementById(`opt-${id}`);
                 btn.classList.add('active');
                 setTimeout(() => { btn.classList.remove('active'); r(); }, 500);
-            } else r();
-        });
-    }
-
-    function userClick(id) {
-        if (!gameActive || isShowing) return;
-        flash(id);
-        userSequence.push(id);
-        const step = userSequence.length - 1;
-
-        if (userSequence[step] !== sequence[step]) {
-            endGame(); return;
+            });
         }
 
-        if (userSequence.length === sequence.length) {
-            score++;
-            document.getElementById('score').innerText = score;
-            setTimeout(nextRound, 1000);
-        }
-    }
+        function userClick(id) {
+            if (!gameActive || isShowing) return;
+            flash(id);
+            userSequence.push(id);
+            const step = userSequence.length - 1;
 
-    function endGame() {
-        gameActive = false;
-        document.getElementById('final-score').innerText = score;
-        document.getElementById('screen-over').style.display = 'flex';
-        if (score > globalBest && score > 0) {
-            document.getElementById('new-record-ui').style.display = 'block';
-        }
-    }
+            if (userSequence[step] !== sequence[step]) {
+                endGame();
+                return;
+            }
 
-    async function saveToRanking() {
-        const nameInput = document.getElementById('insta-handle');
-        const name = nameInput.value.trim().substring(0, 20) || "@anonimo";
-        const saveBtn = document.querySelector('.save-btn');
-        saveBtn.disabled = true; saveBtn.textContent = "...";
-
-        // Sincroniza apenas com Supabase, sem LocalStorage
-        if (supabaseClient) {
-            try {
-                // Remove recorde anterior e insere o novo (lógica de recordista único)
-                await supabaseClient.from('ranking_genius').delete().gte('points', 0); 
-                await supabaseClient.from('ranking_genius').insert([{ name: name, points: score }]);
-            } catch (err) {
-                console.error("Erro ao salvar ranking.");
+            if (userSequence.length === sequence.length) {
+                score++;
+                document.getElementById('score').innerText = score;
+                setTimeout(nextRound, 1000);
             }
         }
 
-        updateChampionUI();
-        document.getElementById('new-record-ui').innerHTML = 
-            `<p style="color: var(--accent); font-weight: bold; margin-top: 20px;">RECORDE SALVO!</p>`;
-    }
-
-    function shareGame() {
-        const text = `Fiz ${score} pontos no Pixel Genius! Duvido você superar a minha memória.`;
-        const url = window.location.href;
-        if (navigator.share) {
-            navigator.share({ title: 'Pixel Genius', text: text, url: url }).catch(() => {});
-        } else {
-            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text + " " + url)}`, '_blank');
-        }
-    }
-
-    function openPix() { document.getElementById('pix-overlay').style.display = 'flex'; }
-    function closePix() { document.getElementById('pix-overlay').style.display = 'none'; }
+        async function endGame() {
+    gameActive = false;
+    document.getElementById('final-score').innerText = score;
+    document.getElementById('screen-over').style.display = 'flex';
     
-    function copyPix() {
-        const key = document.getElementById('pix-key').innerText;
-        navigator.clipboard.writeText(key).then(() => {
-            const btn = event.target;
-            const originalText = btn.innerText;
-            btn.innerText = "COPIADO!";
-            btn.style.background = "#2ed573";
-            setTimeout(() => {
-                btn.innerText = originalText;
-                btn.style.background = "#3498db";
-            }, 2000);
-        });
+    // Essencial: Atualiza o recorde global antes de verificar se o usuário bateu
+    await updateChampionUI(); 
+
+    if (score > globalBest && score > 0) {
+        document.getElementById('new-record-ui').style.display = 'block';
     }
+}
 
-    function loadAdsterra() {
-        const container = document.getElementById('ad-container');
-        if(!container) return;
+        async function saveToRanking() {
+    const nameInput = document.getElementById('insta-handle');
+    const name = nameInput.value.trim().substring(0, 20) || "@anonimo";
+    const saveBtn = document.querySelector('.save-btn');
 
-        window.atOptions = {
-            'key' : '1af5eed8d5a813d46ac266bce36c9450',
-            'format' : 'iframe',
-            'height' : 250,
-            'width' : 300,
-            'params' : {}
-        };
+    // Feedback visual de carregamento
+    saveBtn.disabled = true;
+    saveBtn.textContent = "...";
 
-        const adScript = document.createElement('script');
-        adScript.src = "//www.highperformanceformat.com/1af5eed8d5a813d46ac266bce36c9450/invoke.js";
-        adScript.type = "text/javascript";
-        container.appendChild(adScript);
+    try {
+        // 1. Remove o campeão antigo (limpa a tabela)
+        await supabaseClient
+            .from('ranking_genius')
+            .delete()
+            .gte('points', 0); 
+
+        // 2. Insere o novo recordista absoluto
+        const { error } = await supabaseClient
+            .from('ranking_genius')
+            .insert([{ name: name, points: score }]);
+
+        if (!error) {
+            // Atualiza o Spotlight visualmente sem precisar de dar refresh
+            document.getElementById('champ-name').textContent = name;
+            document.getElementById('champ-score').textContent = score + " pts";
+            globalBest = score;
+
+            // Esconde o formulário de recorde para evitar duplicados
+            document.getElementById('new-record-ui').innerHTML = 
+                `<p style="color: var(--accent); font-weight: bold; margin-top: 20px;">RECORDE SALVO!</p>`;
+        } else {
+            throw error;
+        }
+    } catch (err) {
+        console.error("Erro ao salvar:", err);
+        saveBtn.disabled = false;
+        saveBtn.textContent = "ERRO AO SALVAR";
     }
-</script>
+}
+
+        function openPix() { document.getElementById('pix-overlay').style.display = 'flex'; }
+        function closePix() { document.getElementById('pix-overlay').style.display = 'none'; }
+        function copyPix() {
+    const key = document.getElementById('pix-key').innerText;
+    navigator.clipboard.writeText(key).then(() => {
+        const btn = event.target;
+        const originalText = btn.innerText;
+        btn.innerText = "COPIADO!";
+        btn.style.background = "#2ed573";
+        
+        setTimeout(() => {
+            btn.innerText = originalText;
+            btn.style.background = "#3498db";
+        }, 2000);
+    });
+}
+function shareGame() {
+    const shareMsgs = {
+        pt: `Cheguei ao nível ${score} no Pixel Genius! Duvido você superar a minha memória.`,
+        en: `I reached level ${score} on Pixel Genius! I bet you can't beat my memory.`
+    };
+    
+    // Tenta pegar o idioma atual, se não existir, usa 'pt'
+    const text = shareMsgs[currentLang] || shareMsgs['pt'];
+    const url = window.location.href;
+
+    if (navigator.share) {
+        navigator.share({
+            title: 'Pixel Genius Challenge',
+            text: text,
+            url: url
+        }).catch(err => console.log("Erro ao compartilhar"));
+    } else {
+        const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text + " " + url)}`;
+        window.open(whatsappUrl, '_blank');
+    }
+}
+    </script>
 </body>
+<footer style="margin-top: 50px; text-align: center; font-family: sans-serif; color: #888; font-size: 12px; padding: 20px; line-height: 1.6;">
+    <p>
+        O <strong>Pixel Genius</strong> é um desafio de memória sequencial inspirado em testes clássicos de retenção visual. 
+        Como parte da plataforma <strong>Pixel Click®</strong>, este jogo foca no fortalecimento da memória de curto prazo 
+        e na concentração progressiva.
+</footer>
 </html>

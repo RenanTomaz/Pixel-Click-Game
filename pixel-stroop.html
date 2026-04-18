@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pixel Click: Stroop Challenge</title>
     <meta property="og:title" content="Pixel Click: Stroop Challenge">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="manifest" href="manifest.json">
     <meta property="og:description" content="Consegue bater o recorde mundial de reflexos?">
     <meta property="og:image" content="https://www.pixelclick.fun/thumb.png"> 
@@ -80,7 +80,7 @@
     justify-content: center;
     border: 2px solid #333; 
     border-radius: 12px; 
-    /* Aumentamos a margem inferior para criar o vácuo para o anúncio */ 
+    /* Aumentamos a margem inferior para criar o vácuo para o anúncio */
     margin-bottom: 20px; 
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
 }
@@ -268,9 +268,9 @@
     </div>
 
     <div id="champion-spotlight">
-    <p id="champ-title">RECORDISTA ATUAL</p>
+    <p id="champ-title">ATUAL CAMPEÃO</p>
     <div id="champ-info">
-        <span id="champ-name">Carregando</span>
+        <span id="champ-name">@aguardando</span>
         <span id="champ-score">0 pts</span>
     </div>
 </div>
@@ -280,9 +280,8 @@
         <button onclick="start()" class="retry-btn" id="ui-start-btn">JOGAR</button>
     </div>
 
-    <div id="screen-over" class="overlay" style="display:none; flex-direction: column; align-items: center; justify-content: center;">
-    <div id="ad-container" style="min-height: 250px;"></div>
-    <h1 id="ui-over-title" style="color:#ff4757; margin-top: 0;">GAME OVER!</h1>
+    <div id="screen-over" class="overlay" style="display:none">
+    <h1 id="ui-over-title" style="color:#ff4757">GAME OVER!</h1>
     <p style="font-size: 1.5rem">Pontos: <span id="final-score">0</span></p>
 
     <div id="new-record-ui" style="display:none; width: 100%;">
@@ -295,279 +294,303 @@
     <button onclick="shareGame()" class="retry-btn" id="ui-share-btn">DESAFIE UM AMIGO</button>
 
     <div class="pix-support-container" onclick="openPix()">
-        <div class="pixel-coin">🪙</div>
-        <div class="pix-label">Gostou deste jogo?</div>
-        <div class="pix-label">Então apoie o Dev</div>
+    <div class="pixel-coin">🪙</div>
+    <div class="pix-label">Gostou deste jogo?</div>
+    <div class="pix-label">Então apoie o Dev</div>
+</div>
+        <div id="pix-overlay" class="overlay" style="display:none; z-index: 2000;">
+    <h2 style="color: #f1c40f;">APOIE O DESENVOLVEDOR</h2>
+    <p style="font-size: 0.9rem; margin-bottom: 20px;">Sua ajuda mantém o servidor ativo!</p>
+    
+    <div style="background: white; padding: 15px; width: 85%; max-width: 240px; border-radius: 12px; display: flex; justify-content: center; align-items: center; margin: 0 auto; box-shadow: 0 0 15px rgba(255,255,255,0.2);">
+        <img src="pix.png" alt="QR Code Pix" style="width: 100%; height: auto; display: block;">
     </div>
 
-    <div id="pix-overlay" class="overlay" style="display:none; z-index: 2000;">
-        <h2 style="color: #f1c40f;">APOIE O DESENVOLVEDOR</h2>
-        <p style="font-size: 0.9rem; margin-bottom: 20px;">Sua ajuda mantém o servidor ativo!</p>
-        <div style="background: white; padding: 15px; width: 85%; max-width: 240px; border-radius: 12px; display: flex; justify-content: center; align-items: center; margin: 0 auto; box-shadow: 0 0 15px rgba(255,255,255,0.2);">
-            <img src="pix.png" alt="QR Code Pix" style="width: 100%; height: auto; display: block;">
-        </div>
-        <span id="pix-key" style="display: none;">46d2ae23-3ebc-46f0-9a23-a868df805228</span>
-        <div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 25px;">
-            <button onclick="copyPix(event)" class="save-btn" style="width: 85%; max-width: 260px;">COPIAR CHAVE</button>
-            <button onclick="closePix()" class="retry-btn" style="background: #555; width: 85%; max-width: 260px;">VOLTAR</button>
-        </div>
+    <span id="pix-key" style="display: none;">46d2ae23-3ebc-46f0-9a23-a868df805228</span>
+
+    <div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 25px;">
+        <button onclick="copyPix(event)" class="save-btn" style="width: 85%; max-width: 260px;">COPIAR CHAVE</button>
+        <button onclick="closePix()" class="retry-btn" style="background: #555; width: 85%; max-width: 260px;">VOLTAR</button>
     </div>
+</div>
 
     <script>
-    // 1. CONFIGURAÇÃO: Credenciais Supabase
-    const SUPABASE_URL = 'https://jsjzpilzmpxestbrhado.supabase.co'; 
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzanpwaWx6bXB4ZXN0YnJoYWRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3OTc0NDAsImV4cCI6MjA5MDM3MzQ0MH0.0WXO31A9lYJLMYWnQqlvFArTn4WNN-umhhD23OefgT0';
-    
-    // Inicialização segura
-    let supabaseClient = (typeof supabase !== 'undefined') ? supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+        // O seu código JavaScript continua igual daqui para baixo...
+        // 2. CONFIGURAÇÃO: Insira suas credenciais aqui
+        // Substitua estas linhas no seu código:
+const SUPABASE_URL = 'https://jsjzpilzmpxestbrhado.supabase.co'; 
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzanpwaWx6bXB4ZXN0YnJoYWRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3OTc0NDAsImV4cCI6MjA5MDM3MzQ0MH0.0WXO31A9lYJLMYWnQqlvFArTn4WNN-umhhD23OefgT0'; // Copie a chave completa do seu painel
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    const langs = {
-        pt: { title: "PIXEL CLICK", desc: "Confie na PALAVRA, não na COR!", start: "JOGAR", score: "PONTOS", qPrefix: "CLIQUE NA COR:", champTitle: "ATUAL CAMPEÃO", waiting: "@aguardando", over: "FIM DE JOGO!", save: "SALVAR", retry: "REPETIR", colors: ["VERMELHO", "AZUL", "VERDE", "AMARELO"], even: "PAR", odd: "ÍMPAR", share: "DESAFIE UM AMIGO", newRecord: "NOVO RECORDE!", placeholder: "@nome", saveBtn: "SALVAR RECORDE", recordSaved: "RECORDE SALVO!" },
-        en: { title: "PIXEL CLICK", desc: "Trust the WORD, not the COLOR!", start: "START", score: "SCORE", qPrefix: "CLICK THE COLOR:", champTitle: "CURRENT CHAMPION", waiting: "@waiting", over: "GAME OVER!", save: "SAVE", retry: "RETRY", colors: ["RED", "BLUE", "GREEN", "YELLOW"], even: "EVEN", odd: "ODD", share: "CHALLENGE A FRIEND", newRecord: "NEW RECORD!", placeholder: "@name", saveBtn: "SAVE RECORD", recordSaved: "RECORD SAVED!" },
-        fr: { title: "PIXEL CLICK", desc: "Croyez le MOT, pas la COULEUR!", start: "JOUER", score: "POINTS", qPrefix: "CLIQUEZ COULEUR:", champTitle: "CHAMPION ACTUEL", waiting: "@en_attente", over: "FIN DE JEU!", save: "SAUVER", retry: "REJOUER", colors: ["ROUGE", "BLEU", "VERT", "JAUNE"], even: "PAIR", odd: "IMPAIR", share: "DÉFIER UN AMI", newRecord: "NOUVEAU RECORD!", placeholder: "@nom", saveBtn: "ENREGISTRER", recordSaved: "RECORD ENREGISTRÉ!" },
-        es: { title: "PIXEL CLICK", desc: "¡Confía en la PALABRA, no el COLOR!", start: "JUGAR", score: "PUNTOS", qPrefix: "CLIC EN COLOR:", champTitle: "CAMPEÓN ACTUAL", waiting: "@esperando", over: "¡FIN DEL JUEGO!", save: "GUARDAR", retry: "REPETIR", colors: ["ROJO", "AZUL", "VERDE", "AMARILLO"], even: "PAR", odd: "IMPAR", share: "DESAFÍA A UN AMIGO", newRecord: "¡NUEVO RÉCORD!", placeholder: "@nombre", saveBtn: "GUARDAR RÉCORD", recordSaved: "¡RÉCORD GUARDADO!" }
-    };
-
-    let currentLang = 'pt', score = 0, timer, correctIdx, currentSpeed = 6000, globalBest = 0;
-    const colorValues = ["#ff4757", "#2e86de", "#2ed573", "#eccc68"];
-
-    // Carregamento inicial corrigido
-    window.onload = function() {
-        updateChampionUI();
-        setTimeout(loadAdsterra, 2000);
-    };
-
-    function setLang(l) {
-        currentLang = l;
-        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('btn-' + l).classList.add('active');
-        const ui = langs[l];
-        document.getElementById('ui-title').textContent = ui.title;
-        document.getElementById('ui-desc').textContent = ui.desc;
-        document.getElementById('ui-start-btn').textContent = ui.start;
-        document.getElementById('ui-score-label').firstChild.textContent = ui.score + ": ";
-        document.getElementById('q-prefix').textContent = ui.qPrefix;
-        document.getElementById('ui-over-title').textContent = ui.over;
-        document.getElementById('ui-retry-btn').textContent = ui.retry;
-        document.getElementById('champ-title').textContent = ui.champTitle;
-        document.getElementById('ui-share-btn').textContent = ui.share;
-        updateChampionUI();
-    }
-
-    async function updateChampionUI() {
-        // Busca apenas do Supabase agora
-        if (supabaseClient) {
-            try {
-                const { data } = await supabaseClient
-                    .from('ranking')
-                    .select('name, points')
-                    .order('points', { ascending: false })
-                    .limit(1);
-
-                if (data && data[0]) {
-                    globalBest = data[0].points;
-                    document.getElementById('champ-name').textContent = data[0].name;
-                    document.getElementById('champ-score').textContent = data[0].points + " pts";
-                } else {
-                    document.getElementById('champ-name').textContent = "...";
-                    document.getElementById('champ-score').textContent = "- pts";
-                }
-            } catch (err) { 
-                console.warn("Erro ao buscar ranking mundial."); 
-            }
-        }
-    }
-
-    function start() {
-        score = 0; currentSpeed = 6000;
-        document.getElementById('score').textContent = score;
-        document.getElementById('screen-start').style.display = 'none';
-        document.getElementById('screen-over').style.display = 'none';
-        document.getElementById('new-record-ui').style.display = 'none';
-        next();
-    }
-
-    function next() {
-        const r = Math.random();
-        const stroopChance = Math.min(score / 40, 0.7); 
-        if (r < 0.3) genMath(); 
-        else if (r < 0.3 + stroopChance) genColors(); 
-        else genLogic();
-        resetTimer();
-    }
-
-    function genMath() {
-        let n1, n2, res, opLabel;
-        const randOp = Math.random();
-        if (score > 20 && randOp > 0.7) { 
-            n1 = Math.floor(Math.random() * 10) + 1; n2 = Math.floor(Math.random() * 6) + 1;
-            res = n1 * n2; opLabel = "x";
-        } else if (score > 8 && randOp > 0.4) {
-            n1 = Math.floor(Math.random() * (15 + score)) + 5; n2 = Math.floor(Math.random() * n1) + 1;
-            res = n1 - n2; opLabel = "-";
-        } else {
-            n1 = Math.floor(Math.random() * (10 + score)) + 1; n2 = Math.floor(Math.random() * (10 + score)) + 1;
-            res = n1 + n2; opLabel = "+";
-        }
-        document.getElementById('question-color-text').textContent = `${n1} ${opLabel} ${n2}`;
-        document.getElementById('question-color-text').style.color = "white";
-        let opts = new Set([res]);
-        while(opts.size < 4) {
-            let fake = res + (Math.floor(Math.random() * 15) - 7);
-            if (fake >= 0 && fake !== res) opts.add(fake);
-        }
-        render(Array.from(opts), res);
-    }
-
-    function genColors() {
-        correctIdx = Math.floor(Math.random() * 4);
-        let fontColorIdx;
-        do { fontColorIdx = Math.floor(Math.random() * 4); } while (fontColorIdx === correctIdx);
-        const qSpan = document.getElementById('question-color-text');
-        qSpan.textContent = langs[currentLang].colors[correctIdx];
-        qSpan.style.color = colorValues[fontColorIdx];
-        for (let i = 0; i < 4; i++) {
-            document.getElementById(`opt-${i}`).textContent = langs[currentLang].colors[Math.floor(Math.random() * 4)];
-        }
-    }
-
-    function genLogic() {
-        const findEven = Math.random() > 0.5;
-        const qSpan = document.getElementById('question-color-text');
-        qSpan.textContent = findEven ? langs[currentLang].even : langs[currentLang].odd;
-        qSpan.style.color = "white";
-        let opts = []; let correct;
-        if (findEven) {
-            correct = (Math.floor(Math.random() * 30) * 2);
-            while(opts.length < 3) {
-                let n = Math.floor(Math.random() * 60);
-                if (n % 2 !== 0 && !opts.includes(n)) opts.push(n);
-            }
-        } else {
-            correct = (Math.floor(Math.random() * 30) * 2) + 1;
-            while(opts.length < 3) {
-                let n = Math.floor(Math.random() * 60);
-                if (n % 2 === 0 && !opts.includes(n)) opts.push(n);
-            }
-        }
-        opts.push(correct);
-        render(opts, correct);
-    }
-
-    function render(arr, correct) {
-        let shuffled = arr.sort(() => Math.random() - 0.5);
-        correctIdx = shuffled.indexOf(correct);
-        for(let i=0; i<4; i++) document.getElementById(`opt-${i}`).textContent = shuffled[i];
-    }
-
-    function check(idx) {
-        if (idx === correctIdx) {
-            score++;
-            document.getElementById('score').textContent = score;
-            currentSpeed = Math.max(850, 6000 - (score * 95));
-            next();
-        } else over();
-    }
-
-    function resetTimer() {
-        clearInterval(timer);
-        let startT = Date.now();
-        const bar = document.getElementById('timer-bar');
-        timer = setInterval(() => {
-            let elapsed = Date.now() - startT;
-            let timePerc = 100 - (elapsed / currentSpeed * 100);
-            bar.style.width = timePerc + '%';
-            if (timePerc > 50) bar.style.backgroundColor = "#2ed573";
-            else if (timePerc > 25) bar.style.backgroundColor = "#f1c40f";
-            else bar.style.backgroundColor = "#ff4757";
-            if (timePerc <= 0) over();
-        }, 30);
-    }
-
-    async function over() {
-        clearInterval(timer);
-        document.getElementById('final-score').textContent = score;
-        document.getElementById('screen-over').style.display = 'flex';
+        const langs = {
+    pt: { title: "PIXEL CLICK", desc: "Confie na PALAVRA, não na COR!", start: "JOGAR", score: "PONTOS", qPrefix: "CLIQUE NA COR:", champTitle: "ATUAL CAMPEÃO", waiting: "@aguardando", over: "FIM DE JOGO!", save: "SALVAR", retry: "REPETIR", colors: ["VERMELHO", "AZUL", "VERDE", "AMARELO"], even: "PAR", odd: "ÍMPAR", share: "DESAFIE UM AMIGO", newRecord: "NOVO RECORDE!", placeholder: "@nome", saveBtn: "SALVAR RECORDE", recordSaved: "RECORDE SALVO!" },
+    en: { title: "PIXEL CLICK", desc: "Trust the WORD, not the COLOR!", start: "START", score: "SCORE", qPrefix: "CLICK THE COLOR:", champTitle: "CURRENT CHAMPION", waiting: "@waiting", over: "GAME OVER!", save: "SAVE", retry: "RETRY", colors: ["RED", "BLUE", "GREEN", "YELLOW"], even: "EVEN", odd: "ODD", share: "CHALLENGE A FRIEND", newRecord: "NEW RECORD!", placeholder: "@name", saveBtn: "SAVE RECORD", recordSaved: "RECORD SAVED!" },
+    fr: { title: "PIXEL CLICK", desc: "Croyez le MOT, pas la COULEUR!", start: "JOUER", score: "POINTS", qPrefix: "CLIQUEZ COULEUR:", champTitle: "CHAMPION ACTUEL", waiting: "@en_attente", over: "FIN DE JEU!", save: "SAUVER", retry: "REJOUER", colors: ["ROUGE", "BLEU", "VERT", "JAUNE"], even: "PAIR", odd: "IMPAIR", share: "DÉFIER UN AMI", newRecord: "NOUVEAU RECORD!", placeholder: "@nom", saveBtn: "ENREGISTRER", recordSaved: "RECORD ENREGISTRÉ!" },
+    es: { title: "PIXEL CLICK", desc: "¡Confía en la PALABRA, no el COLOR!", start: "JUGAR", score: "PUNTOS", qPrefix: "CLIC EN COLOR:", champTitle: "CAMPEÓN ACTUAL", waiting: "@esperando", over: "¡FIN DEL JUEGO!", save: "GUARDAR", retry: "REPETIR", colors: ["ROJO", "AZUL", "VERDE", "AMARILLO"], even: "PAR", odd: "IMPAR", share: "DESAFÍA A UN AMIGO", newRecord: "¡NUEVO RÉCORD!", placeholder: "@nombre", saveBtn: "GUARDAR RÉCORD", recordSaved: "¡RÉCORD GUARDADO!" }
+};
         
-        // Verifica apenas contra o recorde global do Supabase
-        if (score > globalBest && score > 0) {
-            document.getElementById('new-record-ui').style.display = 'block';
-        }
+
+        let currentLang = 'pt', score = 0, timer, correctIdx, currentSpeed = 6000, globalBest = 0;
+        const colorValues = ["#ff4757", "#2e86de", "#2ed573", "#eccc68"];
+
+        updateChampionUI();
+
+        function setLang(l) {
+    currentLang = l;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('btn-' + l).classList.add('active');
+    
+    const ui = langs[l];
+    
+    // Atualiza os textos básicos
+    document.getElementById('ui-title').textContent = ui.title;
+    document.getElementById('ui-desc').textContent = ui.desc;
+    document.getElementById('ui-start-btn').textContent = ui.start;
+    document.getElementById('ui-score-label').firstChild.textContent = ui.score + ": ";
+    document.getElementById('q-prefix').textContent = ui.qPrefix;
+    document.getElementById('ui-over-title').textContent = ui.over;
+    document.getElementById('ui-retry-btn').textContent = ui.retry;
+    document.getElementById('champ-title').textContent = ui.champTitle;
+    document.getElementById('ui-share-btn').textContent = ui.share;
+
+    // Tradução dos elementos de Recorde (Game Over)
+    const recordContainer = document.getElementById('new-record-ui');
+    if (recordContainer) {
+        const p = recordContainer.querySelector('p');
+        const btn = recordContainer.querySelector('.save-btn');
+        const input = document.getElementById('insta-handle');
+        
+        if (p) p.textContent = ui.newRecord;
+        if (btn) btn.textContent = ui.saveBtn;
+        if (input) input.placeholder = ui.placeholder;
     }
 
-    async function saveToRanking() {
-        const nameInput = document.getElementById('insta-handle');
-        const name = nameInput.value.trim().substring(0, 20) || "@anonimo";
-        const saveBtn = document.querySelector('.save-btn');
-        saveBtn.disabled = true; saveBtn.textContent = "...";
+    updateChampionUI();
+}
 
-        // Sincroniza apenas com Supabase, sem LocalStorage
-        if (supabaseClient) {
-            try {
-                // Remove recorde anterior e insere o novo (lógica de recordista único)
-                await supabaseClient.from('ranking').delete().gte('points', 0); 
-                await supabaseClient.from('ranking').insert([{ name: name, points: score }]);
-            } catch (err) {
-                console.error("Erro ao salvar ranking.");
+        async function updateChampionUI() {
+            // 3. BUSCAR RECORDE: Pega o maior valor do banco de dados
+            const { data, error } = await supabaseClient
+                .from('ranking')
+                .select('name, points')
+                .order('points', { ascending: false })
+                .limit(1);
+
+            if (data && data.length > 0) {
+                globalBest = data[0].points;
+                document.getElementById('champ-name').textContent = data[0].name;
+                document.getElementById('champ-score').textContent = data[0].points + " pts";
+            } else {
+                document.getElementById('champ-name').textContent = langs[currentLang].waiting;
+                document.getElementById('champ-score').textContent = "0 pts";
             }
         }
 
-        updateChampionUI();
-        document.getElementById('new-record-ui').innerHTML = 
-            `<p style="color: var(--accent); font-weight: bold; margin-top: 20px;">RECORDE SALVO!</p>`;
-    }
-
-    function shareGame() {
-        const shareMsgs = {
-            pt: `Fiz ${score} pontos no Pixel Click! Duvido você bater o meu recorde. Jogue aqui:`,
-            en: `I scored ${score} points on Pixel Click! I bet you can't beat my record. Play here:`,
-            fr: `J'ai marqué ${score} points sur Pixel Click ! Je parie que tu ne podras pas battre mon record. Joue ici :`,
-            es: `¡Hice ${score} puntos en Pixel Click! Te desafio a superar mi récord. Juega aquí:`
-        };
-        const text = shareMsgs[currentLang] || shareMsgs.en;
-        const url = window.location.href;
-        if (navigator.share) {
-            navigator.share({ title: 'Pixel Click Challenge', text: text, url: url }).catch(e => {});
-        } else {
-            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text + " " + url)}`, '_blank');
+        function start() {
+            score = 0; currentSpeed = 6000;
+            document.getElementById('score').textContent = score;
+            document.getElementById('screen-start').style.display = 'none';
+            document.getElementById('screen-over').style.display = 'none';
+            document.getElementById('new-record-ui').style.display = 'none';
+            next();
         }
-    }
 
-    function openPix() { document.getElementById('pix-overlay').style.display = 'flex'; }
-    function closePix() { document.getElementById('pix-overlay').style.display = 'none'; }
+        function next() {
+            const r = Math.random();
+            const stroopChance = Math.min(score / 40, 0.7); 
+            if (r < 0.3) genMath(); 
+            else if (r < 0.3 + stroopChance) genColors(); 
+            else genLogic();
+            resetTimer();
+        }
 
-    function copyPix() {
-        const key = document.getElementById('pix-key').innerText;
-        navigator.clipboard.writeText(key).then(() => {
-            const btn = event.target;
-            const originalText = btn.innerText;
-            btn.innerText = "COPIADO!";
-            btn.style.background = "#2ed573";
-            setTimeout(() => {
-                btn.innerText = originalText;
-                btn.style.background = "#3498db";
-            }, 2000);
-        });
-    }
+        function genMath() {
+            let n1, n2, res, opLabel;
+            const randOp = Math.random();
+            if (score > 20 && randOp > 0.7) { 
+                n1 = Math.floor(Math.random() * 10) + 1; n2 = Math.floor(Math.random() * 6) + 1;
+                res = n1 * n2; opLabel = "x";
+            } else if (score > 8 && randOp > 0.4) {
+                n1 = Math.floor(Math.random() * (15 + score)) + 5; n2 = Math.floor(Math.random() * n1) + 1;
+                res = n1 - n2; opLabel = "-";
+            } else {
+                n1 = Math.floor(Math.random() * (10 + score)) + 1; n2 = Math.floor(Math.random() * (10 + score)) + 1;
+                res = n1 + n2; opLabel = "+";
+            }
+            document.getElementById('question-color-text').textContent = `${n1} ${opLabel} ${n2}`;
+            document.getElementById('question-color-text').style.color = "white";
+            let opts = new Set([res]);
+            while(opts.size < 4) {
+                let fake = res + (Math.floor(Math.random() * 15) - 7);
+                if (fake >= 0 && fake !== res) opts.add(fake);
+            }
+            render(Array.from(opts), res);
+        }
 
-    function loadAdsterra() {
-        const container = document.getElementById('ad-container');
-        if(!container) return;
-        window.atOptions = {
-            'key' : '1af5eed8d5a813d46ac266bce36c9450',
-            'format' : 'iframe',
-            'height' : 250,
-            'width' : 300,
-            'params' : {}
-        };
-        const adScript = document.createElement('script');
-        adScript.src = "//www.highperformanceformat.com/1af5eed8d5a813d46ac266bce36c9450/invoke.js";
-        adScript.type = "text/javascript";
-        container.appendChild(adScript);
+        function genColors() {
+            correctIdx = Math.floor(Math.random() * 4);
+            let fontColorIdx;
+            do { fontColorIdx = Math.floor(Math.random() * 4); } while (fontColorIdx === correctIdx);
+            const qSpan = document.getElementById('question-color-text');
+            qSpan.textContent = langs[currentLang].colors[correctIdx];
+            qSpan.style.color = colorValues[fontColorIdx];
+            for (let i = 0; i < 4; i++) {
+                document.getElementById(`opt-${i}`).textContent = langs[currentLang].colors[Math.floor(Math.random() * 4)];
+            }
+        }
+
+        function genLogic() {
+            const findEven = Math.random() > 0.5;
+            const qSpan = document.getElementById('question-color-text');
+            qSpan.textContent = findEven ? langs[currentLang].even : langs[currentLang].odd;
+            qSpan.style.color = "white";
+            let opts = []; let correct;
+            if (findEven) {
+                correct = (Math.floor(Math.random() * 30) * 2);
+                while(opts.length < 3) {
+                    let n = Math.floor(Math.random() * 60);
+                    if (n % 2 !== 0 && !opts.includes(n)) opts.push(n);
+                }
+            } else {
+                correct = (Math.floor(Math.random() * 30) * 2) + 1;
+                while(opts.length < 3) {
+                    let n = Math.floor(Math.random() * 60);
+                    if (n % 2 === 0 && !opts.includes(n)) opts.push(n);
+                }
+            }
+            opts.push(correct);
+            render(opts, correct);
+        }
+
+        function render(arr, correct) {
+            let shuffled = arr.sort(() => Math.random() - 0.5);
+            correctIdx = shuffled.indexOf(correct);
+            for(let i=0; i<4; i++) document.getElementById(`opt-${i}`).textContent = shuffled[i];
+        }
+
+        function check(idx) {
+            if (idx === correctIdx) {
+                score++;
+                document.getElementById('score').textContent = score;
+                currentSpeed = Math.max(850, 6000 - (score * 95));
+                next();
+            } else over();
+        }
+
+        function resetTimer() {
+            clearInterval(timer);
+            let startT = Date.now();
+            const bar = document.getElementById('timer-bar');
+            timer = setInterval(() => {
+                let elapsed = Date.now() - startT;
+                let timePerc = 100 - (elapsed / currentSpeed * 100);
+                bar.style.width = timePerc + '%';
+                if (timePerc > 50) bar.style.backgroundColor = "#2ed573";
+                else if (timePerc > 25) bar.style.backgroundColor = "#f1c40f";
+                else bar.style.backgroundColor = "#ff4757";
+                if (timePerc <= 0) over();
+            }, 30);
+        }
+
+        async function over() { // 1. Adicionado 'async' aqui
+    clearInterval(timer);
+    document.getElementById('final-score').textContent = score;
+    document.getElementById('screen-over').style.display = 'flex';
+    
+    // 2. ADICIONE ESTA LINHA ABAIXO:
+    // Ela força o jogo a ler o recorde mais recente do Supabase antes de comparar
+    await updateChampionUI(); 
+
+    if (score > globalBest) {
+        const ui = langs[currentLang];
+        const recordContainer = document.getElementById('new-record-ui');
+        
+        recordContainer.querySelector('p').textContent = ui.newRecord;
+        document.getElementById('insta-handle').placeholder = ui.placeholder;
+        recordContainer.querySelector('.save-btn').textContent = ui.saveBtn;
+        
+        recordContainer.style.display = 'block';
     }
-</script>
+}
+
+        async function saveToRanking() {
+    const handle = document.getElementById('insta-handle').value || "@anon";
+    const saveBtn = document.querySelector('.save-btn');
+    
+    // Feedback visual imediato no botão
+    saveBtn.textContent = "...";
+    saveBtn.disabled = true;
+
+    // Apaga registros antigos e insere o novo recordista
+    await supabaseClient.from('ranking').delete().neq('points', -1); 
+    
+    const { error } = await supabaseClient
+        .from('ranking')
+        .insert([{ name: handle, points: score }]);
+
+    if (!error) {
+        await updateChampionUI();
+        document.getElementById('new-record-ui').innerHTML = 
+            `<p style="color: var(--accent); font-weight: bold;">RECORDE SALVO!</p>`;
+        // Removemos o alert() daqui
+    } else {
+        saveBtn.textContent = "ERRO!";
+        saveBtn.disabled = false;
+    }
+}
+        function shareGame() {
+    // Textos personalizados por idioma
+    const shareMsgs = {
+        pt: `Fiz ${score} pontos no Pixel Click! Duvido você bater o meu recorde. Jogue aqui:`,
+        en: `I scored ${score} points on Pixel Click! I bet you can't beat my record. Play here:`,
+        fr: `J'ai marqué ${score} points sur Pixel Click ! Je parie que tu ne podras pas battre mon record. Joue ici :`,
+        es: `¡Hice ${score} puntos en Pixel Click! Te desafio a superar mi récord. Juega aquí:`
+    };
+
+    const text = shareMsgs[currentLang] || shareMsgs.en;
+    const url = window.location.href;
+
+    if (navigator.share) {
+        // Abre o menu nativo do celular (iMessage, WhatsApp, Instagram, etc)
+        navigator.share({
+            title: 'Pixel Click Challenge',
+            text: text,
+            url: url
+        }).catch(err => console.log("Erro ao compartilhar"));
+    } else {
+        // Caso o navegador seja antigo ou PC, abre o link do WhatsApp como reserva
+        const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text + " " + url)}`;
+        window.open(whatsappUrl, '_blank');
+    }
+}
+// Abre a janela do Pix
+function openPix() {
+    document.getElementById('pix-overlay').style.display = 'flex';
+}
+
+// Fecha a janela do Pix
+function closePix() {
+    document.getElementById('pix-overlay').style.display = 'none';
+}
+
+// Copia a chave e dá feedback visual
+function copyPix() {
+    const key = document.getElementById('pix-key').innerText;
+    navigator.clipboard.writeText(key).then(() => {
+        const btn = event.target;
+        const originalText = btn.innerText;
+        btn.innerText = "COPIADO!";
+        btn.style.background = "#2ed573";
+        
+        setTimeout(() => {
+            btn.innerText = originalText;
+            btn.style.background = "#3498db";
+        }, 2000);
+    });
+}
+    </script>
     <footer style="margin-top: 50px; text-align: center; font-family: sans-serif; color: #888; font-size: 12px; padding: 20px;">
-    <p>O <strong>Pixel Stroop</strong> é baseado em um famoso teste psicológico de cores para desafiar a concentração. Como parte da plataforma Pixel Click®, este jogo foca em alta performance cognitiva e diversão rápida no navegador.</p>
+    <p>O <strong>Pixel Stroop</strong> é baseado em um famoso teste psicológico de cores para desafiar a concentração. Como parte da plataforma Pixel Click®, este jogo foca na performance cognitiva.</p>
 </footer>
 </body>
 </html>

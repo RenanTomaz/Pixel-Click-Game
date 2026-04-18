@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-select=none">
     <title>Pixel Click: Trivia Challenge</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <style>
         :root { 
@@ -313,16 +313,15 @@ input#insta-handle:focus {
     </div>
 
     <div id="champion-spotlight">
-    <p id="champ-title">RECORDISTA ATUAL</p>
+    <p id="champ-title">ATUAL CAMPEÃO</p>
     <div id="champ-info">
-        <span id="champ-name">Carregando</span>
+        <span id="champ-name">@aguardando</span>
         <span id="champ-score">0 pts</span>
     </div>
 </div>
 
-    <div id="screen-over" class="overlay" style="display:none; flex-direction: column; align-items: center; justify-content: center;">
-   <div id="ad-container" style="min-height: 250px;"></div>
-    <h1 id="ui-over-title" style="color:#ff4757; margin-top: 0;">GAME OVER!</h1>
+    <div id="screen-over" class="overlay" style="display:none">
+    <h1 id="ui-over-title" style="color:#ff4757">GAME OVER!</h1>
     <p style="font-size: 1.5rem">Pontos: <span id="final-score">0</span></p>
 
     <div id="new-record-ui" style="display:none; width: 100%;">
@@ -331,27 +330,29 @@ input#insta-handle:focus {
         <button onclick="saveToRanking()" class="save-btn">SALVAR</button>
     </div>
 
-    <button onclick="window.location.reload();" class="retry-btn" id="ui-retry-btn">REPETIR</button>
+    <button onclick="window.location.reload();" class="retry-btn">REPETIR</button>
     <button onclick="shareGame()" class="retry-btn" id="ui-share-btn">DESAFIE UM AMIGO</button>
 
-    <div class="pix-support-container" onclick="openPix()">
-        <div class="pixel-coin">🪙</div>
-        <div class="pix-label">Gostou deste jogo?</div>
-        <div class="pix-label">Então apoie o Dev</div>
+        <div class="pix-support-container" onclick="openPix()">
+    <div class="pixel-coin">🪙</div>
+    <div class="pix-label">Gostou deste jogo?</div>
+    <div class="pix-label">Então apoie o Dev</div>
+</div>
+        <div id="pix-overlay" class="overlay" style="display:none; z-index: 2000;">
+    <h2 style="color: #f1c40f;">APOIE O DESENVOLVEDOR</h2>
+    <p style="font-size: 0.9rem; margin-bottom: 20px;">Sua ajuda mantém o servidor ativo!</p>
+    
+    <div style="background: white; padding: 15px; width: 85%; max-width: 240px; border-radius: 12px; display: flex; justify-content: center; align-items: center; margin: 0 auto; box-shadow: 0 0 15px rgba(255,255,255,0.2);">
+        <img src="pix.png" alt="QR Code Pix" style="width: 100%; height: auto; display: block;">
     </div>
 
-    <div id="pix-overlay" class="overlay" style="display:none; z-index: 2000;">
-        <h2 style="color: #f1c40f;">APOIE O DESENVOLVEDOR</h2>
-        <p style="font-size: 0.9rem; margin-bottom: 20px;">Sua ajuda mantém o servidor ativo!</p>
-        <div style="background: white; padding: 15px; width: 85%; max-width: 240px; border-radius: 12px; display: flex; justify-content: center; align-items: center; margin: 0 auto; box-shadow: 0 0 15px rgba(255,255,255,0.2);">
-            <img src="pix.png" alt="QR Code Pix" style="width: 100%; height: auto; display: block;">
-        </div>
-        <span id="pix-key" style="display: none;">46d2ae23-3ebc-46f0-9a23-a868df805228</span>
-        <div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 25px;">
-            <button onclick="copyPix(event)" class="save-btn" style="width: 85%; max-width: 260px;">COPIAR CHAVE</button>
-            <button onclick="closePix()" class="retry-btn" style="background: #555; width: 85%; max-width: 260px;">VOLTAR</button>
-        </div>
+    <span id="pix-key" style="display: none;">46d2ae23-3ebc-46f0-9a23-a868df805228</span>
+
+    <div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 25px;">
+        <button onclick="copyPix(event)" class="save-btn" style="width: 85%; max-width: 260px;">COPIAR CHAVE</button>
+        <button onclick="closePix()" class="retry-btn" style="background: #555; width: 85%; max-width: 260px;">VOLTAR</button>
     </div>
+</div>
 
     <script src="natureza.js"></script>
     <script src="ciencia.js"></script>
@@ -361,240 +362,298 @@ input#insta-handle:focus {
     <script src="esportes.js"></script>
 
     <script>
-    // 1. CONFIGURAÇÃO: Credenciais Supabase
-    const SUPABASE_URL = 'https://jsjzpilzmpxestbrhado.supabase.co'; 
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzanpwaWx6bXB4ZXN0YnJoYWRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3OTc0NDAsImV4cCI6MjA5MDM3MzQ0MH0.0WXO31A9lYJLMYWnQqlvFArTn4WNN-umhhD23OefgT0';
-    
-    let supabaseClient = null;
-    let score = 0, timeLeft = 100, gameActive = false, pool = [], currentQuestion, difficulty = 0.15, globalBest = 0;
-    
-    // Carregamento inicial: Supabase + Anúncios
-    window.onload = function() {
-        // Inicialização do cliente Supabase garantida
-        if (typeof supabase !== 'undefined') {
-            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        } else {
-            console.error("Supabase SDK não encontrado.");
-        }
         
+        // Supabase Mock (Substitua pelas suas chaves reais se quiser ranking)
+        const SUPABASE_URL = 'https://jsjzpilzmpxestbrhado.supabase.co'; 
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzanpwaWx6bXB4ZXN0YnJoYWRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3OTc0NDAsImV4cCI6MjA5MDM3MzQ0MH0.0WXO31A9lYJLMYWnQqlvFArTn4WNN-umhhD23OefgT0'; // Copie a chave completa do seu painel
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let score = 0, timeLeft = 100, gameActive = false, pool = [], currentQuestion, difficulty = 0.15, globalBest = 0;
+        
+        // INICIALIZAÇÃO DO SPOTLIGHT
         updateChampionUI();
-        setTimeout(loadAdsterra, 2000);
+
+        async function updateChampionUI() {
+    if (!supabaseClient) return;
+    try {
+        const { data } = await supabaseClient
+            .from('ranking_trivia')
+            .select('name, points')
+            .order('points', { ascending: false })
+            .limit(1);
+
+        if (data && data.length > 0) {
+            globalBest = data[0].points;
+            document.getElementById('champ-name').textContent = data[0].name;
+            document.getElementById('champ-score').textContent = data[0].points + " pts";
+        }
+    } catch (e) { console.error("Erro ao carregar ranking"); }
+}
+
+        function hideStart() {
+            document.getElementById('screen-start').style.display = 'none';
+        }
+
+        function setLang(l) {
+    currentLang = l;
+    
+    // Atualiza o visual das bandeiras
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    const btn = document.getElementById('btn-' + l);
+    if(btn) btn.classList.add('active');
+
+    const ui = triviaLangs[l];
+
+    // Tradução da interface e cabeçalho
+    if(!gameActive) {
+        document.getElementById('question').innerText = ui.choose;
+    }
+    document.getElementById('ui-score-label').innerHTML = `${ui.score}: <b id="score">${score}</b>`;
+
+    // Tradução dos temas (Botões de categoria)
+    document.getElementById('cat-natureza').innerText = ui["cat-natureza"];
+    document.getElementById('cat-ciencia').innerText = ui["cat-ciencia"];
+    document.getElementById('cat-historia').innerText = ui["cat-historia"];
+    document.getElementById('cat-geografia').innerText = ui["cat-geografia"];
+    document.getElementById('cat-entretenimento').innerText = ui["cat-entretenimento"];
+    document.getElementById('cat-esportes').innerText = ui["cat-esportes"];
+
+    // Tradução dos textos de Game Over
+    document.querySelector('#screen-over h1').innerText = ui.over;
+    
+    // Tradução dos botões da overlay (Retry e Share)
+    const retryBtn = document.getElementById('ui-retry-btn');
+    const shareBtn = document.getElementById('ui-share-btn');
+    if(retryBtn) retryBtn.innerText = ui.retry;
+    if(shareBtn) shareBtn.innerText = ui.share;
+}
+
+        function startTrivia(cat) {
+            // Acessa as variáveis globais carregadas pelos arquivos .js
+            const dataMap = {
+                'natureza': typeof naturezaData !== 'undefined' ? naturezaData : [],
+                'ciencia': typeof cienciaData !== 'undefined' ? cienciaData : [],
+                'historia': typeof historiaData !== 'undefined' ? historiaData : [],
+                'geografia': typeof geografiaData !== 'undefined' ? geografiaData : [],
+                'entretenimento': typeof entretenimentoData !== 'undefined' ? entretenimentoData : [],
+                'esportes': typeof esportesData !== 'undefined' ? esportesData : []
+            };
+
+            pool = dataMap[cat];
+
+            if (!pool || pool.length === 0) {
+                alert("Erro ao carregar perguntas desta categoria!");
+                return;
+            }
+
+            document.getElementById('menu-categories').style.display = 'none';
+            document.getElementById('ui-header').style.display = 'flex';
+            document.getElementById('timer-box').style.display = 'block';
+            document.getElementById('grid').style.display = 'grid';
+            
+            gameActive = true;
+            score = 0;
+            timeLeft = 100;
+            difficulty = 0.1; // Velocidade inicial
+            document.getElementById('score').innerText = score;
+            loadNextQuestion();
+            gameLoop();
+        }
+
+        function loadNextQuestion() {
+    if(!gameActive) return;
+
+    // 1. Pega a pergunta aleatória original
+    const rawQuestion = pool[Math.floor(Math.random() * pool.length)];
+    
+    // 2. Cria uma cópia das opções para não alterar o banco de dados original
+    let optionsWithIndex = rawQuestion.options.map((opt, index) => {
+        return { text: opt, originalIndex: index };
+    });
+
+    // 3. Embaralha as opções (Algoritmo Fisher-Yates)
+    for (let i = optionsWithIndex.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [optionsWithIndex[i], optionsWithIndex[j]] = [optionsWithIndex[j], optionsWithIndex[i]];
+    }
+
+    // 4. Salva qual é o novo índice da resposta correta
+    currentQuestion = {
+        q: rawQuestion.q,
+        options: optionsWithIndex.map(item => item.text),
+        correct: optionsWithIndex.findIndex(item => item.originalIndex === rawQuestion.correct)
     };
 
-    async function updateChampionUI() {
-        // Busca apenas do Supabase agora
-        if (supabaseClient) {
-            try {
-                const { data } = await supabaseClient
-                    .from('ranking_trivia')
-                    .select('name, points')
-                    .order('points', { ascending: false })
-                    .limit(1);
-
-                if (data && data[0]) {
-                    globalBest = data[0].points;
-                    document.getElementById('champ-name').textContent = data[0].name;
-                    document.getElementById('champ-score').textContent = data[0].points + " pts";
-                } else {
-                    document.getElementById('champ-name').textContent = "@aguardando";
-                    document.getElementById('champ-score').textContent = "0 pts";
-                }
-            } catch (err) { 
-                console.warn("Erro ao buscar ranking mundial."); 
-            }
-        }
+    // 5. Renderiza na tela
+    document.getElementById('question').innerText = currentQuestion.q;
+    for(let i=0; i<4; i++) {
+        const btn = document.getElementById(`opt-${i}`);
+        btn.innerText = currentQuestion.options[i];
     }
+}
 
-    function hideStart() {
-        document.getElementById('screen-start').style.display = 'none';
-    }
+        function checkAnswer(idx) {
+    if(!gameActive) return;
 
-    function setLang(l) {
-        currentLang = l;
-        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-        const btn = document.getElementById('btn-' + l);
-        if(btn) btn.classList.add('active');
-        const ui = triviaLangs[l];
-        if(!gameActive) {
-            document.getElementById('question').innerText = ui.choose;
-        }
-        document.getElementById('ui-score-label').innerHTML = `${ui.score}: <b id="score">${score}</b>`;
-        document.getElementById('cat-natureza').innerText = ui["cat-natureza"];
-        document.getElementById('cat-ciencia').innerText = ui["cat-ciencia"];
-        document.getElementById('cat-historia').innerText = ui["cat-historia"];
-        document.getElementById('cat-geografia').innerText = ui["cat-geografia"];
-        document.getElementById('cat-entretenimento').innerText = ui["cat-entretenimento"];
-        document.getElementById('cat-esportes').innerText = ui["cat-esportes"];
-        document.querySelector('#screen-over h1').innerText = ui.over;
-        const retryBtn = document.getElementById('ui-retry-btn');
-        const shareBtn = document.getElementById('ui-share-btn');
-        if(retryBtn) retryBtn.innerText = ui.retry;
-        if(shareBtn) shareBtn.innerText = ui.share;
-    }
-
-    function startTrivia(cat) {
-        const dataMap = {
-            'natureza': typeof naturezaData !== 'undefined' ? naturezaData : [],
-            'ciencia': typeof cienciaData !== 'undefined' ? cienciaData : [],
-            'historia': typeof historiaData !== 'undefined' ? historiaData : [],
-            'geografia': typeof geografiaData !== 'undefined' ? geografiaData : [],
-            'entretenimento': typeof entretenimentoData !== 'undefined' ? entretenimentoData : [],
-            'esportes': typeof esportesData !== 'undefined' ? esportesData : []
-        };
-        pool = dataMap[cat];
-        if (!pool || pool.length === 0) {
-            alert("Erro ao carregar perguntas desta categoria!");
-            return;
-        }
-        document.getElementById('menu-categories').style.display = 'none';
-        document.getElementById('ui-header').style.display = 'flex';
-        document.getElementById('timer-box').style.display = 'block';
-        document.getElementById('grid').style.display = 'grid';
-        gameActive = true;
-        score = 0;
-        timeLeft = 100;
-        difficulty = 0.1;
-        document.getElementById('score').innerText = score;
+    if(idx === currentQuestion.correct) {
+        score++;
+        document.getElementById('score').innerText = score; // Atualiza o número direto
+        timeLeft = 100; 
+        difficulty += 0.002; 
         loadNextQuestion();
-        gameLoop();
+    } else {
+        endGame();
     }
+}
 
-    function loadNextQuestion() {
-        if(!gameActive) return;
-        const rawQuestion = pool[Math.floor(Math.random() * pool.length)];
-        let optionsWithIndex = rawQuestion.options.map((opt, index) => {
-            return { text: opt, originalIndex: index };
-        });
-        for (let i = optionsWithIndex.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [optionsWithIndex[i], optionsWithIndex[j]] = [optionsWithIndex[j], optionsWithIndex[i]];
-        }
-        currentQuestion = {
-            q: rawQuestion.q,
-            options: optionsWithIndex.map(item => item.text),
-            correct: optionsWithIndex.findIndex(item => item.originalIndex === rawQuestion.correct)
-        };
-        document.getElementById('question').innerText = currentQuestion.q;
-        for(let i=0; i<4; i++) {
-            const btn = document.getElementById(`opt-${i}`);
-            btn.innerText = currentQuestion.options[i];
-        }
+        function gameLoop() {
+    if(!gameActive) return;
+
+    timeLeft -= difficulty;
+    
+    // Garante que a barra não passe de 100%
+    const displayWidth = Math.min(timeLeft, 100);
+    document.getElementById('timer-bar').style.width = displayWidth + "%";
+    
+    // Cores de alerta
+    const bar = document.getElementById('timer-bar');
+    if (timeLeft > 50) bar.style.backgroundColor = "#2ed573";
+    else if (timeLeft > 25) bar.style.backgroundColor = "#ffa300";
+    else bar.style.backgroundColor = "#ff4757";
+
+    if(timeLeft <= 0) endGame();
+    else requestAnimationFrame(gameLoop);
+}
+
+        function endGame() {
+    gameActive = false;
+    document.getElementById('screen-over').style.display = 'flex';
+    document.getElementById('final-score').innerText = score;
+
+    // Mostra o campo de recorde apenas se superar o campeão mundial atual
+    if (score > globalBest && score > 0) {
+        document.getElementById('new-record-ui').style.display = 'block';
+    } else {
+        document.getElementById('new-record-ui').style.display = 'none';
     }
+}
 
-    function checkAnswer(idx) {
-        if(!gameActive) return;
-        if(idx === currentQuestion.correct) {
-            score++;
-            document.getElementById('score').innerText = score;
-            timeLeft = 100; 
-            difficulty += 0.002; 
-            loadNextQuestion();
-        } else {
-            endGame();
-        }
-    }
+async function saveToRanking() {
+    const nameInput = document.getElementById('insta-handle');
+    const name = nameInput.value.trim().substring(0, 20) || "@nome";
+    const saveBtn = document.querySelector('.save-btn');
 
-    function gameLoop() {
-        if(!gameActive) return;
-        timeLeft -= difficulty;
-        const displayWidth = Math.min(timeLeft, 100);
-        document.getElementById('timer-bar').style.width = displayWidth + "%";
-        const bar = document.getElementById('timer-bar');
-        if (timeLeft > 50) bar.style.backgroundColor = "#2ed573";
-        else if (timeLeft > 25) bar.style.backgroundColor = "#ffa300";
-        else bar.style.backgroundColor = "#ff4757";
-        if(timeLeft <= 0) endGame();
-        else requestAnimationFrame(gameLoop);
-    }
+    saveBtn.disabled = true;
+    saveBtn.textContent = "...";
 
-    function endGame() {
-        gameActive = false;
-        document.getElementById('final-score').innerText = score;
-        document.getElementById('screen-over').style.display = 'flex';
+    try {
+        // Mantém apenas o Rei da Montanha (apaga todos antes de inserir)
+        await supabaseClient.from('ranking_trivia').delete().gte('points', 0); 
         
-        if (score > globalBest && score > 0) {
-            document.getElementById('new-record-ui').style.display = 'block';
+        const { error } = await supabaseClient
+            .from('ranking_trivia')
+            .insert([{ name: name, points: score }]);
+
+        if (!error) {
+            document.getElementById('champ-name').textContent = name;
+            document.getElementById('champ-score').textContent = score + " pts";
+            globalBest = score;
+            document.getElementById('new-record-ui').innerHTML = 
+                `<p style="color: var(--accent); font-weight: bold; margin-top: 20px;">CAMPEÃO ATUALIZADO!</p>`;
         } else {
-            document.getElementById('new-record-ui').style.display = 'none';
+            saveBtn.disabled = false;
+            saveBtn.textContent = "ERRO!";
         }
+    } catch (err) {
+        saveBtn.disabled = false;
+        saveBtn.textContent = "SALVAR";
+    }
+}
+
+    // Lógica para mostrar input de recorde
+    if (score > globalBest && score > 0) {
+        document.getElementById('new-record-ui').style.display = 'block';
+    } else {
+        document.getElementById('new-record-ui').style.display = 'none';
     }
 
-    async function saveToRanking() {
-        const nameInput = document.getElementById('insta-handle');
-        const name = nameInput.value.trim().substring(0, 20) || "@anonimo";
-        const saveBtn = document.querySelector('.save-btn');
-        saveBtn.disabled = true; saveBtn.textContent = "...";
+        // Bloqueia clique direito e gestos de zoom para mobile
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        function shareGame() {
+    // Na Trivia a variável é 'score', no Stroop era 'finalScore'
+    const text = `Fiz ${score} pontos no Pixel Trivia! Consegue superar meu recorde? 🧠🎮`;
+    const url = "https://pixelclick.fun/pixel-trivia.html";
 
-        // Sincroniza apenas com Supabase, sem LocalStorage
-        if (supabaseClient) {
-            try {
-                // Remove recorde anterior e insere o novo (lógica de recordista único)
-                await supabaseClient.from('ranking_trivia').delete().gte('points', 0); 
-                await supabaseClient.from('ranking_trivia').insert([{ name: name, points: score }]);
-            } catch (err) {
-                console.error("Erro ao salvar ranking.");
-            }
-        }
-
-        updateChampionUI();
-        document.getElementById('new-record-ui').innerHTML = 
-            `<p style="color: var(--accent); font-weight: bold; margin-top: 20px;">RECORDE SALVO!</p>`;
+    if (navigator.share) {
+        navigator.share({
+            title: 'Pixel Click',
+            text: text,
+            url: url
+        }).catch(err => console.log("Erro ao compartilhar", err));
+    } else {
+        const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text + " " + url)}`;
+        window.open(whatsappUrl, '_blank');
     }
-       
-        updateChampionUI();
-        document.getElementById('new-record-ui').innerHTML = 
-            `<p style="color: var(--accent); font-weight: bold; margin-top: 20px;">RECORDE SALVO!</p>`;
-    }
+}
+function setLang(l) {
+    currentLang = l;
+    
+    // Atualiza classes das bandeiras
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    const activeBtn = document.getElementById('btn-' + l);
+    if(activeBtn) activeBtn.classList.add('active');
 
-    document.addEventListener('contextmenu', event => event.preventDefault());
+    const ui = triviaLangs[l];
 
-    function shareGame() {
-        const text = `Fiz ${score} pontos no Pixel Trivia! Consegue superar meu recorde? 🧠🎮`;
-        const url = "https://pixelclick.fun/pixel-trivia.html";
-        if (navigator.share) {
-            navigator.share({ title: 'Pixel Click', text: text, url: url }).catch(e => {});
-        } else {
-            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text + " " + url)}`, '_blank');
-        }
+    // Tradução da Pergunta inicial / Instrução
+    if(!gameActive) {
+        document.getElementById('question').innerText = ui.choose;
     }
 
-    function openPix() { document.getElementById('pix-overlay').style.display = 'flex'; }
-    function closePix() { document.getElementById('pix-overlay').style.display = 'none'; }
+    // Tradução do Label de Score (Mantendo o número atual)
+    document.getElementById('ui-score-label').innerHTML = `${ui.score}: <b id="score">${score}</b>`;
 
-    function copyPix(event) {
-        const key = document.getElementById('pix-key').innerText;
-        navigator.clipboard.writeText(key).then(() => {
-            const btn = event.target;
-            const originalText = btn.innerText;
-            btn.innerText = "COPIADO!";
-            btn.style.background = "#2ed573";
-            setTimeout(() => {
-                btn.innerText = originalText;
-                btn.style.background = "#3498db";
-            }, 2000);
-        });
-    }
+    // Tradução dos Botões de Categoria (Usando os IDs que criamos)
+    document.getElementById('cat-natureza').innerText = ui.cat-natureza;
+    document.getElementById('cat-ciencia').innerText = ui.cat-ciencia;
+    document.getElementById('cat-historia').innerText = ui.cat-historia;
+    document.getElementById('cat-geografia').innerText = ui.cat-geografia;
+    document.getElementById('cat-entretenimento').innerText = ui.cat-entretenimento;
+    document.getElementById('cat-esportes').innerText = ui.cat-esportes;
 
-    function loadAdsterra() {
-        const container = document.getElementById('ad-container');
-        if(!container) return;
+    // Tradução do Overlay de Fim de Jogo
+    document.querySelector('#screen-over h1').innerText = ui.over;
+    // Se você tiver IDs nos botões da overlay, use-os. Exemplo:
+    const retryBtns = document.querySelectorAll('.retry-btn');
+    retryBtns.forEach(btn => {
+        if(btn.onclick && btn.onclick.toString().includes('reload')) btn.innerText = ui.retry;
+    });
+}
+function openPix() {
+    document.getElementById('pix-overlay').style.display = 'flex';
+}
 
-        window.atOptions = {
-            'key' : '1af5eed8d5a813d46ac266bce36c9450',
-            'format' : 'iframe',
-            'height' : 250,
-            'width' : 300,
-            'params' : {}
-        };
+function closePix() {
+    document.getElementById('pix-overlay').style.display = 'none';
+}
 
-        const adScript = document.createElement('script');
-        adScript.src = "//www.highperformanceformat.com/1af5eed8d5a813d46ac266bce36c9450/invoke.js";
-        adScript.type = "text/javascript";
-        container.appendChild(adScript);
-    }
-</script>
+function copyPix() {
+    const key = document.getElementById('pix-key').innerText;
+    navigator.clipboard.writeText(key).then(() => {
+        const btn = event.target;
+        const originalText = btn.innerText;
+        btn.innerText = "COPIADO!";
+        btn.style.background = "#2ed573";
+        
+        setTimeout(() => {
+            btn.innerText = originalText;
+            btn.style.background = "#3498db";
+        }, 2000);
+    });
+}
+    </script>
 </body>
     <footer style="margin-top: 50px; text-align: center; font-family: sans-serif; color: #888; font-size: 12px; padding: 20px;">
-    <p><strong>Pixel Trivia</strong> é um jogo de quiz temático da plataforma de jogos Pixel Click®. Desafie sua mente com perguntas de temas variados, melhore sua pontuação e alcance o topo do ranking global.</p>
+    <p><strong>Pixel Trivia</strong> é um jogo de quiz temático da plataforma de jogos Pixel Click®. Desafie sua mente com perguntas de temas variados, melhore sua pontuação e alcance o topo do ranking.</p>
 </footer>
 </html>
