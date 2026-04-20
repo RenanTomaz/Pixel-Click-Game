@@ -98,7 +98,6 @@ const entretenimentoData = [
     { q: "QUAL A REDE SOCIAL DAS FOTOS", options: ["TWITTER", "INSTAGRAM", "FACEBOOK", "LINKEDIN"], correct: 1 },
     { q: "QUAL O NOME DO PERSONAGEM QUE COME FANTASMAS", options: ["MARIO", "PAC-MAN", "SONIC", "DONKEY KONG"], correct: 1 },
     { q: "QUAL O NOME DO JOGO DE FUTEBOL DA EA SPORTS (ATUAL)", options: ["PES", "FC 24 / FIFA", "UFL", "STRIKER"], correct: 1 },
-    { q: "CONCLUÍMOS O PRIMEIRO BLOCO", options: ["NÃO", "SIM!", "QUASE", "VOLTAR"], correct: 1 },
     { q: "QUAL O NOME DO BONECO DE NEVE DE FROZEN", options: ["SVEN", "OLAF", "KRISTOFF", "HANS"], correct: 1 },
     { q: "QUEM FOI O PRIMEIRO PERSONAGEM DA DISNEY", options: ["MICKEY MOUSE", "OSWALD, O COELHO SORSTUDO", "PATO DONALD", "PATETA"], correct: 1 },
     { q: "QUAL A PRINCESA QUE PERDE O SAPATINHO DE CRISTAL", options: ["BRANCA DE NEVE", "CINDERELA", "AURORA", "BELA"], correct: 1 },
