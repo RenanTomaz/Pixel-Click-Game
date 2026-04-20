@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Click - TikTok Creator Mode</title>
+    <style>
+        :root {
+            --bg: #000000;
+            --card: #1a1a1a;
+            --accent-blue: #3498db;
+            --correct-glow: #00ff00;
+            --color-1: #ff4757;
+            --color-2: #2e86de;
+            --color-3: #2ed573;
+            --color-4: #eccc68;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: white;
+            font-family: 'Arial Black', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #video-canvas {
+            width: 100vw;
+            max-width: 450px;
+            height: 95vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .question-text {
+            font-size: 1.4rem;
+            line-height: 1.1;
+            margin-bottom: 10px;
+            min-height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-transform: uppercase;
+        }
+
+        /* BARRA DE TEMPO IRREDUTÍVEL (ESTRUTURA FIXA) */
+        #timer-container {
+            width: 100%;
+            min-width: 100%; /* Garante que não encolha */
+            height: 25px;
+            background-color: #222;
+            border: 4px solid #fff;
+            margin-bottom: 20px;
+            position: relative;
+            box-sizing: border-box;
+            border-radius: 4px;
+            overflow: hidden; /* Garante que a barra interna não saia do limite */
+        }
+
+        #timer-bar {
+            width: 100%;
+            height: 100%;
+            background-color: #2ed573;
+            /* Transition suave apenas para a cor, a largura é via script para ser precisa */
+            transition: background-color 0.1s linear;
+        }
+
+        .options-list {
+            width: 100%;
+            display: grid;
+            gap: 10px;
+        }
+
+        .option {
+    background: var(--card);
+    border: 3px solid #333;
+    padding: 22px;
+    border-radius: 18px;
+    font-size: 1.0rem;
+    color: white;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+}
+
+        /* Aplicação dos Brilhos Coloridos nas Bordas */
+        .option:nth-child(1) { 
+            border-color: var(--color-1); 
+            box-shadow: 0 0 15px rgba(255, 71, 87, 0.4), inset 0 0 5px rgba(255, 71, 87, 0.2); 
+        }
+        .option:nth-child(2) { 
+            border-color: var(--color-2); 
+            box-shadow: 0 0 15px rgba(46, 134, 222, 0.4), inset 0 0 5px rgba(46, 134, 222, 0.2); 
+        }
+        .option:nth-child(3) { 
+            border-color: var(--color-3); 
+            box-shadow: 0 0 15px rgba(46, 213, 115, 0.4), inset 0 0 5px rgba(46, 213, 115, 0.2); 
+        }
+        .option:nth-child(4) { 
+            border-color: var(--color-4); 
+            box-shadow: 0 0 15px rgba(236, 204, 104, 0.4), inset 0 0 5px rgba(236, 204, 104, 0.2); 
+        }
+
+        .highlight-correct {
+            border-color: var(--correct-glow) !important;
+            background: var(--correct-glow) !important;
+            color: black !important;
+            /* Super brilho multicamadas para a resposta correta */
+            box-shadow: 
+                0 0 20px var(--correct-glow), 
+                0 0 40px var(--correct-glow), 
+                0 0 60px var(--correct-glow) !important;
+            transform: scale(1.08);
+            z-index: 10;
+        }
+
+        .footer-brand {
+            margin-top: 60px;
+            font-size: 1.6rem;
+            background: var(--accent-blue);
+            color: white;
+            padding: 10px 30px;
+            border-radius: 50px;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="video-canvas">
+        <div class="question-text" id="q-text"></div>
+
+        <div id="timer-container">
+            <div id="timer-bar"></div>
+        </div>
+        
+        <div class="options-list" id="options-box"></div>
+
+        <div class="footer-brand">PIXELCLICK.FUN</div>
+    </div>
+
+    <script src="geografia.js"></script>
+    <script src="ciencia.js"></script>
+    <script src="historia.js"></script>
+    <script src="natureza.js"></script>
+    <script src="esportes.js"></script>
+    <script src="entretenimento.js"></script>
+
+    <script>
+        const masterPool = [
+            ...(typeof geografiaData !== 'undefined' ? geografiaData : []),
+            ...(typeof cienciaData !== 'undefined' ? cienciaData : []),
+            ...(typeof historiaData !== 'undefined' ? historiaData : []),
+            ...(typeof naturezaData !== 'undefined' ? naturezaData : []),
+            ...(typeof esportesData !== 'undefined' ? esportesData : []),
+            ...(typeof entretenimentoData !== 'undefined' ? entretenimentoData : [])
+        ];
+
+        const selectedQuestions = masterPool
+            .sort(() => 0.5 - Math.random())
+            .slice(0, 12);
+
+        let currentQ = 0;
+
+        function startSequence() {
+            if (currentQ >= 12) {
+                document.getElementById('video-canvas').innerHTML = `
+                    <p style="font-size: 1.8rem">QUANTAS VOCÊ ACERTOU?</p>
+                    <p style="font-size: 1.2rem; margin-bottom: 20px;">QUER MAIS DESAFIOS? ACESSE:</p>
+                    <div class="footer-brand">WWW.PIXELCLICK.FUN</div>
+                `;
+                return;
+            }
+
+            const data = selectedQuestions[currentQ];
+            document.getElementById('q-text').innerText = data.q;
+            
+            const box = document.getElementById('options-box');
+            box.innerHTML = '';
+            
+            data.options.forEach((opt, i) => {
+                const div = document.createElement('div');
+                div.className = 'option';
+                div.id = `opt-${i}`;
+                div.innerText = opt;
+                box.appendChild(div);
+            });
+
+            runTimer(data.correct);
+        }
+
+        function runTimer(correctIndex) {
+            const barEl = document.getElementById('timer-bar');
+            barEl.style.width = "100%";
+            barEl.style.backgroundColor = "#2ed573";
+
+            const startTime = Date.now();
+            const duration = 8000;
+
+            function updateBar() {
+                const now = Date.now();
+                const elapsed = now - startTime;
+                const percent = Math.max(0, 100 - (elapsed / duration * 100));
+                
+                // Atualiza a largura sem alterar o tamanho do container pai
+                barEl.style.width = percent + "%";
+
+                if (percent > 60) barEl.style.backgroundColor = "#2ed573";
+                else if (percent > 30) barEl.style.backgroundColor = "#eccc68";
+                else barEl.style.backgroundColor = "#ff4757";
+
+                if (elapsed < duration) {
+                    requestAnimationFrame(updateBar);
+                } else {
+                    const correctEl = document.getElementById(`opt-${correctIndex}`);
+                    if(correctEl) correctEl.classList.add('highlight-correct');
+
+                    setTimeout(() => {
+                        currentQ++;
+                        startSequence();
+                    }, 1200);
+                }
+            }
+            requestAnimationFrame(updateBar);
+        }
+
+        startSequence();
+    </script>
+</body>
+</html>
