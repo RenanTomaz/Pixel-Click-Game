@@ -170,12 +170,12 @@
 
         const selectedQuestions = masterPool
             .sort(() => 0.5 - Math.random())
-            .slice(0, 12);
+            .slice(0, 8);
 
         let currentQ = 0;
 
         function startSequence() {
-            if (currentQ >= 12) {
+            if (currentQ >= 8) {
                 document.getElementById('video-canvas').innerHTML = `
                     <p style="font-size: 1.8rem">QUANTAS VOCÊ ACERTOU?</p>
                     <p style="font-size: 1.2rem; margin-bottom: 20px;">QUER MAIS DESAFIOS? ACESSE:</p>
