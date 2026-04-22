@@ -184,6 +184,34 @@
         display: none; align-items: center; justify-content: center;
         cursor: pointer; background: transparent; margin-right: 10px;
     }
+        /* Estilos para o Carrossel */
+.carousel-indicators {
+    display: none; /* Escondido no desktop */
+    justify-content: center;
+    gap: 10px;
+    margin-top: -20px;
+    margin-bottom: 30px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #333;
+    transition: all 0.3s ease;
+}
+
+.dot.active {
+    background: var(--accent-trivia);
+    box-shadow: 0 0 10px var(--accent-trivia);
+    transform: scale(1.2);
+}
+
+@media (max-width: 750px) {
+    .carousel-indicators {
+        display: flex; /* Mostra no mobile */
+    }
+}
     </style>
 </head>
 <body>
@@ -206,6 +234,11 @@
     </header>
 
     <div class="hub-container">
+        <div class="carousel-indicators">
+    <div class="dot active"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+</div>
         <div class="game-card card-pixel" onclick="location.href='pixel-stroop.html'">
             <div>
                 <div id="ui-stroop-tag" class="tag">PIXEL STROOP</div>
@@ -297,6 +330,23 @@
             if (outcome === 'accepted') deferredPrompt = null;
         }
     });
+        // Lógica para atualizar os indicadores do carrossel
+const hubContainer = document.querySelector('.hub-container');
+const dots = document.querySelectorAll('.dot');
+
+hubContainer.addEventListener('scroll', () => {
+    const scrollLeft = hubContainer.scrollLeft;
+    const cardWidth = hubContainer.querySelector('.game-card').offsetWidth + 20; // 20 é o gap
+    const activeIndex = Math.round(scrollLeft / cardWidth);
+
+    dots.forEach((dot, index) => {
+        if (index === activeIndex) {
+            dot.classList.add('active');
+        } else {
+            dot.classList.remove('active');
+        }
+    });
+});
     </script>
 </body>
 </html>
