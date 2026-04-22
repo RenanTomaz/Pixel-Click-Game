@@ -184,32 +184,49 @@
         display: none; align-items: center; justify-content: center;
         cursor: pointer; background: transparent; margin-right: 10px;
     }
-        /* Estilos para o Carrossel */
+        /* --- Estilos Atualizados para os Pontos Coloridos --- */
 .carousel-indicators {
-    display: none; /* Esconde no PC */
+    display: none; /* Escondido no Desktop */
     justify-content: center;
     gap: 12px;
-    margin-top: 10px;
-    margin-bottom: 5px; /* Espaço para não colar nos cards */
+    margin-bottom: 15px; /* Espaço para não colar nos cards */
+    z-index: 10;
 }
 
 .dot {
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
-    background: #333;
-    transition: all 0.3s ease;
+    background: #333; /* Cor neutra quando inativo */
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 2px solid transparent; /* Para o efeito de borda no active */
 }
 
+/* Quando ATIVO, aplica a cor e o brilho específico */
 .dot.active {
-    background: var(--accent-trivia);
-    box-shadow: 0 0 10px var(--accent-trivia);
-    transform: scale(1.2);
+    transform: scale(1.3);
+    border-color: white; /* Borda branca para destacar */
+}
+
+/* Cores específicas para cada ponto ativo */
+.dot-pixel.active {
+    background: var(--g-red) !important;
+    box-shadow: 0 0 15px var(--g-red);
+}
+
+.dot-trivia.active {
+    background: var(--g-blue) !important;
+    box-shadow: 0 0 15px var(--g-blue);
+}
+
+.dot-genius.active {
+    background: var(--g-yellow) !important;
+    box-shadow: 0 0 15px var(--g-yellow);
 }
 
 @media (max-width: 750px) {
     .carousel-indicators {
-        display: flex; /* Mostra no Celular */
+        display: flex; /* Mostra apenas no Mobile */
     }
 }
     </style>
@@ -236,10 +253,10 @@
     <div class="carousel-wrapper" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
     
     <div class="carousel-indicators">
-        <div class="dot active"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-    </div>
+    <div class="dot dot-pixel active"></div>
+    <div class="dot dot-trivia"></div>
+    <div class="dot dot-genius"></div>
+</div>
 
     <div class="hub-container">
         <div class="game-card card-pixel" onclick="location.href='pixel-stroop.html'">
