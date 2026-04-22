@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
-    <title>Pixel Click - TikTok Mode</title>
+    <title>Pixel Click - TikTok 9x16</title>
     <style>
         :root {
             --bg: #000000;
@@ -12,11 +12,13 @@
             --color-2: rgba(46, 134, 222, 0.9);
             --color-3: rgba(46, 213, 115, 0.9);
             --color-4: rgba(236, 204, 104, 0.9);
-            --correct: #00ff80;
         }
 
         body {
-            background: var(--bg);
+            background: url('1000383281.png') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            font-family: 'Archivo Black', sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
@@ -24,47 +26,43 @@
             align-items: center;
             height: 100vh;
             width: 100vw;
-            overflow: hidden;
+            overflow: hidden; /* Impede qualquer rolagem no celular */
         }
 
-        /* O segredo: Este container é a moldura da imagem */
         #video-canvas {
-            position: relative;
+            /* Força a proporção 9:16 baseada na altura da tela */
             width: calc(100vh * 9 / 16);
             height: 100vh;
-            max-width: 100vw;
-            background: url('1000383281.png') no-repeat center center;
-            background-size: contain; /* Garante que a moldura apareça inteira */
+            max-width: 100vw; /* Garante que não estoure em telas muito estreitas */
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: space-between; /* Distribui topo, meio e fim */
+            padding: 60px 30px; /* Respiro para não bater na interface do TikTok */
             box-sizing: border-box;
-            /* Padding interno para o conteúdo não bater na moldura cinza da imagem */
-            padding: 12% 10%; 
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(2px);
         }
         
         .question-text {
-            font-size: 1.5rem;
-            line-height: 1.2;
+            font-size: 1.8rem;
+            line-height: 1.1;
             width: 100%;
-            height: 20%;
+            height: 25%; /* Área fixa para a pergunta */
             display: flex;
             align-items: center;
             justify-content: center;
             text-transform: uppercase;
-            text-align: center;
-            font-family: 'Archivo Black', sans-serif;
-            color: white;
-            text-shadow: 0 0 15px rgba(255,255,255,0.3);
-            margin-top: 10%;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            margin-top: 20px;
         }
 
         #timer-container {
             width: 100%;
-            height: 14px;
+            height: 12px;
             background-color: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 10px;
             overflow: hidden;
             margin: 20px 0;
         }
@@ -72,60 +70,55 @@
         #timer-bar {
             width: 100%;
             height: 100%;
-            background-color: var(--correct);
-            box-shadow: 0 0 15px var(--correct);
+            background-color: #00ff80;
+            box-shadow: 0 0 15px #00ff80;
         }
 
         .options-list {
             width: 100%;
-            flex-grow: 1;
+            display: grid;
+            gap: 15px;
+            flex-grow: 1; /* Ocupa o espaço central */
             display: flex;
             flex-direction: column;
             justify-content: center;
-            gap: 12px;
         }
 
         .option {
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
             border: 3px solid #333;
-            padding: 20px 15px;
+            padding: 25px 20px;
             border-radius: 20px;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: white;
             text-transform: uppercase;
-            text-align: center;
-            font-family: 'Archivo Black', sans-serif;
-            transition: all 0.3s ease;
+            position: relative;
+            transition: transform 0.2s;
         }
 
-        /* Glows específicos baseados na sua imagem 1000383231.png */
-        .option:nth-child(1) { border-color: var(--color-1); box-shadow: 0 0 15px var(--color-1); }
-        .option:nth-child(2) { border-color: var(--color-2); box-shadow: 0 0 15px var(--color-2); }
-        .option:nth-child(3) { border-color: var(--color-3); box-shadow: 0 0 15px var(--color-3); }
-        .option:nth-child(4) { border-color: var(--color-4); box-shadow: 0 0 15px var(--color-4); }
+        /* Cores e Partículas (Glow) */
+        .option:nth-child(1) { border-color: var(--color-1); box-shadow: 0 0 20px var(--color-1); }
+        .option:nth-child(2) { border-color: var(--color-2); box-shadow: 0 0 20px var(--color-2); }
+        .option:nth-child(3) { border-color: var(--color-3); box-shadow: 0 0 20px var(--color-3); }
+        .option:nth-child(4) { border-color: var(--color-4); box-shadow: 0 0 20px var(--color-4); }
 
         .highlight-correct {
-            background: var(--correct) !important;
+            background: white !important;
             color: black !important;
-            border-color: white !important;
-            box-shadow: 0 0 40px var(--correct) !important;
+            box-shadow: 0 0 50px white !important;
             transform: scale(1.05);
         }
 
         .footer-brand {
-            width: 90%;
-            font-size: 1.3rem;
+            margin-bottom: 20px;
+            font-size: 1.6rem;
             background: linear-gradient(180deg, #3498db, #2980b9);
             color: white;
-            padding: 12px 0;
+            padding: 12px 45px;
             border-radius: 40px;
-            font-family: 'Archivo Black', sans-serif;
-            text-align: center;
             font-weight: 900;
-            margin-bottom: 5%;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            border: 2px solid rgba(255,255,255,0.2);
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.6);
         }
     </style>
 </head>
@@ -137,11 +130,12 @@
         
         <div class="options-list" id="options-box"></div>
 
-        <div class="footer-brand">WWW.PIXELCLICK.FUN</div>
+        <div class="footer-brand">PIXELCLICK.FUN</div>
     </div>
 
     <script>
-        // Insira aqui sua lógica JavaScript masterPool e runTimer enviada anteriormente
+        // Use a lógica de sorteio de questões que já definimos anteriormente
+        // ... (geografiaData, startSequence, etc)
     </script>
 </body>
 </html>
