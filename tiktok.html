@@ -4,23 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
-    <title>Pixel Click - TikTok Creator Mode</title>
+    <title>Pixel Click - TikTok Premium</title>
     <style>
         :root {
-            --bg: #000000;
-            --card: #1a1a1a;
-            --accent-blue: #3498db;
-            --correct-glow: #00ff00;
             --color-1: #ff4757;
             --color-2: #2e86de;
             --color-3: #2ed573;
             --color-4: #eccc68;
+            --color-accent: #2e86de;
         }
 
         body {
-            background-color: var(--bg);
+            background-image: url('background.png');
+            background-size: auto; 
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-color: #000;
+            
             color: white;
-            font-family: 'Arial Black', 'Arial Bold', Gadget, sans-serif;
+            /* Fonte Sans Serif para todo o projeto */
+            font-family: 'Archivo Black', sans-serif;
             margin: 0;
             display: flex;
             justify-content: center;
@@ -36,206 +40,232 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start; 
             padding: 20px;
             text-align: center;
             position: relative;
+            box-sizing: border-box;
         }
-        
+
+        /* TÍTULO ESTILIZADO SANS SERIF */
+        .fixed-title {
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-top: 100px; 
+            margin-bottom: 60px;
+            
+            /* Efeito Gradiente Metálico */
+            background: linear-gradient(to bottom, #ffffff 0%, #bbbbbb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            
+            /* Brilho Neon Branco */
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.6));
+            position: relative;
+            z-index: 5;
+        }
+
         .question-text {
-            font-size: 1.4rem;
-            line-height: 1.1;
+            font-size: 1.7rem;
             margin-bottom: 10px;
-            min-height: 140px;
+            min-height: 120px;
             display: flex;
             align-items: center;
             justify-content: center;
             text-transform: uppercase;
-            font-family: 'Arial Black', 'Arial Bold', Gadget, sans-serif;
+            /* Sombra para legibilidade extrema */
+            text-shadow: 2px 2px 0px #000, 0 0 20px rgba(0,0,0,0.9);
+            z-index: 2;
         }
 
-        /* BARRA DE TEMPO IRREDUTÍVEL (ESTRUTURA FIXA) */
         #timer-container {
             width: 100%;
-            min-width: 100%; /* Garante que não encolha */
-            height: 25px;
-            background-color: #222;
-            border: 4px solid #fff;
-            margin-bottom: 20px;
-            position: relative;
-            box-sizing: border-box;
-            border-radius: 4px;
-            overflow: hidden; /* Garante que a barra interna não saia do limite */
+            height: 12px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            margin-bottom: 25px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.2);
+            z-index: 2;
         }
-
         #timer-bar {
             width: 100%;
             height: 100%;
-            background-color: #2ed573;
-            /* Transition suave apenas para a cor, a largura é via script para ser precisa */
-            transition: background-color 0.1s linear;
+            background: #2ed573;
+            box-shadow: 0 0 15px #2ed573;
         }
 
         .options-list {
             width: 100%;
             display: grid;
-            gap: 10px;
+            gap: 15px;
+            z-index: 2;
         }
 
         .option {
-    background: var(--card);
-    border: 3px solid #333;
-    padding: 22px;
-    border-radius: 18px;
-    font-size: 1.0rem;
-    color: white;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    text-transform: uppercase;
-    position: relative;
-    overflow: hidden;
-    font-family: 'Arial Black', 'Arial Bold', Gadget, sans-serif;
-}
+            background: rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            padding: 22px;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            position: relative;
+            transition: all 0.3s;
+        }
 
-        /* Aplicação dos Brilhos Coloridos nas Bordas */
-        .option:nth-child(1) { 
-            border-color: var(--color-1); 
-            box-shadow: 0 0 15px rgba(255, 71, 87, 0.4), inset 0 0 5px rgba(255, 71, 87, 0.2); 
-        }
-        .option:nth-child(2) { 
-            border-color: var(--color-2); 
-            box-shadow: 0 0 15px rgba(46, 134, 222, 0.4), inset 0 0 5px rgba(46, 134, 222, 0.2); 
-        }
-        .option:nth-child(3) { 
-            border-color: var(--color-3); 
-            box-shadow: 0 0 15px rgba(46, 213, 115, 0.4), inset 0 0 5px rgba(46, 213, 115, 0.2); 
-        }
-        .option:nth-child(4) { 
-            border-color: var(--color-4); 
-            box-shadow: 0 0 15px rgba(236, 204, 104, 0.4), inset 0 0 5px rgba(236, 204, 104, 0.2); 
-        }
+        /* Brilhos Constantes por cor */
+        .opt-0 { border-color: var(--color-1); box-shadow: 0 0 15px rgba(255, 71, 87, 0.5); }
+        .opt-1 { border-color: var(--color-2); box-shadow: 0 0 15px rgba(46, 134, 222, 0.5); }
+        .opt-2 { border-color: var(--color-3); box-shadow: 0 0 15px rgba(46, 213, 115, 0.5); }
+        .opt-3 { border-color: var(--color-4); box-shadow: 0 0 15px rgba(236, 204, 104, 0.5); }
 
         .highlight-correct {
-            border-color: var(--correct-glow) !important;
-            background: var(--correct-glow) !important;
-            color: black !important;
-            /* Super brilho multicamadas para a resposta correta */
-            box-shadow: 
-                0 0 20px var(--correct-glow), 
-                0 0 40px var(--correct-glow), 
-                0 0 60px var(--correct-glow) !important;
-            transform: scale(1.08);
-            z-index: 10;
+            border-color: #fff !important;
+            background: #fff !important;
+            color: #000 !important;
+            box-shadow: 0 0 40px #fff !important;
+            transform: scale(1.05);
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1; 
+            animation: move-particle 2s linear forwards;
+        }
+
+        @keyframes move-particle {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--mx), var(--my)) scale(0); opacity: 0; }
         }
 
         .footer-brand {
-            margin-top: 60px;
-            font-size: 1.6rem;
-            background: var(--accent-blue);
-            color: white;
-            padding: 10px 30px;
+            margin-top: 40px; 
+            background: var(--color-accent);
+            padding: 12px 40px;
             border-radius: 50px;
+            font-size: 1.4rem;
             font-weight: 900;
-            letter-spacing: 1px;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 20px rgba(46, 134, 222, 0.7);
+            position: relative;
+            z-index: 2;
         }
     </style>
 </head>
 <body>
 
     <div id="video-canvas">
-        <div class="question-text" id="q-text"></div>
-
-        <div id="timer-container">
-            <div id="timer-bar"></div>
-        </div>
+        <div class="fixed-title" id="main-title">TESTE SEU CONHECIMENTO</div>
         
-        <div class="options-list" id="options-box"></div>
+        <div style="width: 100%;">
+            <div class="question-text" id="q-text"></div>
+            <div id="timer-container"><div id="timer-bar"></div></div>
+            <div class="options-list" id="options-box"></div>
+        </div>
 
-        <div class="footer-brand">WWW.PIXELCLICK.FUN</div>
+        <div class="footer-brand" id="footer-btn">WWW.PIXELCLICK.FUN</div>
     </div>
 
     <script src="geografia.js"></script>
-    <script src="ciencia.js"></script>
-    <script src="historia.js"></script>
-    <script src="natureza.js"></script>
-    <script src="esportes.js"></script>
-    <script src="entretenimento.js"></script>
 
     <script>
-        const masterPool = [
-            ...(typeof geografiaData !== 'undefined' ? geografiaData : []),
-            ...(typeof cienciaData !== 'undefined' ? cienciaData : []),
-            ...(typeof historiaData !== 'undefined' ? historiaData : []),
-            ...(typeof naturezaData !== 'undefined' ? naturezaData : []),
-            ...(typeof esportesData !== 'undefined' ? esportesData : []),
-            ...(typeof entretenimentoData !== 'undefined' ? entretenimentoData : [])
-        ];
-
-        const selectedQuestions = masterPool
-            .sort(() => 0.5 - Math.random())
-            .slice(0, 8);
-
+        const masterPool = [...(typeof geografiaData !== 'undefined' ? geografiaData : [])];
+        const selectedQuestions = masterPool.sort(() => 0.5 - Math.random()).slice(0, 8);
         let currentQ = 0;
+        let particleIntervals = [];
 
         function startSequence() {
+            particleIntervals.forEach(clearInterval);
+            particleIntervals = [];
+
             if (currentQ >= 8) {
                 document.getElementById('video-canvas').innerHTML = `
-                    <p style="font-size: 1.8rem">QUANTAS VOCÊ ACERTOU?</p>
-                    <p style="font-size: 1.2rem; margin-bottom: 20px;">QUER MAIS DESAFIOS? ACESSE:</p>
-                    <div class="footer-brand">WWW.PIXELCLICK.FUN</div>
+                    <div class="fixed-title" style="margin-top: 150px">TESTE FINALIZADO</div>
+                    <h1 style="font-size: 2rem">QUANTAS VOCÊ ACERTOU?</h1>
+                    <div class="footer-brand" style="margin-top: 40px">WWW.PIXELCLICK.FUN</div>
                 `;
                 return;
             }
 
             const data = selectedQuestions[currentQ];
             document.getElementById('q-text').innerText = data.q;
-            
             const box = document.getElementById('options-box');
             box.innerHTML = '';
             
+            const colors = ['#ff4757', '#2e86de', '#2ed573', '#eccc68'];
+
+            // Loop Partículas Título
+            const title = document.getElementById('main-title');
+            particleIntervals.push(setInterval(() => spawnParticle(title, '#ffffff'), 300));
+
+            // Opções
             data.options.forEach((opt, i) => {
                 const div = document.createElement('div');
-                div.className = 'option';
+                div.className = `option opt-${i}`;
                 div.id = `opt-${i}`;
                 div.innerText = opt;
                 box.appendChild(div);
+                particleIntervals.push(setInterval(() => spawnParticle(div, colors[i]), 180));
             });
+
+            // Loop Partículas Footer
+            const footer = document.getElementById('footer-btn');
+            particleIntervals.push(setInterval(() => spawnParticle(footer, '#2e86de'), 250));
 
             runTimer(data.correct);
         }
 
+        function spawnParticle(parent, color) {
+            if (!parent) return;
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.backgroundColor = color;
+            p.style.boxShadow = `0 0 6px ${color}`;
+
+            const edge = Math.floor(Math.random() * 4);
+            let x = 0, y = 0;
+            if(edge === 0) { x = Math.random() * 100; y = 0; }        
+            else if(edge === 1) { x = 100; y = Math.random() * 100; } 
+            else if(edge === 2) { x = Math.random() * 100; y = 100; } 
+            else { x = 0; y = Math.random() * 100; }                  
+
+            p.style.left = x + '%';
+            p.style.top = y + '%';
+
+            const mx = (Math.random() - 0.5) * 150 + 'px';
+            const my = (Math.random() - 0.5) * 150 + 'px';
+            p.style.setProperty('--mx', mx);
+            p.style.setProperty('--my', my);
+
+            parent.appendChild(p);
+            setTimeout(() => p.remove(), 2000);
+        }
+
         function runTimer(correctIndex) {
             const barEl = document.getElementById('timer-bar');
-            barEl.style.width = "100%";
-            barEl.style.backgroundColor = "#2ed573";
-
             const startTime = Date.now();
             const duration = 8000;
 
-            function updateBar() {
-                const now = Date.now();
-                const elapsed = now - startTime;
+            function update() {
+                const elapsed = Date.now() - startTime;
                 const percent = Math.max(0, 100 - (elapsed / duration * 100));
-                
-                // Atualiza a largura sem alterar o tamanho do container pai
                 barEl.style.width = percent + "%";
-
-                if (percent > 60) barEl.style.backgroundColor = "#2ed573";
-                else if (percent > 30) barEl.style.backgroundColor = "#eccc68";
-                else barEl.style.backgroundColor = "#ff4757";
-
-                if (elapsed < duration) {
-                    requestAnimationFrame(updateBar);
-                } else {
+                if (elapsed < duration) requestAnimationFrame(update);
+                else {
                     const correctEl = document.getElementById(`opt-${correctIndex}`);
                     if(correctEl) correctEl.classList.add('highlight-correct');
-
-                    setTimeout(() => {
-                        currentQ++;
-                        startSequence();
-                    }, 1200);
+                    setTimeout(() => { currentQ++; startSequence(); }, 1500);
                 }
             }
-            requestAnimationFrame(updateBar);
+            update();
         }
 
         startSequence();
