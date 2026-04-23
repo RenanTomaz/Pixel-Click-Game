@@ -30,10 +30,12 @@
             font-family: 'Russo One', sans-serif;
         }
 
-        /* Ajustado para 16:9 Horizontal */
+        /* Container ajustado para proporção 16:9 (YouTube) */
         #video-canvas {
-            width: 70vw; 
-            height: 60vh; 
+            width: 90vw; 
+            height: 50.625vw; /* Mantém a proporção 16:9 baseada na largura */
+            max-height: 85vh; 
+            max-width: 151vh;
             position: relative;
             background-image: url('backgroundyt.png');
             background-size: 100% 100%; 
@@ -43,13 +45,13 @@
             flex-direction: column;
             align-items: center;
             box-sizing: border-box;
-            padding: 4vh 10vh; /* Mais padding lateral para o formato largo */
+            padding: 4vh 10vh; 
             border: 1px solid #333;
             overflow: hidden;
         }
 
         .fixed-title {
-            font-size: 5vh; /* Aumentado para o YouTube */
+            font-size: 4.5vh; 
             text-transform: uppercase;
             letter-spacing: 0.2vh;
             color: var(--color-title);
@@ -63,14 +65,14 @@
         }
 
         .question-text {
-            font-size: 3.5vh; /* Aumentado para o YouTube */
-            height: 15vh;
+            font-size: 3vh; 
+            height: 12vh;
             display: flex;
             align-items: center;
             justify-content: center;
             text-transform: uppercase;
             text-shadow: 0.3vh 0.3vh 0px #000;
-            margin-bottom: 2vh;
+            margin-bottom: 1.5vh;
             color: white;
             line-height: 1.2;
             z-index: 2;
@@ -79,15 +81,15 @@
         }
 
         #timer-container {
-            width: 70%; /* Mais centralizado horizontalmente */
-            height: 1.8vh;
+            width: 80%;
+            height: 1.6vh;
             background: rgba(255,255,255,0.1);
             border-radius: 1vh;
             overflow: hidden;
             border: 0.2vh solid rgba(255,255,255,0.2);
             z-index: 2;
             flex-shrink: 0;
-            margin: 1vh 0 4vh 0;
+            margin: 1vh 0 3vh 0;
         }
 
         #timer-bar {
@@ -101,8 +103,8 @@
         .options-list {
             width: 100%;
             display: grid;
-            grid-template-columns: 1fr 1fr; /* DUAS COLUNAS PARA O YOUTUBE */
-            gap: 3vh;
+            grid-template-columns: 1fr 1fr; /* Duas colunas para o formato YouTube */
+            gap: 2vh;
             flex-grow: 1;
             align-content: center;
             z-index: 2;
@@ -113,9 +115,9 @@
             backdrop-filter: blur(1vh);
             -webkit-backdrop-filter: blur(1vh);
             border: 0.3vh solid rgba(255, 255, 255, 0.2);
-            padding: 3vh 2vh; /* Botões mais robustos */
+            padding: 2.5vh 2vh;
             border-radius: 1.5vh;
-            font-size: 2.5vh; /* Texto maior */
+            font-size: 2.2vh;
             text-transform: uppercase;
             color: white;
             position: relative;
@@ -143,15 +145,15 @@
         }
 
         .footer-brand {
-            width: 40%; /* Menor no YouTube para não poluir */
+            width: 35%;
             background: var(--color-accent);
-            padding: 1.2vh 0;
+            padding: 1vh 0;
             border-radius: 5vh;
-            font-size: 2.2vh;
+            font-size: 2vh;
             font-weight: bold;
             color: white;
             border: 0.3vh solid rgba(255, 255, 255, 0.3);
-            margin-top: 4vh;
+            margin-top: 3vh;
             margin-bottom: 2vh;
             z-index: 2;
             text-align: center;
@@ -159,8 +161,8 @@
 
         .particle { 
             position: absolute; 
-            width: 0.6vh; 
-            height: 0.6vh; 
+            width: 0.5vh; 
+            height: 0.5vh; 
             border-radius: 50%; 
             pointer-events: none; 
             z-index: -1; 
@@ -196,6 +198,7 @@
 <script src="entretenimento.js"></script>
 
 <script>
+    // UNE TODOS OS ARQUIVOS CARREGADOS
     const masterPool = [
         ...(typeof esportesData !== 'undefined' ? esportesData : []),
         ...(typeof geografiaData !== 'undefined' ? geografiaData : []),
@@ -205,7 +208,9 @@
         ...(typeof entretenimentoData !== 'undefined' ? entretenimentoData : [])
     ];
 
+    // SELECIONA 8 PERGUNTAS ALEATÓRIAS
     const selectedQuestions = masterPool.sort(() => 0.5 - Math.random()).slice(0, 8);
+    
     let currentQ = 0;
     let particleIntervals = [];
 
@@ -255,8 +260,10 @@
         let shuffledOptions = data.options.map(text => ({ text })).sort(() => Math.random() - 0.5);
         const newCorrectIndex = shuffledOptions.findIndex(opt => opt.text === correctText);
 
-        document.getElementById('q-text').innerText = data.q;
+        const qTextElement = document.getElementById('q-text');
+        qTextElement.innerText = data.q;
 
+        // Narração sem soletrar (toLowerCase)
         window.speechSynthesis.cancel(); 
         const msgQ = new SpeechSynthesisUtterance(data.q.toLowerCase());
         msgQ.lang = 'pt-BR';
