@@ -215,9 +215,9 @@
     let particleIntervals = [];
 
     const sfx = {
-        timer: new Howl({ src: ['timer_tic_tac.mp3'], loop: true, volume: 0.5 }),
-        correct: new Howl({ src: ['success.mp3'], volume: 0.8 }),
-        transition: new Howl({ src: ['swoosh.mp3'], volume: 0.4 })
+        timer: new Howl({ src: ['timer_tic_tac.mp3'], loop: true, volume: 1 }),
+        correct: new Howl({ src: ['success.mp3'], volume: 1 }),
+        transition: new Howl({ src: ['swoosh.mp3'], volume: 1 })
     };
 
     // Acelera levemente os efeitos sonoros para acompanhar o ritmo
@@ -270,8 +270,9 @@
         const qTextElement = document.getElementById('q-text');
         qTextElement.innerText = data.q;
 
+        // CORREÇÃO: toLowerCase() impede que a IA soletre as palavras em maiúsculas
         window.speechSynthesis.cancel(); 
-        const msgQ = new SpeechSynthesisUtterance(data.q);
+        const msgQ = new SpeechSynthesisUtterance(data.q.toLowerCase());
         msgQ.lang = 'pt-BR';
         msgQ.rate = 1.3; 
         window.speechSynthesis.speak(msgQ);
@@ -326,7 +327,8 @@
                 const correctEl = document.getElementById(`opt-${correctIndex}`);
                 if(correctEl) {
                     correctEl.classList.add('highlight-correct');
-                    const msgA = new SpeechSynthesisUtterance("" + correctText);
+                    // CORREÇÃO: toLowerCase() na resposta também
+                    const msgA = new SpeechSynthesisUtterance("" + correctText.toLowerCase());
                     msgA.lang = 'pt-BR';
                     msgA.rate = 1.4; 
                     window.speechSynthesis.speak(msgA);
