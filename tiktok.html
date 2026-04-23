@@ -2,9 +2,9 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
-    <title>Pixel Click - TikTok Timer Shake Only</title>
+    <title>Pixel Click - TikTok Proportional</title>
     <style>
         :root {
             --color-1: #ff4757;
@@ -16,69 +16,72 @@
             --correct-glow: #00ff00; 
         }
 
+        /* Reset e Base */
         body {
-            background-image: url('background.png');
-            background-size: auto; 
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
             background-color: #000;
-            color: white;
-            font-family: 'Russo One', sans-serif;
             margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            width: 100vw;
             overflow: hidden;
+            font-family: 'Russo One', sans-serif;
         }
 
+        /* Container 9:16 que segue a proporção da imagem */
         #video-canvas {
-            width: 100vw;
-            max-width: 450px;
-            height: 95vh;
+            position: relative;
+            width: 56.25vh; /* 9/16 de 100vh */
+            height: 100vh;
+            background-image: url('background.png');
+            background-size: 100% 100%;
+            background-position: center;
+            background-repeat: no-repeat;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start; 
-            padding: 20px;
-            text-align: center;
-            position: relative;
             box-sizing: border-box;
+            
+            /* Padding proporcional para manter conteúdo dentro da moldura escura */
+            padding: 18vh 8vh 10vh 8vh; 
+            text-align: center;
         }
 
         .fixed-title {
-            font-size: 2.8rem;
+            font-size: 4.2vh; 
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-top: 100px; 
-            margin-bottom: 50px;
+            letter-spacing: 0.2vh;
+            margin-bottom: 2vh;
             color: var(--color-title);
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.7), 0 0 20px rgba(255, 215, 0, 0.5), 2px 2px 2px rgba(0, 0, 0, 0.8);
-            position: relative;
+            text-shadow: 0 0 1vh rgba(255, 215, 0, 0.6), 0.3vh 0.3vh 0.3vh rgba(0, 0, 0, 0.8);
+            width: 100%;
             z-index: 5;
         }
 
         .question-text {
-            font-size: 1.7rem;
-            margin-bottom: 10px;
-            min-height: 120px;
+            font-size: 2.6vh;
+            height: 14vh;
             display: flex;
             align-items: center;
             justify-content: center;
             text-transform: uppercase;
-            text-shadow: 2px 2px 0px #000, 0 0 20px rgba(0,0,0,0.9);
+            text-shadow: 0.3vh 0.3vh 0px #000;
+            margin-bottom: 1.5vh;
+            color: white;
+            line-height: 1.2;
             z-index: 2;
         }
 
         #timer-container {
             width: 100%;
-            height: 16px;
+            height: 1.6vh;
             background: rgba(255,255,255,0.1);
-            border-radius: 10px;
-            margin-bottom: 25px;
+            border-radius: 1vh;
+            margin-bottom: 3vh;
             overflow: hidden;
-            border: 2px solid rgba(255,255,255,0.2);
+            border: 0.3vh solid rgba(255,255,255,0.2);
             z-index: 2;
         }
         
@@ -86,63 +89,75 @@
             width: 100%;
             height: 100%;
             background: var(--color-3);
-            box-shadow: 0 0 15px var(--color-3);
-            /* Transições para suavizar a troca de cor e brilho */
-            transition: background-color 0.3s, box-shadow 0.3s;
-            /* Garante que o shake não quebre o layout */
+            box-shadow: 0 0 2vh var(--color-3);
             transform-origin: center left; 
+            transition: background-color 0.3s;
         }
 
         .options-list {
             width: 100%;
             display: grid;
-            gap: 15px;
+            gap: 1.4vh;
+            flex-grow: 1;
+            align-content: center;
             z-index: 2;
         }
 
         .option {
             background: rgba(255, 255, 255, 0.1); 
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            padding: 22px;
-            border-radius: 15px;
-            font-size: 1.2rem;
+            backdrop-filter: blur(1vh);
+            -webkit-backdrop-filter: blur(1vh);
+            border: 0.3vh solid rgba(255, 255, 255, 0.2);
+            padding: 2vh;
+            border-radius: 1.5vh;
+            font-size: 2vh;
             text-transform: uppercase;
+            color: white;
             position: relative;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .opt-0 { border-color: var(--color-1); box-shadow: 0 0 15px rgba(255, 71, 87, 0.4); }
-        .opt-1 { border-color: var(--color-2); box-shadow: 0 0 15px rgba(46, 134, 222, 0.4); }
-        .opt-2 { border-color: var(--color-3); box-shadow: 0 0 15px rgba(46, 213, 115, 0.4); }
-        .opt-3 { border-color: var(--color-4); box-shadow: 0 0 15px rgba(236, 204, 104, 0.4); }
+        .opt-0 { border-color: var(--color-1); box-shadow: 0 0 1vh rgba(255, 71, 87, 0.3); }
+        .opt-1 { border-color: var(--color-2); box-shadow: 0 0 1vh rgba(46, 134, 222, 0.3); }
+        .opt-2 { border-color: var(--color-3); box-shadow: 0 0 1vh rgba(46, 213, 115, 0.3); }
+        .opt-3 { border-color: var(--color-4); box-shadow: 0 0 1vh rgba(236, 204, 104, 0.3); }
 
         .highlight-correct {
             border-color: var(--correct-glow) !important;
             background: var(--correct-glow) !important;
             color: black !important;
-            box-shadow: 0 0 20px var(--correct-glow), 0 0 40px var(--correct-glow) !important;
-            transform: scale(1.08);
+            box-shadow: 0 0 4vh var(--correct-glow) !important;
+            transform: scale(1.05);
             z-index: 10;
         }
 
         .footer-brand {
-            margin-top: 40px; 
+            width: 100%;
             background: var(--color-accent);
-            padding: 12px 40px;
-            border-radius: 50px;
-            font-size: 1.4rem;
+            padding: 1.4vh 0;
+            border-radius: 5vh;
+            font-size: 2.4vh;
             font-weight: bold;
             color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 20px rgba(46, 134, 222, 0.7);
-            position: relative;
+            border: 0.3vh solid rgba(255, 255, 255, 0.3);
+            margin-top: 3vh;
             z-index: 2;
         }
 
-        .particle { position: absolute; width: 4px; height: 4px; border-radius: 50%; pointer-events: none; z-index: -1; animation: move-particle 2s linear forwards; }
-        @keyframes move-particle { 0% { transform: translate(0, 0) scale(1); opacity: 1; } 100% { transform: translate(var(--mx), var(--my)) scale(0); opacity: 0; } }
+        /* Partículas Proporcionais */
+        .particle { 
+            position: absolute; 
+            width: 0.5vh; 
+            height: 0.5vh; 
+            border-radius: 50%; 
+            pointer-events: none; 
+            z-index: -1; 
+            animation: move-particle 2s linear forwards; 
+        }
+        @keyframes move-particle { 
+            0% { transform: translate(0, 0) scale(1); opacity: 1; } 
+            100% { transform: translate(var(--mx), var(--my)) scale(0); opacity: 0; } 
+        }
     </style>
 </head>
 <body>
@@ -150,11 +165,10 @@
     <div id="video-canvas">
         <div class="fixed-title" id="main-title">TESTE SEU CONHECIMENTO</div>
         
-        <div style="width: 100%;" id="quiz-container">
-            <div class="question-text" id="q-text"></div>
-            <div id="timer-container"><div id="timer-bar"></div></div>
-            <div class="options-list" id="options-box"></div>
-        </div>
+        <div class="question-text" id="q-text"></div>
+        <div id="timer-container"><div id="timer-bar"></div></div>
+        
+        <div class="options-list" id="options-box"></div>
 
         <div class="footer-brand" id="footer-btn">WWW.PIXELCLICK.FUN</div>
     </div>
@@ -174,9 +188,9 @@
             if (currentQ >= 8) {
                 document.getElementById('video-canvas').innerHTML = `
                     <div style="display: flex; flex-direction: column; justify-content: center; height: 100%; align-items: center;">
-                        <div class="fixed-title" style="margin-top: 0; margin-bottom: 40px;">TESTE FINALIZADO</div>
-                        <h1 style="font-size: 2.5rem; margin-bottom: 50px;">QUAL FOI A SUA PONTUAÇÃO?</h1>
-                        <div class="footer-brand" style="margin-top: 0">WWW.PIXELCLICK.FUN</div>
+                        <div class="fixed-title">FIM DO TESTE</div>
+                        <h1 style="color:white; font-size: 3vh; margin-bottom: 4vh;">QUAL FOI O SEU RESULTADO?</h1>
+                        <div class="footer-brand">WWW.PIXELCLICK.FUN</div>
                     </div>
                 `;
                 return;
@@ -189,7 +203,8 @@
             
             const colors = ['#ff4757', '#2e86de', '#2ed573', '#eccc68'];
 
-            particleIntervals.push(setInterval(() => spawnParticle(document.getElementById('main-title'), '#ffffff'), 300));
+            // Partículas no título
+            particleIntervals.push(setInterval(() => spawnParticle(document.getElementById('main-title'), '#ffffff'), 400));
 
             data.options.forEach((opt, i) => {
                 const div = document.createElement('div');
@@ -197,10 +212,9 @@
                 div.id = `opt-${i}`;
                 div.innerText = opt;
                 box.appendChild(div);
-                particleIntervals.push(setInterval(() => spawnParticle(div, colors[i]), 180));
+                // Partículas nos botões
+                particleIntervals.push(setInterval(() => spawnParticle(div, colors[i]), 250));
             });
-
-            particleIntervals.push(setInterval(() => spawnParticle(document.getElementById('footer-btn'), '#2e86de'), 250));
 
             runTimer(data.correct);
         }
@@ -208,30 +222,20 @@
         function runTimer(correctIndex) {
             const barEl = document.getElementById('timer-bar');
             const startTime = Date.now();
-            const duration = 8000; // 8 segundos
+            const duration = 8000;
 
             function update() {
                 const elapsed = Date.now() - startTime;
                 const percent = Math.max(0, 100 - (elapsed / duration * 100));
-                
                 barEl.style.width = percent + "%";
 
-                // Lógica de Cores e Suspense ISOLADA na Barra de Tempo
-                if (percent > 60) {
-                    barEl.style.backgroundColor = "#2ed573"; // Verde
-                    barEl.style.boxShadow = "0 0 15px #2ed573";
-                    barEl.classList.remove('suspense-timer-shake'); // Garante que está limpo
-                } else if (percent <= 60 && percent > 30) {
-                    barEl.style.backgroundColor = "#eccc68"; // Amarelo (Meio suspendo)
-                    barEl.style.boxShadow = "0 0 15px #eccc68";
-                } else {
-                    barEl.style.backgroundColor = "#ff4757"; // Vermelho (Urgência Total)
-                }
+                if (percent > 60) barEl.style.backgroundColor = "#2ed573";
+                else if (percent > 30) barEl.style.backgroundColor = "#eccc68";
+                else barEl.style.backgroundColor = "#ff4757";
 
                 if (elapsed < duration) {
                     requestAnimationFrame(update);
                 } else {
-                    
                     const correctEl = document.getElementById(`opt-${correctIndex}`);
                     if(correctEl) correctEl.classList.add('highlight-correct');
                     setTimeout(() => { currentQ++; startSequence(); }, 1500);
@@ -247,8 +251,11 @@
             p.style.backgroundColor = color;
             p.style.left = Math.random() * 100 + '%';
             p.style.top = Math.random() * 100 + '%';
-            p.style.setProperty('--mx', (Math.random() - 0.5) * 150 + 'px');
-            p.style.setProperty('--my', (Math.random() - 0.5) * 150 + 'px');
+            
+            const range = window.innerHeight * 0.08; // Movimento proporcional
+            p.style.setProperty('--mx', (Math.random() - 0.5) * range + 'px');
+            p.style.setProperty('--my', (Math.random() - 0.5) * range + 'px');
+            
             parent.appendChild(p);
             setTimeout(() => p.remove(), 2000);
         }
