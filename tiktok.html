@@ -190,11 +190,27 @@
     <div class="footer-brand" id="footer-btn">WWW.PIXELCLICK.FUN</div>
 </div>
 
+<script src="esportes.js"></script>
 <script src="geografia.js"></script>
+<script src="historia.js"></script>
+<script src="natureza.js"></script>
+<script src="ciencia.js"></script>
+<script src="entretenimento.js"></script>
 
 <script>
-    const masterPool = [...(typeof geografiaData !== 'undefined' ? geografiaData : [])];
+    // UNE TODOS OS ARQUIVOS EM UM ÚNICO BANCO DE DADOS
+    const masterPool = [
+        ...(typeof esportesData !== 'undefined' ? esportesData : []),
+        ...(typeof geografiaData !== 'undefined' ? geografiaData : []),
+        ...(typeof historiaData !== 'undefined' ? historiaData : []),
+        ...(typeof naturezaData !== 'undefined' ? naturezaData : []),
+        ...(typeof cienciaData !== 'undefined' ? cienciaData : []),
+        ...(typeof entretenimentoData !== 'undefined' ? entretenimentoData : [])
+    ];
+
+    // SELECIONA 8 PERGUNTAS ALEATÓRIAS DO POOL COMPLETO
     const selectedQuestions = masterPool.sort(() => 0.5 - Math.random()).slice(0, 8);
+    
     let currentQ = 0;
     let particleIntervals = [];
 
@@ -234,7 +250,7 @@
                 window.speechSynthesis.cancel();
                 const msgFinal = new SpeechSynthesisUtterance("Fim do teste. E aí, quantas você acertou?");
                 msgFinal.lang = 'pt-BR';
-                msgFinal.rate = 1.3; // Acelerado
+                msgFinal.rate = 1.3; 
                 window.speechSynthesis.speak(msgFinal);
             }, 500);
             return;
@@ -257,7 +273,7 @@
         window.speechSynthesis.cancel(); 
         const msgQ = new SpeechSynthesisUtterance(data.q);
         msgQ.lang = 'pt-BR';
-        msgQ.rate = 1.3; // Narração da pergunta mais rápida
+        msgQ.rate = 1.3; 
         window.speechSynthesis.speak(msgQ);
 
         const canvas = document.getElementById('video-canvas');
@@ -312,10 +328,9 @@
                     correctEl.classList.add('highlight-correct');
                     const msgA = new SpeechSynthesisUtterance("" + correctText);
                     msgA.lang = 'pt-BR';
-                    msgA.rate = 1.4; // Resposta bem rápida para não atrasar o vídeo
+                    msgA.rate = 1.4; 
                     window.speechSynthesis.speak(msgA);
                 }
-                // Reduzi de 2500ms para 1800ms para o vídeo não ficar parado muito tempo
                 setTimeout(() => { currentQ++; startSequence(); }, 1800);
             }
         }
