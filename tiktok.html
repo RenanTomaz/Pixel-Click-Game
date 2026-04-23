@@ -174,7 +174,12 @@
     </style>
 </head>
 <body>
-
+<div id="overlay-start" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+    <button onclick="iniciarQuiz()" style="padding: 2.5vh 6vh; font-family:'Russo One', sans-serif; font-size: 3.5vh; background: #2ed573; color:white; border:none; border-radius:15px; cursor:pointer; box-shadow: 0 0 20px rgba(46, 213, 115, 0.5);">
+        INICIAR QUIZ
+    </button>
+    <p style="color:white; font-family:sans-serif; margin-top: 2vh; font-size: 1.8vh;">Clique para ativar o som</p>
+</div>
     <div id="video-canvas">
         <div class="fixed-title" id="main-title">TESTE SEU CONHECIMENTO</div>
         
@@ -195,11 +200,23 @@
     let currentQ = 0;
     let particleIntervals = [];
 
+    // Definição dos Sons
     const sfx = {
         timer: new Howl({ src: ['timer_tic_tac.mp3'], loop: true, volume: 0.5 }),
         correct: new Howl({ src: ['success.mp3'], volume: 0.8 }),
         transition: new Howl({ src: ['swoosh.mp3'], volume: 0.4 })
     };
+
+    // Função chamada pelo botão no celular
+    function iniciarQuiz() {
+        document.getElementById('overlay-start').style.display = 'none';
+        
+        // "Acorda" o motor de áudio para o navegador liberar o som
+        sfx.transition.play();
+        
+        // Inicia a sequência
+        startSequence();
+    }
 
     function startSequence() {
         particleIntervals.forEach(clearInterval);
@@ -218,10 +235,10 @@
                 </div>
             `;
 
-            // Narração do Encerramento
+            // Narração do Encerramento - FRASE ATUALIZADA
             setTimeout(() => {
                 window.speechSynthesis.cancel();
-                const msgFinal = new SpeechSynthesisUtterance("Fim do teste! Qual foi o seu resultado?");
+                const msgFinal = new SpeechSynthesisUtterance("Fim do teste. E aí, qual foi o seu resultado?");
                 msgFinal.lang = 'pt-BR';
                 msgFinal.rate = 1.1;
                 window.speechSynthesis.speak(msgFinal);
@@ -304,13 +321,12 @@
                     correctEl.classList.add('highlight-correct');
                     
                     // Narração da Resposta Correta
-                    const msgA = new SpeechSynthesisUtterance("" + correctText);
+                    const msgA = new SpeechSynthesisUtterance("Resposta: " + correctText);
                     msgA.lang = 'pt-BR';
                     msgA.rate = 1.2;
                     window.speechSynthesis.speak(msgA);
                 }
                 
-                // 2.5 segundos para dar tempo de ouvir a resposta antes de trocar
                 setTimeout(() => { currentQ++; startSequence(); }, 2500);
             }
         }
@@ -330,8 +346,6 @@
         parent.appendChild(p);
         setTimeout(() => p.remove(), 2000);
     }
-
-    startSequence();
 </script>
 </body>
 </html>
