@@ -47,22 +47,6 @@
             box-sizing: border-box;
         }
 
-        /* ANIMAÇÃO DE TREMIDA (SHAKE) ISOLADA */
-        @keyframes timerShake {
-            0% { transform: translateX(0) rotate(0); }
-            15% { transform: translateX(-4px) rotate(-1deg); }
-            30% { transform: translateX(4px) rotate(1deg); }
-            45% { transform: translateX(-3px) rotate(-1deg); }
-            60% { transform: translateX(3px) rotate(1deg); }
-            75% { transform: translateX(-2px) rotate(0); }
-            100% { transform: translateX(2px) rotate(0); }
-        }
-
-        /* Classe que aplica a tremida (shake) à barra de tempo */
-        .suspense-timer-shake {
-            animation: timerShake 0.15s infinite ease-in-out;
-        }
-
         .fixed-title {
             font-size: 2.8rem;
             text-transform: uppercase;
@@ -186,11 +170,6 @@
         function startSequence() {
             particleIntervals.forEach(clearInterval);
             particleIntervals = [];
-            
-            // Garante que o suspense-shake do container inteiro (se existir) seja removido
-            document.getElementById('quiz-container').classList.remove('suspense-shake');
-            // Remove a tremida da barra de tempo anterior
-            document.getElementById('timer-bar').classList.remove('suspense-timer-shake');
 
             if (currentQ >= 8) {
                 document.getElementById('video-canvas').innerHTML = `
@@ -245,18 +224,13 @@
                 } else if (percent <= 60 && percent > 30) {
                     barEl.style.backgroundColor = "#eccc68"; // Amarelo (Meio suspendo)
                     barEl.style.boxShadow = "0 0 15px #eccc68";
-                    barEl.classList.add('suspense-timer-shake'); // INICIA A TREMIDA SÓ NA BARRA
                 } else {
                     barEl.style.backgroundColor = "#ff4757"; // Vermelho (Urgência Total)
-                    barEl.style.boxShadow = "0 0 20px #ff4757";
-                    // Mantém a tremida que já foi ativada, ou poderia aumentar a velocidade via JS inline
                 }
 
                 if (elapsed < duration) {
                     requestAnimationFrame(update);
                 } else {
-                    // Limpa a tremida ao final do tempo
-                    barEl.classList.remove('suspense-timer-shake');
                     
                     const correctEl = document.getElementById(`opt-${correctIndex}`);
                     if(correctEl) correctEl.classList.add('highlight-correct');
