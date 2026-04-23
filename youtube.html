@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+    <title>Pixel Click - YouTube Horizontal</title>
+    <style>
+        :root {
+            --color-1: #ff4757;
+            --color-2: #2e86de;
+            --color-3: #2ed573;
+            --color-4: #eccc68;
+            --color-accent: #2e86de;
+            --color-title: #ffd700; 
+            --correct-glow: #00ff00; 
+        }
+
+        body {
+            background-color: #000;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            font-family: 'Russo One', sans-serif;
+        }
+
+        /* Ajustado para 16:9 Horizontal */
+        #video-canvas {
+            width: 70vw; 
+            height: 60vh; 
+            position: relative;
+            background-image: url('backgroundyt.png');
+            background-size: 100% 100%; 
+            background-repeat: no-repeat;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: border-box;
+            padding: 4vh 10vh; /* Mais padding lateral para o formato largo */
+            border: 1px solid #333;
+            overflow: hidden;
+        }
+
+        .fixed-title {
+            font-size: 5vh; /* Aumentado para o YouTube */
+            text-transform: uppercase;
+            letter-spacing: 0.2vh;
+            color: var(--color-title);
+            text-shadow: 0 0 1vh rgba(255, 215, 0, 0.6), 0.3vh 0.3vh 0.3vh rgba(0, 0, 0, 0.8);
+            width: 100%;
+            z-index: 5;
+            margin-top: 2vh; 
+            margin-bottom: 2vh;
+            position: relative;
+            text-align: center;
+        }
+
+        .question-text {
+            font-size: 3.5vh; /* Aumentado para o YouTube */
+            height: 15vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-transform: uppercase;
+            text-shadow: 0.3vh 0.3vh 0px #000;
+            margin-bottom: 2vh;
+            color: white;
+            line-height: 1.2;
+            z-index: 2;
+            text-align: center;
+            width: 100%;
+        }
+
+        #timer-container {
+            width: 70%; /* Mais centralizado horizontalmente */
+            height: 1.8vh;
+            background: rgba(255,255,255,0.1);
+            border-radius: 1vh;
+            overflow: hidden;
+            border: 0.2vh solid rgba(255,255,255,0.2);
+            z-index: 2;
+            flex-shrink: 0;
+            margin: 1vh 0 4vh 0;
+        }
+
+        #timer-bar {
+            width: 100%;
+            height: 100%;
+            background: var(--color-3);
+            box-shadow: 0 0 2vh var(--color-3);
+            transform-origin: center left; 
+        }
+
+        .options-list {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* DUAS COLUNAS PARA O YOUTUBE */
+            gap: 3vh;
+            flex-grow: 1;
+            align-content: center;
+            z-index: 2;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(1vh);
+            -webkit-backdrop-filter: blur(1vh);
+            border: 0.3vh solid rgba(255, 255, 255, 0.2);
+            padding: 3vh 2vh; /* Botões mais robustos */
+            border-radius: 1.5vh;
+            font-size: 2.5vh; /* Texto maior */
+            text-transform: uppercase;
+            color: white;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        .opt-0 { border-color: var(--color-1); }
+        .opt-1 { border-color: var(--color-2); }
+        .opt-2 { border-color: var(--color-3); }
+        .opt-3 { border-color: var(--color-4); }
+
+        .highlight-correct {
+            border-color: var(--correct-glow) !important;
+            background: var(--correct-glow) !important;
+            color: black !important;
+            box-shadow: 0 0 4vh var(--correct-glow) !important;
+            transform: scale(1.05);
+            z-index: 10;
+        }
+
+        .footer-brand {
+            width: 40%; /* Menor no YouTube para não poluir */
+            background: var(--color-accent);
+            padding: 1.2vh 0;
+            border-radius: 5vh;
+            font-size: 2.2vh;
+            font-weight: bold;
+            color: white;
+            border: 0.3vh solid rgba(255, 255, 255, 0.3);
+            margin-top: 4vh;
+            margin-bottom: 2vh;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .particle { 
+            position: absolute; 
+            width: 0.6vh; 
+            height: 0.6vh; 
+            border-radius: 50%; 
+            pointer-events: none; 
+            z-index: -1; 
+            animation: move-particle 2s linear forwards; 
+        }
+        @keyframes move-particle { 
+            0% { transform: translate(0, 0) scale(1); opacity: 1; } 
+            100% { transform: translate(var(--mx), var(--my)) scale(0); opacity: 0; } 
+        }
+    </style>
+</head>
+<body>
+
+<div id="overlay-start" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+    <button onclick="iniciarQuiz()" style="padding: 2.5vh 6vh; font-family:'Russo One', sans-serif; font-size: 3.5vh; background: #2ed573; color:white; border:none; border-radius:15px; cursor:pointer; box-shadow: 0 0 20px rgba(46, 213, 115, 0.5);">
+        INICIAR VÍDEO
+    </button>
+</div>
+
+<div id="video-canvas">
+    <div class="fixed-title" id="main-title">DESAFIO DE CONHECIMENTO</div>
+    <div class="question-text" id="q-text"></div>
+    <div id="timer-container"><div id="timer-bar"></div></div>
+    <div class="options-list" id="options-box"></div>
+    <div class="footer-brand" id="footer-btn">WWW.PIXELCLICK.FUN</div>
+</div>
+
+<script src="esportes.js"></script>
+<script src="geografia.js"></script>
+<script src="historia.js"></script>
+<script src="natureza.js"></script>
+<script src="ciencia.js"></script>
+<script src="entretenimento.js"></script>
+
+<script>
+    const masterPool = [
+        ...(typeof esportesData !== 'undefined' ? esportesData : []),
+        ...(typeof geografiaData !== 'undefined' ? geografiaData : []),
+        ...(typeof historiaData !== 'undefined' ? historiaData : []),
+        ...(typeof naturezaData !== 'undefined' ? naturezaData : []),
+        ...(typeof cienciaData !== 'undefined' ? cienciaData : []),
+        ...(typeof entretenimentoData !== 'undefined' ? entretenimentoData : [])
+    ];
+
+    const selectedQuestions = masterPool.sort(() => 0.5 - Math.random()).slice(0, 8);
+    let currentQ = 0;
+    let particleIntervals = [];
+
+    const sfx = {
+        timer: new Howl({ src: ['timer_tic_tac.mp3'], loop: true, volume: 0.5 }),
+        correct: new Howl({ src: ['success.mp3'], volume: 0.8 }),
+        transition: new Howl({ src: ['swoosh.mp3'], volume: 0.4 })
+    };
+
+    sfx.timer.rate(1.5);
+    sfx.transition.rate(1.5);
+
+    function iniciarQuiz() {
+        document.getElementById('overlay-start').style.display = 'none';
+        sfx.transition.play();
+        startSequence();
+    }
+
+    function startSequence() {
+        particleIntervals.forEach(clearInterval);
+        particleIntervals = [];
+
+        if (currentQ >= 8) {
+            sfx.timer.stop();
+            sfx.transition.play();
+
+            document.getElementById('video-canvas').innerHTML = `
+                <div style="display: flex; flex-direction: column; justify-content: center; height: 100%; align-items: center; text-align: center;">
+                    <div class="fixed-title">FIM DO TESTE</div>
+                    <h1 style="color:white; font-size: 5vh; margin: 3vh 0;">QUANTAS VOCÊ ACERTOU?</h1>
+                    <div class="footer-brand">WWW.PIXELCLICK.FUN</div>
+                </div>
+            `;
+
+            setTimeout(() => {
+                window.speechSynthesis.cancel();
+                const msgFinal = new SpeechSynthesisUtterance("Fim do teste. E aí, quantas você acertou?");
+                msgFinal.lang = 'pt-BR';
+                msgFinal.rate = 1.3; 
+                window.speechSynthesis.speak(msgFinal);
+            }, 500);
+            return;
+        }
+
+        const data = selectedQuestions[currentQ];
+        const correctText = data.options[data.correct];
+        let shuffledOptions = data.options.map(text => ({ text })).sort(() => Math.random() - 0.5);
+        const newCorrectIndex = shuffledOptions.findIndex(opt => opt.text === correctText);
+
+        document.getElementById('q-text').innerText = data.q;
+
+        window.speechSynthesis.cancel(); 
+        const msgQ = new SpeechSynthesisUtterance(data.q.toLowerCase());
+        msgQ.lang = 'pt-BR';
+        msgQ.rate = 1.3; 
+        window.speechSynthesis.speak(msgQ);
+
+        const box = document.getElementById('options-box');
+        box.innerHTML = '';
+        const colors = ['#ff4757', '#2e86de', '#2ed573', '#eccc68'];
+
+        particleIntervals.push(setInterval(() => spawnParticle(document.getElementById('main-title'), '#ffffff'), 400));
+
+        shuffledOptions.forEach((opt, i) => {
+            const div = document.createElement('div');
+            div.className = `option opt-${i}`;
+            div.id = `opt-${i}`;
+            div.innerText = opt.text;
+            box.appendChild(div);
+            particleIntervals.push(setInterval(() => spawnParticle(div, colors[i]), 250));
+        });
+
+        sfx.timer.play();
+        runTimer(newCorrectIndex, correctText);
+    }
+
+    function runTimer(correctIndex, correctText) {
+        const barEl = document.getElementById('timer-bar');
+        const startTime = Date.now();
+        const duration = 8000;
+
+        function update() {
+            const elapsed = Date.now() - startTime;
+            const percent = Math.max(0, 100 - (elapsed / duration * 100));
+            barEl.style.width = percent + "%";
+
+            if (percent > 60) barEl.style.backgroundColor = "#2ed573";
+            else if (percent > 30) barEl.style.backgroundColor = "#eccc68";
+            else barEl.style.backgroundColor = "#ff4757";
+
+            if (elapsed < duration) {
+                requestAnimationFrame(update);
+            } else {
+                sfx.timer.stop(); 
+                sfx.correct.play(); 
+                document.getElementById(`opt-${correctIndex}`).classList.add('highlight-correct');
+                
+                const msgA = new SpeechSynthesisUtterance("" + correctText.toLowerCase());
+                msgA.lang = 'pt-BR';
+                msgA.rate = 1.4; 
+                window.speechSynthesis.speak(msgA);
+
+                setTimeout(() => { currentQ++; startSequence(); }, 1800);
+            }
+        }
+        update();
+    }
+
+    function spawnParticle(parent, color) {
+        if (!parent) return;
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.backgroundColor = color;
+        p.style.left = Math.random() * 100 + '%';
+        p.style.top = Math.random() * 100 + '%';
+        const range = window.innerHeight * 0.08;
+        p.style.setProperty('--mx', (Math.random() - 0.5) * range + 'px');
+        p.style.setProperty('--my', (Math.random() - 0.5) * range + 'px');
+        parent.appendChild(p);
+        setTimeout(() => p.remove(), 2000);
+    }
+</script>
+</body>
+</html>
