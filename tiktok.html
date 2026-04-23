@@ -43,22 +43,27 @@
             flex-direction: column;
             align-items: center;
             box-sizing: border-box;
+            transition: padding-top 0.4s ease-in-out;
             
             /* Padding proporcional para manter conteúdo dentro da moldura escura */
-            padding: 12vh 8vh 10vh 8vh; 
+            padding: 2vh 8vh 10vh 8vh; 
             text-align: center;
         }
 
         .fixed-title {
-            font-size: 4.2vh; 
-            text-transform: uppercase;
-            letter-spacing: 0.2vh;
-            margin-bottom: 10px;
-            color: var(--color-title);
-            text-shadow: 0 0 1vh rgba(255, 215, 0, 0.6), 0.3vh 0.3vh 0.3vh rgba(0, 0, 0, 0.8);
-            width: 100%;
-            z-index: 5;
-        }
+    font-size: 4.2vh; 
+    text-transform: uppercase;
+    letter-spacing: 0.2vh;
+    color: var(--color-title);
+    text-shadow: 0 0 1vh rgba(255, 215, 0, 0.6), 0.3vh 0.3vh 0.3vh rgba(0, 0, 0, 0.8);
+    width: 100%;
+    z-index: 5;
+
+    /* AJUSTE AQUI: */
+    margin-top: -3vh;    /* Valores negativos (ex: -2vh, -4vh) sobem o título */
+    margin-bottom: 2vh;  /* Espaço entre o título e a pergunta abaixo dele */
+    position: relative;  /* Garante que a margem negativa funcione corretamente */
+}
 
         .question-text {
             font-size: 2.6vh;
@@ -75,24 +80,31 @@
         }
 
         #timer-container {
-            width: 100%;
-            height: 1.6vh;
-            background: rgba(255,255,255,0.1);
-            border-radius: 1vh;
-            margin-bottom: 3vh;
-            overflow: hidden;
-            border: 0.3vh solid rgba(255,255,255,0.2);
-            z-index: 2;
-        }
-        
-        #timer-bar {
-            width: 100%;
-            height: 100%;
-            background: var(--color-3);
-            box-shadow: 0 0 2vh var(--color-3);
-            transform-origin: center left; 
-            transition: background-color 0.3s;
-        }
+    width: 100%;
+    height: 1.6vh;
+    background: rgba(255,255,255,0.1);
+    border-radius: 1vh;
+    overflow: hidden;
+    border: 0.3vh solid rgba(255,255,255,0.2);
+    z-index: 2;
+
+    /* Novas propriedades para imutabilidade */
+    flex-shrink: 0;        /* Impede que o container seja esmagado por textos longos */
+    margin: 2vh 0 3vh 0;   /* Define margens fixas (Top, Right, Bottom, Left) */
+    position: relative;    /* Garante o posicionamento estável */
+}
+
+#timer-bar {
+    width: 100%;
+    height: 100%;
+    background: var(--color-3);
+    box-shadow: 0 0 2vh var(--color-3);
+    transform-origin: center left; 
+    transition: background-color 0.3s;
+    
+    /* Garante que a animação interna não afete o layout externo */
+    display: block; 
+}
 
         .options-list {
             width: 100%;
@@ -182,54 +194,65 @@
         let particleIntervals = [];
 
         function startSequence() {
-            particleIntervals.forEach(clearInterval);
-            particleIntervals = [];
+    particleIntervals.forEach(clearInterval);
+    particleIntervals = [];
 
-            if (currentQ >= 8) {
-                document.getElementById('video-canvas').innerHTML = `
-                    <div style="display: flex; flex-direction: column; justify-content: center; height: 100%; align-items: center;">
-                        <div class="fixed-title">FIM DO TESTE</div>
-                        <h1 style="color:white; font-size: 3vh; margin-bottom: 4vh;">QUAL FOI O SEU RESULTADO?</h1>
-                        <div class="footer-brand">WWW.PIXELCLICK.FUN</div>
-                    </div>
-                `;
-                return;
-            }
+    if (currentQ >= 8) {
+        document.getElementById('video-canvas').innerHTML = `
+            <div style="display: flex; flex-direction: column; justify-content: center; height: 100%; align-items: center;">
+                <div class="fixed-title">FIM DO TESTE</div>
+                <h1 style="color:white; font-size: 3vh; margin-bottom: 4vh;">QUAL FOI O SEU RESULTADO?</h1>
+                <div class="footer-brand">WWW.PIXELCLICK.FUN</div>
+            </div>
+        `;
+        return;
+    }
 
-            const data = selectedQuestions[currentQ];
-            
-            // --- LÓGICA DE EMBARALHAMENTO DAS OPÇÕES ---
-            const correctText = data.options[data.correct]; // Guarda o texto da resposta certa
-            
-            // Cria uma lista de objetos com texto e se é original ou não para embaralhar
-            let shuffledOptions = data.options
-                .map((text) => ({ text }))
-                .sort(() => Math.random() - 0.5);
-            
-            // Encontra o novo índice onde a resposta correta foi parar
-            const newCorrectIndex = shuffledOptions.findIndex(opt => opt.text === correctText);
-            // --------------------------------------------
+    const data = selectedQuestions[currentQ];
+    
+    // --- LÓGICA DE EMBARALHAMENTO DAS OPÇÕES ---
+    const correctText = data.options[data.correct];
+    let shuffledOptions = data.options
+        .map((text) => ({ text }))
+        .sort(() => Math.random() - 0.5);
+    const newCorrectIndex = shuffledOptions.findIndex(opt => opt.text === correctText);
+    // --------------------------------------------
 
-            document.getElementById('q-text').innerText = data.q;
-            const box = document.getElementById('options-box');
-            box.innerHTML = '';
-            
-            const colors = ['#ff4757', '#2e86de', '#2ed573', '#eccc68'];
+    // Inserção do texto da pergunta
+    const qTextElement = document.getElementById('q-text');
+    qTextElement.innerText = data.q;
 
-            particleIntervals.push(setInterval(() => spawnParticle(document.getElementById('main-title'), '#ffffff'), 400));
-
-            shuffledOptions.forEach((opt, i) => {
-                const div = document.createElement('div');
-                div.className = `option opt-${i}`;
-                div.id = `opt-${i}`;
-                div.innerText = opt.text;
-                box.appendChild(div);
-                particleIntervals.push(setInterval(() => spawnParticle(div, colors[i]), 250));
-            });
-
-            // Passa o novo índice embaralhado para o Timer
-            runTimer(newCorrectIndex);
+    // --- AJUSTE DE POSIÇÃO PARA TEXTOS LONGOS ---
+    const canvas = document.getElementById('video-canvas');
+    // Se o texto ocupar muito espaço (mais de 15vh, por exemplo), subimos o padding
+    // Usamos um pequeno timeout para garantir que o navegador já renderizou o texto para medir
+    setTimeout(() => {
+        if (qTextElement.offsetHeight > window.innerHeight * 0.15) {
+            canvas.style.paddingTop = "8vh"; // Sobe o conteúdo
+        } else {
+            canvas.style.paddingTop = "18vh"; // Volta ao padrão
         }
+    }, 10);
+    // --------------------------------------------
+
+    const box = document.getElementById('options-box');
+    box.innerHTML = '';
+    
+    const colors = ['#ff4757', '#2e86de', '#2ed573', '#eccc68'];
+
+    particleIntervals.push(setInterval(() => spawnParticle(document.getElementById('main-title'), '#ffffff'), 400));
+
+    shuffledOptions.forEach((opt, i) => {
+        const div = document.createElement('div');
+        div.className = `option opt-${i}`;
+        div.id = `opt-${i}`;
+        div.innerText = opt.text;
+        box.appendChild(div);
+        particleIntervals.push(setInterval(() => spawnParticle(div, colors[i]), 250));
+    });
+
+    runTimer(newCorrectIndex);
+}
 
         function runTimer(correctIndex) {
             const barEl = document.getElementById('timer-bar');
@@ -273,6 +296,21 @@
         }
 
         startSequence();
+        function ajustarLayoutParaTextoLongo() {
+    const canvas = document.getElementById('video-canvas');
+    const qText = document.getElementById('q-text');
+    
+    // Resetamos para o valor padrão antes de medir
+    canvas.style.paddingTop = "18vh"; 
+    
+    // Se a pergunta ocupar mais de 160px (ajuste esse valor se necessário)
+    // nós diminuímos o padding para 8vh para dar espaço
+    if (qText.offsetHeight > 160) {
+        canvas.style.paddingTop = "8vh";
+    } else {
+        canvas.style.paddingTop = "18vh";
+    }
+}
     </script>
 </body>
 </html>
