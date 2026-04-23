@@ -34,7 +34,7 @@
         #video-canvas {
             position: relative;
             width: 56vh; /* 9/16 de 100vh */
-            height: 95vh;
+            height: 90vh;
             background-image: url('background.png');
             background-size: 100% 100%;
             background-position: center;
@@ -197,26 +197,38 @@
             }
 
             const data = selectedQuestions[currentQ];
+            
+            // --- LÓGICA DE EMBARALHAMENTO DAS OPÇÕES ---
+            const correctText = data.options[data.correct]; // Guarda o texto da resposta certa
+            
+            // Cria uma lista de objetos com texto e se é original ou não para embaralhar
+            let shuffledOptions = data.options
+                .map((text) => ({ text }))
+                .sort(() => Math.random() - 0.5);
+            
+            // Encontra o novo índice onde a resposta correta foi parar
+            const newCorrectIndex = shuffledOptions.findIndex(opt => opt.text === correctText);
+            // --------------------------------------------
+
             document.getElementById('q-text').innerText = data.q;
             const box = document.getElementById('options-box');
             box.innerHTML = '';
             
             const colors = ['#ff4757', '#2e86de', '#2ed573', '#eccc68'];
 
-            // Partículas no título
             particleIntervals.push(setInterval(() => spawnParticle(document.getElementById('main-title'), '#ffffff'), 400));
 
-            data.options.forEach((opt, i) => {
+            shuffledOptions.forEach((opt, i) => {
                 const div = document.createElement('div');
                 div.className = `option opt-${i}`;
                 div.id = `opt-${i}`;
-                div.innerText = opt;
+                div.innerText = opt.text;
                 box.appendChild(div);
-                // Partículas nos botões
                 particleIntervals.push(setInterval(() => spawnParticle(div, colors[i]), 250));
             });
 
-            runTimer(data.correct);
+            // Passa o novo índice embaralhado para o Timer
+            runTimer(newCorrectIndex);
         }
 
         function runTimer(correctIndex) {
@@ -252,7 +264,7 @@
             p.style.left = Math.random() * 100 + '%';
             p.style.top = Math.random() * 100 + '%';
             
-            const range = window.innerHeight * 0.08; // Movimento proporcional
+            const range = window.innerHeight * 0.08;
             p.style.setProperty('--mx', (Math.random() - 0.5) * range + 'px');
             p.style.setProperty('--my', (Math.random() - 0.5) * range + 'px');
             
