@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>Pixel Click - TikTok Proportional</title>
     <style>
         :root {
@@ -31,21 +34,22 @@
         }
 
         #video-canvas {
-            width: 48vh;          
-            height: 80vh;         
-            position: relative;
-            background-image: url('background.png');
-            background-size: 100% 100%; 
-            background-repeat: no-repeat;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            box-sizing: border-box;
-            padding: 0 4.5vh; /* Padding lateral levemente ajustado */
-            border: 1px solid #333;
-            overflow: hidden;
-        }
+    width: 100vw;         /* Ocupa toda a largura no mobile */
+    max-width: 56.25vh;   /* Mantém a proporção 9:16 em telas muito largas */
+    height: 100vh;        /* Ocupa toda a altura disponível */
+    position: relative;
+    background-image: url('background.png');
+    background-size: cover; /* Garante que o fundo cubra tudo sem distorcer */
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 0 4.5vh;
+    border: none;         /* Remove a borda para parecer App */
+    overflow: hidden;
+}
 
         .fixed-title {
             font-size: 3.8vh; 
@@ -225,10 +229,20 @@
     sfx.transition.rate(1.5);
 
     function iniciarQuiz() {
-        document.getElementById('overlay-start').style.display = 'none';
-        sfx.transition.play();
-        startSequence();
+    // Tenta colocar o site em tela cheia
+    const elem = document.documentElement;
+    if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+    } else if (elem.webkitRequestFullscreen) { /* Safari/iOS */
+        elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) { /* IE11 */
+        elem.msRequestFullscreen();
     }
+
+    document.getElementById('overlay-start').style.display = 'none';
+    sfx.transition.play();
+    startSequence();
+}
 
     function startSequence() {
         particleIntervals.forEach(clearInterval);
