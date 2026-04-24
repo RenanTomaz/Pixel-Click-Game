@@ -34,20 +34,27 @@
         }
 
         #video-canvas {
-    width: 100vw;         /* Ocupa toda a largura no mobile */
-    max-width: 56.25vh;   /* Mantém a proporção 9:16 em telas muito largas */
-    height: 100vh;        /* Ocupa toda a altura disponível */
+    /* Faz o container ocupar a tela inteira, mas respeitar a proporção da imagem */
+    width: 100vw;
+    height: 100vh;
+    
     position: relative;
+    
+    /* FORÇA A EXIBIÇÃO DE 100% DA IMAGEM */
     background-image: url('background.png');
-    background-size: cover; /* Garante que o fundo cubra tudo sem distorcer */
+    background-size: 100% 100%; /* Garante que a imagem se esprema/estique para caber 100% */
     background-repeat: no-repeat;
     background-position: center;
+    
     display: flex;
     flex-direction: column;
     align-items: center;
     box-sizing: border-box;
-    padding: 0 4.5vh;
-    border: none;         /* Remove a borda para parecer App */
+    
+    /* Ajuste o padding para o conteúdo não bater na moldura da imagem */
+    padding: 12vh 10% 10vh 10%; 
+    
+    border: none;
     overflow: hidden;
 }
 
