@@ -5,213 +5,101 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
-    <title>Pixel Click - YouTube Horizontal</title>
+    <title>Pixel Click - Live Harry Potter</title>
     <style>
         :root {
-            --color-1: #ff4757;
-            --color-2: #2e86de;
-            --color-3: #2ed573;
-            --color-4: #eccc68;
-            --color-accent: #2e86de;
-            --color-title: #ffd700; 
-            --correct-glow: #00ff00; 
+            --color-1: #ff4757; --color-2: #2e86de; --color-3: #2ed573; --color-4: #eccc68;
+            --color-accent: #2e86de; --color-title: #ffd700; --correct-glow: #00ff00; 
         }
 
         body {
-            background-color: #000;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
-            font-family: 'Russo One', sans-serif;
+            background-color: #000; margin: 0; padding: 0; display: flex;
+            justify-content: center; align-items: center; height: 100vh;
+            width: 100vw; overflow: hidden; font-family: 'Russo One', sans-serif;
         }
 
-        /* Container ajustado para proporção 16:9 (YouTube) */
         #video-canvas {
-            width: 90vw; 
-            height: 50.625vw; /* Mantém a proporção 16:9 baseada na largura */
-            max-height: 85vh; 
-            max-width: 151vh;
-            position: relative;
-            background-image: url('backgroundyt.png');
-            background-size: 100% 100%; 
-            background-repeat: no-repeat;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            box-sizing: border-box;
-            padding: 4vh 10vh; 
-            border: 1px solid #333;
-            overflow: hidden;
+            width: 90vw; height: 50.625vw; max-height: 85vh; max-width: 151vh;
+            position: relative; background-image: url('backgroundyt.png');
+            background-size: 100% 100%; background-repeat: no-repeat;
+            background-position: center; display: flex; flex-direction: column;
+            align-items: center; box-sizing: border-box; padding: 4vh 10vh;
+            border: 1px solid #333; overflow: hidden;
         }
 
         .fixed-title {
-            font-size: 4.5vh; 
-            text-transform: uppercase;
-            letter-spacing: 0.2vh;
-            color: var(--color-title);
-            text-shadow: 0 0 1vh rgba(255, 215, 0, 0.6), 0.3vh 0.3vh 0.3vh rgba(0, 0, 0, 0.8);
-            width: 100%;
-            z-index: 5;
-            margin-top: 2vh; 
-            margin-bottom: 2vh;
-            position: relative;
-            text-align: center;
+            font-size: 4.5vh; text-transform: uppercase; letter-spacing: 0.2vh;
+            color: var(--color-title); text-shadow: 0 0 1vh rgba(255, 215, 0, 0.6), 0.3vh 0.3vh 0.3vh rgba(0, 0, 0, 0.8);
+            width: 100%; z-index: 5; margin-top: 2vh; margin-bottom: 2vh;
+            position: relative; text-align: center;
         }
 
         .question-text {
-            font-size: 3vh; 
-            height: 12vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-transform: uppercase;
-            text-shadow: 0.3vh 0.3vh 0px #000;
-            margin-bottom: 1.5vh;
-            color: white;
-            line-height: 1.2;
-            z-index: 2;
-            text-align: center;
-            width: 100%;
+            font-size: 3vh; height: 12vh; display: flex; align-items: center;
+            justify-content: center; text-transform: uppercase; text-shadow: 0.3vh 0.3vh 0px #000;
+            margin-bottom: 1.5vh; color: white; line-height: 1.2; z-index: 2;
+            text-align: center; width: 100%;
         }
 
         #timer-container {
-            width: 80%;
-            height: 1.6vh;
-            background: rgba(255,255,255,0.1);
-            border-radius: 1vh;
-            overflow: hidden;
-            border: 0.2vh solid rgba(255,255,255,0.2);
-            z-index: 2;
-            flex-shrink: 0;
-            margin: 1vh 0 3vh 0;
+            width: 80%; height: 1.6vh; background: rgba(255,255,255,0.1);
+            border-radius: 1vh; overflow: hidden; border: 0.2vh solid rgba(255,255,255,0.2);
+            z-index: 2; flex-shrink: 0; margin: 1vh 0 3vh 0;
         }
 
-        #timer-bar {
-            width: 100%;
-            height: 100%;
-            background: var(--color-3);
-            box-shadow: 0 0 2vh var(--color-3);
-            transform-origin: center left; 
-        }
+        #timer-bar { width: 100%; height: 100%; background: var(--color-3); transform-origin: center left; }
 
         .options-list {
-            width: 100%;
-            display: grid;
-            grid-template-columns: 1fr 1fr; /* Duas colunas para o formato YouTube */
-            gap: 2vh;
-            flex-grow: 1;
-            align-content: center;
-            z-index: 2;
+            width: 100%; display: grid; grid-template-columns: 1fr 1fr;
+            gap: 2vh; flex-grow: 1; align-content: center; z-index: 2;
         }
 
         .option {
-            background: rgba(255, 255, 255, 0.1); 
-            backdrop-filter: blur(1vh);
-            -webkit-backdrop-filter: blur(1vh);
-            border: 0.3vh solid rgba(255, 255, 255, 0.2);
-            padding: 2.5vh 2vh;
-            border-radius: 1.5vh;
-            font-size: 2.2vh;
-            text-transform: uppercase;
-            color: white;
-            position: relative;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            box-sizing: border-box;
-            width: 100%;
+            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(1vh);
+            border: 0.3vh solid rgba(255, 255, 255, 0.2); padding: 2.5vh 2vh;
+            border-radius: 1.5vh; font-size: 2.2vh; text-transform: uppercase;
+            color: white; display: flex; align-items: center; justify-content: center;
+            text-align: center; width: 100%; box-sizing: border-box;
         }
-
-        .opt-0 { border-color: var(--color-1); }
-        .opt-1 { border-color: var(--color-2); }
-        .opt-2 { border-color: var(--color-3); }
-        .opt-3 { border-color: var(--color-4); }
 
         .highlight-correct {
             border-color: var(--correct-glow) !important;
             background: var(--correct-glow) !important;
-            color: black !important;
-            box-shadow: 0 0 4vh var(--correct-glow) !important;
-            transform: scale(1.05);
-            z-index: 10;
+            color: black !important; transform: scale(1.05); z-index: 10;
         }
 
         .footer-brand {
-            width: 35%;
-            background: var(--color-accent);
-            padding: 1vh 0;
-            border-radius: 5vh;
-            font-size: 2vh;
-            font-weight: bold;
-            color: white;
-            border: 0.3vh solid rgba(255, 255, 255, 0.3);
-            margin-top: 3vh;
-            margin-bottom: 2vh;
-            z-index: 2;
-            text-align: center;
+            width: 35%; background: var(--color-accent); padding: 1vh 0;
+            border-radius: 5vh; font-size: 2vh; font-weight: bold;
+            color: white; border: 0.3vh solid rgba(255, 255, 255, 0.3);
+            margin-top: 3vh; margin-bottom: 2vh; z-index: 2; text-align: center;
         }
 
-        .particle { 
-            position: absolute; 
-            width: 0.5vh; 
-            height: 0.5vh; 
-            border-radius: 50%; 
-            pointer-events: none; 
-            z-index: -1; 
-            animation: move-particle 2s linear forwards; 
-        }
-        @keyframes move-particle { 
-            0% { transform: translate(0, 0) scale(1); opacity: 1; } 
-            100% { transform: translate(var(--mx), var(--my)) scale(0); opacity: 0; } 
-        }
+        .particle { position: absolute; width: 0.5vh; height: 0.5vh; border-radius: 50%; pointer-events: none; z-index: -1; animation: move-particle 2s linear forwards; }
+        @keyframes move-particle { 0% { transform: translate(0, 0) scale(1); opacity: 1; } 100% { transform: translate(var(--mx), var(--my)) scale(0); opacity: 0; } }
     </style>
 </head>
 <body>
 
-<div id="overlay-start" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center;">
-    <button onclick="iniciarQuiz()" style="padding: 2.5vh 6vh; font-family:'Russo One', sans-serif; font-size: 3.5vh; background: #2ed573; color:white; border:none; border-radius:15px; cursor:pointer; box-shadow: 0 0 20px rgba(46, 213, 115, 0.5);">
-        INICIAR VÍDEO
+<div id="overlay-start" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align: center;">
+    <h1 style="color:white; font-size: 5vh; margin-bottom: 4vh;">LIVE HARRY POTTER</h1>
+    <button onclick="iniciarLive()" style="padding: 2.5vh 6vh; font-family:'Russo One', sans-serif; font-size: 3vh; background: var(--color-3); color:black; border:none; border-radius:15px; cursor:pointer;">
+        INICIAR TRANSMISSÃO
     </button>
 </div>
 
 <div id="video-canvas">
-    <div class="fixed-title" id="main-title">DESAFIO DE CONHECIMENTO</div>
+    <div class="fixed-title" id="main-title">QUIZ HARRY POTTER</div>
     <div class="question-text" id="q-text"></div>
     <div id="timer-container"><div id="timer-bar"></div></div>
     <div class="options-list" id="options-box"></div>
     <div class="footer-brand" id="footer-btn">WWW.PIXELCLICK.FUN</div>
 </div>
 
-<script src="esportes.js"></script>
-<script src="geografia.js"></script>
-<script src="historia.js"></script>
-<script src="natureza.js"></script>
-<script src="ciencia.js"></script>
-<script src="entretenimento.js"></script>
+<script src="harrypotter.js"></script>
 
 <script>
-    // UNE TODOS OS ARQUIVOS CARREGADOS
-    const masterPool = [
-        ...(typeof esportesData !== 'undefined' ? esportesData : []),
-        ...(typeof geografiaData !== 'undefined' ? geografiaData : []),
-        ...(typeof historiaData !== 'undefined' ? historiaData : []),
-        ...(typeof naturezaData !== 'undefined' ? naturezaData : []),
-        ...(typeof cienciaData !== 'undefined' ? cienciaData : []),
-        ...(typeof entretenimentoData !== 'undefined' ? entretenimentoData : [])
-    ];
-
-    // SELECIONA 8 PERGUNTAS ALEATÓRIAS
-    const selectedQuestions = masterPool.sort(() => 0.5 - Math.random()).slice(0, 8);
-    
-    let currentQ = 0;
+    let liveQueue = []; // Fila de perguntas que ainda não passaram
     let particleIntervals = [];
 
     const sfx = {
@@ -223,52 +111,55 @@
     sfx.timer.rate(1.5);
     sfx.transition.rate(1.5);
 
-    function iniciarQuiz() {
-        document.getElementById('overlay-start').style.display = 'none';
-        sfx.transition.play();
-        startSequence();
+    function narrar(texto, velocidade = 1.5, callback) {
+        window.speechSynthesis.cancel();
+        const msg = new SpeechSynthesisUtterance(texto.toLowerCase());
+        msg.lang = 'pt-BR';
+        msg.rate = velocidade;
+
+        const vozes = window.speechSynthesis.getVoices();
+        const vozMasculina = vozes.find(v => 
+            v.lang.includes('pt-BR') && 
+            (v.name.includes('Daniel') || v.name.includes('Antonio') || v.name.includes('Guilherme') || v.name.toLowerCase().includes('male'))
+        ) || vozes.find(v => v.lang.includes('pt-BR'));
+
+        if (vozMasculina) msg.voice = vozMasculina;
+        if (callback) msg.onend = callback;
+        window.speechSynthesis.speak(msg);
     }
 
-    function startSequence() {
+    function iniciarLive() {
+        document.getElementById('overlay-start').style.display = 'none';
+        prepararFila();
+        sfx.transition.play();
+        proximaPergunta();
+    }
+
+    function prepararFila() {
+        // Pega os dados do arquivo harrypotter.js e embaralha
+        liveQueue = [...harrypotterData].sort(() => Math.random() - 0.5);
+    }
+
+    function proximaPergunta() {
         particleIntervals.forEach(clearInterval);
         particleIntervals = [];
 
-        if (currentQ >= 8) {
-            sfx.timer.stop();
-            sfx.transition.play();
-
-            document.getElementById('video-canvas').innerHTML = `
-                <div style="display: flex; flex-direction: column; justify-content: center; height: 100%; align-items: center; text-align: center;">
-                    <div class="fixed-title">FIM DO TESTE</div>
-                    <h1 style="color:white; font-size: 5vh; margin: 3vh 0;">QUANTAS VOCÊ ACERTOU?</h1>
-                    <div class="footer-brand">WWW.PIXELCLICK.FUN</div>
-                </div>
-            `;
-
-            setTimeout(() => {
-                window.speechSynthesis.cancel();
-                const msgFinal = new SpeechSynthesisUtterance("Fim do teste. E aí, quantas você acertou?");
-                msgFinal.lang = 'pt-BR';
-                msgFinal.rate = 1.3; 
-                window.speechSynthesis.speak(msgFinal);
-            }, 500);
-            return;
+        // Se a fila esvaziar, recarrega e embaralha tudo de novo para a live não parar
+        if (liveQueue.length === 0) {
+            prepararFila();
         }
 
-        const data = selectedQuestions[currentQ];
+        // Remove a primeira pergunta da fila (o que garante que não repita até o deck acabar)
+        const data = liveQueue.shift();
+        
         const correctText = data.options[data.correct];
+        
+        // Randomiza a posição das alternativas para evitar vícios na opção 1
         let shuffledOptions = data.options.map(text => ({ text })).sort(() => Math.random() - 0.5);
         const newCorrectIndex = shuffledOptions.findIndex(opt => opt.text === correctText);
 
-        const qTextElement = document.getElementById('q-text');
-        qTextElement.innerText = data.q;
-
-        // Narração sem soletrar (toLowerCase)
-        window.speechSynthesis.cancel(); 
-        const msgQ = new SpeechSynthesisUtterance(data.q.toLowerCase());
-        msgQ.lang = 'pt-BR';
-        msgQ.rate = 1.3; 
-        window.speechSynthesis.speak(msgQ);
+        document.getElementById('q-text').innerText = data.q;
+        narrar(data.q);
 
         const box = document.getElementById('options-box');
         box.innerHTML = '';
@@ -280,6 +171,7 @@
             const div = document.createElement('div');
             div.className = `option opt-${i}`;
             div.id = `opt-${i}`;
+            div.style.borderColor = colors[i];
             div.innerText = opt.text;
             box.appendChild(div);
             particleIntervals.push(setInterval(() => spawnParticle(div, colors[i]), 250));
@@ -310,12 +202,13 @@
                 sfx.correct.play(); 
                 document.getElementById(`opt-${correctIndex}`).classList.add('highlight-correct');
                 
-                const msgA = new SpeechSynthesisUtterance("" + correctText.toLowerCase());
-                msgA.lang = 'pt-BR';
-                msgA.rate = 1.4; 
-                window.speechSynthesis.speak(msgA);
-
-                setTimeout(() => { currentQ++; startSequence(); }, 1800);
+                setTimeout(() => {
+                    narrar(correctText, 1.4, () => {
+                        setTimeout(() => {
+                            proximaPergunta();
+                        }, 1200); // Pausa leve para o público absorver a resposta
+                    });
+                }, 200);
             }
         }
         update();
@@ -334,6 +227,8 @@
         parent.appendChild(p);
         setTimeout(() => p.remove(), 2000);
     }
+    
+    window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
 </script>
 </body>
 </html>
