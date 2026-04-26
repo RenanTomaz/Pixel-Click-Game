@@ -20,7 +20,7 @@
 
         #video-canvas {
             width: 90vw; height: 50.625vw; max-height: 85vh; max-width: 151vh;
-            position: relative; background-image: url('backgroundyt.png');
+            position: relative; background-image: url('backgroundharrypotter.png');
             background-size: 100% 100%; background-repeat: no-repeat;
             background-position: center; display: flex; flex-direction: column;
             align-items: center; box-sizing: border-box; padding: 4vh 10vh;
@@ -136,9 +136,16 @@
     }
 
     function prepararFila() {
-        // Pega os dados do arquivo harrypotter.js e embaralha
+    // Verifica se os dados existem antes de tentar usar
+    if (typeof harrypotterData !== 'undefined' && harrypotterData.length > 0) {
         liveQueue = [...harrypotterData].sort(() => Math.random() - 0.5);
+        console.log("Fila preparada com " + liveQueue.length + " perguntas.");
+    } else {
+        console.error("Erro: harrypotterData não foi encontrado ou está vazio!");
+        // Opcional: Criar uma pergunta de fallback para a live não ficar preta
+        liveQueue = [{q: "Carregando perguntas...", options: ["Aguarde", "Aguarde", "Aguarde", "Aguarde"], correct: 0}];
     }
+}
 
     function proximaPergunta() {
         particleIntervals.forEach(clearInterval);
