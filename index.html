@@ -45,7 +45,7 @@
       }
     }
     </script>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
     :root { 
         --bg-color: #121212; 
@@ -265,6 +265,35 @@
         display: none; align-items: center; justify-content: center;
         cursor: pointer; background: transparent; margin-right: 10px;
     }
+    .social-section {
+    width: 100%;
+    margin: 30px 0 50px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.social-container {
+    display: flex;
+    gap: 30px; /* Espaço entre as logos */
+    align-items: center;
+}
+
+.social-link {
+    color: #555; /* Cor discreta inicial */
+    font-size: 1.8rem; /* Tamanho das logos */
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+/* Cores ao passar o mouse (Hover) */
+.social-link:hover {
+    transform: translateY(-3px);
+}
+
+.social-link[aria-label="TikTok"]:hover { color: #ff0050; text-shadow: 0 0 10px rgba(255, 0, 80, 0.5); }
+.social-link[aria-label="Instagram"]:hover { color: #e1306c; text-shadow: 0 0 10px rgba(225, 48, 108, 0.5); }
+.social-link[aria-label="Discord"]:hover { color: #5865f2; text-shadow: 0 0 10px rgba(88, 101, 242, 0.5); }
+.social-link[aria-label="YouTube"]:hover { color: #ff0000; text-shadow: 0 0 10px rgba(255, 0, 0, 0.5); }
     </style>
 </head>
 <body>
@@ -350,7 +379,6 @@
             <p id="ui-seo-stroop-text">
                 O Pixel Stroop baseia-se num famoso teste neuropsicológico que mede a sua flexibilidade cognitiva. O Efeito Stroop ocorre quando o seu cérebro precisa processar informações conflitantes. Treinar com esses desafios ajuda a melhorar sua atenção seletiva e a velocidade de reação mental.
             </p>
-            <div id="ui-seo-stroop-footer" class="box-footer">ANALISE_COGNITIVA_OK</div>
         </article>
 
         <article class="seo-box trivia-box">
@@ -361,7 +389,6 @@
             <p id="ui-seo-trivia-text">
                 Jogar Pixel Trivia e responder a quizzes de conhecimentos gerais estimula a memória de longo prazo e reduz o estresse. É o exercício cerebral perfeito para manter sua mente ativa, promovendo aprendizagem rápida e foco em um ambiente competitivo.
             </p>
-            <div id="ui-seo-trivia-footer" class="box-footer">BANCO_DE_DADOS_ATUALIZADO</div>
         </article>
 
         <article class="seo-box genius-box">
@@ -372,10 +399,26 @@
             <p id="ui-seo-genius-text">
                 O Pixel Genius é um desafio de memória sequencial inspirado em testes de retenção visual. Ao repetir padrões de cores e sons, você exercita sua memória de curto prazo e concentração. Jogos de repetição são ferramentas essenciais para fortalecer conexões neurais.
             </p>
-            <div id="ui-seo-genius-footer" class="box-footer">SEQUENCIA_MEMORIZADA_OK</div>
         </article>
 
     </div>
+</section>
+<section class="social-section">
+    <div class="social-container">
+        <a href="https://www.tiktok.com/@pixelclick.fun" target="_blank" class="social-link" aria-label="TikTok">
+            <i class="fab fa-tiktok"></i>
+        </a>
+        <span class="social-link disabled" aria-label="Instagram">
+            <i class="fab fa-instagram"></i>
+        </span>
+        <span class="social-link disabled" aria-label="Discord">
+            <i class="fab fa-discord"></i>
+        </span>
+        <a href="https://www.youtube.com/@pixelclick_fun" target="_blank" class="social-link" aria-label="YouTube">
+            <i class="fab fa-youtube"></i>
+        </a>
+    </div>
+</section>
 </section>
     <footer class="game-footer">
         <p id="footer-text">Pixel Click® - Jogos de Raciocínio</p>
