@@ -1,0 +1,17 @@
+# ==========================================
+# Robots.txt para PixelClick.fun
+# ==========================================
+
+User-agent: *
+Allow: /
+
+# Caminho para o seu mapa do site atualizado
+Sitemap: https://pixelclick.fun/sitemap.xml
+
+# Evita que o Google perca tempo com URLs de parâmetros irrelevantes
+Disallow: /*?s=
+Disallow: /*&s=
+
+# Otimização para rastreadores de anúncios (AdSense/Media.net)
+User-agent: Mediapartners-Google
+Allow: /
