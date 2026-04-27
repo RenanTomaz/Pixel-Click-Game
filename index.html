@@ -229,6 +229,161 @@
         display: flex; /* Mostra apenas no Mobile */
     }
 }
+/* --- Título da Seção SEO --- */
+.seo-header-wrapper {
+    width: 90%;
+    max-width: 1100px;
+    margin: 20px auto 15px auto; /* Espaçamento reduzido para ficar próximo aos cards */
+    display: flex;
+    justify-content: center; /* Centraliza o título horizontalmente */
+    align-items: center;
+}
+
+.seo-display-title {
+    font-family: 'Courier New', monospace;
+    font-size: 1.1rem;
+    color: #eee;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0;
+    text-align: center;
+}
+
+.seo-display-title .prefix {
+    color: var(--g-green);
+    font-weight: bold;
+    margin-right: 5px;
+    /* Opcional: mantive o pulso no prefixo para dar vida ao terminal */
+    animation: pulse 1.5s infinite; 
+}
+
+.header-line {
+    height: 1px;
+    flex-grow: 1;
+    background: linear-gradient(90deg, #333, transparent);
+}
+
+/* --- Container Principal SEO --- */
+.seo-container-advanced {
+    position: relative;
+    width: 90%;
+    max-width: 1100px;
+    margin: 20px auto 60px auto;
+    padding: 2px;
+    background: linear-gradient(90deg, var(--g-red), var(--g-blue), var(--g-yellow));
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.seo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2px;
+    background: #000;
+    border-radius: 18px;
+    overflow: hidden;
+}
+
+.seo-scanline {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(to bottom, transparent, rgba(46, 134, 222, 0.05), transparent);
+    animation: scanline 4s linear infinite;
+    pointer-events: none;
+    z-index: 5;
+}
+
+@keyframes scanline {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+}
+
+.seo-box {
+    background: rgba(26, 26, 26, 0.95);
+    padding: 35px 30px;
+    position: relative;
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.seo-box:hover {
+    background: rgba(35, 35, 35, 1);
+}
+
+.box-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.status-dot {
+    width: 8px; height: 8px;
+    flex-shrink: 0; /* Impede achatamento */
+    border-radius: 50%;
+    background: #2ed573;
+    box-shadow: 0 0 10px #2ed573;
+    animation: pulse 1.5s infinite;
+}
+
+.seo-box h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    letter-spacing: 1px;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    text-align: left;
+    line-height: 1.2;
+}
+
+.stroop-box h3 { color: var(--g-red); }
+.trivia-box h3 { color: var(--g-blue); }
+.genius-box h3 { color: var(--g-yellow); }
+
+.seo-box p {
+    font-size: 0.9rem;
+    color: #ccc;
+    line-height: 1.7;
+    margin: 0;
+    font-family: sans-serif;
+    text-align: justify;
+}
+
+.box-footer {
+    margin-top: auto; /* Alinha todos os footers horizontalmente */
+    padding-top: 25px;
+    font-size: 0.6rem;
+    color: #444;
+    letter-spacing: 2px;
+    text-align: right;
+    font-family: 'Courier New', monospace;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.4; }
+    50% { opacity: 1; }
+    100% { opacity: 0.4; }
+}
+
+/* --- Ajustes Mobile --- */
+@media (max-width: 750px) {
+    .seo-header-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .header-line { width: 100%; height: 2px; }
+    .seo-display-title {
+        font-size: 0.9rem;
+        padding: 0 10px;
+    }
+    .seo-container-advanced { margin-bottom: 50px; }
+    .seo-box { padding: 25px; }
+    .seo-box p { text-align: left; }
+}
     </style>
 </head>
 <body>
@@ -298,7 +453,50 @@
             <button class="play-btn" id="ui-genius-btn">JOGAR</button>
         </div>
     </div>
+    <div class="seo-header-wrapper">
+    <h2 id="ui-seo-title" class="seo-display-title">
+        <span class="prefix"></span> Entenda os nossos desafios cognitivos
+    </h2>
+</div>
 
+<section class="seo-container-advanced">
+    </section>
+<section class="seo-container-advanced">
+    <div class="seo-scanline"></div>
+    <div class="seo-grid">
+        
+        <article class="seo-box stroop-box">
+            <div class="box-header">
+                <span class="status-dot"></span>
+                <h3>O QUE É O PIXEL STROOP?</h3>
+            </div>
+            <p>
+                O <strong>Pixel Stroop</strong> baseia-se num famoso teste neuropsicológico que mede a sua flexibilidade cognitiva. O <strong>Efeito Stroop</strong> ocorre quando o seu cérebro precisa processar informações conflitantes. Treinar com esses desafios ajuda a melhorar sua <strong>atenção seletiva</strong> e a velocidade de reação mental.
+            </p>
+        </article>
+
+        <article class="seo-box trivia-box">
+            <div class="box-header">
+                <span class="status-dot"></span>
+                <h3>BENEFÍCIOS DO PIXEL TRIVIA</h3>
+            </div>
+            <p>
+                Jogar <strong>Pixel Trivia</strong> e responder a <strong>quizzes de conhecimentos gerais</strong> estimula a memória de longo prazo e reduz o estresse. É o <strong>exercício cerebral</strong> perfeito para manter sua mente ativa, promovendo aprendizagem rápida através de um ambiente competitivo contra o relógio.
+            </p>
+        </article>
+
+        <article class="seo-box genius-box">
+            <div class="box-header">
+                <span class="status-dot"></span>
+                <h3>COMO TREINAR A MEMÓRIA COM O PIXEL GENIUS?</h3>
+            </div>
+            <p>
+                O <strong>Pixel Genius</strong> é um desafio de memória sequencial inspirado em testes de retenção visual. Ao repetir padrões de cores e luzes, você exercita sua <strong>memória de curto prazo</strong> e concentração. Jogos de repetição são ferramentas essenciais para fortalecer conexões neurais e foco mental.
+            </p>
+        </article>
+
+    </div>
+</section>
     <footer class="game-footer">
         <p id="footer-text">Pixel Click® - Jogos de Raciocínio</p>
         <a href="politica.html" id="footer-policy">Política de Privacidade</a>
