@@ -233,9 +233,9 @@
 .seo-header-wrapper {
     width: 90%;
     max-width: 1100px;
-    margin: 20px auto 15px auto; /* Espaçamento reduzido para ficar próximo aos cards */
+    margin: 20px auto 15px auto;
     display: flex;
-    justify-content: center; /* Centraliza o título horizontalmente */
+    justify-content: center;
     align-items: center;
 }
 
@@ -454,13 +454,9 @@
         </div>
     </div>
     <div class="seo-header-wrapper">
-    <h2 id="ui-seo-title" class="seo-display-title">
-        <span class="prefix"></span> Entenda os nossos desafios cognitivos
-    </h2>
+    <h2 id="ui-seo-main-title" class="seo-display-title">Entenda os nossos desafios cognitivos</h2>
 </div>
 
-<section class="seo-container-advanced">
-    </section>
 <section class="seo-container-advanced">
     <div class="seo-scanline"></div>
     <div class="seo-grid">
@@ -468,31 +464,34 @@
         <article class="seo-box stroop-box">
             <div class="box-header">
                 <span class="status-dot"></span>
-                <h3>O QUE É O PIXEL STROOP?</h3>
+                <h3 id="ui-seo-stroop-title">O QUE É O EFEITO STROOP?</h3>
             </div>
-            <p>
-                O <strong>Pixel Stroop</strong> baseia-se num famoso teste neuropsicológico que mede a sua flexibilidade cognitiva. O <strong>Efeito Stroop</strong> ocorre quando o seu cérebro precisa processar informações conflitantes. Treinar com esses desafios ajuda a melhorar sua <strong>atenção seletiva</strong> e a velocidade de reação mental.
+            <p id="ui-seo-stroop-text">
+                O Pixel Stroop baseia-se num famoso teste neuropsicológico que mede a sua flexibilidade cognitiva. O Efeito Stroop ocorre quando o seu cérebro precisa processar informações conflitantes. Treinar com esses desafios ajuda a melhorar sua atenção seletiva e a velocidade de reação mental.
             </p>
+            <div id="ui-seo-stroop-footer" class="box-footer">ANALISE_COGNITIVA_OK</div>
         </article>
 
         <article class="seo-box trivia-box">
             <div class="box-header">
                 <span class="status-dot"></span>
-                <h3>BENEFÍCIOS DO PIXEL TRIVIA</h3>
+                <h3 id="ui-seo-trivia-title">BENEFÍCIOS DA TRIVIA</h3>
             </div>
-            <p>
-                Jogar <strong>Pixel Trivia</strong> e responder a <strong>quizzes de conhecimentos gerais</strong> estimula a memória de longo prazo e reduz o estresse. É o <strong>exercício cerebral</strong> perfeito para manter sua mente ativa, promovendo aprendizagem rápida através de um ambiente competitivo contra o relógio.
+            <p id="ui-seo-trivia-text">
+                Jogar Pixel Trivia e responder a quizzes de conhecimentos gerais estimula a memória de longo prazo e reduz o estresse. É o exercício cerebral perfeito para manter sua mente ativa, promovendo aprendizagem rápida e foco em um ambiente competitivo.
             </p>
+            <div id="ui-seo-trivia-footer" class="box-footer">BANCO_DE_DADOS_ATUALIZADO</div>
         </article>
 
         <article class="seo-box genius-box">
             <div class="box-header">
                 <span class="status-dot"></span>
-                <h3>COMO TREINAR A MEMÓRIA COM O PIXEL GENIUS?</h3>
+                <h3 id="ui-seo-genius-title">COMO TREINAR A MEMÓRIA?</h3>
             </div>
-            <p>
-                O <strong>Pixel Genius</strong> é um desafio de memória sequencial inspirado em testes de retenção visual. Ao repetir padrões de cores e luzes, você exercita sua <strong>memória de curto prazo</strong> e concentração. Jogos de repetição são ferramentas essenciais para fortalecer conexões neurais e foco mental.
+            <p id="ui-seo-genius-text">
+                O Pixel Genius é um desafio de memória sequencial inspirado em testes de retenção visual. Ao repetir padrões de cores e sons, você exercita sua memória de curto prazo e concentração. Jogos de repetição são ferramentas essenciais para fortalecer conexões neurais.
             </p>
+            <div id="ui-seo-genius-footer" class="box-footer">SEQUENCIA_MEMORIZADA_OK</div>
         </article>
 
     </div>
@@ -509,31 +508,126 @@
 
     <script>
     const hubLangs = {
-        pt: { subtitle: "ESCOLHA SEU DESAFIO", stroop: "PIXEL STROOP", pixelDesc: "Teste seus reflexos neste desafio de cores e números.", triviaTag: "PIXEL TRIVIA", triviaDesc: "Escolha uma categoria e desafie seus conhecimentos contra o relógio.", geniusTag: "PIXEL GENIUS", geniusDesc: "O clássico desafio de memória. Siga a sequência e não erre a luz.", play: "JOGAR", footerMain: "Pixel Click® - Jogos de Raciocínio", footerPolicy: "Política de Privacidade" },
-        en: { subtitle: "CHOOSE YOUR CHALLENGE", stroop: "PIXEL STROOP", pixelDesc: "Test your reflexes in this colors and numbers challenge.", triviaTag: "PIXEL TRIVIA", triviaDesc: "Pick a category and challenge your knowledge against the clock!.", geniusTag: "PIXEL GENIUS", geniusDesc: "The classic memory challenge. Follow the sequence and don't miss the light.", play: "PLAY NOW", footerMain: "Pixel Click® - Brain Games", footerPolicy: "Privacy Policy" },
-        fr: { subtitle: "CHOISISSEZ VOTRE DÉFI", stroop: "PIXEL STROOP", pixelDesc: "Testez vos réflexes dans este défi de couleurs et de nombres.", triviaTag: "PIXEL TRIVIA", triviaDesc: "Choisissez une catégorie et défiez vos connaissances contre la montre.", geniusTag: "PIXEL GENIUS", geniusDesc: "Le défi classique de mémoire. Suivez la séquence et ne manquez pas la lumière.", play: "JOUER", footerMain: "Pixel Click® - Jeux de Réflexion", footerPolicy: "Politique de Confidentialité" },
-        es: { subtitle: "ELIGE TU DESAFÍO", stroop: "PIXEL STROOP", pixelDesc: "Pon a prueba tus reflejos en este desafío de colores y números.", triviaTag: "PIXEL TRIVIA", triviaDesc: "Elige una categoría y desafía tus conocimientos contra el reloj.", geniusTag: "PIXEL GENIUS", geniusDesc: "O clássico desafio de memória. Siga a sequência e não erre a luz.", play: "JUGAR", footerMain: "Pixel Click® - Juegos Mentales", footerPolicy: "Política de Privacidad" }
-    };
+    pt: { 
+        subtitle: "ESCOLHA SEU DESAFIO", 
+        stroop: "PIXEL STROOP", 
+        pixelDesc: "Teste seus reflexos neste desafio de cores e números.", 
+        triviaTag: "PIXEL TRIVIA", 
+        triviaDesc: "Escolha uma categoria e desafie seus conhecimentos contra o relógio.", 
+        geniusTag: "PIXEL GENIUS", 
+        geniusDesc: "O clássico desafio de memória. Siga a sequência de cores.", 
+        play: "JOGAR", 
+        footerMain: "Pixel Click® - Jogos de Raciocínio", 
+        footerPolicy: "Política de Privacidade",
+        // Campos de SEO
+        seoTitle: "Entenda os nossos desafios cognitivos",
+        seoStroopH: "O QUE É O PIXEL STROOP?", 
+        seoStroopP: "O Pixel Stroop baseia-se num famoso teste neuropsicológico que mede a sua flexibilidade cognitiva. O Efeito Stroop ocorre quando o seu cérebro precisa processar informações conflitantes. Treinar com esses desafios ajuda a melhorar sua atenção seletiva e a velocidade de reação mental.",
+        seoTriviaH: "BENEFÍCIOS DO PIXEL TRIVIA", 
+        seoTriviaP: "Jogar Pixel Trivia e responder a quizzes de conhecimentos gerais estimula a memória de longo prazo e reduz o estresse. É o exercício cerebral perfeito para manter sua mente ativa através de um ambiente competitivo.",
+        seoGeniusH: "COMO TREINAR A MEMÓRIA?", 
+        seoGeniusP: "O Pixel Genius é um desafio de memória sequencial inspirado em testes de retenção visual. Ao repetir padrões de cores e luzes, você exercita sua memória de curto prazo e concentração. Jogos de repetição são excelentes para fortalecer conexões neurais."
+    },
+    en: { 
+        subtitle: "CHOOSE YOUR CHALLENGE", 
+        stroop: "PIXEL STROOP", 
+        pixelDesc: "Test your reflexes in this colors and numbers challenge.", 
+        triviaTag: "PIXEL TRIVIA", 
+        triviaDesc: "Pick a category and challenge your knowledge against the clock!", 
+        geniusTag: "PIXEL GENIUS", 
+        geniusDesc: "The classic memory challenge. Follow the sequence of colors.", 
+        play: "PLAY NOW", 
+        footerMain: "Pixel Click® - Brain Games", 
+        footerPolicy: "Privacy Policy",
+        // SEO Fields
+        seoTitle: "Understand our cognitive challenges",
+        seoStroopH: "WHAT IS PIXEL STROOP?", 
+        seoStroopP: "Pixel Stroop is based on a famous neuropsychological test that measures your cognitive flexibility. The Stroop Effect occurs when your brain processes conflicting information. Training helps improve selective attention and reaction speed.",
+        seoTriviaH: "BENEFITS OF PIXEL TRIVIA", 
+        seoTriviaP: "Playing Pixel Trivia and answering general knowledge quizzes stimulates long-term memory and reduces stress. It's the perfect brain exercise to keep your mind active in a competitive environment.",
+        seoGeniusH: "HOW TO TRAIN MEMORY?", 
+        seoGeniusP: "Pixel Genius is a sequential memory challenge inspired by visual retention tests. By repeating patterns of colors and lights, you exercise your short-term memory and focus. Great for neural connections."
+    },
+    fr: { 
+        subtitle: "CHOISISSEZ VOTRE DÉFI", 
+        stroop: "PIXEL STROOP", 
+        pixelDesc: "Testez vos réflexes dans ce défi de couleurs et de nombres.", 
+        triviaTag: "PIXEL TRIVIA", 
+        triviaDesc: "Choisissez une catégorie et défiez vos connaissances contre la montre.", 
+        geniusTag: "PIXEL GENIUS", 
+        geniusDesc: "Le défi classique de mémoire. Suivez la séquence de couleurs.", 
+        play: "JOUER", 
+        footerMain: "Pixel Click® - Jeux de Réflexion", 
+        footerPolicy: "Politique de Confidentialité",
+        // Champs SEO
+        seoTitle: "Comprendre nos défis cognitifs",
+        seoStroopH: "QU'EST-CE QUE LE PIXEL STROOP ?", 
+        seoStroopP: "Le Pixel Stroop est basé sur un test neuropsychologique célèbre. L'effet Stroop se produit lorsque votre cerveau traite des informations conflictuelles. L'entraînement aide à améliorer l'attention sélective.",
+        seoTriviaH: "AVANTAGES DE PIXEL TRIVIA", 
+        seoTriviaP: "Jouer à Pixel Trivia stimule la mémoire à long terme et réduit le stress. C'est l'exercice cérébral parfait pour rester actif grâce à un environnement compétitif.",
+        seoGeniusH: "COMMENT ENTRAÎNER LA MÉMOIRE ?", 
+        seoGeniusP: "Pixel Genius est un défi de mémoire séquentielle. En répétant les motifs, vous exercez votre mémoire à court terme et votre concentration. Outils essentiels pour renforcer les connexions neuronales."
+    },
+    es: { 
+        subtitle: "ELIGE TU DESAFÍO", 
+        stroop: "PIXEL STROOP", 
+        pixelDesc: "Pon a prueba tus reflejos en este desafío de colores y números.", 
+        triviaTag: "PIXEL TRIVIA", 
+        triviaDesc: "Elige una categoría y desafía tus conocimientos contra el reloj.", 
+        geniusTag: "PIXEL GENIUS", 
+        geniusDesc: "El clásico desafío de memoria. Sigue la secuencia de colores.", 
+        play: "JUGAR", 
+        footerMain: "Pixel Click® - Juegos Mentales", 
+        footerPolicy: "Política de Privacidad",
+        // Campos SEO
+        seoTitle: "Entiende nuestros desafíos cognitivos",
+        seoStroopH: "¿QUÉ ES PIXEL STROOP?", 
+        seoStroopP: "Pixel Stroop se basa en un famoso test neuropsicológico. El efecto Stroop ocurre cuando el cerebro procesa información conflictiva. Entrenar ayuda a mejorar la atención selectiva y la rapidez mental.",
+        seoTriviaH: "BENEFICIOS DE PIXEL TRIVIA", 
+        seoTriviaP: "Jugar Pixel Trivia estimula la memoria a largo plazo y reduce el estrés. Es el ejercicio cerebral perfecto para mantener la mente activa en un entorno competitivo.",
+        seoGeniusH: "¿CÓMO ENTRENAR LA MEMORIA?", 
+        seoGeniusP: "Pixel Genius es un desafío de memoria secuencial. Al repetir patrones de colores y luces, ejercitas tu memoria a corto plazo y concentración. Ideal para fortalecer las conexiones neuronales."
+    }
+};
 
     function setLang(l) {
-        localStorage.setItem('userLanguage', l);
-        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('btn-' + l).classList.add('active');
+    localStorage.setItem('userLanguage', l);
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    if(document.getElementById('btn-' + l)) document.getElementById('btn-' + l).classList.add('active');
 
-        const ui = hubLangs[l];
-        document.getElementById('ui-hub-subtitle').textContent = ui.subtitle;
-        document.getElementById('ui-stroop-tag').textContent = ui.stroop;
-        document.getElementById('ui-pixel-desc').textContent = ui.pixelDesc;
-        document.getElementById('ui-pixel-btn').textContent = ui.play;
-        document.getElementById('ui-trivia-tag').textContent = ui.triviaTag;
-        document.getElementById('ui-trivia-desc').textContent = ui.triviaDesc;
-        document.getElementById('ui-trivia-btn').textContent = ui.play;
-        document.getElementById('ui-genius-tag').textContent = ui.geniusTag;
-        document.getElementById('ui-genius-desc').textContent = ui.geniusDesc;
-        document.getElementById('ui-genius-btn').textContent = ui.play;
-        document.getElementById('footer-text').textContent = ui.footerMain;
-        document.getElementById('footer-policy').textContent = ui.footerPolicy;
-    }
+    const ui = hubLangs[l];
+
+    // --- Tradução do Hub de Jogos ---
+    document.getElementById('ui-hub-subtitle').textContent = ui.subtitle;
+    document.getElementById('ui-stroop-tag').textContent = ui.stroop;
+    document.getElementById('ui-pixel-desc').textContent = ui.pixelDesc;
+    document.getElementById('ui-pixel-btn').textContent = ui.play;
+    document.getElementById('ui-trivia-tag').textContent = ui.triviaTag;
+    document.getElementById('ui-trivia-desc').textContent = ui.triviaDesc;
+    document.getElementById('ui-trivia-btn').textContent = ui.play;
+    document.getElementById('ui-genius-tag').textContent = ui.geniusTag;
+    document.getElementById('ui-genius-desc').textContent = ui.geniusDesc;
+    document.getElementById('ui-genius-btn').textContent = ui.play;
+    document.getElementById('footer-text').textContent = ui.footerMain;
+    document.getElementById('footer-policy').textContent = ui.footerPolicy;
+
+    // --- Tradução da Seção SEO ---
+    document.getElementById('ui-seo-main-title').textContent = ui.seoTitle;    
+    // Stroop SEO
+    document.getElementById('ui-seo-stroop-title').textContent = ui.seoStroopH;
+    document.getElementById('ui-seo-stroop-text').textContent = ui.seoStroopP;
+    document.getElementById('ui-seo-stroop-footer').textContent = ui.seoStroopF;
+    
+    // Trivia SEO
+    document.getElementById('ui-seo-trivia-title').textContent = ui.seoTriviaH;
+    document.getElementById('ui-seo-trivia-text').textContent = ui.seoTriviaP;
+    document.getElementById('ui-seo-trivia-footer').textContent = ui.seoTriviaF;
+    
+    // Genius SEO
+    document.getElementById('ui-seo-genius-title').textContent = ui.seoGeniusH;
+    document.getElementById('ui-seo-genius-text').textContent = ui.seoGeniusP;
+    document.getElementById('ui-seo-genius-footer').textContent = ui.seoGeniusF;
+}
 
     function acceptCookies() {
         localStorage.setItem('cookiesAccepted', 'true');
