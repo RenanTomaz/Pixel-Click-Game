@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
-    <title>Pixel Click - Live Harry Potter</title>
+    <title>Pixel Click - Live GEEK, GAMES E CINEMA</title>
     <style>
         :root {
             --color-1: #ff4757; --color-2: #2e86de; --color-3: #2ed573; --color-4: #eccc68;
@@ -20,7 +20,7 @@
 
         #video-canvas {
             width: 90vw; height: 50.625vw; max-height: 85vh; max-width: 151vh;
-            position: relative; background-image: url('backgroundharrypotter.png');
+            position: relative; background-image: url('backgroundgeek.png');
             background-size: 100% 100%; background-repeat: no-repeat;
             background-position: center; display: flex; flex-direction: column;
             align-items: center; box-sizing: border-box; padding: 4vh 10vh;
@@ -82,21 +82,21 @@
 <body>
 
 <div id="overlay-start" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align: center;">
-    <h1 style="color:white; font-size: 5vh; margin-bottom: 4vh;">LIVE HARRY POTTER</h1>
+    <h1 style="color:white; font-size: 5vh; margin-bottom: 4vh;">LIVE GEEK, GAMES E CINEMA</h1>
     <button onclick="iniciarLive()" style="padding: 2.5vh 6vh; font-family:'Russo One', sans-serif; font-size: 3vh; background: var(--color-3); color:black; border:none; border-radius:15px; cursor:pointer;">
         INICIAR TRANSMISSÃO
     </button>
 </div>
 
 <div id="video-canvas">
-    <div class="fixed-title" id="main-title">QUIZ HARRY POTTER</div>
+    <div class="fixed-title" id="main-title">QUIZ GEEK, GAMES E CINEMA</div>
     <div class="question-text" id="q-text"></div>
     <div id="timer-container"><div id="timer-bar"></div></div>
     <div class="options-list" id="options-box"></div>
     <div class="footer-brand" id="footer-btn">WWW.PIXELCLICK.FUN</div>
 </div>
 
-<script src="harrypotter.js"></script>
+<script src="geek.js"></script>
 
 <script>
     let liveQueue = []; // Fila de perguntas que ainda não passaram
@@ -137,11 +137,11 @@
 
     function prepararFila() {
     // Verifica se os dados existem antes de tentar usar
-    if (typeof harrypotterData !== 'undefined' && harrypotterData.length > 0) {
-        liveQueue = [...harrypotterData].sort(() => Math.random() - 0.5);
+    if (typeof geekData !== 'undefined' && geekData.length > 0) {
+        liveQueue = [...geekData].sort(() => Math.random() - 0.5);
         console.log("Fila preparada com " + liveQueue.length + " perguntas.");
     } else {
-        console.error("Erro: harrypotterData não foi encontrado ou está vazio!");
+        console.error("Erro: geekData não foi encontrado ou está vazio!");
         // Opcional: Criar uma pergunta de fallback para a live não ficar preta
         liveQueue = [{q: "Carregando perguntas...", options: ["Aguarde", "Aguarde", "Aguarde", "Aguarde"], correct: 0}];
     }
