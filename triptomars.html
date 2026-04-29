@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Missão Ares-1: Partida</title>
+    <title>Missão Ares-1: Deep Space POV</title>
     <style>
         body, html {
             margin: 0; padding: 0; overflow: hidden;
@@ -12,7 +12,6 @@
 
         canvas { display: block; }
 
-        /* Interface POV do Cockpit */
         .cockpit-overlay {
             position: absolute; inset: 0;
             pointer-events: none;
@@ -27,25 +26,28 @@
         }
 
         .hud-bottom {
-            padding: 40px; background: rgba(0, 0, 0, 0.7);
-            border-top: 1px solid #00ffff; color: #00ffff;
-            min-height: 80px; text-align: center;
+            padding: 40px; background: rgba(0, 0, 0, 0.85);
+            border-top: 2px solid #00ffff; color: #00ffff;
+            min-height: 100px; text-align: center;
+            display: flex; flex-direction: column; justify-content: center;
         }
 
-        .status-box { border: 1px solid #00ffff; padding: 10px; background: rgba(0, 255, 255, 0.05); }
+        .status-box { border: 1px solid #00ffff; padding: 10px; background: rgba(0, 255, 255, 0.05); line-height: 1.5; }
 
         #btnIniciar {
             position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            padding: 20px 40px; background: transparent;
+            padding: 25px 50px; background: #000;
             color: #00ffff; border: 2px solid #00ffff;
-            font-size: 1.5rem; cursor: pointer; pointer-events: auto;
-            z-index: 10; transition: 0.3s;
+            font-size: 1.2rem; cursor: pointer; pointer-events: auto;
+            z-index: 100; transition: 0.4s;
+            letter-spacing: 2px;
         }
 
-        #btnIniciar:hover { background: #00ffff; color: #000; box-shadow: 0 0 30px #00ffff; }
+        #btnIniciar:hover { background: #00ffff; color: #000; box-shadow: 0 0 50px #00ffff; }
 
-        .char-label { font-weight: bold; text-transform: uppercase; margin-right: 10px; }
+        .char-label { font-weight: bold; text-transform: uppercase; margin-bottom: 8px; font-size: 1.1rem; }
+        #subtitle { font-size: 1.2rem; line-height: 1.4; color: #fff; }
     </style>
 </head>
 <body>
@@ -56,17 +58,17 @@
     <div class="cockpit-overlay">
         <div class="hud-top">
             <div class="status-box">
-                VELOCIDADE: <span id="vel">11.20</span> km/s<br>
+                VELOCIDADE: <span id="vel">11.18</span> km/s<br>
                 DISTÂNCIA TERRA: <span id="dist">384.400</span> km
             </div>
             <div class="status-box">
-                SISTEMA: OPERACIONAL<br>
-                SETOR: INJEÇÃO TRANS-MARCIANA
+                TRAJETÓRIA: INJEÇÃO TRANS-MARCIANA<br>
+                SISTEMA: OPERACIONAL (AISA v.4.2)
             </div>
         </div>
         <div class="hud-bottom">
             <div id="char-name" class="char-label"></div>
-            <div id="subtitle">Aguardando autorização do comando...</div>
+            <div id="subtitle">Aguardando inicialização dos sistemas de áudio...</div>
         </div>
     </div>
 
@@ -81,9 +83,20 @@
         canvas.height = window.innerHeight;
 
         let stars = [];
-        let speed = 0.5;
+        let speed = 0.4;
+        let voices = [];
 
-        for(let i=0; i<800; i++) {
+        // Inicialização de vozes
+        function loadVoices() {
+            voices = window.speechSynthesis.getVoices();
+        }
+        loadVoices();
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = loadVoices;
+        }
+
+        // Estrelas 3D
+        for(let i=0; i<1000; i++) {
             stars.push({
                 x: Math.random() * canvas.width - canvas.width/2,
                 y: Math.random() * canvas.height - canvas.height/2,
@@ -103,7 +116,7 @@
                 let sy = (s.y / s.z) * canvas.height;
                 let r = (1 - s.z / canvas.width) * 2;
                 ctx.beginPath();
-                ctx.fillStyle = "white";
+                ctx.fillStyle = "rgba(255, 255, 255, " + (1 - s.z/canvas.width) + ")";
                 ctx.arc(sx, sy, r, 0, Math.PI*2);
                 ctx.fill();
             });
@@ -113,73 +126,66 @@
         }
         draw();
 
-        // Roteiro com Áudio em Inglês e Legenda em Português
+        // Roteiro Científico
         const missionScript = [
             { 
-                time: 0, 
-                char: "AISA", 
-                audio: "Commander, trans-mars injection burn complete. Departure velocity set at eleven point two kilometers per second.",
-                translation: "Comandante, queima de inserção trans-marciana concluída. Velocidade de partida definida em 11.2 km/s."
+                time: 1, char: "AISA", 
+                audio: "Commander, trans-mars injection burn complete. Escape velocity verified at eleven point two kilometers per second.",
+                translation: "Comandante, queima de inserção trans-marciana concluída. Velocidade de escape verificada em 11.2 km/s."
             },
             { 
-                time: 8, 
-                char: "CONTROL", 
-                audio: "Alpha, this is Starbase. Ground radars confirm your trajectory. You are officially on your way to the red planet.",
-                translation: "Alpha, aqui é a Base Estelar. Os radares de solo confirmam sua trajetória. Vocês estão oficialmente a caminho do planeta vermelho."
+                time: 10, char: "CONTROL", 
+                audio: "Alpha, this is Houston Starbase. Telemetry confirms your trajectory. You are officially leaving Earth's hill sphere.",
+                translation: "Alpha, aqui é a Base Houston. A telemetria confirma sua trajetória. Vocês estão oficialmente deixando a esfera de influência da Terra."
             },
             { 
-                time: 18, 
-                char: "AISA", 
-                audio: "Propellant report: twelve hundred tons of methalox consumed. Current ship mass is within expected parameters.",
-                translation: "Relatório de propelente: 1.200 toneladas de metalox consumidas. Massa atual da nave dentro dos parâmetros esperados."
+                time: 20, char: "AISA", 
+                audio: "Fuel consumption report: twelve hundred tons of liquid methane and oxygen. Mass ratios are optimal for the long cruise phase.",
+                translation: "Relatório de combustível: 1.200 toneladas de metano líquido e oxigênio. A proporção de massa está ideal para a fase de cruzeiro."
             },
             { 
-                time: 28, 
-                char: "CONTROL", 
-                audio: "Copy that, Alpha. Telemetry shows the first stage has already begun its return to base. Clear skies ahead.",
-                translation: "Copiado, Alpha. A telemetria mostra que o primeiro estágio já iniciou o retorno para a base. Céu limpo à frente."
+                time: 32, char: "CONTROL", 
+                audio: "Copy that, Alpha. The booster has successfully landed on the drone ship. Enjoy the silent flight. Houston out.",
+                translation: "Copiado, Alpha. O propulsor pousou com sucesso na balsa. Aproveitem o voo silencioso. Houston encerrando."
             },
             { 
-                time: 40, 
-                char: "AISA", 
-                audio: "Attention. We are crossing the four hundred thousand kilometer mark. Earth's moon is now behind us.",
-                translation: "Atenção. Estamos cruzando a marca de 400.000 quilômetros. A Lua da Terra ficou para trás."
+                time: 45, char: "AISA", 
+                audio: "We are now four hundred thousand kilometers from Earth. Lunar orbit distance exceeded. Transitioning to deep space protocol.",
+                translation: "Estamos agora a 400.000 quilômetros da Terra. Distância da órbita lunar superada. Transicionando para o protocolo de espaço profundo."
             },
             { 
-                time: 50, 
-                char: "CONTROL", 
-                audio: "Alpha, enjoy the view while Earth is still visible. Soon, it will be just a pale blue dot in the void.",
-                translation: "Alpha, aproveite a vista enquanto a Terra ainda é visível. Em breve, ela será apenas um ponto azul no vácuo."
-            },
-            { 
-                time: 60, 
-                char: "AISA", 
-                audio: "Infrared sensors active. Engine cooling is following the predicted thermal curve. No risk of structural deformation.",
-                translation: "Sensores infravermelhos ativos. O resfriamento do motor segue a curva térmica prevista. Sem risco de deformação estrutural."
+                time: 58, char: "AISA", 
+                audio: "Infrared readings show engine bell cooling is steady. Thermal radiation is being dissipated as planned.",
+                translation: "Leituras infravermelhas mostram que o resfriamento da campânula do motor está estável. A radiação térmica está sendo dissipada como planejado."
             }
         ];
 
         function speak(character, text, subtitleText) {
             const msg = new SpeechSynthesisUtterance(text);
-            msg.lang = 'en-US'; // Áudio em Inglês
+            
+            // Força a voz para Inglês Americano ou Britânico
+            const engVoice = voices.find(v => v.lang === 'en-US') || voices.find(v => v.lang.includes('en'));
+            if(engVoice) msg.voice = engVoice;
+            
+            msg.lang = 'en-US';
             
             if(character === "AISA") {
-                msg.pitch = 1.2; msg.rate = 1.0;
+                msg.pitch = 1.3; msg.rate = 1.05;
                 charLabel.style.color = "#00ffff";
-                charLabel.innerText = "AISA:";
+                charLabel.innerText = "AISA (I.A. de Bordo):";
             } else {
                 msg.pitch = 0.8; msg.rate = 0.9;
                 charLabel.style.color = "#ffaa00";
-                charLabel.innerText = "CONTROLE:";
+                charLabel.innerText = "CONTROLE DE MISSÃO:";
             }
 
-            subtitle.innerText = subtitleText; // Legenda em Português
+            subtitle.innerText = subtitleText;
             window.speechSynthesis.speak(msg);
         }
 
         btn.addEventListener('click', () => {
             btn.style.display = 'none';
-            speed = 5; 
+            speed = 7; // Efeito de aceleração visual
             
             missionScript.forEach(step => {
                 setTimeout(() => {
@@ -187,13 +193,14 @@
                 }, step.time * 1000);
             });
 
+            // Simulador de Telemetria (Atualiza a cada 100ms para realismo)
             setInterval(() => {
-                let v = (11.20 + Math.random() * 0.05).toFixed(2);
+                let v = (11.18 + Math.random() * 0.02).toFixed(2);
                 let dStr = document.getElementById('dist').innerText.replace(/\./g, '');
-                let d = (parseInt(dStr) + 12).toLocaleString('pt-BR');
+                let d = (parseInt(dStr) + 24).toLocaleString('pt-BR');
                 document.getElementById('vel').innerText = v;
                 document.getElementById('dist').innerText = d;
-            }, 500);
+            }, 100);
         });
     </script>
 </body>
