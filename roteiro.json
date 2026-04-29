@@ -1,0 +1,173 @@
+[
+  {
+    "time": 1,
+    "char": "AISA",
+    "vel": 11.18,
+    "dist": 384400,
+    "phase": "ESCAPE",
+    "audio": "Commander, trans-mars injection burn complete. Escape velocity verified at eleven point two kilometers per second.",
+    "translation": "Comandante, queima de inserção completa. Velocidade de escape em 11.2 km/s."
+  },
+  {
+    "time": 7,
+    "char": "NARRATOR",
+    "vel": 11.18,
+    "dist": 385000,
+    "phase": "ESCAPE",
+    "audio": "A manobra que você acaba de presenciar é a Injeção Trans-Marciana. Para escapar da gravidade da Terra, precisamos atingir onze ponto dois quilômetros por segundo.",
+    "translation": "Física: Atingindo a velocidade de escape para vencer a gravidade."
+  },
+  {
+    "time": 15,
+    "char": "CONTROL",
+    "vel": 11.25,
+    "dist": 390000,
+    "phase": "ESCAPE",
+    "audio": "Alpha, Houston. Booster landing confirmed on the drone ship. Signal strength is maximum.",
+    "translation": "Houston: Pouso do propulsor confirmado. Sinal em força máxima."
+  },
+  {
+    "time": 25,
+    "char": "NARRATOR",
+    "vel": 11.3,
+    "dist": 400000,
+    "phase": "ESCAPE",
+    "audio": "Enquanto seguimos ao abismo, o primeiro estágio já retornou. A precisão é a chave da exploração moderna.",
+    "translation": "Engenharia: Reutilização de foguetes em missões interplanetárias."
+  },
+  {
+    "time": 35,
+    "char": "NARRATOR",
+    "vel": 12.52,
+    "dist": 400525,
+    "phase": "CRUISE",
+    "audio": "No vácuo não existe GPS. Usamos estrelas fixas para navegação precisa no vazio.",
+    "translation": "Astronomia: O uso de rastreadores de estrelas no vácuo."
+  },
+  {
+    "time": 47,
+    "char": "NARRATOR",
+    "vel": 16.65,
+    "dist": 400705,
+    "phase": "CRUISE",
+    "audio": "Sem peso, os ossos perdem cálcio. O exercício intenso é obrigatório para sobreviver.",
+    "translation": "Biologia: Efeitos da microgravidade no corpo humano."
+  },
+  {
+    "time": 59,
+    "char": "NARRATOR",
+    "vel": 14.72,
+    "dist": 400885,
+    "phase": "CRUISE",
+    "audio": "Longe da Terra, estamos expostos a núcleos de átomos pesados vindo de supernovas.",
+    "translation": "Ciência: O perigo da radiação ionizante no espaço profundo."
+  },
+  {
+    "time": 71,
+    "char": "NARRATOR",
+    "vel": 16.0,
+    "dist": 401065,
+    "phase": "CRUISE",
+    "audio": "O reator Sabatier converte o CO2 exalado em água e metano. Ciclo fechado.",
+    "translation": "Química: Sustentabilidade biológica em voos longos."
+  },
+  {
+    "time": 83,
+    "char": "AISA",
+    "vel": 16.6,
+    "dist": 401245,
+    "phase": "CRUISE",
+    "audio": "Solar wind density increasing. Thrusters adjusting to maintain attitude.",
+    "translation": "Astrofísica: Pressão do vento solar no casco da nave."
+  },
+  {
+    "time": 95,
+    "char": "CONTROL",
+    "vel": 14.85,
+    "dist": 401425,
+    "phase": "CRUISE",
+    "audio": "Alpha, signal delay is now 30 seconds. Welcome to deep space.",
+    "translation": "Isolamento: O início do atraso de sinal rádio."
+  },
+  {
+    "time": 107,
+    "char": "AISA",
+    "vel": 17.05,
+    "dist": 401605,
+    "phase": "CRUISE",
+    "audio": "Oxygen recovery system active. Carbon dioxide levels at zero point zero four percent.",
+    "translation": "Vida: Ciclo de oxigênio e níveis de CO2 estáveis."
+  },
+  {
+    "time": 119,
+    "char": "AISA",
+    "vel": 15.88,
+    "dist": 401785,
+    "phase": "CRUISE",
+    "audio": "Oxygen recovery system active. Carbon dioxide levels at zero point zero four percent.",
+    "translation": "Vida: Ciclo de oxigênio e níveis de CO2 estáveis."
+  },
+  {
+    "time": 131,
+    "char": "NARRATOR",
+    "vel": 15.78,
+    "dist": 401965,
+    "phase": "CRUISE",
+    "audio": "Sem peso, os ossos perdem cálcio. O exercício intenso é obrigatório para sobreviver.",
+    "translation": "Biologia: Efeitos da microgravidade no corpo humano."
+  },
+  {
+    "time": 143,
+    "char": "AISA",
+    "vel": 16.88,
+    "dist": 402145,
+    "phase": "CRUISE",
+    "audio": "Solar wind density increasing. Thrusters adjusting to maintain attitude.",
+    "translation": "Astrofísica: Pressão do vento solar no casco da nave."
+  },
+  {
+    "time": 155,
+    "char": "AISA",
+    "vel": 15.54,
+    "dist": 402325,
+    "phase": "CRUISE",
+    "audio": "Oxygen recovery system active. Carbon dioxide levels at zero point zero four percent.",
+    "translation": "Vida: Ciclo de oxigênio e níveis de CO2 estáveis."
+  },
+  {
+    "time": 167,
+    "char": "NARRATOR",
+    "vel": 14.37,
+    "dist": 402505,
+    "phase": "CRUISE",
+    "audio": "Longe da Terra, estamos expostos a núcleos de átomos pesados vindo de supernovas.",
+    "translation": "Ciência: O perigo da radiação ionizante no espaço profundo."
+  },
+  {
+    "time": 179,
+    "char": "CONTROL",
+    "vel": 17.0,
+    "dist": 402685,
+    "phase": "CRUISE",
+    "audio": "Alpha, signal delay is now 30 seconds. Welcome to deep space.",
+    "translation": "Isolamento: O início do atraso de sinal rádio."
+  },
+  {
+    "time": 191,
+    "char": "CONTROL",
+    "vel": 15.45,
+    "dist": 402865,
+    "phase": "CRUISE",
+    "audio": "Alpha, initiate Barbecue Roll to balance thermal loads across the hull.",
+    "translation": "Termodinâmica: Manobra de rotação para equilíbrio de calor."
+  },
+  {
+    "time": 203,
+    "char": "NARRATOR",
+    "vel": 15.99,
+    "dist": 403045,
+    "phase": "CRUISE",
+    "audio": "A cada quilômetro, a luz demora mais para chegar. O diálogo vira monólogo.",
+    "translation": "Física: A velocidade da luz limitando a comunicação."
+  }
+]
