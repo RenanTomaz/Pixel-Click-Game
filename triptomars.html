@@ -3,39 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ares-1: Missão Marte (External Data)</title>
+    <title>Ares-1 | Sistema de Navegação POV</title>
     <style>
-        body, html { margin: 0; padding: 0; overflow: hidden; background: #000; font-family: 'Courier New', monospace; }
+        :root {
+            --primary: #00f2ff;
+            --secondary: #ffaa00;
+            --bg-glass: rgba(0, 15, 25, 0.85);
+            --border-glow: 0 0 15px rgba(0, 242, 255, 0.4);
+        }
+
+        body, html { margin: 0; padding: 0; overflow: hidden; background: #000; font-family: 'Segoe UI', 'Courier New', monospace; color: #fff; }
+        
+        /* Canvas para Estrelas */
         canvas { display: block; position: absolute; top: 0; left: 0; z-index: 1; }
-        .cockpit-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 10; border: 40px solid #1a1a1a; border-image: linear-gradient(to bottom, #333, #111, #333) 1; box-shadow: inset 0 0 200px rgba(0, 255, 255, 0.15); }
-        .hud-top { display: flex; justify-content: space-between; padding: 40px; color: #00ffff; text-shadow: 0 0 8px #00ffff; z-index: 20; }
-        .hud-bottom { position: absolute; bottom: 0; left: 0; right: 0; padding: 40px; background: rgba(0, 15, 25, 0.95); border-top: 2px solid #00ffff; color: #00ffff; min-height: 150px; text-align: center; display: flex; flex-direction: column; justify-content: center; backdrop-filter: blur(10px); z-index: 20; }
-        .status-box { border: 2px solid #00ffff; padding: 15px; background: rgba(0, 255, 255, 0.08); }
-        #btnIniciar { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 25px 50px; background: #000; color: #00ffff; border: 2px solid #00ffff; font-size: 1.5rem; cursor: pointer; pointer-events: auto; z-index: 100; letter-spacing: 2px; }
-        #btnIniciar:disabled { opacity: 0.5; cursor: not-allowed; }
-        .char-label { font-weight: bold; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 2px; }
-        #subtitle { font-size: 1.3rem; color: #fff; line-height: 1.4; }
+
+        /* HUD - Cockpit Profissional */
+        .cockpit-frame {
+            position: absolute; inset: 0; pointer-events: none; z-index: 10;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: 
+                radial-gradient(circle at 50% 50%, transparent 60%, rgba(0,0,0,0.8) 100%),
+                linear-gradient(to bottom, #1a1a1a 40px, transparent 40px),
+                linear-gradient(to top, #1a1a1a 150px, transparent 150px);
+            box-shadow: inset 0 0 300px rgba(0, 0, 0, 0.9);
+        }
+
+        /* Displays de Telemetria */
+        .telemetry-grid {
+            position: absolute; top: 50px; left: 50px; right: 50px;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+            z-index: 20; pointer-events: none;
+        }
+
+        .data-node {
+            background: var(--bg-glass);
+            border-left: 4px solid var(--primary);
+            padding: 15px; backdrop-filter: blur(10px);
+            box-shadow: var(--border-glow);
+            clip-path: polygon(0 0, 100% 0, 100% 80%, 90% 100%, 0 100%);
+        }
+
+        .label { font-size: 0.7rem; letter-spacing: 2px; color: var(--primary); opacity: 0.8; }
+        .value { font-size: 1.5rem; font-weight: bold; font-family: 'Share Tech Mono', monospace; }
+
+        /* Centro de Legendas e Diálogos */
+        .dialogue-center {
+            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+            width: 80%; max-width: 900px; min-height: 120px;
+            background: var(--bg-glass);
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            padding: 30px; text-align: center; z-index: 20;
+            border-radius: 5px; backdrop-filter: blur(15px);
+        }
+
+        #char-name { font-size: 0.8rem; letter-spacing: 4px; margin-bottom: 10px; transition: color 0.3s; }
+        #subtitle { font-size: 1.2rem; line-height: 1.6; min-height: 3em; }
+
+        /* Botão de Ignição */
+        #btnIniciar {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            padding: 30px 60px; background: transparent; color: var(--primary);
+            border: 2px solid var(--primary); font-size: 1.2rem; cursor: pointer;
+            z-index: 100; letter-spacing: 5px; transition: 0.3s;
+            text-transform: uppercase;
+        }
+        #btnIniciar:hover:not(:disabled) { background: var(--primary); color: #000; box-shadow: 0 0 40px var(--primary); }
+        #btnIniciar:disabled { border-color: #444; color: #444; cursor: wait; }
+
+        /* Scanline FX */
+        .scanline {
+            width: 100%; height: 2px; background: rgba(0, 242, 255, 0.1);
+            position: absolute; top: 0; z-index: 30;
+            animation: scan 8s linear infinite; pointer-events: none;
+        }
+        @keyframes scan { from { top: 0; } to { top: 100%; } }
     </style>
 </head>
 <body>
 
-    <button id="btnIniciar">CARREGANDO ROTEIRO...</button>
+    <div class="scanline"></div>
+    <button id="btnIniciar">CARREGANDO SISTEMAS...</button>
     <canvas id="starfield"></canvas>
 
-    <div class="cockpit-overlay">
-        <div class="hud-top">
-            <div class="status-box">
-                VELOCIDADE: <span id="vel">0.00</span> km/s<br>
-                DISTÂNCIA: <span id="dist">0</span> km
+    <div class="cockpit-frame">
+        <div class="telemetry-grid">
+            <div class="data-node">
+                <div class="label">VELOCIDADE ATUAL</div>
+                <div class="value"><span id="vel">0.00</span> KM/S</div>
             </div>
-            <div class="status-box">
-                FASE: <span id="mission-phase">LOAD</span><br>
-                STATUS: <span id="sync-status">OFFLINE</span>
+            <div class="data-node">
+                <div class="label">MISSÃO / FASE</div>
+                <div class="value" id="mission-phase">STANDBY</div>
+            </div>
+            <div class="data-node">
+                <div class="label">DISTÂNCIA DA TERRA</div>
+                <div class="value"><span id="dist">0</span> KM</div>
             </div>
         </div>
-        <div class="hud-bottom">
-            <div id="char-name" class="char-label"></div>
-            <div id="subtitle">SINCRONIZANDO COM DATA-CENTER TERRESTRE...</div>
+
+        <div class="dialogue-center">
+            <div id="char-name" class="char-label">REDE DE DADOS</div>
+            <div id="subtitle">SINCRONIZANDO COM TERMINAL TERRESTRE...</div>
         </div>
     </div>
 
@@ -48,60 +116,80 @@
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        let stars = [], speed = 0.2, voices = [], missionScript = [];
+        let stars = [], speed = 0.1, voices = [], missionScript = [];
 
-        function loadVoices() { voices = window.speechSynthesis.getVoices(); }
+        // Inicialização de Vozes com preferência por Naturalidade
+        function loadVoices() { 
+            voices = window.speechSynthesis.getVoices(); 
+        }
         loadVoices();
         window.speechSynthesis.onvoiceschanged = loadVoices;
 
-        // Carregar Roteiro Externo
+        // Fetch do Roteiro (Certifique-se que o roteiro.json está na mesma pasta)
         async function fetchScript() {
             try {
+                // Simulação de delay para aspecto profissional
+                await new Promise(r => setTimeout(r, 1500));
                 const response = await fetch('roteiro.json');
                 missionScript = await response.json();
-                btn.innerText = "INICIAR MISSÃO";
+                btn.innerText = "INICIAR IGNICÃO";
                 btn.disabled = false;
-                subtitle.innerText = "SISTEMAS PRONTOS. AGUARDANDO COMANDO.";
+                subtitle.innerText = "SISTEMAS PRONTOS. AGUARDANDO COMANDO DO COMANDANTE.";
             } catch (e) {
-                btn.innerText = "ERRO DE CARREGAMENTO";
-                subtitle.innerText = "FALHA AO ACESSAR ROTEIRO.JSON.";
+                btn.innerText = "ERRO DE LINK";
+                subtitle.innerText = "FALHA CRÍTICA: ROTEIRO.JSON NÃO ENCONTRADO.";
             }
         }
         fetchScript();
 
-        for(let i=0; i<1000; i++) {
-            stars.push({ x: Math.random()*canvas.width - canvas.width/2, y: Math.random()*canvas.height - canvas.height/2, z: Math.random()*canvas.width });
+        // Estrelas com densidade variável
+        for(let i=0; i<1200; i++) {
+            stars.push({ 
+                x: Math.random()*canvas.width - canvas.width/2, 
+                y: Math.random()*canvas.height - canvas.height/2, 
+                z: Math.random()*canvas.width 
+            });
         }
 
         function draw() {
-            ctx.fillStyle = "black"; ctx.fillRect(0, 0, canvas.width, canvas.height); ctx.translate(canvas.width/2, canvas.height/2);
+            ctx.fillStyle = "#000"; ctx.fillRect(0, 0, canvas.width, canvas.height); ctx.translate(canvas.width/2, canvas.height/2);
             stars.forEach(s => {
                 s.z -= speed; if(s.z <= 0) s.z = canvas.width;
-                let sx = (s.x / s.z) * canvas.width, sy = (s.y / s.z) * canvas.height, r = (1 - s.z / canvas.width) * 2.5;
-                ctx.beginPath(); ctx.fillStyle = "rgba(200, 255, 255, " + (1 - s.z/canvas.width) + ")";
+                let sx = (s.x / s.z) * canvas.width, sy = (s.y / s.z) * canvas.height;
+                let r = (1 - s.z / canvas.width) * 3;
+                ctx.beginPath(); 
+                ctx.fillStyle = `rgba(180, 240, 255, ${1 - s.z/canvas.width})`;
                 ctx.arc(sx, sy, r, 0, Math.PI*2); ctx.fill();
             });
             ctx.setTransform(1,0,0,1,0,0); requestAnimationFrame(draw);
         }
         draw();
 
+        // Personalização Avançada das Vozes
         function speak(step) {
             const msg = new SpeechSynthesisUtterance(step.audio);
+            
             if (step.char === "NARRATOR") {
                 msg.voice = voices.find(v => v.lang.startsWith('pt')) || voices[0];
-                msg.lang = 'pt-BR'; msg.rate = 0.95;
-            } else {
-                msg.voice = voices.find(v => v.lang.startsWith('en')) || voices[0];
+                msg.lang = 'pt-BR'; 
+                msg.rate = 0.9; msg.pitch = 1.0;
+            } else if (step.char === "AISA") {
+                // Voz feminina, rápida e aguda para a IA
+                msg.voice = voices.find(v => v.lang.startsWith('en') && v.name.includes('Google')) || voices[0];
                 msg.lang = 'en-US'; 
-                msg.pitch = step.char === "AISA" ? 1.3 : 0.8;
-                msg.rate = step.char === "AISA" ? 1.1 : 0.85;
+                msg.pitch = 1.4; msg.rate = 1.1;
+            } else if (step.char === "CONTROL") {
+                // Voz masculina, lenta e grave para o rádio
+                msg.voice = voices.find(v => v.lang.startsWith('en') && !v.name.includes('Female')) || voices[0];
+                msg.lang = 'en-US'; 
+                msg.pitch = 0.7; msg.rate = 0.85;
             }
+
             msg.onstart = () => {
-                charLabel.innerText = `> ${step.char}:`;
-                charLabel.style.color = step.char === "AISA" ? "#00ffff" : (step.char === "CONTROL" ? "#ffaa00" : "#fff");
+                charLabel.innerText = `COMMS // ${step.char}`;
+                charLabel.style.color = step.char === "AISA" ? "#00f2ff" : (step.char === "CONTROL" ? "#ffaa00" : "#ffffff");
                 subtitle.innerText = step.translation;
                 document.getElementById('mission-phase').innerText = step.phase;
-                document.getElementById('sync-status').innerText = "LIVE LINK";
             };
             window.speechSynthesis.speak(msg);
         }
@@ -110,15 +198,22 @@
             window.speechSynthesis.cancel();
             btn.style.display = 'none';
             const startTime = Date.now();
+            
+            // Agendar falas
             missionScript.forEach(step => setTimeout(() => speak(step), step.time * 1000));
 
+            // Atualização de Telemetria Dinâmica
             setInterval(() => {
                 const elapsedSec = (Date.now() - startTime) / 1000;
                 let current = missionScript[0];
                 for (let s of missionScript) { if (elapsedSec >= s.time) current = s; }
+                
+                // Cálculo de velocidade e distância suaves
                 document.getElementById('vel').innerText = (current.vel + (Math.random() * 0.05)).toFixed(2);
                 document.getElementById('dist').innerText = Math.floor(current.dist + (current.vel * (elapsedSec - current.time))).toLocaleString('pt-BR');
-                speed = current.vel / 2.5;
+                
+                // Velocidade visual ajustada pela física da fase
+                speed = current.vel / 2.0;
             }, 100);
         });
     </script>
