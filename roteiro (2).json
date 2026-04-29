@@ -1,0 +1,101 @@
+[
+  {
+    "time": 1,
+    "char": "AISA",
+    "vel": 11.18,
+    "dist": 384400,
+    "phase": "ESCAPE",
+    "audio": "Commander, trans-mars injection burn complete. Escape velocity verified at eleven point two kilometers per second. We have officially cleared the atmosphere and are now on a direct intercept course with the red planet.",
+    "translation": "Comandante, queima de inserção trans-marciana completa. Velocidade de escape verificada em onze ponto dois quilômetros por segundo. Deixamos oficialmente a atmosfera e agora estamos em curso de interceptação direta com o planeta vermelho."
+  },
+  {
+    "time": 12,
+    "char": "NARRATOR",
+    "vel": 11.2,
+    "dist": 384800,
+    "phase": "ESCAPE",
+    "audio": "Ao cruzarmos a Linha de Kármán, a física muda. A partir deste momento, a nave não voa mais por aerodinâmica, mas por mecânica orbital. Iniciamos agora a fase de cruzeiro, onde cada grama de combustível e cada watt de energia serão monitorados para sustentar a vida no vazio absoluto.",
+    "translation": "Ao cruzarmos a Linha de Kármán, a física muda. A partir deste momento, a nave não voa mais por aerodinâmica, mas por mecânica orbital. Iniciamos agora a fase de cruzeiro, onde cada grama de combustível e cada watt de energia serão monitorados para sustentar a vida no vazio absoluto."
+  },
+  {
+    "time": 25,
+    "char": "CONTROL",
+    "vel": 11.25,
+    "dist": 390000,
+    "phase": "ESCAPE",
+    "audio": "Alpha, Houston. Booster landing confirmed on the drone ship. Signal strength is maximum. All secondary systems are green. Welcome to the long dark, Alpha.",
+    "translation": "Alpha, aqui é Houston. Pouso do propulsor confirmado na balsa. A força do sinal é máxima. Todos os sistemas secundários estão operacionais. Bem-vindos à longa escuridão, Alpha."
+  },
+  {
+    "time": 38,
+    "char": "NARRATOR",
+    "vel": 11.3,
+    "dist": 400000,
+    "phase": "ESCAPE",
+    "audio": "A precisão da exploração moderna permitiu que o propulsor retornasse à base enquanto seguimos ao abismo. Agora, nossa única conexão com o lar é um feixe de rádio que viaja à velocidade da luz.",
+    "translation": "A precisão da exploração moderna permitiu que o propulsor retornasse à base enquanto seguimos ao abismo. Agora, nossa única conexão com o lar é um feixe de rádio que viaja à velocidade da luz."
+  },
+  {
+    "time": 50,
+    "char": "NARRATOR",
+    "vel": 12.52,
+    "dist": 400525,
+    "phase": "CRUISE",
+    "audio": "No vácuo profundo não existe GPS. Para manter o curso, o computador de bordo utiliza rastreadores de estrelas, fixando-se em constelações distantes para calcular nossa posição com erro zero.",
+    "translation": "No vácuo profundo não existe GPS. Para manter o curso, o computador de bordo utiliza rastreadores de estrelas, fixando-se em constelações distantes para calcular nossa posição com erro zero."
+  },
+  {
+    "time": 65,
+    "char": "NARRATOR",
+    "vel": 16.65,
+    "dist": 400705,
+    "phase": "CRUISE",
+    "audio": "Sem o peso da gravidade, o corpo humano começa a se degradar. Os ossos perdem cálcio e os músculos atrofiam. Por isso, o exercício intenso e diário é a única forma de garantir que teremos força para caminhar em Marte.",
+    "translation": "Sem o peso da gravidade, o corpo humano começa a se degradar. Os ossos perdem cálcio e os músculos atrofiam. Por isso, o exercício intenso e diário é a única forma de garantir que teremos força para caminhar em Marte."
+  },
+  {
+    "time": 80,
+    "char": "NARRATOR",
+    "vel": 14.72,
+    "dist": 400885,
+    "phase": "CRUISE",
+    "audio": "Longe da Terra e da proteção da magnetosfera, estamos expostos a núcleos de átomos pesados vindos de supernovas distantes. A blindagem da nave é o que nos separa de mutações genéticas e doenças causadas pela radiação ionizante.",
+    "translation": "Longe da Terra e da proteção da magnetosfera, estamos expostos a núcleos de átomos pesados vindos de supernovas distantes. A blindagem da nave é o que nos separa de mutações genéticas e doenças causadas pela radiação ionizante."
+  },
+  {
+    "time": 95,
+    "char": "NARRATOR",
+    "vel": 16.0,
+    "dist": 401065,
+    "phase": "CRUISE",
+    "audio": "A química é nossa aliada. O reator Sabatier a bordo converte o gás carbônico exalado pelos astronautas em água e combustível metano, criando um ciclo de sustentabilidade essencial para voos de longa duração.",
+    "translation": "A química é nossa aliada. O reator Sabatier a bordo converte o gás carbônico exalado pelos astronautas em água e combustível metano, criando um ciclo de sustentabilidade essencial para voos de longa duração."
+  },
+  {
+    "time": 110,
+    "char": "AISA",
+    "vel": 16.6,
+    "dist": 401245,
+    "phase": "CRUISE",
+    "audio": "Solar wind density is increasing significantly. Adjusting thrusters now to maintain attitude and orientation.",
+    "translation": "A densidade do vento solar está aumentando significativamente. Ajustando os propulsores agora para manter a atitude e a orientação."
+  },
+  {
+    "time": 120,
+    "char": "CONTROL",
+    "vel": 14.85,
+    "dist": 401425,
+    "phase": "CRUISE",
+    "audio": "Alpha, be advised. Signal delay is now approaching thirty seconds. The distance is growing. Welcome to deep space, commander.",
+    "translation": "Alpha, esteja ciente. O atraso de sinal está agora se aproximando de trinta segundos. A distância está aumentando. Bem-vindo ao espaço profundo, comandante."
+  },
+  {
+    "time": 135,
+    "char": "AISA",
+    "vel": 17.05,
+    "dist": 401605,
+    "phase": "CRUISE",
+    "audio": "Environmental systems update. Oxygen recovery system is active and stable. Carbon dioxide levels are currently at zero point zero four percent.",
+    "translation": "Atualização dos sistemas ambientais. O sistema de recuperação de oxigênio está ativo e estável. Os níveis de dióxido de carbono estão atualmente em zero ponto zero quatro por cento."
+  }
+]
