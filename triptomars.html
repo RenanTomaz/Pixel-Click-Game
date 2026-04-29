@@ -3,64 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Missão Ares-1: Deep Space POV</title>
+    <title>Ares-1: Missão Marte (External Data)</title>
     <style>
-        body, html {
-            margin: 0; padding: 0; overflow: hidden;
-            background: #000; font-family: 'Courier New', monospace;
-        }
-        canvas { display: block; }
-        .cockpit-overlay {
-            position: absolute; inset: 0;
-            pointer-events: none;
-            border: 30px solid #1a1a1a;
-            box-shadow: inset 0 0 150px rgba(0, 255, 255, 0.1);
-            display: flex; flex-direction: column; justify-content: space-between;
-        }
-        .hud-top {
-            display: flex; justify-content: space-between;
-            padding: 40px; color: #00ffff; text-shadow: 0 0 10px #00ffff;
-        }
-        .hud-bottom {
-            padding: 40px; background: rgba(0, 0, 0, 0.85);
-            border-top: 2px solid #00ffff; color: #00ffff;
-            min-height: 100px; text-align: center;
-            display: flex; flex-direction: column; justify-content: center;
-        }
-        .status-box { border: 1px solid #00ffff; padding: 10px; background: rgba(0, 255, 255, 0.05); line-height: 1.5; }
-        #btnIniciar {
-            position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 25px 50px; background: #000;
-            color: #00ffff; border: 2px solid #00ffff;
-            font-size: 1.2rem; cursor: pointer; pointer-events: auto;
-            z-index: 100; transition: 0.4s;
-            letter-spacing: 2px;
-        }
-        #btnIniciar:hover { background: #00ffff; color: #000; box-shadow: 0 0 50px #00ffff; }
-        .char-label { font-weight: bold; text-transform: uppercase; margin-bottom: 8px; font-size: 1.1rem; }
-        #subtitle { font-size: 1.2rem; line-height: 1.4; color: #fff; }
+        body, html { margin: 0; padding: 0; overflow: hidden; background: #000; font-family: 'Courier New', monospace; }
+        canvas { display: block; position: absolute; top: 0; left: 0; z-index: 1; }
+        .cockpit-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 10; border: 40px solid #1a1a1a; border-image: linear-gradient(to bottom, #333, #111, #333) 1; box-shadow: inset 0 0 200px rgba(0, 255, 255, 0.15); }
+        .hud-top { display: flex; justify-content: space-between; padding: 40px; color: #00ffff; text-shadow: 0 0 8px #00ffff; z-index: 20; }
+        .hud-bottom { position: absolute; bottom: 0; left: 0; right: 0; padding: 40px; background: rgba(0, 15, 25, 0.95); border-top: 2px solid #00ffff; color: #00ffff; min-height: 150px; text-align: center; display: flex; flex-direction: column; justify-content: center; backdrop-filter: blur(10px); z-index: 20; }
+        .status-box { border: 2px solid #00ffff; padding: 15px; background: rgba(0, 255, 255, 0.08); }
+        #btnIniciar { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 25px 50px; background: #000; color: #00ffff; border: 2px solid #00ffff; font-size: 1.5rem; cursor: pointer; pointer-events: auto; z-index: 100; letter-spacing: 2px; }
+        #btnIniciar:disabled { opacity: 0.5; cursor: not-allowed; }
+        .char-label { font-weight: bold; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 2px; }
+        #subtitle { font-size: 1.3rem; color: #fff; line-height: 1.4; }
     </style>
 </head>
 <body>
 
-    <button id="btnIniciar">INICIAR SEQUÊNCIA DE PARTIDA</button>
+    <button id="btnIniciar">CARREGANDO ROTEIRO...</button>
     <canvas id="starfield"></canvas>
 
     <div class="cockpit-overlay">
         <div class="hud-top">
             <div class="status-box">
-                VELOCIDADE: <span id="vel">11.18</span> km/s<br>
-                DISTÂNCIA TERRA: <span id="dist">384.400</span> km
+                VELOCIDADE: <span id="vel">0.00</span> km/s<br>
+                DISTÂNCIA: <span id="dist">0</span> km
             </div>
             <div class="status-box">
-                TRAJETÓRIA: INJEÇÃO TRANS-MARCIANA<br>
-                SISTEMA: OPERACIONAL (AISA v.4.2)
+                FASE: <span id="mission-phase">LOAD</span><br>
+                STATUS: <span id="sync-status">OFFLINE</span>
             </div>
         </div>
         <div class="hud-bottom">
             <div id="char-name" class="char-label"></div>
-            <div id="subtitle">Aguardando inicialização dos sistemas...</div>
+            <div id="subtitle">SINCRONIZANDO COM DATA-CENTER TERRESTRE...</div>
         </div>
     </div>
 
@@ -73,146 +48,77 @@
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+        let stars = [], speed = 0.2, voices = [], missionScript = [];
 
-        let stars = [];
-        let speed = 0.4;
-        let voices = [];
-
-        function loadVoices() {
-            voices = window.speechSynthesis.getVoices();
-        }
+        function loadVoices() { voices = window.speechSynthesis.getVoices(); }
         loadVoices();
-        if (speechSynthesis.onvoiceschanged !== undefined) {
-            speechSynthesis.onvoiceschanged = loadVoices;
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+
+        // Carregar Roteiro Externo
+        async function fetchScript() {
+            try {
+                const response = await fetch('roteiro.json');
+                missionScript = await response.json();
+                btn.innerText = "INICIAR MISSÃO";
+                btn.disabled = false;
+                subtitle.innerText = "SISTEMAS PRONTOS. AGUARDANDO COMANDO.";
+            } catch (e) {
+                btn.innerText = "ERRO DE CARREGAMENTO";
+                subtitle.innerText = "FALHA AO ACESSAR ROTEIRO.JSON.";
+            }
         }
+        fetchScript();
 
         for(let i=0; i<1000; i++) {
-            stars.push({
-                x: Math.random() * canvas.width - canvas.width/2,
-                y: Math.random() * canvas.height - canvas.height/2,
-                z: Math.random() * canvas.width
-            });
+            stars.push({ x: Math.random()*canvas.width - canvas.width/2, y: Math.random()*canvas.height - canvas.height/2, z: Math.random()*canvas.width });
         }
 
         function draw() {
-            ctx.fillStyle = "black";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.translate(canvas.width/2, canvas.height/2);
-
+            ctx.fillStyle = "black"; ctx.fillRect(0, 0, canvas.width, canvas.height); ctx.translate(canvas.width/2, canvas.height/2);
             stars.forEach(s => {
-                s.z -= speed;
-                if(s.z <= 0) s.z = canvas.width;
-                let sx = (s.x / s.z) * canvas.width;
-                let sy = (s.y / s.z) * canvas.height;
-                let r = (1 - s.z / canvas.width) * 2;
-                ctx.beginPath();
-                ctx.fillStyle = "rgba(255, 255, 255, " + (1 - s.z/canvas.width) + ")";
-                ctx.arc(sx, sy, r, 0, Math.PI*2);
-                ctx.fill();
+                s.z -= speed; if(s.z <= 0) s.z = canvas.width;
+                let sx = (s.x / s.z) * canvas.width, sy = (s.y / s.z) * canvas.height, r = (1 - s.z / canvas.width) * 2.5;
+                ctx.beginPath(); ctx.fillStyle = "rgba(200, 255, 255, " + (1 - s.z/canvas.width) + ")";
+                ctx.arc(sx, sy, r, 0, Math.PI*2); ctx.fill();
             });
-
-            ctx.setTransform(1,0,0,1,0,0);
-            requestAnimationFrame(draw);
+            ctx.setTransform(1,0,0,1,0,0); requestAnimationFrame(draw);
         }
         draw();
 
-        const missionScript = [
-            { 
-                time: 1, char: "AISA", 
-                audio: "Commander, trans-mars injection burn complete. Escape velocity verified at eleven point two kilometers per second.",
-                translation: "Comandante, queima de inserção trans-marciana concluída. Velocidade de escape verificada em 11.2 km/s."
-            },
-            { 
-                time: 10, char: "CONTROL", 
-                audio: "Alpha, this is Houston Starbase. Telemetry confirms your trajectory. You are officially leaving Earth's hill sphere.",
-                translation: "Alpha, aqui é a Base Houston. A telemetria confirma sua trajetória. Vocês estão oficialmente deixando a esfera de influência da Terra."
-            },
-            { 
-                time: 20, char: "AISA", 
-                audio: "Fuel consumption report: twelve hundred tons of liquid methane and oxygen. Mass ratios are optimal for the long cruise phase.",
-                translation: "Relatório de combustível: 1.200 toneladas de metano líquido e oxigênio. A proporção de massa está ideal para a fase de cruzeiro."
-            },
-            { 
-                time: 32, char: "CONTROL", 
-                audio: "Copy that, Alpha. The booster has successfully landed on the drone ship. Enjoy the silent flight. Houston out.",
-                translation: "Copiado, Alpha. O propulsor pousou com sucesso na balsa. Aproveitem o voo silencioso. Houston encerrando."
-            },
-            { 
-                time: 45, char: "AISA", 
-                audio: "We are now four hundred thousand kilometers from Earth. Lunar orbit distance exceeded. Transitioning to deep space protocol.",
-                translation: "Estamos agora a 400.000 quilômetros da Terra. Distância da órbita lunar superada. Transicionando para o protocolo de espaço profundo."
-            },
-            { 
-                time: 58, char: "AISA", 
-                audio: "Infrared readings show engine bell cooling is steady. Thermal radiation is being dissipated as planned.",
-                translation: "Leituras infravermelhas mostram que o resfriamento da campânula do motor está estável. A radiação térmica está sendo dissipada como planejado."
-            },
-            { 
-                time: 100, char: "AISA", 
-                audio: "External radiation sensors reporting zero point four millisieverts. Activating secondary shielding for the biological storage unit.",
-                translation: "Sensores de radiação externa relatando 0.4 milisieverts. Ativando blindagem secundária para a unidade de armazenamento biológico."
-            },
-            { 
-                time: 160, char: "CONTROL", 
-                audio: "Alpha, Houston. We need a manual recalibration of the star tracker. Confirm when the Orion constellation is centered in your secondary lens.",
-                translation: "Alpha, aqui é Houston. Precisamos de uma recalibragem manual do rastreador de estrelas. Confirme quando a constelação de Órion estiver centrada."
-            },
-            { 
-                time: 220, char: "AISA", 
-                audio: "Recalibration complete. Navigation computer is now synced with the Deep Space Network. Precision is within three centimeters.",
-                translation: "Recalibragem concluída. O computador de navegação está sincronizado com a Rede de Espaço Profundo. Precisão de 3 centímetros."
-            },
-            { 
-                time: 280, char: "AISA", 
-                audio: "Initiating daily hydroponics check. Nutrient levels in the lettuce and radish modules are stable. Growth rate is consistent with Earth baseline.",
-                translation: "Iniciando checagem diária de hidroponia. Níveis de nutrientes nos módulos de alface e rabanete estão estáveis. Taxa de crescimento nominal."
-            },
-            { 
-                time: 340, char: "CONTROL", 
-                audio: "Alpha, we are receiving your biometric data. Heart rate is slightly elevated. Drink four hundred milliliters of electrolyte solution.",
-                translation: "Alpha, estamos recebendo seus dados biométricos. Frequência cardíaca levemente elevada. Beba 400 ml de solução eletrolítica."
-            },
-            { 
-                time: 400, char: "AISA", 
-                audio: "Internal pressure update: Nitrogen levels at seventy-eight percent. Maintaining standard sea-level atmosphere simulation.",
-                translation: "Atualização de pressão interna: Níveis de nitrogênio em 78%. Mantendo simulação de atmosfera padrão ao nível do mar."
-            }
-        ];
-
-        function speak(character, text, subtitleText) {
-            const msg = new SpeechSynthesisUtterance(text);
-            const engVoice = voices.find(v => v.lang === 'en-US') || voices.find(v => v.lang.includes('en'));
-            if(engVoice) msg.voice = engVoice;
-            msg.lang = 'en-US';
-            
-            if(character === "AISA") {
-                msg.pitch = 1.3; msg.rate = 1.05;
-                charLabel.style.color = "#00ffff";
-                charLabel.innerText = "AISA (I.A. de Bordo):";
+        function speak(step) {
+            const msg = new SpeechSynthesisUtterance(step.audio);
+            if (step.char === "NARRATOR") {
+                msg.voice = voices.find(v => v.lang.startsWith('pt')) || voices[0];
+                msg.lang = 'pt-BR'; msg.rate = 0.95;
             } else {
-                msg.pitch = 0.8; msg.rate = 0.9;
-                charLabel.style.color = "#ffaa00";
-                charLabel.innerText = "CONTROLE DE MISSÃO:";
+                msg.voice = voices.find(v => v.lang.startsWith('en')) || voices[0];
+                msg.lang = 'en-US'; 
+                msg.pitch = step.char === "AISA" ? 1.3 : 0.8;
+                msg.rate = step.char === "AISA" ? 1.1 : 0.85;
             }
-            subtitle.innerText = subtitleText;
+            msg.onstart = () => {
+                charLabel.innerText = `> ${step.char}:`;
+                charLabel.style.color = step.char === "AISA" ? "#00ffff" : (step.char === "CONTROL" ? "#ffaa00" : "#fff");
+                subtitle.innerText = step.translation;
+                document.getElementById('mission-phase').innerText = step.phase;
+                document.getElementById('sync-status').innerText = "LIVE LINK";
+            };
             window.speechSynthesis.speak(msg);
         }
 
         btn.addEventListener('click', () => {
-            window.speechSynthesis.cancel(); // Limpa áudios pendentes ao iniciar
+            window.speechSynthesis.cancel();
             btn.style.display = 'none';
-            speed = 7; 
-            missionScript.forEach(step => {
-                setTimeout(() => {
-                    speak(step.char, step.audio, step.translation);
-                }, step.time * 1000);
-            });
+            const startTime = Date.now();
+            missionScript.forEach(step => setTimeout(() => speak(step), step.time * 1000));
+
             setInterval(() => {
-                let v = (11.18 + Math.random() * 0.02).toFixed(2);
-                let dStr = document.getElementById('dist').innerText.replace(/\./g, '');
-                let d = (parseInt(dStr) + 24).toLocaleString('pt-BR');
-                document.getElementById('vel').innerText = v;
-                document.getElementById('dist').innerText = d;
+                const elapsedSec = (Date.now() - startTime) / 1000;
+                let current = missionScript[0];
+                for (let s of missionScript) { if (elapsedSec >= s.time) current = s; }
+                document.getElementById('vel').innerText = (current.vel + (Math.random() * 0.05)).toFixed(2);
+                document.getElementById('dist').innerText = Math.floor(current.dist + (current.vel * (elapsedSec - current.time))).toLocaleString('pt-BR');
+                speed = current.vel / 2.5;
             }, 100);
         });
     </script>
