@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Missão Ares-1: Partida</title>
+    <style>
+        body, html {
+            margin: 0; padding: 0; overflow: hidden;
+            background: #000; font-family: 'Courier New', monospace;
+        }
+
+        canvas { display: block; }
+
+        /* Interface POV do Cockpit */
+        .cockpit-overlay {
+            position: absolute; inset: 0;
+            pointer-events: none;
+            border: 30px solid #1a1a1a;
+            box-shadow: inset 0 0 150px rgba(0, 255, 255, 0.1);
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+
+        .hud-top {
+            display: flex; justify-content: space-between;
+            padding: 40px; color: #00ffff; text-shadow: 0 0 10px #00ffff;
+        }
+
+        .hud-bottom {
+            padding: 40px; background: rgba(0, 0, 0, 0.7);
+            border-top: 1px solid #00ffff; color: #00ffff;
+            min-height: 80px; text-align: center;
+        }
+
+        .status-box { border: 1px solid #00ffff; padding: 10px; background: rgba(0, 255, 255, 0.05); }
+
+        #btnIniciar {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px 40px; background: transparent;
+            color: #00ffff; border: 2px solid #00ffff;
+            font-size: 1.5rem; cursor: pointer; pointer-events: auto;
+            z-index: 10; transition: 0.3s;
+        }
+
+        #btnIniciar:hover { background: #00ffff; color: #000; box-shadow: 0 0 30px #00ffff; }
+
+        .log-msg { font-size: 0.9rem; opacity: 0.8; margin-top: 5px; }
+        
+        .char-label { font-weight: bold; text-transform: uppercase; margin-right: 10px; }
+    </style>
+</head>
+<body>
+
+    <button id="btnIniciar">INICIAR SEQUÊNCIA DE PARTIDA</button>
+    <canvas id="starfield"></canvas>
+
+    <div class="cockpit-overlay">
+        <div class="hud-top">
+            <div class="status-box">
+                VELOCIDADE: <span id="vel">11.20</span> km/s<br>
+                DISTÂNCIA TERRA: <span id="dist">384.400</span> km
+            </div>
+            <div class="status-box">
+                SISTEMA: NOMINAL<br>
+                SETOR: TRANS-MARS INJECTION
+            </div>
+        </div>
+        <div class="hud-bottom">
+            <div id="char-name" class="char-label"></div>
+            <div id="subtitle">Aguardando autorização do comando...</div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+        const btn = document.getElementById('btnIniciar');
+        const subtitle = document.getElementById('subtitle');
+        const charLabel = document.getElementById('char-name');
+
+        // Configuração do Canvas
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let stars = [];
+        let speed = 0.5;
+
+        for(let i=0; i<800; i++) {
+            stars.push({
+                x: Math.random() * canvas.width - canvas.width/2,
+                y: Math.random() * canvas.height - canvas.height/2,
+                z: Math.random() * canvas.width
+            });
+        }
+
+        function draw() {
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.translate(canvas.width/2, canvas.height/2);
+
+            stars.forEach(s => {
+                s.z -= speed;
+                if(s.z <= 0) s.z = canvas.width;
+                let sx = (s.x / s.z) * canvas.width;
+                let sy = (s.y / s.z) * canvas.height;
+                let r = (1 - s.z / canvas.width) * 2;
+                ctx.beginPath();
+                ctx.fillStyle = "white";
+                ctx.arc(sx, sy, r, 0, Math.PI*2);
+                ctx.fill();
+            });
+
+            ctx.setTransform(1,0,0,1,0,0);
+            requestAnimationFrame(draw);
+        }
+        draw();
+
+        // Lógica de Narração
+        const roteiroBloco1 = [
+            { tempo: 0, char: "AISA", texto: "Comandante, queima de inserção trans-marciana finalizada. Vetor de saída estabelecido em onze ponto dois quilômetros por segundo." },
+            { tempo: 8, char: "CONTROLE", texto: "Alpha, aqui é Starbase. Nossos radares de solo confirmam sua trajetória. Vocês estão oficialmente a caminho do planeta vermelho." },
+            { tempo: 18, char: "AISA", texto: "Relatório de propelente: mil e duzentas toneladas de metano e oxigênio líquido consumidas. Massa atual da nave conforme o esperado." },
+            { tempo: 28, char: "CONTROLE", texto: "Copiado, Alpha. A telemetria indica que o primeiro estágio já iniciou o retorno para a base. O céu está limpo." },
+            { tempo: 40, char: "AISA", texto: "Atenção. Estamos cruzando a marca de quatrocentos mil quilômetros. A influência gravitacional da Lua ficou para trás." },
+            { tempo: 50, char: "CONTROLE", texto: "Alpha, aproveitem a vista enquanto a Terra ainda é visível. Em breve, ela será apenas um ponto azul no vácuo." },
+            { tempo: 60, char: "AISA", texto: "Sensores infravermelhos ativados. O resfriamento das tubeiras segue a curva térmica prevista. Sem risco de deformação." }
+        ];
+
+        function falar(personagem, texto) {
+            const msg = new SpeechSynthesisUtterance(texto);
+            msg.lang = 'pt-BR';
+            
+            if(personagem === "AISA") {
+                msg.pitch = 1.2; msg.rate = 1.0;
+                charLabel.style.color = "#00ffff";
+            } else {
+                msg.pitch = 0.8; msg.rate = 0.9;
+                charLabel.style.color = "#ffaa00";
+            }
+
+            charLabel.innerText = personagem + ":";
+            subtitle.innerText = texto;
+            window.speechSynthesis.speak(msg);
+        }
+
+        btn.addEventListener('click', () => {
+            btn.style.display = 'none';
+            speed = 5; // Aumenta a velocidade visual
+            
+            roteiroBloco1.forEach(fala => {
+                setTimeout(() => {
+                    falar(fala.char, fala.texto);
+                }, fala.tempo * 1000);
+            });
+
+            // Simulador de telemetria variando
+            setInterval(() => {
+                let v = (11.20 + Math.random() * 0.05).toFixed(2);
+                let d = (parseFloat(document.getElementById('dist').innerText.replace('.','')) + 1.2).toLocaleString('pt-BR');
+                document.getElementById('vel').innerText = v;
+                document.getElementById('dist').innerText = d;
+            }, 500);
+        });
+    </script>
+</body>
+</html>
