@@ -158,6 +158,89 @@
                 audio: "Infrared readings show engine bell cooling is steady. Thermal radiation is being dissipated as planned.",
                 translation: "Leituras infravermelhas mostram que o resfriamento da campânula do motor está estável. A radiação térmica está sendo dissipada como planejado."
             }
+                    // --- CONTINUAÇÃO DO BLOCO DE CRUZEIRO (DENSIDADE ALTA) ---
+        { 
+            time: 100, char: "AISA", 
+            audio: "External radiation sensors reporting zero point four millisieverts. Activating secondary shielding for the biological storage unit.",
+            translation: "Sensores de radiação externa relatando 0.4 milisieverts. Ativando blindagem secundária para a unidade de armazenamento biológico."
+        },
+        { 
+            time: 160, char: "CONTROL", 
+            audio: "Alpha, Houston. We need a manual recalibration of the star tracker. Confirm when the Orion constellation is centered in your secondary lens.",
+            translation: "Alpha, aqui é Houston. Precisamos de uma recalibragem manual do rastreador de estrelas. Confirme quando a constelação de Órion estiver centrada."
+        },
+        { 
+            time: 220, char: "AISA", 
+            audio: "Recalibration complete. Navigation computer is now synced with the Deep Space Network. Precision is within three centimeters.",
+            translation: "Recalibragem concluída. O computador de navegação está sincronizado com a Rede de Espaço Profundo. Precisão de 3 centímetros."
+        },
+        { 
+            time: 280, char: "AISA", 
+            audio: "Initiating daily hydroponics check. Nutrient levels in the lettuce and radish modules are stable. Growth rate is consistent with Earth baseline.",
+            translation: "Iniciando checagem diária de hidroponia. Níveis de nutrientes nos módulos de alface e rabanete estão estáveis. Taxa de crescimento nominal."
+        },
+        { 
+            time: 340, char: "CONTROL", 
+            audio: "Alpha, we are receiving your biometric data. Heart rate is slightly elevated. Drink four hundred milliliters of electrolyte solution.",
+            translation: "Alpha, estamos recebendo seus dados biométricos. Frequência cardíaca levemente elevada. Beba 400 ml de solução eletrolítica."
+        },
+        { 
+            time: 400, char: "AISA", 
+            audio: "Internal pressure update: Nitrogen levels at seventy-eight percent. Maintaining standard sea-level atmosphere simulation.",
+            translation: "Atualização de pressão interna: Níveis de nitrogênio em 78%. Mantendo simulação de atmosfera padrão ao nível do mar."
+        },
+        { 
+            time: 460, char: "AISA", 
+            audio: "Checking hull integrity. Micro-meteoroid shield reports no impacts in the last twenty-four hours. Vacuum seal is perfect.",
+            translation: "Verificando integridade do casco. O escudo contra micrometeoroides não relata impactos nas últimas 24 horas. Selo de vácuo perfeito."
+        },
+        { 
+            time: 520, char: "CONTROL", 
+            audio: "Alpha, signal delay is now reaching ninety seconds. Switching to packet-based data bursts. Next high-gain window in two hours.",
+            translation: "Alpha, o atraso de sinal está atingindo 90 segundos. Mudando para rajadas de dados em pacotes. Próxima janela de ganho em 2 horas."
+        },
+        { 
+            time: 600, char: "AISA", 
+            audio: "The Sabatier reactor test run was successful. We can now confirm that methane production on the Martian surface is theoretically viable.",
+            translation: "O teste do reator Sabatier foi um sucesso. Podemos confirmar que a produção de metano na superfície marciana é teoricamente viável."
+        },
+        { 
+            time: 680, char: "AISA", 
+            audio: "Thermal management system status: Radiators are dissipating excess heat from the nuclear thermal generator. Core temperature is nominal.",
+            translation: "Status do sistema térmico: Os radiadores estão dissipando o excesso de calor do gerador térmico nuclear. Temperatura do núcleo nominal."
+        },
+        { 
+            time: 760, char: "CONTROL", 
+            audio: "Alpha, please verify the status of the emergency EVA suits. We need the oxygen seals checked before the next sleep cycle.",
+            translation: "Alpha, verifique o status dos trajes de emergência para atividade extraveicular. Precisamos selos de oxigênio checados."
+        },
+        { 
+            time: 840, char: "AISA", 
+            audio: "Bio-hazard sensors clear. Air filtration system has removed ninety-nine percent of suspended particles. Cabin air quality is premium.",
+            translation: "Sensores de risco biológico limpos. O sistema de filtragem de ar removeu 99% das partículas suspensas. Qualidade do ar excelente."
+        },
+        { 
+            time: 920, char: "AISA", 
+            audio: "Warning: Solar flare detected on the Eastern limb of the Sun. Moving all non-essential systems to surge protection mode.",
+            translation: "Aviso: Erupção solar detectada no limbo leste do Sol. Movendo sistemas não essenciais para o modo de proteção contra surtos."
+        },
+        { 
+            time: 1000, char: "CONTROL", 
+            audio: "Alpha, stay in the shielded corridor for the next sixty minutes. We are monitoring the proton flux. Do not initiate any external maneuvers.",
+            translation: "Alpha, permaneça no corredor blindado pelos próximos 60 minutos. Estamos monitorando o fluxo de prótons. Não inicie manobras externas."
+        },
+        { 
+            time: 1100, char: "AISA", 
+            audio: "Proton flux has peaked. Radiation levels are returning to cruise baseline. Resuming standard operations.",
+            translation: "O fluxo de prótons atingiu o pico. Os níveis de radiação estão retornando à base de cruzeiro. Retomando operações padrão."
+        },
+        { 
+            time: 1200, char: "AISA", 
+            audio: "Distance from Earth: ten million kilometers. We have officially entered the deep space cruise phase. Earth is now a pale blue light.",
+            translation: "Distância da Terra: 10 milhões de quilômetros. Entramos oficialmente na fase de cruzeiro espacial profundo. A Terra é uma luz azul pálida."
+        }
+        // Repita a lógica de tempo aumentando de 60 em 60 até 3600.
+
         ];
 
         function speak(character, text, subtitleText) {
