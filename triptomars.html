@@ -45,8 +45,6 @@
 
         #btnIniciar:hover { background: #00ffff; color: #000; box-shadow: 0 0 30px #00ffff; }
 
-        .log-msg { font-size: 0.9rem; opacity: 0.8; margin-top: 5px; }
-        
         .char-label { font-weight: bold; text-transform: uppercase; margin-right: 10px; }
     </style>
 </head>
@@ -62,8 +60,8 @@
                 DISTÂNCIA TERRA: <span id="dist">384.400</span> km
             </div>
             <div class="status-box">
-                SISTEMA: NOMINAL<br>
-                SETOR: TRANS-MARS INJECTION
+                SISTEMA: OPERACIONAL<br>
+                SETOR: INJEÇÃO TRANS-MARCIANA
             </div>
         </div>
         <div class="hud-bottom">
@@ -79,7 +77,6 @@
         const subtitle = document.getElementById('subtitle');
         const charLabel = document.getElementById('char-name');
 
-        // Configuração do Canvas
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
@@ -116,48 +113,84 @@
         }
         draw();
 
-        // Lógica de Narração
-        const roteiroBloco1 = [
-            { tempo: 0, char: "AISA", texto: "Comandante, queima de inserção trans-marciana finalizada. Vetor de saída estabelecido em onze ponto dois quilômetros por segundo." },
-            { tempo: 8, char: "CONTROLE", texto: "Alpha, aqui é Starbase. Nossos radares de solo confirmam sua trajetória. Vocês estão oficialmente a caminho do planeta vermelho." },
-            { tempo: 18, char: "AISA", texto: "Relatório de propelente: mil e duzentas toneladas de metano e oxigênio líquido consumidas. Massa atual da nave conforme o esperado." },
-            { tempo: 28, char: "CONTROLE", texto: "Copiado, Alpha. A telemetria indica que o primeiro estágio já iniciou o retorno para a base. O céu está limpo." },
-            { tempo: 40, char: "AISA", texto: "Atenção. Estamos cruzando a marca de quatrocentos mil quilômetros. A influência gravitacional da Lua ficou para trás." },
-            { tempo: 50, char: "CONTROLE", texto: "Alpha, aproveitem a vista enquanto a Terra ainda é visível. Em breve, ela será apenas um ponto azul no vácuo." },
-            { tempo: 60, char: "AISA", texto: "Sensores infravermelhos ativados. O resfriamento das tubeiras segue a curva térmica prevista. Sem risco de deformação." }
+        // Roteiro com Áudio em Inglês e Legenda em Português
+        const missionScript = [
+            { 
+                time: 0, 
+                char: "AISA", 
+                audio: "Commander, trans-mars injection burn complete. Departure velocity set at eleven point two kilometers per second.",
+                translation: "Comandante, queima de inserção trans-marciana concluída. Velocidade de partida definida em 11.2 km/s."
+            },
+            { 
+                time: 8, 
+                char: "CONTROL", 
+                audio: "Alpha, this is Starbase. Ground radars confirm your trajectory. You are officially on your way to the red planet.",
+                translation: "Alpha, aqui é a Base Estelar. Os radares de solo confirmam sua trajetória. Vocês estão oficialmente a caminho do planeta vermelho."
+            },
+            { 
+                time: 18, 
+                char: "AISA", 
+                audio: "Propellant report: twelve hundred tons of methalox consumed. Current ship mass is within expected parameters.",
+                translation: "Relatório de propelente: 1.200 toneladas de metalox consumidas. Massa atual da nave dentro dos parâmetros esperados."
+            },
+            { 
+                time: 28, 
+                char: "CONTROL", 
+                audio: "Copy that, Alpha. Telemetry shows the first stage has already begun its return to base. Clear skies ahead.",
+                translation: "Copiado, Alpha. A telemetria mostra que o primeiro estágio já iniciou o retorno para a base. Céu limpo à frente."
+            },
+            { 
+                time: 40, 
+                char: "AISA", 
+                audio: "Attention. We are crossing the four hundred thousand kilometer mark. Earth's moon is now behind us.",
+                translation: "Atenção. Estamos cruzando a marca de 400.000 quilômetros. A Lua da Terra ficou para trás."
+            },
+            { 
+                time: 50, 
+                char: "CONTROL", 
+                audio: "Alpha, enjoy the view while Earth is still visible. Soon, it will be just a pale blue dot in the void.",
+                translation: "Alpha, aproveite a vista enquanto a Terra ainda é visível. Em breve, ela será apenas um ponto azul no vácuo."
+            },
+            { 
+                time: 60, 
+                char: "AISA", 
+                audio: "Infrared sensors active. Engine cooling is following the predicted thermal curve. No risk of structural deformation.",
+                translation: "Sensores infravermelhos ativos. O resfriamento do motor segue a curva térmica prevista. Sem risco de deformação estrutural."
+            }
         ];
 
-        function falar(personagem, texto) {
-            const msg = new SpeechSynthesisUtterance(texto);
-            msg.lang = 'pt-BR';
+        function speak(character, text, subtitleText) {
+            const msg = new SpeechSynthesisUtterance(text);
+            msg.lang = 'en-US'; // Áudio em Inglês
             
-            if(personagem === "AISA") {
+            if(character === "AISA") {
                 msg.pitch = 1.2; msg.rate = 1.0;
                 charLabel.style.color = "#00ffff";
+                charLabel.innerText = "AISA:";
             } else {
                 msg.pitch = 0.8; msg.rate = 0.9;
                 charLabel.style.color = "#ffaa00";
+                charLabel.innerText = "CONTROLE:";
             }
 
-            charLabel.innerText = personagem + ":";
-            subtitle.innerText = texto;
+            subtitle.innerText = subtitleText; // Legenda em Português
             window.speechSynthesis.speak(msg);
         }
 
         btn.addEventListener('click', () => {
             btn.style.display = 'none';
-            speed = 5; // Aumenta a velocidade visual
+            speed = 5; 
             
-            roteiroBloco1.forEach(fala => {
+            missionScript.forEach(step => {
                 setTimeout(() => {
-                    falar(fala.char, fala.texto);
-                }, fala.tempo * 1000);
+                    speak(step.char, step.audio, step.translation);
+                }, step.time * 1000);
             });
 
-            // Simulador de telemetria variando
             setInterval(() => {
                 let v = (11.20 + Math.random() * 0.05).toFixed(2);
-                let d = (parseFloat(document.getElementById('dist').innerText.replace('.','')) + 1.2).toLocaleString('pt-BR');
+                let dStr = document.getElementById('dist').innerText.replace(/\./g, '');
+                let d = (parseInt(dStr) + 12).toLocaleString('pt-BR');
                 document.getElementById('vel').innerText = v;
                 document.getElementById('dist').innerText = d;
             }, 500);
