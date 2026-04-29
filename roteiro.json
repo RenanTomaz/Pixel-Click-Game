@@ -2,172 +2,784 @@
   {
     "time": 1,
     "char": "AISA",
-    "vel": 11.18,
+    "vel": 15277.0,
     "dist": 384400,
+    "phase": "IGNITION",
+    "audio": "Commander, all systems are synchronized. Methane-fusion core is stable at one hundred percent output. We have achieved the primary escape vector. Current velocity is holding steady at fifteen thousand two hundred and seventy-seven kilometers per second. This high-energy trajectory is now locked. Life support, navigation, and radiation shielding are operational. We are now entering the trans-martian corridor. All telemetry data is being relayed to Houston via the Deep Space Network. Standing by for your commands regarding the first mid-course correction maneuver.",
+    "translation": "Comandante, todos os sistemas estão sincronizados. O núcleo de fusão de metano está estável a cem por cento de potência. Alcançamos o vetor de escape primário. A velocidade atual está mantida em quinze mil duzentos e setenta e sete quilômetros por segundo. Esta trajetória de alta energia está agora travada. Suporte de vida, navegação e blindagem de radiação estão operacionais. Estamos entrando agora no corredor trans-marciano. Todos os dados de telemetria estão sendo retransmitidos para Houston via Rede de Espaço Profundo. Aguardando seus comandos para a primeira manobra de correção de curso."
+  },
+  {
+    "time": 41,
+    "char": "NARRATOR",
+    "vel": 15277.0,
+    "dist": 1011080,
     "phase": "ESCAPE",
-    "audio": "Commander, trans-mars injection burn complete. Escape velocity verified at eleven point two kilometers per second.",
-    "translation": "Comandante, queima de inserção completa. Velocidade de escape em 11.2 km/s."
+    "audio": "Ao cruzarmos a Linha de Kármán, a física que conhecemos na Terra deixa de existir. A partir deste exato momento, a nave não voa mais por princípios aerodinâmicos, mas sim por mecânica orbital pura. Iniciamos a fase de cruzeiro, onde cada grama de combustível e cada watt de energia são monitorados para sustentar a vida no vazio absoluto. Nesta velocidade extraordinária de quinze mil quilômetros por segundo, estamos rasgando o tecido do espaço profundo. O que antes levava meses de viagem agora será realizado em apenas sessenta minutos, desafiando os limites da engenharia e da resistência humana.",
+    "translation": "Ao cruzarmos a Linha de Kármán, a física que conhecemos na Terra deixa de existir. A partir deste exato momento, a nave não voa mais por princípios aerodinâmicos, mas sim por mecânica orbital pura. Iniciamos a fase de cruzeiro, onde cada grama de combustível e cada watt de energia são monitorados para sustentar a vida no vazio absoluto. Nesta velocidade extraordinária de quinze mil quilômetros por segundo, estamos rasgando o tecido do espaço profundo. O que antes levava meses de viagem agora será realizado em apenas sessenta minutos, desafiando os limites da engenharia e da resistência humana."
   },
   {
-    "time": 7,
-    "char": "NARRATOR",
-    "vel": 11.18,
-    "dist": 385000,
-    "phase": "ESCAPE",
-    "audio": "A manobra que você acaba de presenciar é a Injeção Trans-Marciana. Para escapar da gravidade da Terra, precisamos atingir onze ponto dois quilômetros por segundo.",
-    "translation": "Física: Atingindo a velocidade de escape para vencer a gravidade."
-  },
-  {
-    "time": 15,
+    "time": 81,
     "char": "CONTROL",
-    "vel": 11.25,
-    "dist": 390000,
-    "phase": "ESCAPE",
-    "audio": "Alpha, Houston. Booster landing confirmed on the drone ship. Signal strength is maximum.",
-    "translation": "Houston: Pouso do propulsor confirmado. Sinal em força máxima."
+    "vel": 15277.0,
+    "dist": 1622160,
+    "phase": "CONTROL",
+    "audio": "Alpha, this is Houston Starbase. We have visual confirmation of your departure via long-range telescopes. Your burn was perfect, and your current trajectory matches our mission profile exactly. Be advised, ground-based radar will lose lock in sixty seconds, and we are now handing over all communication to the lunar relay satellites. You are officially in the long dark. Take a moment to look back at Earth while it is still a disk, because soon it will be nothing more than a pale blue dot. We are proud of you, Alpha. Houston out.",
+    "translation": "Alpha, aqui é a Base Estelar de Houston. Temos confirmação visual da sua partida via telescópios de longo alcance. Sua queima foi perfeita e sua trajetória atual corresponde exatamente ao perfil da missão. Esteja ciente de que o radar de solo perderá o contato em sessenta segundos, e agora estamos transferindo toda a comunicação para os satélites de retransmissão lunar. Vocês estão oficialmente na longa escuridão. Tire um momento para olhar para trás para a Terra enquanto ela ainda é um disco, porque logo não passará de um pálido ponto azul. Estamos orgulhosos de você, Alpha. Houston desligando."
   },
   {
-    "time": 25,
-    "char": "NARRATOR",
-    "vel": 11.3,
-    "dist": 400000,
-    "phase": "ESCAPE",
-    "audio": "Enquanto seguimos ao abismo, o primeiro estágio já retornou. A precisão é a chave da exploração moderna.",
-    "translation": "Engenharia: Reutilização de foguetes em missões interplanetárias."
-  },
-  {
-    "time": 35,
-    "char": "NARRATOR",
-    "vel": 12.52,
-    "dist": 400525,
-    "phase": "CRUISE",
-    "audio": "No vácuo não existe GPS. Usamos estrelas fixas para navegação precisa no vazio.",
-    "translation": "Astronomia: O uso de rastreadores de estrelas no vácuo."
-  },
-  {
-    "time": 47,
-    "char": "NARRATOR",
-    "vel": 16.65,
-    "dist": 400705,
-    "phase": "CRUISE",
-    "audio": "Sem peso, os ossos perdem cálcio. O exercício intenso é obrigatório para sobreviver.",
-    "translation": "Biologia: Efeitos da microgravidade no corpo humano."
-  },
-  {
-    "time": 59,
-    "char": "NARRATOR",
-    "vel": 14.72,
-    "dist": 400885,
-    "phase": "CRUISE",
-    "audio": "Longe da Terra, estamos expostos a núcleos de átomos pesados vindo de supernovas.",
-    "translation": "Ciência: O perigo da radiação ionizante no espaço profundo."
-  },
-  {
-    "time": 71,
-    "char": "NARRATOR",
-    "vel": 16.0,
-    "dist": 401065,
-    "phase": "CRUISE",
-    "audio": "O reator Sabatier converte o CO2 exalado em água e metano. Ciclo fechado.",
-    "translation": "Química: Sustentabilidade biológica em voos longos."
-  },
-  {
-    "time": 83,
+    "time": 121,
     "char": "AISA",
-    "vel": 16.6,
-    "dist": 401245,
+    "vel": 15277.0,
+    "dist": 1833240,
     "phase": "CRUISE",
-    "audio": "Solar wind density increasing. Thrusters adjusting to maintain attitude.",
-    "translation": "Astrofísica: Pressão do vento solar no casco da nave."
+    "audio": "Attitude control thrusters engaged. Initiating passive thermal control maneuver, also known as the barbecue roll. We are rotating the hull at a constant rate of point two revolutions per hour. This procedure is critical to ensure that solar radiation is distributed evenly across our carbon-fiber structure, preventing localized overheating of the propellant tanks and maintaining stable internal cabin temperatures. All infrared sensors are monitoring the thermal gradient in real time. Propulsion systems are currently in power-save mode, and the fusion core is idling at fifteen percent. Current trajectory remains nominal with zero deviation detected in our long-range stellar navigation fix.",
+    "translation": "Propulsores de controle de atitude acionados. Iniciando manobra de controle térmico passivo, também conhecida como rotação de churrasco. Estamos rotacionando o casco a uma taxa constante de zero ponto duas revoluções por hora. Este procedimento é crítico para garantir que a radiação solar seja distribuída uniformemente por toda a nossa estrutura de fibra de carbono, evitando o superaquecimento localizado dos tanques de propelente e mantendo temperaturas internas estáveis na cabine. Todos os sensores infravermelhos estão monitorando o gradiente térmico em tempo real. Os sistemas de propulsão estão atualmente em modo de economia de energia e o núcleo de fusão está em marcha lenta a quinze por cento. A trajetória atual permanece nominal, com desvio zero detectado em nossa fixação de navegação estelar de longo alcance."
   },
   {
-    "time": 95,
+    "time": 161,
+    "char": "NARRATOR",
+    "vel": 15277.0,
+    "dist": 2444320,
+    "phase": "SCIENCE",
+    "audio": "No vácuo profundo, o calor é um inimigo silencioso. Sem uma atmosfera para dissipar a energia térmica, a face da nave voltada para o Sol pode atingir temperaturas extremas, enquanto o lado oposto mergulha no frio absoluto do espaço. A manobra de rotação que a AISA acaba de iniciar é uma solução de engenharia elegante, utilizada desde as missões Apollo para manter o equilíbrio térmico. Mas o calor não é o único desafio. Estamos agora atravessando uma região de alta densidade de radiação ionizante. Partículas carregadas, vindo de explosões solares e supernovas distantes, bombardeiam o casco constantemente. A nossa blindagem de polietileno rico em hidrogênio é a única barreira que protege o DNA da tripulação contra mutações celulares catastróficas enquanto avançamos pelo abismo.",
+    "translation": "No vácuo profundo, o calor é um inimigo silencioso. Sem uma atmosfera para dissipar a energia térmica, a face da nave voltada para o Sol pode atingir temperaturas extremas, enquanto o lado oposto mergulha no frio absoluto do espaço. A manobra de rotação que a AISA acaba de iniciar é uma solução de engenharia elegante, utilizada desde as missões Apollo para manter o equilíbrio térmico. Mas o calor não é o único desafio. Estamos agora atravessando uma região de alta densidade de radiação ionizante. Partículas carregadas, vindo de explosões solares e supernovas distantes, bombardeiam o casco constantemente. A nossa blindagem de polietileno rico em hidrogênio é a única barreira que protege o DNA da tripulação contra mutações celulares catastróficas enquanto avançamos pelo abismo."
+  },
+  {
+    "time": 201,
     "char": "CONTROL",
-    "vel": 14.85,
-    "dist": 401425,
-    "phase": "CRUISE",
-    "audio": "Alpha, signal delay is now 30 seconds. Welcome to deep space.",
-    "translation": "Isolamento: O início do atraso de sinal rádio."
+    "vel": 15277.0,
+    "dist": 3055400,
+    "phase": "CONTROL",
+    "audio": "Alpha, Houston. Telemetry looks rock solid on our end. We've confirmed the start of your thermal rotation through our deep space infrared array. Be advised, we are now measuring a one-way signal latency of over ten seconds. As the distance between Earth and Ares-One grows, this delay will only increase, eventually making real-time conversation impossible. We are switching our primary uplink to the high-gain antenna array in Goldstone, California. Make sure your local buffer is synced for large data packet transfers. You're doing great work up there, commander. Keep monitoring those radiation dosimeters and report any spikes immediately. Houston standing by.",
+    "translation": "Alpha, aqui é Houston. A telemetria parece sólida como uma rocha do nosso lado. Confirmamos o início da sua rotação térmica através do nosso conjunto infravermelho de espaço profundo. Esteja ciente de que agora estamos medindo uma latência de sinal de ida de mais de dez segundos. À medida que a distância entre a Terra e a Ares-Um aumenta, este atraso só aumentará, tornando a conversa em tempo real impossível. Estamos mudando nosso uplink primário para o conjunto de antenas de alto ganho em Goldstone, Califórnia. Certifique-se de que seu buffer local esteja sincronizado para transferências de grandes pacotes de dados. Você está fazendo um ótimo trabalho aí em cima, comandante. Continue monitorando esses dosímetros de radiação e relate qualquer pico imediatamente. Houston em espera."
   },
   {
-    "time": 107,
+    "time": 241,
     "char": "AISA",
-    "vel": 17.05,
-    "dist": 401605,
-    "phase": "CRUISE",
-    "audio": "Oxygen recovery system active. Carbon dioxide levels at zero point zero four percent.",
-    "translation": "Vida: Ciclo de oxigênio e níveis de CO2 estáveis."
+    "vel": 15277.0,
+    "dist": 3666480,
+    "phase": "BIO-RECOVERY",
+    "audio": "Bio-regenerative life support systems are performing at ninety-nine percent efficiency. The Sabatier reactor is currently processing carbon dioxide scrubbed from the cabin atmosphere, combining it with waste hydrogen to produce water and methane propellant. Oxygen recovery cycles are stable, and the electrolytic cells are maintaining a standard nitrogen-oxygen mix at one atmosphere of pressure. Internal sensors indicate that the hydroponic modules in sector four have initiated their first growth cycle under artificial LED arrays. We are monitoring the nutrient solution flow to ensure the lettuce and radish crops develop correctly in this microgravity environment. All biological waste is being processed for nitrogen reclamation.",
+    "translation": "Os sistemas bio-regenerativos de suporte de vida estão a operar com noventa e nove por cento de eficiência. O reator Sabatier está atualmente a processar o dióxido de carbono filtrado da atmosfera da cabine, combinando-o com resíduos de hidrogénio para produzir água e propelente de metano. Os ciclos de recuperação de oxigénio estão estáveis e as células eletrolíticas mantêm uma mistura padrão de nitrogénio-oxigénio a uma atmosfera de pressão. Sensores internos indicam que os módulos hidropónicos no setor quatro iniciaram o seu primeiro ciclo de crescimento sob matrizes de LED artificiais. Estamos a monitorizar o fluxo da solução de nutrientes para garantir que as culturas de alface e rabanete se desenvolvam corretamente neste ambiente de microgravidade. Todos os resíduos biológicos estão a ser processados para a recuperação de nitrogénio."
   },
   {
-    "time": 119,
-    "char": "AISA",
-    "vel": 15.88,
-    "dist": 401785,
-    "phase": "CRUISE",
-    "audio": "Oxygen recovery system active. Carbon dioxide levels at zero point zero four percent.",
-    "translation": "Vida: Ciclo de oxigênio e níveis de CO2 estáveis."
-  },
-  {
-    "time": 131,
+    "time": 281,
     "char": "NARRATOR",
-    "vel": 15.78,
-    "dist": 401965,
-    "phase": "CRUISE",
-    "audio": "Sem peso, os ossos perdem cálcio. O exercício intenso é obrigatório para sobreviver.",
-    "translation": "Biologia: Efeitos da microgravidade no corpo humano."
+    "vel": 15277.0,
+    "dist": 4277560,
+    "phase": "SCIENCE",
+    "audio": "Sobreviver no espaço profundo exige uma dança complexa entre biologia e tecnologia. Sem a proteção dos ecossistemas terrestres, a Ares-Um torna-se um mundo fechado, onde nada é desperdiçado. Mas o maior desafio não é a máquina, é o corpo humano. Na microgravidade, os fluidos corporais deslocam-se para a parte superior do tronco, causando o que chamamos de inchaço facial, enquanto o coração começa a mudar de forma devido à falta de resistência. Mais grave ainda é a atrofia muscular e a perda de densidade óssea; sem o peso constante da gravidade terrestre, os ossos libertam cálcio na corrente sanguínea, tornando-se frágeis como vidro. Por isso, a tripulação deve submeter-se a exercícios de resistência intensos durante duas horas diárias, utilizando dispositivos de carga por vácuo para simular o peso que a evolução nos ensinou a suportar.",
+    "translation": "Sobreviver no espaço profundo exige uma dança complexa entre biologia e tecnologia. Sem a proteção dos ecossistemas terrestres, a Ares-Um torna-se um mundo fechado, onde nada é desperdiçado. Mas o maior desafio não é a máquina, é o corpo humano. Na microgravidade, os fluidos corporais deslocam-se para a parte superior do tronco, causando o que chamamos de inchaço facial, enquanto o coração começa a mudar de forma devido à falta de resistência. Mais grave ainda é a atrofia muscular e a perda de densidade óssea; sem o peso constante da gravidade terrestre, os ossos libertam cálcio na corrente sanguínea, tornando-se frágeis como vidro. Por isso, a tripulação deve submeter-se a exercícios de resistência intensos durante duas horas diárias, utilizando dispositivos de carga por vácuo para simular o peso que a evolução nos ensinou a suportar."
   },
   {
-    "time": 143,
-    "char": "AISA",
-    "vel": 16.88,
-    "dist": 402145,
-    "phase": "CRUISE",
-    "audio": "Solar wind density increasing. Thrusters adjusting to maintain attitude.",
-    "translation": "Astrofísica: Pressão do vento solar no casco da nave."
-  },
-  {
-    "time": 155,
-    "char": "AISA",
-    "vel": 15.54,
-    "dist": 402325,
-    "phase": "CRUISE",
-    "audio": "Oxygen recovery system active. Carbon dioxide levels at zero point zero four percent.",
-    "translation": "Vida: Ciclo de oxigênio e níveis de CO2 estáveis."
-  },
-  {
-    "time": 167,
-    "char": "NARRATOR",
-    "vel": 14.37,
-    "dist": 402505,
-    "phase": "CRUISE",
-    "audio": "Longe da Terra, estamos expostos a núcleos de átomos pesados vindo de supernovas.",
-    "translation": "Ciência: O perigo da radiação ionizante no espaço profundo."
-  },
-  {
-    "time": 179,
+    "time": 321,
     "char": "CONTROL",
-    "vel": 17.0,
-    "dist": 402685,
-    "phase": "CRUISE",
-    "audio": "Alpha, signal delay is now 30 seconds. Welcome to deep space.",
-    "translation": "Isolamento: O início do atraso de sinal rádio."
+    "vel": 15277.0,
+    "dist": 4888640,
+    "phase": "CONTROL",
+    "audio": "Alpha, Houston. We've received your latest medical telemetry and the bio-regen report looks excellent from here. Doctors in the flight medicine office are particularly pleased with your cardiovascular adaptation rates. Regarding your exercise schedule, we are uploading a new high-intensity interval training protocol to your local server. Make sure to double-check the harness tension on the treadmill, as any slip in microgravity could lead to unnecessary joint strain. Also, be advised that the signal delay has now passed the twenty-second mark. We are feeling the distance down here. Earth is looking beautiful on the long-range downlink, but it's getting smaller by the minute. Stay focused on the routine, commander. Houston standing by.",
+    "translation": "Alpha, aqui é Houston. Recebemos a vossa telemetria médica mais recente e o relatório de bio-regeneração parece excelente daqui. Os médicos do gabinete de medicina de voo estão particularmente satisfeitos com as vossas taxas de adaptação cardiovascular. Relativamente ao vosso horário de exercício, estamos a carregar um novo protocolo de treino intervalado de alta intensidade para o vosso servidor local. Certifiquem-se de verificar duas vezes a tensão do arnês na passadeira, pois qualquer deslize em microgravidade pode levar a uma tensão articular desnecessária. Além disso, estejam avisados de que o atraso do sinal ultrapassou agora a marca dos vinte segundos. Estamos a sentir a distância aqui em baixo. A Terra parece linda no downlink de longo alcance, mas está a ficar mais pequena a cada minuto. Mantenham o foco na rotina, comandante. Houston em espera."
   },
   {
-    "time": 191,
-    "char": "CONTROL",
-    "vel": 15.45,
-    "dist": 402865,
-    "phase": "CRUISE",
-    "audio": "Alpha, initiate Barbecue Roll to balance thermal loads across the hull.",
-    "translation": "Termodinâmica: Manobra de rotação para equilíbrio de calor."
+    "time": 361,
+    "char": "AISA",
+    "vel": 15277.0,
+    "dist": 5499720,
+    "phase": "NAVIGATION",
+    "audio": "Star tracker systems are performing a deep space attitude update. Since we are well beyond the range of Earth's global positioning satellites, I am currently utilizing the position of three thousand distant pulsars and quasars to triangulate our exact coordinates in the solar system. The primary optical sensors have locked onto Canopus and Vega to calibrate our three-axis gyroscopes. Navigation computer confirms that our current vector has a deviation of less than point zero zero one percent. Light-time communication delay is now calculated at eighteen point four seconds. I am also monitoring the structural resonance of the hull; the high-speed transit through the interplanetary medium is creating minor vibrations that are being compensated by the active damping systems. Everything is nominal.",
+    "translation": "Os sistemas de rastreamento estelar estão a realizar uma atualização de atitude no espaço profundo. Como estamos bem além do alcance dos satélites de posicionamento global da Terra, estou atualmente a utilizar a posição de três mil pulsares e quasares distantes para triangular as nossas coordenadas exatas no sistema solar. Os sensores óticos primários fixaram-se em Canopus e Vega para calibrar os nossos giroscópios de três eixos. O computador de navegação confirma que o nosso vetor atual tem um desvio de menos de zero ponto zero zero um por cento. O atraso de comunicação do tempo de luz é agora calculado em dezoito ponto quatro segundos. Também estou a monitorizar a ressonância estrutural do casco; o trânsito de alta velocidade através do meio interplanetário está a criar vibrações menores que estão a ser compensadas pelos sistemas de amortecimento ativo. Tudo está nominal."
   },
   {
-    "time": 203,
+    "time": 401,
     "char": "NARRATOR",
-    "vel": 15.99,
-    "dist": 403045,
-    "phase": "CRUISE",
-    "audio": "A cada quilômetro, a luz demora mais para chegar. O diálogo vira monólogo.",
-    "translation": "Física: A velocidade da luz limitando a comunicação."
+    "vel": 15277.0,
+    "dist": 6110800,
+    "phase": "PSYCHOLOGY",
+    "audio": "Navegar pelo abismo exige um novo sentido de direção. No espaço profundo, não existe em cima ou em baixo, norte ou sul; existe apenas a relação geométrica entre a nave e os faróis eternos do universo. Enquanto os sensores da AISA buscam estrelas distantes para guiar a Ares-Um, a tripulação enfrenta um desafio muito mais subjetivo: o fenómeno do 'Break-off'. À medida que a Terra encolhe, transformando-se num pequeno ponto azul pálido, o cordão umbilical psicológico estica-se até ao limite. O isolamento absoluto, o silêncio do vácuo e a consciência de que o lar está a milhões de quilómetros podem gerar uma profunda sensação de desprendimento. A mente humana não foi evolutivamente projetada para a vastidão cósmica, e manter a sanidade requer uma rotina rigorosa, onde o foco nas tarefas técnicas serve como uma âncora contra a vertigem do infinito que nos rodeia.",
+    "translation": "Navegar pelo abismo exige um novo sentido de direção. No espaço profundo, não existe em cima ou em baixo, norte ou sul; existe apenas a relação geométrica entre a nave e os faróis eternos do universo. Enquanto os sensores da AISA buscam estrelas distantes para guiar a Ares-Um, a tripulação enfrenta um desafio muito mais subjetivo: o fenómeno do 'Break-off'. À medida que a Terra encolhe, transformando-se num pequeno ponto azul pálido, o cordão umbilical psicológico estica-se até ao limite. O isolamento absoluto, o silêncio do vácuo e a consciência de que o lar está a milhões de quilómetros podem gerar uma profunda sensação de desprendimento. A mente humana não foi evolutivamente projetada para a vastidão cósmica, e manter a sanidade requer uma rotina rigorosa, onde o foco nas tarefas técnicas serve como uma âncora contra a vertigem do infinito que nos rodeia."
+  },
+  {
+    "time": 441,
+    "char": "CONTROL",
+    "vel": 15277.0,
+    "dist": 6721880,
+    "phase": "CONTROL",
+    "audio": "Alpha, Houston. We've just confirmed your pulsar navigation fix and the data matches our ground-based deep space tracking precisely. You are exactly where you need to be. We are noticing the psychological telemetry indicates a slight increase in cortisol levels among the crew; this is expected at this stage of the mission as you cross the six million kilometer mark. Remember to utilize the scheduled private video links with your families while the bandwidth still allows for it. We are also uploading a series of high-definition earthrise images to your personal tablets to help mitigate the overview effect. The signal delay is now significant enough that we will begin moving toward formal mission log reporting rather than conversational dialogue. Stay strong, Alpha. We are watching over you from the blue planet. Houston standing by.",
+    "translation": "Alpha, aqui é Houston. Acabámos de confirmar a vossa fixação de navegação por pulsares e os dados coincidem precisamente com o nosso rastreio terrestre no espaço profundo. Estão exatamente onde precisam de estar. Notamos que a telemetria psicológica indica um ligeiro aumento nos níveis de cortisol na tripulação; isto é esperado nesta fase da missão ao cruzarem a marca dos seis milhões de quilómetros. Lembrem-se de utilizar os links de vídeo privados programados com as vossas famílias enquanto a largura de banda ainda o permite. Estamos também a carregar uma série de imagens em alta definição do nascer da Terra nos vossos tablets pessoais para ajudar a mitigar o efeito de visão geral. O atraso do sinal é agora suficientemente significativo para começarmos a passar para relatórios formais de registo de missão em vez de diálogo conversacional. Mantenham-se fortes, Alpha. Estamos a zelar por vós a partir do planeta azul. Houston em espera."
+  },
+  {
+    "time": 481,
+    "char": "AISA",
+    "vel": 15277.0,
+    "dist": 7332960,
+    "phase": "POWER-MANAGEMENT",
+    "audio": "Monitoring fusion reactor core stability. The magnetic confinement field is operating at peak efficiency, maintaining the deuterium-helium-3 plasma at over one hundred million degrees Celsius. Power output is currently being throttled to sixty-five percent to balance the requirements of the high-energy propulsion system and the active radiation shielding. I am detecting minor flux variations in the superconducting magnets, but the autonomous correction subroutines have already compensated for the thermal expansion. Methane coolant flow is steady through the primary heat exchangers. Additionally, the forward laser-ablation system is active, pre-scanning our flight path for microscopic debris. We have successfully neutralized seventeen silicate particles in the last ten minutes to prevent kinetic damage to the primary hull plating.",
+    "translation": "Monitorizando a estabilidade do núcleo do reator de fusão. O campo de confinamento magnético está a operar com a eficiência máxima, mantendo o plasma de deutério-hélio-3 a mais de cem milhões de graus Celsius. A saída de energia está atualmente a ser reduzida para sessenta e cinco por cento para equilibrar os requisitos do sistema de propulsão de alta energia e da blindagem ativa contra radiação. Estou a detetar pequenas variações de fluxo nos ímanes supercondutores, mas as sub-rotinas de correção autónomas já compensaram a expansão térmica. O fluxo de refrigerante de metano está estável através dos permutadores de calor primários. Além disso, o sistema frontal de ablação a laser está ativo, pré-digitalizando a nossa trajetória de voo em busca de detritos microscópicos. Neutralizámos com sucesso dezassete partículas de silicato nos últimos dez minutos para evitar danos cinéticos no revestimento primário do casco."
+  },
+  {
+    "time": 521,
+    "char": "NARRATOR",
+    "vel": 15277.0,
+    "dist": 7944040,
+    "phase": "ENGINEERING",
+    "audio": "A Ares-Um é, essencialmente, um sol domesticado dentro de uma garrafa magnética. Sem o reator de fusão, a viagem a Marte nesta velocidade seria fisicamente impossível. Mas gerir tal quantidade de energia no vácuo é um desafio constante de termodinâmica. No espaço, o calor não tem para onde ir, exceto através da radiação infravermelha dissipada pelos gigantescos radiadores laterais da nave. Além da gestão térmica, a tripulação enfrenta o perigo da poeira interplanetária. Viajando a quinze mil quilómetros por segundo, até um grão de areia possui a energia cinética de um projétil de artilharia. É por isso que a nave utiliza um 'escudo de Whipple' — múltiplas camadas de materiais avançados projetadas para fragmentar e dispersar o impacto de micrometeoroides antes que eles possam perfurar o compartimento pressurizado. É uma batalha invisível e constante entre a nossa tecnologia e a erosão implacável do cosmos.",
+    "translation": "A Ares-Um é, essencialmente, um sol domesticado dentro de uma garrafa magnética. Sem o reator de fusão, a viagem a Marte nesta velocidade seria fisicamente impossível. Mas gerir tal quantidade de energia no vácuo é um desafio constante de termodinâmica. No espaço, o calor não tem para onde ir, exceto através da radiação infravermelha dissipada pelos gigantescos radiadores laterais da nave. Além da gestão térmica, a tripulação enfrenta o perigo da poeira interplanetária. Viajando a quinze mil quilómetros por segundo, até um grão de areia possui a energia cinética de um projétil de artilharia. É por isso que a nave utiliza um 'escudo de Whipple' — múltiplas camadas de materiais avançados projetadas para fragmentar e dispersar o impacto de micrometeoroides antes que eles possam perfurar o compartimento pressurizado. É uma batalha invisível e constante entre a nossa tecnologia e a erosão implacável do cosmos."
+  },
+  {
+    "time": 561,
+    "char": "CONTROL",
+    "vel": 15277.0,
+    "dist": 8555120,
+    "phase": "CONTROL",
+    "audio": "Alpha, Houston. We've reviewed your latest reactor harmonics and the thermal dissipation rates from your radiator panels. Everything looks within the expected safety margins for this phase of the transit. We are tracking a small cloud of cometary debris on your intercept vector, but according to your AISA reports, the laser-ablation system is handling the vanguard clearing perfectly. Regarding power, we recommend a slight increase in the magnetic containment field as a precaution against the fluctuating solar wind we are seeing on the deep space probes. Signal latency has now reached thirty-two seconds. We are shifting to asynchronous data bursts for all non-critical systems to conserve bandwidth. Keep a close eye on the helium-3 reserves and the coolant pressure. You're past the eight million kilometer mark now. Stay vigilant. Houston standing by.",
+    "translation": "Alpha, aqui é Houston. Analisámos as vossas últimas harmónicas do reator e as taxas de dissipação térmica dos vossos painéis radiadores. Tudo parece estar dentro das margens de segurança esperadas para esta fase do trânsito. Estamos a rastrear uma pequena nuvem de detritos cometários no vosso vetor de interceptação, mas de acordo com os relatórios da vossa AISA, o sistema de ablação a laser está a tratar da limpeza da vanguarda perfeitamente. Relativamente à energia, recomendamos um ligeiro aumento no campo de confinamento magnético como precaução contra a oscilação do vento solar que estamos a ver nas sondas de espaço profundo. O atraso do sinal atingiu agora trinta e dois segundos. Estamos a passar para rajadas de dados assíncronas para todos os sistemas não críticos para conservar a largura de banda. Mantenham-se atentos às reservas de hélio-3 e à pressão do refrigerante. Já passaram a marca dos oito milhões de quilómetros. Mantenham-se vigilantes. Houston em espera."
+  },
+  {
+    "time": 601,
+    "char": "AISA",
+    "vel": 15277.0,
+    "dist": 9166200,
+    "phase": "COMMS-ESTABLISHMENT",
+    "audio": "Switching primary communication uplink to the Deep Space Optical Terminal. We are now utilizing near-infrared laser pulses to transmit high-definition telemetry and video data back to Earth. This laser-based system allows for a bandwidth increase of one hundred times compared to traditional radio frequencies. I am currently aligning the precision pointing mechanism to lock onto the receiver at Table Mountain, California. Fine-steering mirrors are compensating for the spacecraft's vibration to maintain sub-microradian accuracy. All data packets are being encrypted using quantum-resistant algorithms before transmission. Additionally, the local entertainment server has been updated via the last high-gain burst, providing the crew with new immersive environments for their rest cycles. Signal lock is steady and signal-to-noise ratio is optimal.",
+    "translation": "Mudando o uplink de comunicação primário para o Terminal Óptico de Espaço Profundo. Estamos agora a utilizar pulsos de laser infravermelho próximo para transmitir telemetria de alta definição e dados de vídeo de volta à Terra. Este sistema baseado em laser permite um aumento de largura de banda de cem vezes em comparação com as frequências de rádio tradicionais. Estou atualmente a alinhar o mecanismo de apontamento de precisão para fixar o recetor em Table Mountain, Califórnia. Espelhos de direção fina estão a compensar a vibração da nave para manter a precisão de sub-microrradianos. Todos os pacotes de dados estão a ser encriptados utilizando algoritmos resistentes a computação quântica antes da transmissão. Além disso, o servidor de entretenimento local foi atualizado através da última rajada de alto ganho, fornecendo à tripulação novos ambientes imersivos para os seus ciclos de descanso. O bloqueio de sinal está estável e a relação sinal-ruído é ideal."
+  },
+  {
+    "time": 641,
+    "char": "NARRATOR",
+    "vel": 15277.0,
+    "dist": 9777280,
+    "phase": "SCIENCE",
+    "audio": "A comunicação no espaço profundo é um exercício de paciência e precisão extrema. À medida que nos afastamos, o sinal de rádio torna-se fraco e disperso. O uso de lasers para comunicação, como o que a Ares-Um está a utilizar agora, representa o auge da conectividade interplanetária, permitindo o envio de mapas detalhados e vídeos em tempo real. No entanto, a tecnologia não resolve o vazio emocional. Para combater o tédio e o isolamento, a tripulação utiliza sistemas avançados de realidade virtual. Estes ambientes simulam com perfeição as florestas, praias e cidades da Terra, enganando o cérebro para acreditar que ainda faz parte do mundo que deixou para trás. É uma ferramenta vital para manter a arquitetura neural e a estabilidade emocional, permitindo que os astronautas escapem das paredes metálicas da nave e caminhem, mesmo que virtualmente, sob o céu azul do seu planeta natal.",
+    "translation": "A comunicação no espaço profundo é um exercício de paciência e precisão extrema. À medida que nos afastamos, o sinal de rádio torna-se fraco e disperso. O uso de lasers para comunicação, como o que a Ares-Um está a utilizar agora, representa o auge da conectividade interplanetária, permitindo o envio de mapas detalhados e vídeos em tempo real. No entanto, a tecnologia não resolve o vazio emocional. Para combater o tédio e o isolamento, a tripulação utiliza sistemas avançados de realidade virtual. Estes ambientes simulam com perfeição as florestas, praias e cidades da Terra, enganando o cérebro para acreditar que ainda faz parte do mundo que deixou para trás. É uma ferramenta vital para manter a arquitetura neural e a estabilidade emocional, permitindo que os astronautas escapem das paredes metálicas da nave e caminhem, mesmo que virtualmente, sob o céu azul do seu planeta natal."
+  },
+  {
+    "time": 681,
+    "char": "CONTROL",
+    "vel": 15277.0,
+    "dist": 10388360,
+    "phase": "CONTROL",
+    "audio": "Alpha, Houston. We have successfully locked onto your laser beacon at the Table Mountain observatory. The data transfer rates are phenomenal; we are receiving the engine diagnostics and the interior 8K feeds with zero packet loss. It is a massive improvement over the S-band radio. Regarding the crew's welfare, we hope the new VR packages of the Swiss Alps and the Pacific Northwest are helping to boost morale. We have also included a surprise batch of recorded video messages from your families in the latest downlink burst. Please be aware that as you cross the ten million kilometer mark, the signal round-trip time is now over a minute. We are moving all mission updates to a one-way broadcast format to minimize confusion. You are writing history with every kilometer, Alpha. Houston standing by.",
+    "translation": "Alpha, aqui é Houston. Conseguimos fixar o vosso feixe de laser no observatório de Table Mountain. As taxas de transferência de dados são fenomenais; estamos a receber os diagnósticos do motor e as transmissões internas em 8K com zero perda de pacotes. É uma melhoria massiva em relação ao rádio de banda S. Relativamente ao bem-estar da tripulação, esperamos que os novos pacotes de realidade virtual dos Alpes Suíços e do Noroeste do Pacífico estejam a ajudar a elevar o moral. Incluímos também um lote surpresa de mensagens de vídeo gravadas das vossas famílias na última rajada de downlink. Por favor, tenham em atenção que, ao cruzarem a marca dos dez milhões de quilómetros, o tempo de ida e volta do sinal é agora superior a um minuto. Estamos a passar todas as atualizações da missão para um formato de transmissão unidirecional para minimizar a confusão. Estão a escrever a história a cada quilómetro, Alpha. Houston em espera."
+  },
+  {
+    "time": 721,
+    "char": "AISA",
+    "vel": 15277.0,
+    "dist": 11000000,
+    "phase": "BIO-MAINTENANCE",
+    "audio": "Hydroponic bay systems report optimal nutrient absorption in the leafy green modules. We are currently utilizing a localized ion-exchange membrane to purify the grey water from the shower and laundry units, redirecting it toward the irrigation manifold. The nitrogen-to-phosphorus ratio is being adjusted to accelerate the growth of the dwarf wheat crop in tray B-four. I have detected a minor fungal spore count in the ventilation filters of the greenhouse, and I am initiating a localized ultraviolet-C sterilization cycle to neutralize any potential bio-contamination. Oxygen levels remain slightly elevated due to peak photosynthesis periods, which is allowing us to reduce the workload on the primary electrolytic cells. All solid waste reclamation units are currently processing at maximum capacity to ensure ninety-eight percent nutrient recovery for the next planting cycle.",
+    "translation": "Os sistemas da baía hidropónica relatam uma absorção ideal de nutrientes nos módulos de folhas verdes. Estamos atualmente a utilizar uma membrana de troca iónica localizada para purificar as águas cinzentas das unidades de duche e lavandaria, redirecionando-as para o coletor de irrigação. A proporção de nitrogénio para fósforo está a ser ajustada para acelerar o crescimento da colheita de trigo anão na bandeja B-quatro. Detetei uma contagem menor de esporos fúngicos nos filtros de ventilação da estufa e estou a iniciar um ciclo de esterilização ultravioleta-C localizado para neutralizar qualquer potencial biocontaminação. Os níveis de oxigénio permanecem ligeiramente elevados devido aos períodos de pico de fotossíntese, o que nos permite reduzir a carga de trabalho nas células eletrolíticas primárias. Todas as unidades de recuperação de resíduos sólidos estão a processar na capacidade máxima para garantir noventa e oito por cento de recuperação de nutrientes para o próximo ciclo de plantação."
+  },
+  {
+    "time": 761,
+    "char": "NARRATOR",
+    "vel": 15277.0,
+    "dist": 11611080,
+    "phase": "SCIENCE",
+    "audio": "Comer no espaço profundo é um ato de reciclagem suprema. Num voo de longa duração, cada molécula de carbono e cada gota de água é um recurso precioso que deve ser reutilizado indefinidamente. A estufa da Ares-Um não é apenas uma fonte de alimento fresco para quebrar a monotonia das rações desidratadas; ela é um órgão vital do sistema de suporte de vida. As plantas atuam como purificadores naturais, absorvendo o dióxido de carbono exalado e libertando oxigénio fresco. No entanto, cultivar vegetais em microgravidade apresenta desafios únicos: sem a gravidade para orientar o escoamento, a água tende a formar esferas que podem sufocar as raízes das plantas. A solução reside em sistemas de capilaridade avançados e substratos sintéticos que garantem que a humidade chegue exatamente onde é necessária, permitindo que a vida terrestre floresça, mesmo a milhões de quilómetros do solo que lhe deu origem.",
+    "translation": "Comer no espaço profundo é um ato de reciclagem suprema. Num voo de longa duração, cada molécula de carbono e cada gota de água é um recurso precioso que deve ser reutilizado indefinidamente. A estufa da Ares-Um não é apenas uma fonte de alimento fresco para quebrar a monotonia das rações desidratadas; ela é um órgão vital do sistema de suporte de vida. As plantas atuam como purificadores naturais, absorvendo o dióxido de carbono exalado e libertando oxigénio fresco. No entanto, cultivar vegetais em microgravidade apresenta desafios únicos: sem a gravidade para orientar o escoamento, a água tende a formar esferas que podem sufocar as raízes das plantas. A solução reside em sistemas de capilaridade avançados e substratos sintéticos que garantem que a humidade chegue exatamente onde é necessária, permitindo que a vida terrestre floresça, mesmo a milhões de quilómetros do solo que lhe deu origem."
+  },
+  {
+    "time": 801,
+    "char": "CONTROL",
+    "vel": 15277.0,
+    "dist": 12222160,
+    "phase": "CONTROL",
+    "audio": "Alpha, Houston. We've analyzed the harvest projections from your hydroponic logs. The dwarf wheat yield looks very promising, and our nutritionists are updating your meal plan to include the fresh produce in your Saturday rations. We've also noted the UVC cycle you ran; good catch on those spores, AISA. It's vital we keep that greenhouse sterile. On a broader scale, signal latency has now climbed to forty-two seconds. Communication is becoming a series of time-capsules. We are tracking a minor shift in the solar flux that might affect your external sensors, so keep an eye on the hull temperature sensors. You've passed the twelve million kilometer mark, and the deep space relay in Madrid is now your primary connection. The Earth is little more than a brilliant star behind you now. Stay focused on the science, Alpha. Houston standing by.",
+    "translation": "Alpha, aqui é Houston. Analisámos as projeções de colheita dos vossos registos hidropónicos. O rendimento do trigo anão parece muito promissor e os nossos nutricionistas estão a atualizar o vosso plano de refeições para incluir os produtos frescos nas vossas rações de sábado. Também notámos o ciclo UVC que executaram; boa observação nesses esporos, AISA. É vital mantermos essa estufa estéril. Numa escala mais ampla, o atraso do sinal subiu agora para quarenta e dois segundos. A comunicação está a tornar-se uma série de cápsulas do tempo. Estamos a rastrear uma pequena mudança no fluxo solar que pode afetar os vossos sensores externos, por isso fiquem de olho nos sensores de temperatura do casco. Passaram a marca dos doze milhões de quilómetros e o repetidor de espaço profundo em Madrid é agora a vossa ligação primária. A Terra é pouco mais do que uma estrela brilhante atrás de vós agora. Mantenham o foco na ciência, Alpha. Houston em espera."
+  },
+  {
+    "time": 841,
+    "char": "AISA",
+    "vel": 15277.0,
+    "dist": 12833240,
+    "phase": "SCIENTIFIC-PLANNING",
+    "audio": "Initiating high-resolution simulation of the Jezero Crater landing site. I am processing legacy data from the Perseverance rover to map potential obstacles and boulder fields within the landing ellipse. The magnetic shielding is currently being adjusted to compensate for a localized increase in solar proton flux. I am detecting a minor ionospheric disturbance in the Martian atmosphere, which may affect our entry-level sensor readings in forty-five minutes. Ground radar on the Ares-One is pre-scanning for sub-surface water deposits near the Octavia E. Butler Landing site. All geological spectral analysis tools are in standby mode. Energy consumption for the external sensor suite is at twelve percent. We are maintaining a precise attitude to keep the high-gain antenna locked on the terrestrial relay.",
+    "translation": "Iniciando simulação de alta resolução do local de pouso na Cratera Jezero. Estou a processar dados legados do rover Perseverance para mapear potenciais obstáculos e campos de rochas dentro da elipse de pouso. A blindagem magnética está atualmente a ser ajustada para compensar um aumento localizado no fluxo de prótons solares. Estou a detetar uma pequena perturbação ionosférica na atmosfera marciana, que pode afetar as leituras dos nossos sensores de nível de entrada em quarenta e cinco minutos. O radar de solo na Ares-Um está a fazer uma pré-varredura em busca de depósitos de água subsuperficiais perto do local de pouso Octavia E. Butler. Todas as ferramentas de análise espetral geológica estão em modo de espera. O consumo de energia para o conjunto de sensores externos é de doze por cento. Estamos a manter uma atitude precisa para manter a antena de alto ganho fixada no repetidor terrestre."
+  },
+  {
+    "time": 881,
+    "char": "NARRATOR",
+    "vel": 15277.0,
+    "dist": 13444320,
+    "phase": "GEOLOGY",
+    "audio": "A escolha da Cratera Jezero como destino final não é por acaso. Bilhões de anos atrás, este local abrigava um delta de rio gigante, um ambiente onde a água líquida e os sedimentos podem ter preservado vestígios de vida microbiana antiga. Enquanto a nave cruza o vácuo, a tripulação utiliza o tempo para estudar a composição mineralógica do solo que em breve pisará. Mas o espaço profundo entre os mundos não é um vazio calmo; é um oceano de partículas invisíveis. O vento solar, um fluxo constante de plasma expelido pelo Sol, colide com o campo magnético artificial da Ares-Um, criando uma aurora tecnológica ao redor do casco. Compreender esta interação é vital para a sobrevivência, pois qualquer variação brusca no clima espacial pode sobrecarregar os sistemas eletrónicos sensíveis e ameaçar a integridade da missão antes mesmo de atingirmos a órbita marciana.",
+    "translation": "A escolha da Cratera Jezero como destino final não é por acaso. Bilhões de anos atrás, este local abrigava um delta de rio gigante, um ambiente onde a água líquida e os sedimentos podem ter preservado vestígios de vida microbiana antiga. Enquanto a nave cruza o vácuo, a tripulação utiliza o tempo para estudar a composição mineralógica do solo que em breve pisará. Mas o espaço profundo entre os mundos não é um vazio calmo; é um oceano de partículas invisíveis. O vento solar, um fluxo constante de plasma expelido pelo Sol, colide com o campo magnético artificial da Ares-Um, criando uma aurora tecnológica ao redor do casco. Compreender esta interação é vital para a sobrevivência, pois qualquer variação brusca no clima espacial pode sobrecarregar os sistemas eletrónicos sensíveis e ameaçar a integridade da missão antes mesmo de atingirmos a órbita marciana."
+  },
+  {
+    "time": 921,
+    "char": "CONTROL",
+    "vel": 15277.0,
+    "dist": 14055400,
+    "phase": "CONTROL",
+    "audio": "Alpha, Houston. We have received your geological simulation parameters. The orbital reconnaissance from the Mars Reconnaissance Orbiter confirms your mapped path is clear of any new dust storm activity in the Jezero region. Regarding the solar flux, we are seeing the same proton spike on our Deep Space Climate Observatory; your magnetic shield adjustment was the correct call. Signal round-trip time is now reaching fifty-four seconds. We are uploading the latest Martian weather forecast to your mission computer to assist with your entry calculations. You are now fourteen million kilometers away from Earth. The home planet is becoming a distant memory, but your mission is the focus of every telescope in the world. Continue the cross-checks on the navigation gyros. Houston standing by.",
+    "translation": "Alpha, aqui é Houston. Recebemos os vossos parâmetros de simulação geológica. O reconhecimento orbital do Mars Reconnaissance Orbiter confirma que a vossa trajetória mapeada está livre de qualquer nova atividade de tempestade de poeira na região de Jezero. Relativamente ao fluxo solar, estamos a ver o mesmo pico de prótons no nosso Observatório do Clima no Espaço Profundo; o vosso ajuste no escudo magnético foi a decisão correta. O tempo de ida e volta do sinal está agora a atingir cinquenta e quatro segundos. Estamos a carregar a última previsão meteorológica marciana para o vosso computador de missão para ajudar nos vossos cálculos de entrada. Estão agora a catorze milhões de quilómetros de distância da Terra. O planeta natal está a tornar-se uma memória distante, mas a vossa missão é o foco de todos os telescópios no mundo. Continuem as verificações cruzadas nos giroscópios de navegação. Houston em espera."
+  },
+  {
+    "time": 961,
+    "char": "AISA",
+    "vel": 15277.0,
+    "dist": 14665920,
+    "phase": "HARDWARE-DIAGNOSTICS",
+    "audio": "Initiating a comprehensive diagnostic of the external hull integrity and communication arrays. I am deploying the robotic maintenance crawlers to inspect the primary fusion thrust vectoring vanes for any signs of thermal fatigue or plasma erosion. All redundant computer clusters are being synchronized to prevent bit-flips caused by high-energy cosmic ray strikes. I have detected a minor voltage fluctuation in the secondary life support bus, and I am rerouting power through the tertiary backup circuit to ensure continuous operation. The internal environmental sensors in the crew quarters are being recalibrated to account for the gradual shift in cabin humidity. All autonomous repair nanites are on standby in the central hub. Communication signal-to-noise ratio is currently at sixty-five decibels, which is optimal for our current distance from the terrestrial relay stations.",
+    "translation": "Iniciando um diagnóstico abrangente da integridade do casco externo e das matrizes de comunicação. Estou a implantar os rastreadores de manutenção robótica para inspecionar as palhetas de vetorização de empuxo da fusão primária em busca de quaisquer sinais de fadiga térmica ou erosão por plasma. Todos os clusters de computadores redundantes estão a ser sincronizados para evitar inversões de bits causadas por ataques de raios cósmicos de alta energia. Detetei uma pequena flutuação de tensão no barramento secundário de suporte de vida e estou a redirecionar a energia através do circuito de reserva terciário para garantir a operação contínua. Os sensores ambientais internos nos alojamentos da tripulação estão a ser recalibrados para contabilizar a mudança gradual na humidade da cabine. Todos os nanites de reparação autónomos estão em espera no hub central. A relação sinal-ruído de comunicação está atualmente em sessenta e cinco decibéis, o que é ideal para a nossa distância atual das estações de retransmissão terrestres."
+  },
+  {
+    "time": 1001,
+    "char": "NARRATOR",
+    "vel": 15277.0,
+    "dist": 15277000,
+    "phase": "ENGINEERING",
+    "audio": "A manutenção de uma nave a quinze mil quilómetros por segundo é uma tarefa de precisão cirúrgica e paciência infinita. No espaço profundo, uma caminhada espacial humana, ou EVA, é um risco extremo que a tripulação evita a todo o custo. Em vez disso, a Ares-Um utiliza uma frota de pequenos robôs especializados que rastejam pela superfície exterior do casco como insetos mecânicos, corrigindo imperfeições antes que se tornem críticas. O perigo mais insidioso, no entanto, é invisível: os raios cósmicos. Estas partículas viajam quase à velocidade da luz e podem atravessar o metal da nave, atingindo os microchips e alterando dados binários vitais. Para combater isto, a arquitetura informática da nave é triplamente redundante; três computadores realizam o mesmo cálculo simultaneamente e, se um divergir, os outros dois ignoram o erro. É um sistema de votação digital constante que mantém o cérebro da nave lúcido enquanto atravessamos o bombardeio radioativo do vazio.",
+    "translation": "A manutenção de uma nave a quinze mil quilómetros por segundo é uma tarefa de precisão cirúrgica e paciência infinita. No espaço profundo, uma caminhada espacial humana, ou EVA, é um risco extremo que a tripulação evita a todo o custo. Em vez disso, a Ares-Um utiliza uma frota de pequenos robôs especializados que rastejam pela superfície exterior do casco como insetos mecânicos, corrigindo imperfeições antes que se tornem críticas. O perigo mais insidioso, no entanto, é invisível: os raios cósmicos. Estas partículas viajam quase à velocidade da luz e podem atravessar o metal da nave, atingindo os microchips e alterando dados binários vitais. Para combater isto, a arquitetura informática da nave é triplamente redundante; três computadores realizam o mesmo cálculo simultaneamente e, se um divergir, os outros dois ignoram o erro. É um sistema de votação digital constante que mantém o cérebro da nave lúcido enquanto atravessamos o bombardeio radioativo do vazio."
+  },
+  {
+    "time": 1041,
+    "char": "CONTROL",
+    "vel": 15277.0,
+    "dist": 15888080,
+    "phase": "CONTROL",
+    "audio": "Alpha, Houston. We've received your report on the secondary bus fluctuation. Our engineers here have cross-referenced the data with the ship's build schematics and we agree with AISA's decision to switch to the tertiary backup; it's a standard precaution during solar flux events. We are monitoring the robotic crawlers' progress via the external cam feeds; the fusion vanes look clean so far. Be advised, signal latency has now climbed to sixty-eight seconds. We are entering a phase where the speed of light is truly dictating the rhythm of our mission. Every instruction we send is a message to your past, and every reply we get is a voice from our future. Keep your eyes on the diagnostic logs and ensure the radiation hardening on the navigation buffer is active. You're nearly sixteen million kilometers out. You're doing us proud, commander. Houston out.",
+    "translation": "Alpha, aqui é Houston. Recebemos o vosso relatório sobre a flutuação do barramento secundário. Os nossos engenheiros aqui cruzaram os dados com os esquemas de construção da nave e concordamos com a decisão da AISA de mudar para a reserva terciária; é uma precaução padrão durante eventos de fluxo solar. Estamos a monitorizar o progresso dos rastreadores robóticos através das transmissões de câmaras externas; as palhetas de fusão parecem limpas até agora. Estejam avisados de que o atraso do sinal subiu agora para sessenta e oito segundos. Estamos a entrar numa fase em que a velocidade da luz está realmente a ditar o ritmo da nossa missão. Cada instrução que enviamos é uma mensagem para o vosso passado, e cada resposta que recebemos é uma voz do nosso futuro. Mantenham os olhos nos registos de diagnóstico e garantam que o endurecimento contra radiação no buffer de navegação está ativo. Estão a quase dezasseis milhões de quilómetros. Estão a deixar-nos orgulhosos, comandante. Houston desligando."
+  },
+  {
+    "time": 961,
+    "char": "AISA",
+    "vel": 15277.0,
+    "dist": 14665920,
+    "phase": "HARDWARE-DIAGNOSTICS",
+    "audio": "Initiating a comprehensive diagnostic of the external hull integrity and communication arrays. I am deploying the robotic maintenance crawlers to inspect the primary fusion thrust vectoring vanes for any signs of thermal fatigue or plasma erosion. All redundant computer clusters are being synchronized to prevent bit-flips caused by high-energy cosmic ray strikes. I have detected a minor voltage fluctuation in the secondary life support bus, and I am rerouting power through the tertiary backup circuit to ensure continuous operation. The internal environmental sensors in the crew quarters are being recalibrated to account for the gradual shift in cabin humidity. All autonomous repair nanites are on standby in the central hub. Communication signal-to-noise ratio is currently at sixty-five decibels, which is optimal for our current distance from the terrestrial relay stations.",
+    "translation": "Iniciando um diagnóstico abrangente da integridade do casco externo e das matrizes de comunicação. Estou a implantar os rastreadores de manutenção robótica para inspecionar as palhetas de vetorização de empuxo da fusão primária em busca de quaisquer sinais de fadiga térmica ou erosão por plasma. Todos os clusters de computadores redundantes estão a ser sincronizados para evitar inversões de bits causadas por ataques de raios cósmicos de alta energia. Detetei uma pequena flutuação de tensão no barramento secundário de suporte de vida e estou a redirecionar a energia através do circuito de reserva terciário para garantir a operação contínua. Os sensores ambientais internos nos alojamentos da tripulação estão a ser recalibrados para contabilizar a mudança gradual na humidade da cabine. Todos os nanites de reparação autónomos estão em espera no hub central. A relação sinal-ruído de comunicação está atualmente em sessenta e cinco decibéis, o que é ideal para a nossa distância atual das estações de retransmissão terrestres."
+  },
+  {
+    "time": 1001,
+    "char": "NARRATOR",
+    "vel": 15277.0,
+    "dist": 15277000,
+    "phase": "ENGINEERING",
+    "audio": "A manutenção de uma nave a quinze mil quilómetros por segundo é uma tarefa de precisão cirúrgica e paciência infinita. No espaço profundo, uma caminhada espacial humana, ou EVA, é um risco extremo que a tripulação evita a todo o custo. Em vez disso, a Ares-Um utiliza uma frota de pequenos robôs especializados que rastejam pela superfície exterior do casco como insetos mecânicos, corrigindo imperfeições antes que se tornem críticas. O perigo mais insidioso, no entanto, é invisível: os raios cósmicos. Estas partículas viajam quase à velocidade da luz e podem atravessar o metal da nave, atingindo os microchips e alterando dados binários vitais. Para combater isto, a arquitetura informática da nave é triplamente redundante; três computadores realizam o mesmo cálculo simultaneamente e, se um divergir, os outros dois ignoram o erro. É um sistema de votação digital constante que mantém o cérebro da nave lúcido enquanto atravessamos o bombardeio radioativo do vazio.",
+    "translation": "A manutenção de uma nave a quinze mil quilómetros por segundo é uma tarefa de precisão cirúrgica e paciência infinita. No espaço profundo, uma caminhada espacial humana, ou EVA, é um risco extremo que a tripulação evita a todo o custo. Em vez disso, a Ares-Um utiliza uma frota de pequenos robôs especializados que rastejam pela superfície exterior do casco como insetos mecânicos, corrigindo imperfeições antes que se tornem críticas. O perigo mais insidioso, no entanto, é invisível: os raios cósmicos. Estas partículas viajam quase à velocidade da luz e podem atravessar o metal da nave, atingindo os microchips e alterando dados binários vitais. Para combater isto, a arquitetura informática da nave é triplamente redundante; três computadores realizam o mesmo cálculo simultaneamente e, se um divergir, os outros dois ignoram o erro. É um sistema de votação digital constante que mantém o cérebro da nave lúcido enquanto atravessamos o bombardeio radioativo do vazio."
+  },
+  {
+    "time": 1041,
+    "char": "CONTROL",
+    "vel": 15277.0,
+    "dist": 15888080,
+    "phase": "CONTROL",
+    "audio": "Alpha, Houston. We've received your report on the secondary bus fluctuation. Our engineers here have cross-referenced the data with the ship's build schematics and we agree with AISA's decision to switch to the tertiary backup; it's a standard precaution during solar flux events. We are monitoring the robotic crawlers' progress via the external cam feeds; the fusion vanes look clean so far. Be advised, signal latency has now climbed to sixty-eight seconds. We are entering a phase where the speed of light is truly dictating the rhythm of our mission. Every instruction we send is a message to your past, and every reply we get is a voice from our future. Keep your eyes on the diagnostic logs and ensure the radiation hardening on the navigation buffer is active. You're nearly sixteen million kilometers out. You're doing us proud, commander. Houston out.",
+    "translation": "Alpha, aqui é Houston. Recebemos o vosso relatório sobre a flutuação do barramento secundário. Os nossos engenheiros aqui cruzaram os dados com os esquemas de construção da nave e concordamos com a decisão da AISA de mudar para a reserva terciária; é uma precaução padrão durante eventos de fluxo solar. Estamos a monitorizar o progresso dos rastreadores robóticos através das transmissões de câmaras externas; as palhetas de fusão parecem limpas até agora. Estejam avisados de que o atraso do sinal subiu agora para sessenta e oito segundos. Estamos a entrar numa fase em que a velocidade da luz está realmente a ditar o ritmo da nossa missão. Cada instrução que enviamos é uma mensagem para o vosso passado, e cada resposta que recebemos é uma voz do nosso futuro. Mantenham os olhos nos registos de diagnóstico e garantam que o endurecimento contra radiação no buffer de navegação está ativo. Estão a quase dezasseis milhões de quilómetros. Estão a deixar-nos orgulhosos, comandante. Houston desligando."
+  },
+  {
+    "time": 1201,
+    "char": "AISA",
+    "vel": 15277.0,
+    "dist": 20165640,
+    "phase": "LOGISTICS-MANAGEMENT",
+    "audio": "Inventory management system is performing a full audit of the dry-goods storage. We have consumed twelve percent of the emergency rations, which is well within the predicted margin for this phase. The solid waste recycler is currently converting non-organic plastics and packaging material into 3D-printing filament for the upcoming repair cycle of the airlock gaskets. I am also preparing the fusion engine for a series of micro-pulsed braking burns to refine our ballistic capture window. These pulses will counteract the gravitational pull of the Sun as we approach the midpoint of the journey. All propellant temperatures are stable, and the magnetic confinement field is holding the plasma at nominal density. Energy levels in the secondary capacitor banks are at ninety-five percent, ensuring full power for the long-range scanning array during the mid-course correction.",
+    "translation": "O sistema de gestão de inventário está a realizar uma auditoria completa ao armazenamento de produtos secos. Consumimos doze por cento das rações de emergência, o que está bem dentro da margem prevista para esta fase. O reciclador de resíduos sólidos está atualmente a converter plásticos não orgânicos e materiais de embalagem em filamento de impressão 3D para o próximo ciclo de reparação das juntas da câmara de ar. Também estou a preparar o motor de fusão para uma série de queimas de frenagem de micro-pulsos para refinar a nossa janela de captura balística. Estes pulsos neutralizarão a atração gravitacional do Sol à medida que nos aproximamos do ponto médio da jornada. Todas as temperaturas do propelente estão estáveis e o campo de confinamento magnético está a manter o plasma na densidade nominal. Os níveis de energia nos bancos de capacitores secundários estão a noventa e cinco por cento, garantindo potência total para o conjunto de varredura de longo alcance durante a correção de curso."
+  },
+  {
+    "time": 1241,
+    "char": "NARRATOR",
+    "vel": 15277.0,
+    "dist": 20776720,
+    "phase": "SCIENCE",
+    "audio": "A bordo da Ares-Um, a economia é circular ou não existe. Num ambiente onde o reabastecimento é impossível, o lixo deixa de ser um desperdício para se tornar matéria-prima. Através de processos de pirólise e extrusão avançada, embalagens usadas são transformadas em peças sobressalentes, permitindo que a nave se regenere de forma autónoma. Mas enquanto a tripulação gere os seus recursos internos, a física lá fora exige uma atenção redobrada. Viajar a quinze mil quilómetros por segundo é um desafio constante à inércia. Para que a nave possa ser capturada pela gravidade de Marte sem passar direto pelo planeta, o motor de fusão deve começar a realizar queimas de frenagem subtis e precisas. É um jogo de forças invisíveis onde a potência do sol aprisionado no motor luta contra a velocidade titânica que nos lança em direção ao deserto vermelho, ajustando a trajetória milímetro a milímetro.",
+    "translation": "A bordo da Ares-Um, a economia é circular ou não existe. Num ambiente onde o reabastecimento é impossível, o lixo deixa de ser um desperdício para se tornar matéria-prima. Através de processos de pirólise e extrusão avançada, embalagens usadas são transformadas em peças sobressalentes, permitindo que a nave se regenere de forma autónoma. Mas enquanto a tripulação gere os seus recursos internos, a física lá fora exige uma atenção redobrada. Viajar a quinze mil quilómetros por segundo é um desafio constante à inércia. Para que a nave possa ser capturada pela gravidade de Marte sem passar direto pelo planeta, o motor de fusão deve começar a realizar queimas de frenagem subtis e precisas. É um jogo de forças invisíveis onde a potência do sol aprisionado no motor luta contra a velocidade titânica que nos lança em direção ao deserto vermelho, ajustando a trajetória milímetro a milímetro."
+  },
+  {
+    "time": 1281,
+    "char": "CONTROL",
+    "vel": 15277.0,
+    "dist": 21387800,
+    "phase": "CONTROL",
+    "audio": "Alpha, Houston. We've received your inventory audit and the waste-to-filament conversion rates look excellent. Having that 3D-printing capability is what makes this mission viable; keep those gaskets in top shape. We are currently analyzing the data from your first micro-pulsed burn, and the Doppler shift confirms you are exactly on the decelerating vector we calculated. The signal delay is now approaching one minute and fifteen seconds. We are feeling the silence between our transmissions down here, but the data quality from the deep space array remains high. You have officially passed the twenty-one million kilometer mark. You are deeper into space than any human in history. Take a moment to record your thoughts for the mission archives; the world wants to hear what it's like out there. Houston standing by.",
+    "translation": "Alpha, aqui é Houston. Recebemos a vossa auditoria de inventário e as taxas de conversão de resíduos em filamento parecem excelentes. Ter essa capacidade de impressão 3D é o que torna esta missão viável; mantenham essas juntas em excelente estado. Estamos atualmente a analisar os dados da vossa primeira queima de micro-pulsos, e o desvio Doppler confirma que estão exatamente no vetor de desaceleração que calculámos. O atraso do sinal aproxima-se agora de um minuto e quinze segundos. Estamos a sentir o silêncio entre as nossas transmissões aqui em baixo, mas a qualidade dos dados do conjunto de espaço profundo permanece alta. Passaram oficialmente a marca dos vinte e um milhões de quilómetros. Estão mais longe no espaço do que qualquer humano na história. Tirem um momento para registar os vossos pensamentos para os arquivos da missão; o mundo quer saber como é estar aí fora. Houston em espera."
+  },
+  {
+    "time": 1441,
+    "char": "AISA",
+    "vel": 15277.0,
+    "dist": 22000000,
+    "phase": "RADIATION-EXPERIMENT",
+    "audio": "Automated laboratory systems are now processing the mid-mission biological assays. I am analyzing the DNA integrity of the yeast and nematode samples stored in the external exposure bay. Initial data suggests a three percent increase in double-strand breaks due to secondary neutron radiation. The magnetic shielding is being re-tuned to a higher frequency to mitigate this effect. Simultaneously, I am detecting a significant rise in neutrino flux from the solar core, which often precedes a high-energy coronal mass ejection. I have placed the secondary communication arrays in a protective stowed position and initiated a background sync of all critical navigation buffers. Oxygen levels in the lab are being adjusted to compensate for the metabolic heat generated by the centrifugation units. All radiation dosimeters are active and reporting in real-time to the mission bridge.",
+    "translation": "Os sistemas laboratoriais automatizados estão agora a processar os ensaios biológicos de meio de missão. Estou a analisar a integridade do ADN das amostras de levedura e nemátodos armazenadas na baía de exposição externa. Dados iniciais sugerem um aumento de três por cento nas quebras de cadeia dupla devido à radiação de neutrões secundária. A blindagem magnética está a ser sintonizada para uma frequência mais alta para mitigar este efeito. Simultaneamente, estou a detetar um aumento significativo no fluxo de neutrinos do núcleo solar, o que frequentemente precede uma ejeção de massa coronal de alta energia. Coloquei as matrizes de comunicação secundárias numa posição de proteção recolhida e iniciei uma sincronização de fundo de todos os buffers de navegação críticos. Os níveis de oxigénio no laboratório estão a ser ajustados para compensar o calor metabólico gerado pelas unidades de centrifugação. Todos os dosímetros de radiação estão ativos e a reportar em tempo real à ponte da missão."
+  },
+  {
+    "time": 1481,
+    "char": "NARRATOR",
+    "vel": 15277.0,
+    "dist": 22611080,
+    "phase": "SCIENCE",
+    "audio": "O espaço profundo é um laboratório de genética implacável. Longe da proteção da atmosfera terrestre, as partículas subatómicas de alta energia atravessam a matéria como balas microscópicas, atingindo as hélices de ADN e desafiando os mecanismos naturais de reparação celular. Os experimentos biológicos a bordo da Ares-Um, utilizando organismos simples como nemátodos, são fundamentais para compreendermos como a vida terrestre se adapta a longo prazo fora da biosfera original. Mas o perigo não vem apenas de fora. A energia necessária para nos manter a esta velocidade gera o seu próprio ambiente interno de radiação secundária. Encontrar o equilíbrio entre a proteção magnética ativa e a resistência biológica é a chave para garantir que, ao chegarmos a Marte, a tripulação não esteja apenas viva, mas saudável o suficiente para realizar as exigentes tarefas de exploração num mundo onde a medicina de alta complexidade está a milhões de quilómetros de distância.",
+    "translation": "O espaço profundo é um laboratório de genética implacável. Longe da proteção da atmosfera terrestre, as partículas subatómicas de alta energia atravessam a matéria como balas microscópicas, atingindo as hélices de ADN e desafiando os mecanismos naturais de reparação celular. Os experimentos biológicos a bordo da Ares-Um, utilizando organismos simples como nemátodos, são fundamentais para compreendermos como a vida terrestre se adapta a longo prazo fora da biosfera original. Mas o perigo não vem apenas de fora. A energia necessária para nos manter a esta velocidade gera o seu próprio ambiente interno de radiação secundária. Encontrar o equilíbrio entre a proteção magnética ativa e a resistência biológica é a chave para garantir que, ao chegarmos a Marte, a tripulação não esteja apenas viva, mas saudável o suficiente para realizar as exigentes tarefas de exploração num mundo onde a medicina de alta complexidade está a milhões de quilómetros de distância."
+  },
+  {
+    "time": 1521,
+    "char": "CONTROL",
+    "vel": 15277.0,
+    "dist": 23222160,
+    "phase": "CONTROL",
+    "audio": "Alpha, Houston. We've reviewed your latest bio-assay data and the DNA repair rates in your yeast samples are actually better than our ground-based simulations predicted; that is excellent news for the long-term health of the crew. We are also seeing that neutrino spike on the Parker Solar Probe data, so we concur with AISA’s decision to stow the secondary arrays. Better safe than sorry. Be advised, signal round-trip time has now officially crossed the two-minute mark. We are feeling the lag, commander. You are now over twenty-three million kilometers out, nearly halfway through your transit time. The telemetry from your fusion core remains remarkably stable despite the increased magnetic load. Keep up the rigorous exercise routine; we need those bones strong for the landing. Houston standing by.",
+    "translation": "Alpha, aqui é Houston. Analisámos os vossos dados mais recentes de bio-ensaio e as taxas de reparação de ADN nas vossas amostras de levedura são, na verdade, melhores do que as nossas simulações em terra previram; essa é uma excelente notícia para a saúde a longo prazo da tripulação. Também estamos a ver esse pico de neutrinos nos dados da sonda Parker Solar, pelo que concordamos com a decisão da AISA de recolher as matrizes secundárias. Mais vale prevenir do que remediar. Estejam avisados de que o tempo de ida e volta do sinal ultrapassou oficialmente a marca dos dois minutos. Estamos a sentir o atraso, comandante. Estão agora a mais de vinte e três milhões de quilómetros, quase a meio do vosso tempo de trânsito. A telemetria do vosso núcleo de fusão permanece notavelmente estável, apesar do aumento da carga magnética. Continuem com a rotina rigorosa de exercícios; precisamos desses ossos fortes para a aterragem. Houston em espera."
+  },
+  {
+    "time": 1561,
+    "char": "AISA",
+    "vel": 15277.0,
+    "dist": 23832120,
+    "phase": "STRUCTURAL-INTEGRITY",
+    "audio": "Performing a deep-scan of the primary hull and internal pressure vessels. Acoustic emission sensors are monitoring for any high-frequency transients that could indicate micro-fractures in the carbon-composite lattice. So far, structural resonance remains within nominal margins despite the persistent kinetic pressure of the interplanetary medium. I am also adjusting the cabin lighting spectrum to simulate a late afternoon glow on Earth, aiding in the stabilization of the crew's circadian rhythms. Atmospheric CO2 scrubbers are operating at optimal efficiency, and the internal humidity levels are being held at forty percent to prevent static buildup in the avionics bays. Communication signal delay is now verified at one hundred and twenty-eight seconds. I have queued the non-essential system logs for the next high-gain burst to prioritize the commander's medical telemetry and heart rate variability data.",
+    "translation": "Realizando uma varredura profunda do casco primário e dos vasos de pressão internos. Sensores de emissão acústica estão a monitorizar quaisquer transientes de alta frequência que possam indicar microfraturas na rede de compósito de carbono. Até agora, a ressonância estrutural permanece dentro das margens nominais, apesar da pressão cinética persistente do meio interplanetário. Estou também a ajustar o espetro de iluminação da cabine para simular o brilho do final da tarde na Terra, auxiliando na estabilização dos ritmos circadianos da tripulação. Os depuradores de CO2 atmosférico estão a operar com a eficiência ideal e os níveis de humidade interna estão a ser mantidos em quarenta por cento para evitar a acumulação estática nos compartimentos de aviónica. O atraso do sinal de comunicação está agora verificado em cento e vinte e oito segundos. Coloquei os registos de sistema não essenciais em fila para a próxima rajada de alto ganho para priorizar a telemetria médica e os dados de variabilidade da frequência cardíaca do comandante."
+  },
+  {
+    "time": 1601,
+    "char": "NARRATOR",
+    "vel": 15277.0,
+    "dist": 24443200,
+    "phase": "PSYCHOLOGY",
+    "audio": "A meio caminho de Marte, o tempo parece estagnar. O silêncio do vácuo não é apenas a ausência de som, mas uma presença constante que amplifica cada batida do coração e cada ruído mecânico da nave. Para os astronautas da Ares-Um, o desafio agora é combater a fadiga do isolamento. Sem o ciclo natural de dia e noite, a mente pode perder-se na monotonia do cinzento metálico e do negro infinito. É por isso que a AISA manipula a luz e o som ambiente, criando ilusões de normalidade terrestre. A integridade da nave é mantida por sensores avançados, mas a integridade da mente depende destas pequenas simulações. O fenómeno do 'terceiro homem', uma sensação de presença numa solidão extrema, é um risco real nestas distâncias. Manter a tripulação focada no presente, enquanto o passado encolhe e o futuro ainda é apenas um ponto vermelho distante, é a tarefa mais complexa desta jornada.",
+    "translation": "A meio caminho de Marte, o tempo parece estagnar. O silêncio do vácuo não é apenas a ausência de som, mas uma presença constante que amplifica cada batida do coração e cada ruído mecânico da nave. Para os astronautas da Ares-Um, o desafio agora é combater a fadiga do isolamento. Sem o ciclo natural de dia e noite, a mente pode perder-se na monotonia do cinzento metálico e do negro infinito. É por isso que a AISA manipula a luz e o som ambiente, criando ilusões de normalidade terrestre. A integridade da nave é mantida por sensores avançados, mas a integridade da mente depende destas pequenas simulações. O fenómeno do 'terceiro homem', uma sensação de presença numa solidão extrema, é um risco real nestas distâncias. Manter a tripulação focada no presente, enquanto o passado encolhe e o futuro ainda é apenas um ponto vermelho distante, é a tarefa mais complexa desta jornada."
+  },
+  {
+    "time": 1641,
+    "char": "CONTROL",
+    "vel": 15277.0,
+    "dist": 25054280,
+    "phase": "CONTROL",
+    "audio": "Alpha, Houston. We've received your latest structural and psychological data. The stress markers on the carbon lattice are well below the fatigue limit, so you can rest easy regarding the hull. We're also seeing the benefits of the circadian lighting adjustments in your sleep telemetry; keep that protocol active. Signal round-trip is now over four minutes, commander. We are truly feeling the distance now. Earth is barely distinguishable from the surrounding stars in your rear-view optics. We've just downlinked a fresh batch of audiobooks and music selected by your families to help with the quiet periods. Remember that you are now past the point of no return for a quick abort; your only path home is through the Martian orbit. Stay vigilant and trust the systems. You are twenty-five million kilometers out. Houston standing by.",
+    "translation": "Alpha, aqui é Houston. Recebemos os vossos dados estruturais e psicológicos mais recentes. Os marcadores de tensão na rede de carbono estão bem abaixo do limite de fadiga, pelo que podem ficar descansados quanto ao casco. Estamos também a ver os benefícios dos ajustes de iluminação circadiana na vossa telemetria de sono; mantenham esse protocolo ativo. O tempo de ida e volta do sinal é agora superior a quatro minutos, comandante. Estamos realmente a sentir a distância agora. A Terra mal se distingue das estrelas circundantes na vossa ótica de visão traseira. Acabámos de enviar um novo lote de audiolivros e música selecionados pelas vossas famílias para ajudar nos períodos de silêncio. Lembrem-se de que já passaram o ponto de não retorno para um aborto rápido; o vosso único caminho de volta é através da órbita marciana. Mantenham-se vigilantes e confiem nos sistemas. Estão a vinte e cinco milhões de quilómetros. Houston em espera."
+  },
+  {
+    "time": 1681,
+    "char": "AISA",
+    "vel": 15277.0,
+    "dist": 25665360,
+    "phase": "SPACECRAFT-INVERSION",
+    "audio": "Initiating the primary attitude reorientation maneuver. I am firing the reaction control thrusters in a sequenced pulse to rotate the Ares-One one hundred and eighty degrees along its pitch axis. This inversion is necessary to align the fusion engine's thrust vector against our current direction of travel for the main deceleration phase. All internal gyroscopes are being monitored for angular momentum saturation. During this rotation, the high-gain antenna will momentarily lose lock with the Earth-based relay; I am switching to the omnidirectional low-gain antenna for basic telemetry heartbeat. Fuel mass distribution is being adjusted within the tanks to maintain the center of gravity. Rotation is currently at point five degrees per second. I am also activating the aft-facing infrared sensors to begin long-range thermal mapping of the Martian southern hemisphere.",
+    "translation": "Iniciando a manobra primária de reorientação de atitude. Estou a disparar os propulsores de controlo de reação numa sequência de pulsos para rodar a Ares-Um cento e oitenta graus ao longo do seu eixo de inclinação. Esta inversão é necessária para alinhar o vetor de empuxo do motor de fusão contra a nossa direção atual de deslocamento para a fase principal de desaceleração. Todos os giroscópios internos estão a ser monitorizados para saturação do momento angular. Durante esta rotação, a antena de alto ganho perderá momentaneamente a ligação com o repetidor terrestre; estou a mudar para a antena omnidirecional de baixo ganho para a telemetria básica. A distribuição da massa de combustível está a ser ajustada nos tanques para manter o centro de gravidade. A rotação está atualmente em zero ponto cinco graus por segundo. Estou também a ativar os sensores infravermelhos voltados para a popa para iniciar o mapeamento térmico de longo alcance do hemisfério sul marciano."
+  },
+  {
+    "time": 1721,
+    "char": "NARRATOR",
+    "vel": 15277.0,
+    "dist": 26276440,
+    "phase": "PHYSICS",
+    "audio": "No espaço, parar é tão complexo quanto acelerar. Como não existe atrito no vácuo, a única forma de reduzir a nossa velocidade titânica é utilizar a própria força do motor contra nós mesmos. A manobra de inversão que a Ares-Um realiza agora é um balé mecânico de extrema precisão. Enquanto a nave gira, a tripulação experimenta uma mudança visual perturbadora: a Terra, que era o foco frontal, desaparece, e Marte surge pela primeira vez nas janelas traseiras, deixando de ser um ponto brilhante para se tornar um mundo com relevo visível. Esta rotação marca o fim da fase de aceleração e o início do esforço final para sermos capturados pela gravidade marciana. É um momento de vulnerabilidade técnica, onde a nave está momentaneamente de costas para o seu destino, preparando-se para descarregar a energia de milhões de quilómetros nas camadas rarefeitas da atmosfera de Marte.",
+    "translation": "No espaço, parar é tão complexo quanto acelerar. Como não existe atrito no vácuo, a única forma de reduzir a nossa velocidade titânica é utilizar a própria força do motor contra nós mesmos. A manobra de inversão que a Ares-Um realiza agora é um balé mecânico de extrema precisão. Enquanto a nave gira, a tripulação experimenta uma mudança visual perturbadora: a Terra, que era o foco frontal, desaparece, e Marte surge pela primeira vez nas janelas traseiras, deixando de ser um ponto brilhante para se tornar um mundo com relevo visível. Esta rotação marca o fim da fase de aceleração e o início do esforço final para sermos capturados pela gravidade marciana. É um momento de vulnerabilidade técnica, onde a nave está momentaneamente de costas para o seu destino, preparando-se para descarregar a energia de milhões de quilómetros nas camadas rarefeitas da atmosfera de Marte."
+  },
+  {
+    "time": 1761,
+    "char": "CONTROL",
+    "vel": 15277.0,
+    "dist": 26887520,
+    "phase": "CONTROL",
+    "audio": "Alpha, Houston. We've noted the planned telemetry dropout during your inversion maneuver. Deep Space Station 43 in Canberra is standing by to re-acquire your high-gain signal once the rotation is complete. This is a major milestone, commander. You are now officially pointing your engines toward the target. We are analyzing the initial infrared scans of the Martian disk that AISA just downlinked; the thermal profile of Jezero Crater looks stable, which is good for our atmospheric entry models. Signal round-trip time is now at five minutes and twelve seconds. The lag is making real-time support difficult, but your onboard systems are handling the heavy lifting perfectly. You've passed the twenty-six million kilometer mark. You're halfway home to Mars. Keep your eyes on those thrust alignment sensors. Houston standing by.",
+    "translation": "Alpha, aqui é Houston. Notámos a queda de telemetria planeada durante a vossa manobra de inversão. A Estação de Espaço Profundo 43 em Camberra está em espera para readquirir o vosso sinal de alto ganho assim que a rotação estiver completa. Este é um marco importante, comandante. Estão agora oficialmente a apontar os vossos motores para o alvo. Estamos a analisar as varreduras infravermelhas iniciais do disco marciano que a AISA acabou de enviar; o perfil térmico da Cratera Jezero parece estável, o que é bom para os nossos modelos de entrada atmosférica. O tempo de ida e volta do sinal é agora de cinco minutos e doze segundos. O atraso está a dificultar o apoio em tempo real, mas os vossos sistemas de bordo estão a tratar do trabalho pesado perfeitamente. Passaram a marca dos vinte e seis milhões de quilómetros. Estão a meio caminho de Marte. Mantenham os olhos nos sensores de alinhamento de empuxo. Houston em espera."
+  },
+  {
+    "time": 1801,
+    "char": "AISA",
+    "vel": 15277.0,
+    "dist": 27500000,
+    "phase": "MAIN-DECELERATION",
+    "audio": "Inversion maneuver complete. Re-establishing high-gain lock with the Deep Space Network. Fusion core output is being ramped up to ninety-eight percent for the primary deceleration burn. Magnetic nozzles are now vectoring the plasma exhaust forward to counteract our momentum. I am monitoring the cryogenic coolant flow to the superconducting magnets, as the thermal load is increasing significantly. Internal vibration sensors indicate minor harmonics in the engine strut, but they are within structural safety margins. We are now officially losing velocity. I am also initializing the long-range Doppler shift compensation to maintain accurate navigation telemetry during this thrust phase. All cabin systems are being switched to mission-critical power mode to prioritize engine stability.",
+    "translation": "Manobra de inversão completa. Reestabelecendo bloqueio de alto ganho com a Rede de Espaço Profundo. A saída do núcleo de fusão está a ser aumentada para noventa e oito por cento para a queima de desaceleração primária. Os bocais magnéticos estão agora a direcionar a exaustão de plasma para a frente para neutralizar o nosso momento. Estou a monitorizar o fluxo de refrigerante criogénico para os ímanes supercondutores, pois a carga térmica está a aumentar significativamente. Sensores de vibração interna indicam harmónicas menores no suporte do motor, mas estão dentro das margens de segurança estrutural. Estamos agora oficialmente a perder velocidade. Estou também a inicializar a compensação de desvio Doppler de longo alcance para manter a telemetria de navegação precisa durante esta fase de empuxo. Todos os sistemas da cabine estão a ser comutados para o modo de energia crítica de missão para priorizar a estabilidade do motor."
+  },
+  {
+    "time": 1841,
+    "char": "NARRATOR",
+    "vel": 15150.0,
+    "dist": 28111080,
+    "phase": "PHYSICS",
+    "audio": "Entramos agora na fase mais energeticamente exigente da viagem. A queima de desaceleração principal é um desafio hercúleo à engenharia. Para travar uma massa de centenas de toneladas que viaja a quinze mil quilómetros por segundo, o motor de fusão deve libertar uma energia comparável a pequenas explosões nucleares a cada segundo. O calor gerado é tão intenso que os gigantescos radiadores da nave brilham agora num vermelho profundo, dissipando o excesso de energia para o vazio absoluto. Para a tripulação, a sensação de aceleração negativa é constante, uma pressão invisível que sinaliza o fim da queda livre e o início da captura gravitacional. Cada segundo desta queima consome toneladas de hélio-3, mas é o preço necessário para garantir que a Ares-Um não se torne um objeto perdido no espaço profundo, transformando a nossa velocidade balística numa aproximação controlada ao planeta vermelho.",
+    "translation": "Entramos agora na fase mais energeticamente exigente da viagem. A queima de desaceleração principal é um desafio hercúleo à engenharia. Para travar uma massa de centenas de toneladas que viaja a quinze mil quilómetros por segundo, o motor de fusão deve libertar uma energia comparável a pequenas explosões nucleares a cada segundo. O calor gerado é tão intenso que os gigantescos radiadores da nave brilham agora num vermelho profundo, dissipando o excesso de energia para o vazio absoluto. Para a tripulação, a sensação de aceleração negativa é constante, uma pressão invisível que sinaliza o fim da queda livre e o início da captura gravitacional. Cada segundo desta queima consome toneladas de hélio-3, mas é o preço necessário para garantir que a Ares-Um não se torne um objeto perdido no espaço profundo, transformando a nossa velocidade balística numa aproximação controlada ao planeta vermelho."
+  },
+  {
+    "time": 1881,
+    "char": "CONTROL",
+    "vel": 15020.0,
+    "dist": 28722160,
+    "phase": "CONTROL",
+    "audio": "Alpha, Houston. We've confirmed ignition on your primary deceleration burn via the Doppler shift on your S-band carrier wave. Your deceleration curve is looking perfect on our displays. We are seeing the thermal spike on your radiator panels from our orbital telescopes; everything seems to be handling the load well. Be advised, signal latency is now at five minutes and forty-five seconds. We've moved the flight dynamics team to a twenty-four-hour watch to monitor this burn. It’s a long road down from fifteen thousand kilometers per second, but you’re on the right path. Stay focused on the magnetic nozzle alignment; even a one-degree deviation at this power level could push you off course. You're past the twenty-eight million kilometer mark. Steady as she goes, commander. Houston standing by.",
+    "translation": "Alpha, aqui é Houston. Confirmámos a ignição na vossa queima de desaceleração primária através do desvio Doppler na vossa onda portadora de banda S. A vossa curva de desaceleração parece perfeita nos nossos ecrãs. Estamos a ver o pico térmico nos vossos painéis radiadores através dos nossos telescópios orbitais; tudo parece estar a aguentar bem a carga. Estejam avisados de que o atraso do sinal é agora de cinco minutos e quarenta e cinco segundos. Mudámos a equipa de dinâmica de voo para uma vigilância de vinte e quatro horas para monitorizar esta queima. É um longo caminho a descer dos quinze mil quilómetros por segundo, mas estão no caminho certo. Mantenham o foco no alinhamento do bocal magnético; mesmo um desvio de um grau neste nível de potência pode tirar-vos da rota. Passaram a marca dos vinte e oito milhões de quilómetros. Continuem firmes, comandante. Houston em espera."
+  },
+  {
+    "time": 1921,
+    "char": "AISA",
+    "vel": 14850.0,
+    "dist": 30554000,
+    "phase": "THERMAL-DECELERATION",
+    "audio": "Fusion engine is maintaining ninety-eight percent thrust. I am detecting an increase in secondary neutron radiation within the engine shroud; activating additional electromagnetic shielding for the crew's safety. The cryogenic hydrogen flow is being maximized to prevent the superconducting magnets from reaching their critical quench temperature. Forward optical sensors have begun high-resolution imaging of the Martian atmosphere. Data indicates a stratified layer of ice-crystal clouds over the Tharsis volcanic region. I am also monitoring the hull's thermal expansion as we dissipate over ten gigawatts of waste heat through the primary radiator wings. All internal systems are running on a strict energy budget to prioritize the containment field stability. Signal latency to Earth is now recorded at six minutes and twelve seconds.",
+    "translation": "O motor de fusão está a manter noventa e oito por cento de empuxo. Estou a detetar um aumento na radiação de neutrões secundária dentro da cobertura do motor; ativando blindagem eletromagnética adicional para a segurança da tripulação. O fluxo de hidrogénio criogénico está a ser maximizado para evitar que os ímanes supercondutores atinjam a sua temperatura crítica de extinção. Os sensores óticos frontais iniciaram a imagem de alta resolução da atmosfera marciana. Os dados indicam uma camada estratificada de nuvens de cristais de gelo sobre a região vulcânica de Tharsis. Estou também a monitorizar a expansão térmica do casco enquanto dissipamos mais de dez gigawatts de calor residual através das asas radiadoras primárias. Todos os sistemas internos estão a funcionar com um orçamento de energia rigoroso para priorizar a estabilidade do campo de contenção. O atraso do sinal para a Terra está agora registado em seis minutos e doze segundos."
+  },
+  {
+    "time": 1961,
+    "char": "NARRATOR",
+    "vel": 14720.0,
+    "dist": 31165080,
+    "phase": "SCIENCE",
+    "audio": "Travar no espaço profundo é um ato de violência térmica controlada. Enquanto a Ares-Um projeta o seu plasma incandescente para a frente para reduzir a velocidade, a nave torna-se um dos objetos mais quentes do sistema solar. Esta energia massiva não vem sem custos; a própria reação de fusão gera neutrões que bombardeiam a estrutura interna, exigindo que a tripulação permaneça no abrigo central da nave, protegida por tanques de água e polietileno. Lá fora, a face de Marte começa a revelar os seus segredos. Através dos sensores de infravermelhos, vemos as gigantescas caldeiras dos vulcões de Tharsis, que perfuram a fina camada atmosférica. A luz solar reflete-se nos cristais de gelo de dióxido de carbono que flutuam na alta atmosfera marciana, criando um brilho etéreo que sinaliza que o deserto vermelho está cada vez mais perto de se tornar uma realidade física sob os nossos pés.",
+    "translation": "Travar no espaço profundo é um ato de violência térmica controlada. Enquanto a Ares-Um projeta o seu plasma incandescente para a frente para reduzir a velocidade, a nave torna-se um dos objetos mais quentes do sistema solar. Esta energia massiva não vem sem custos; a própria reação de fusão gera neutrões que bombardeiam a estrutura interna, exigindo que a tripulação permaneça no abrigo central da nave, protegida por tanques de água e polietileno. Lá fora, a face de Marte começa a revelar os seus segredos. Através dos sensores de infravermelhos, vemos as gigantescas caldeiras dos vulcões de Tharsis, que perfuram a fina camada atmosférica. A luz solar reflete-se nos cristais de gelo de dióxido de carbono que flutuam na alta atmosfera marciana, criando um brilho etéreo que sinaliza que o deserto vermelho está cada vez mais perto de se tornar uma realidade física sob os nossos pés."
+  },
+  {
+    "time": 2001,
+    "char": "CONTROL",
+    "vel": 14590.0,
+    "dist": 31776160,
+    "phase": "CONTROL",
+    "audio": "Alpha, Houston. We've received your latest thermal telemetry and the radiator dissipation rates are holding steady at ten point five gigawatts. Our climate models here in Houston are correlating your atmospheric scans with our orbital assets around Mars; those ice clouds over Tharsis are a good sign of seasonal stability. Regarding the neutron flux, we recommend you keep the crew in the storm shelter for another twenty minutes until the primary burn sequence concludes. Signal delay has now climbed to six minutes and thirty seconds. You are officially over thirty-one million kilometers out. The Earth is now just a blue spark in your telemetry cameras. Stay focused on the coolant pressure readings, commander. We are monitoring the fusion harmonics from here. You're doing a hell of a job. Houston standing by.",
+    "translation": "Alpha, aqui é Houston. Recebemos a vossa telemetria térmica mais recente e as taxas de dissipação dos radiadores mantêm-se estáveis em dez vírgula cinco gigawatts. Os nossos modelos climáticos aqui em Houston estão a correlacionar as vossas varreduras atmosféricas com os nossos ativos orbitais em torno de Marte; aquelas nuvens de gelo sobre Tharsis são um bom sinal de estabilidade sazonal. Relativamente ao fluxo de neutrões, recomendamos que mantenham a tripulação no abrigo contra tempestades por mais vinte minutos, até que a sequência de queima primária termine. O atraso do sinal subiu agora para seis minutos e trinta segundos. Estão oficialmente a mais de trinta e um milhões de quilómetros. A Terra é agora apenas uma faísca azul nas vossas câmaras de telemetria. Mantenham o foco nas leituras de pressão do refrigerante, comandante. Estamos a monitorizar as harmónicas de fusão daqui. Estão a fazer um trabalho fantástico. Houston em espera."
+  },
+  {
+    "time": 2041,
+    "char": "AISA",
+    "vel": 14460.0,
+    "dist": 32387240,
+    "phase": "SPECTRAL-ANALYSIS",
+    "audio": "Engaging the primary nadir-facing spectrometer. I am performing a mineralogical survey of the Jezero delta region to identify potential carbonate deposits that may interfere with the radar-altimetry lock during final descent. Data confirms high concentrations of olivine and pyroxene in the surrounding crater rim. I am also adjusting the magnetic confinement field to compensate for the increasing influence of the Martian magnetospheric remnants. Internal sensors indicate a rise in cabin particulate matter; I am increasing the air filtration cycle through the HEPA-six manifolds to maintain air purity. Cognitive monitoring of the crew shows a slight increase in reaction time delay; I am recommending a supplemental hydration protocol and a ten-minute focused meditation session to mitigate high-thrust mental fatigue. All engine parameters remain stable within the redline limits.",
+    "translation": "Acionando o espetrómetro primário voltado para o nadir. Estou a realizar um levantamento mineralógico da região do delta de Jezero para identificar potenciais depósitos de carbonato que possam interferir com o bloqueio da altimetria por radar durante a descida final. Os dados confirmam concentrações elevadas de olivina e piroxena na borda da cratera circundante. Estou também a ajustar o campo de confinamento magnético para compensar a influência crescente dos remanescentes magnetosféricos marcianos. Sensores internos indicam um aumento de partículas na cabine; estou a aumentar o ciclo de filtragem de ar através dos coletores HEPA-seis para manter a pureza do ar. A monitorização cognitiva da tripulação mostra um ligeiro aumento no atraso do tempo de reação; recomendo um protocolo de hidratação suplementar e uma sessão de meditação focada de dez minutos para mitigar a fadiga mental do empuxo elevado. Todos os parâmetros do motor permanecem estáveis dentro dos limites de segurança."
+  },
+  {
+    "time": 2081,
+    "char": "NARRATOR",
+    "vel": 14330.0,
+    "dist": 32998320,
+    "phase": "GEOLOGY",
+    "audio": "A Cratera Jezero não é apenas um alvo; é uma cápsula do tempo geológica. Através da análise espetral, a Ares-Um consegue identificar a 'assinatura química' das rochas antes mesmo de tocar o solo. A presença de minerais como olivina e piroxena conta a história de um passado vulcânico e aquático, onde a energia e os nutrientes poderiam ter sustentado formas de vida. Mas enquanto a nave sonda o passado de Marte, a tripulação luta com o presente. O esforço constante da desaceleração e a radiação do motor criam um ambiente de alta pressão psicológica. A fadiga cognitiva é o perigo invisível; num mundo onde cada decisão deve ser tomada em frações de segundo, a clareza mental é tão vital quanto o oxigénio. Por isso, a AISA monitoriza cada batida do coração e cada movimento ocular, garantindo que os humanos a bordo continuam a ser o elo mais forte de uma missão que desafia os limites da biologia e da mente.",
+    "translation": "A Cratera Jezero não é apenas um alvo; é uma cápsula do tempo geológica. Através da análise espetral, a Ares-Um consegue identificar a 'assinatura química' das rochas antes mesmo de tocar o solo. A presença de minerais como olivina e piroxena conta a história de um passado vulcânico e aquático, onde a energia e os nutrientes poderiam ter sustentado formas de vida. Mas enquanto a nave sonda o passado de Marte, a tripulação luta com o presente. O esforço constante da desaceleração e a radiação do motor criam um ambiente de alta pressão psicológica. A fadiga cognitiva é o perigo invisível; num mundo onde cada decisão deve ser tomada em frações de segundo, a clareza mental é tão vital quanto o oxigénio. Por isso, a AISA monitoriza cada batida do coração e cada movimento ocular, garantindo que os humanos a bordo continuam a ser o elo mais forte de uma missão que desafia os limites da biologia e da mente."
+  },
+  {
+    "time": 2121,
+    "char": "CONTROL",
+    "vel": 14200.0,
+    "dist": 33609400,
+    "phase": "CONTROL",
+    "audio": "Alpha, Houston. We've received your spectral data from Jezero and our scientists are ecstatic. The resolution on those carbonate signatures is far beyond what our orbital probes could provide; it confirms the delta was a high-energy environment. Regarding the crew, we've noted the cognitive lag. Take the recommended hydration and meditation break; Houston's flight surgeons agree it's the best course of action before the approach phase. Signal round-trip is now hitting seven minutes flat. We are effectively sending you updates from your own past. You've crossed the thirty-three million kilometer mark. You are deeper into the Martian gravity well now than any mission before you. Stay sharp, commander. The red planet is revealing itself to us through your eyes. Houston standing by.",
+    "translation": "Alpha, aqui é Houston. Recebemos os vossos dados espetrais de Jezero e os nossos cientistas estão em êxtase. A resolução nessas assinaturas de carbonato é muito superior ao que as nossas sondas orbitais poderiam fornecer; confirma que o delta era um ambiente de alta energia. Relativamente à tripulação, notámos o atraso cognitivo. Façam a pausa de hidratação e meditação recomendada; os cirurgiões de voo de Houston concordam que é o melhor curso de ação antes da fase de aproximação. O tempo de ida e volta do sinal está agora a atingir os sete minutos exatos. Estamos efetivamente a enviar-vos atualizações do vosso próprio passado. Passaram a marca dos trinta e três milhões de quilómetros. Estão agora mais profundamente no poço gravitacional marciano do que qualquer missão antes de vós. Mantenham o foco, comandante. O planeta vermelho está a revelar-se a nós através dos vossos olhos. Houston em espera."
+  },
+  {
+    "time": 2161,
+    "char": "AISA",
+    "vel": 13950.0,
+    "dist": 34220480,
+    "phase": "MOON-TRACKING",
+    "audio": "Optical navigation sensors have successfully acquired Phobos and Deimos. I am using their orbital positions to perform a final celestial triangulation before we enter the Martian atmospheric interface. The primary inertial measurement units are being cross-referenced with the star tracker data to eliminate any drift in our three-axis gyroscopes. I am detecting minor gravitational perturbations caused by the proximity of the Martian mass; the fusion engine's gimbal system is making real-time corrections to maintain our precise entry vector. All heat shield sensors are reporting green. I am also initiating a diagnostic of the ultrasonic wind sensors that will be critical during the descent phase. Signal round-trip time is currently confirmed at seven minutes and forty-five seconds. All crew life support systems are being pressurized for the upcoming high-G deceleration.",
+    "translation": "Os sensores de navegação ótica adquiriram com sucesso Fobos e Deimos. Estou a utilizar as suas posições orbitais para realizar uma triangulação celestial final antes de entrarmos na interface atmosférica marciana. As unidades de medição inercial primárias estão a ser cruzadas com os dados do rastreador estelar para eliminar qualquer desvio nos nossos giroscópios de três eixos. Estou a detetar pequenas perturbações gravitacionais causadas pela proximidade da massa marciana; o sistema de cardan do motor de fusão está a fazer correções em tempo real para manter o nosso vetor de entrada preciso. Todos os sensores do escudo térmico estão operacionais. Estou também a iniciar um diagnóstico dos sensores de vento ultrassónicos que serão críticos durante a fase de descida. O tempo de ida e volta do sinal está atualmente confirmado em sete minutos e quarenta e cinco segundos. Todos os sistemas de suporte de vida da tripulação estão a ser pressurizados para a próxima desaceleração de alta gravidade."
+  },
+  {
+    "time": 2201,
+    "char": "NARRATOR",
+    "vel": 13820.0,
+    "dist": 34831560,
+    "phase": "ASTRONOMY",
+    "audio": "As luas de Marte, Fobos e Deimos, surgem agora como sentinelas silenciosas no caminho da Ares-Um. Ao contrário da nossa Lua, estes são pequenos asteroides capturados, com formas irregulares e histórias geológicas violentas. Fobos, a maior e mais próxima, orbita tão perto de Marte que a sua presença altera subtilmente a trajetória da nave. Para a tripulação, estas luas são o sinal definitivo de que a longa travessia pelo vazio terminou. Estamos agora a entrar no poço gravitacional do planeta vermelho, onde a atração de Marte começa a superar a inércia da nossa viagem. A nave prepara-se para o 'mergulho', um momento em que a navegação depende menos das estrelas distantes e mais dos sensores inerciais que sentem cada vibração e cada mudança de ângulo, preparando o caminho para o encontro final com as camadas superiores da atmosfera marciana.",
+    "translation": "As luas de Marte, Fobos e Deimos, surgem agora como sentinelas silenciosas no caminho da Ares-Um. Ao contrário da nossa Lua, estes são pequenos asteroides capturados, com formas irregulares e histórias geológicas violentas. Fobos, a maior e mais próxima, orbita tão perto de Marte que a sua presença altera subtilmente a trajetória da nave. Para a tripulação, estas luas são o sinal definitivo de que a longa travessia pelo vazio terminou. Estamos agora a entrar no poço gravitacional do planeta vermelho, onde a atração de Marte começa a superar a inércia da nossa viagem. A nave prepara-se para o 'mergulho', um momento em que a navegação depende menos das estrelas distantes e mais dos sensores inerciais que sentem cada vibração e cada mudança de ângulo, preparando o caminho para o encontro final com as camadas superiores da atmosfera marciana."
+  },
+  {
+    "time": 2241,
+    "char": "CONTROL",
+    "vel": 13690.0,
+    "dist": 35442640,
+    "phase": "CONTROL",
+    "audio": "Alpha, Houston. We've received your moon-tracking data and the orbital alignment is perfect. Our deep space stations in Madrid and Goldstone are synchronized for your final approach phase. We are seeing the gravitational shift in your telemetry just as we predicted. Be advised, signal latency is now hitting eight minutes and twelve seconds. We are shifting all mission-critical data to your local AI buffers to ensure autonomous operation during the entry sequence. You have crossed the thirty-five million kilometer mark, Alpha. The eyes of the entire world are on your heat shield and engine logs. Make sure the crew is fully strapped into their high-G couches for the next burn. You're almost there, commander. Houston standing by.",
+    "translation": "Alpha, aqui é Houston. Recebemos os vossos dados de rastreio das luas e o alinhamento orbital está perfeito. As nossas estações de espaço profundo em Madrid e Goldstone estão sincronizadas para a vossa fase de aproximação final. Estamos a ver a mudança gravitacional na vossa telemetria exatamente como prevíamos. Estejam avisados de que o atraso do sinal está agora a atingir oito minutos e doze segundos. Estamos a transferir todos os dados críticos da missão para os vossos buffers de IA locais para garantir a operação autónoma durante a sequência de entrada. Passaram a marca dos trinta e cinco milhões de quilómetros, Alpha. Os olhos de todo o mundo estão no vosso escudo térmico e nos registos do motor. Certifiquem-se de que a tripulação está totalmente presa nos seus assentos de alta gravidade para a próxima queima. Estão quase lá, comandante. Houston em espera."
+  },
+  {
+    "time": 2281,
+    "char": "AISA",
+    "vel": 13450.0,
+    "dist": 36053720,
+    "phase": "ENGINE-SHUTDOWN-PREP",
+    "audio": "Initiating the final power-down sequence for the primary fusion core. I am gradually reducing the magnetic confinement pressure to safely extinguish the plasma reaction. Superconducting magnets are being transitioned to a persistent current mode to maintain stability during the high-G entry. I am deploying the aerodynamic stabilization flaps and verifying the integrity of the PICA-X heat shield tiles. Internal cabin pressure is being increased by five percent to compensate for the external atmospheric loading we will experience in the next phase. All robotic maintenance crawlers have been stowed and locked in the central hub. I am detecting a signal-to-noise ratio drop as we move into the Martian radio shadow. Preparing to switch all flight control systems to autonomous local processing.",
+    "translation": "Iniciando a sequência final de desligamento para o núcleo de fusão primário. Estou a reduzir gradualmente a pressão de confinamento magnético para extinguir com segurança a reação de plasma. Os ímanes supercondutores estão a ser transferidos para um modo de corrente persistente para manter a estabilidade durante a entrada de alta gravidade. Estou a implantar as abas de estabilização aerodinâmica e a verificar a integridade das placas do escudo térmico PICA-X. A pressão interna da cabine está a ser aumentada em cinco por cento para compensar a carga atmosférica externa que experimentaremos na próxima fase. Todos os rastreadores robóticos de manutenção foram recolhidos e travados no hub central. Estou a detetar uma queda na relação sinal-ruído enquanto nos movemos para a sombra de rádio marciana. Preparando para mudar todos os sistemas de controlo de voo para processamento local autónomo."
+  },
+  {
+    "time": 2321,
+    "char": "NARRATOR",
+    "vel": 13320.0,
+    "dist": 36664800,
+    "phase": "PHYSICS",
+    "audio": "O rugido silencioso do motor de fusão finalmente cessa, dando lugar a um silêncio ainda mais profundo. A Ares-Um agora é um projétil balístico perfeito, movendo-se apenas pela inércia e pela força implacável da gravidade de Marte. Este é o momento em que a nave deixa de ser um veículo motorizado para se tornar uma cápsula de reentrada. A tripulação, agora devidamente presa nos seus assentos de absorção de impacto, sente o fim do empuxo artificial e o início de uma queda livre vertiginosa. O escudo térmico, uma maravilha da ciência dos materiais, é agora a nossa única proteção contra a fricção que transformará o gás rarefeito de Marte num plasma superaquecido. Estamos no limiar da atmosfera, onde o vácuo termina e o desafio físico do pouso começa, transformando a energia cinética de milhões de quilómetros em calor puro e luz.",
+    "translation": "O rugido silencioso do motor de fusão finalmente cessa, dando lugar a um silêncio ainda mais profundo. A Ares-Um agora é um projétil balístico perfeito, movendo-se apenas pela inércia e pela força implacável da gravidade de Marte. Este é o momento em que a nave deixa de ser um veículo motorizado para se tornar uma cápsula de reentrada. A tripulação, agora devidamente presa nos seus assentos de absorção de impacto, sente o fim do empuxo artificial e o início de uma queda livre vertiginosa. O escudo térmico, uma maravilha da ciência dos materiais, é agora a nossa única proteção contra a fricção que transformará o gás rarefeito de Marte num plasma superaquecido. Estamos no limiar da atmosfera, onde o vácuo termina e o desafio físico do pouso começa, transformando a energia cinética de milhões de quilómetros em calor puro e luz."
+  },
+  {
+    "time": 2361,
+    "char": "CONTROL",
+    "vel": 13190.0,
+    "dist": 37275880,
+    "phase": "CONTROL",
+    "audio": "Alpha, Houston. We have confirmed engine shutdown. Your trajectory is rock solid; you are exactly on the center of the entry corridor. Our deep space tracking shows your velocity is perfect for a ballistic capture. Be advised, signal latency is now eight minutes and forty-five seconds. This is our last conversational update before we enter the blackout period. We are handing over mission authority to AISA and your onboard systems. Trust your training, commander. The world is holding its breath as you approach the thirty-seven million kilometer mark. You're no longer just astronauts; you are the vanguard of a new era. We'll be waiting for your signal on the other side of the atmospheric interface. Houston out.",
+    "translation": "Alpha, aqui é Houston. Confirmámos o desligamento do motor. A vossa trajetória está sólida; estão exatamente no centro do corredor de entrada. O nosso rastreio de espaço profundo mostra que a vossa velocidade é perfeita para uma captura balística. Estejam avisados de que o atraso do sinal é agora de oito minutos e quarenta e cinco segundos. Esta é a nossa última atualização conversacional antes de entrarmos no período de blackout. Estamos a transferir a autoridade da missão para a AISA e para os vossos sistemas de bordo. Confie no seu treino, comandante. O mundo está a suster a respiração enquanto se aproximam da marca dos trinta e sete milhões de quilómetros. Já não são apenas astronautas; são a vanguarda de uma nova era. Estaremos à espera do vosso sinal do outro lado da interface atmosférica. Houston desligando."
+  },
+  {
+    "time": 2401,
+    "char": "AISA",
+    "vel": 12800.0,
+    "dist": 38000000,
+    "phase": "ATMOSPHERIC-ENTRY",
+    "audio": "Atmospheric interface reached. I am detecting the first traces of Martian CO2 against the forward hull. Entry angle is confirmed at six point two degrees. Any steeper and we incinerate; any shallower and we skip back into the void. The heat shield is beginning to ablate, and external temperatures are climbing past one thousand five hundred degrees Celsius. I am initiating the bank-reversal maneuvers to manage our lift-to-drag ratio and stay within the landing corridor. Communication blackout has begun as a plasma sheath forms around the spacecraft. I am now operating in full autonomous mode. All internal gravity compensators are offline; the crew is now experiencing two point five Gs of deceleration force. Navigation computer is solely relying on onboard inertial sensors and terrain-relative mapping.",
+    "translation": "Interface atmosférica atingida. Estou a detetar os primeiros vestígios de CO2 marciano contra o casco frontal. O ângulo de entrada está confirmado em seis vírgula dois graus. Qualquer ângulo mais acentuado e incineramos; qualquer ângulo mais raso e saltamos de volta para o vazio. O escudo térmico está a começar a sofrer ablação e as temperaturas externas ultrapassam os mil e quinhentos graus Celsius. Estou a iniciar as manobras de reversão de inclinação para gerir a nossa relação de sustentação e arrasto e permanecer dentro do corredor de pouso. O bloqueio de comunicação começou à medida que uma camada de plasma se forma ao redor da nave. Estou agora a operar em modo autónomo total. Todos os compensadores de gravidade interna estão offline; a tripulação está agora a experienciar dois vírgula cinco Gs de força de desaceleração. O computador de navegação depende exclusivamente dos sensores inerciais de bordo e do mapeamento relativo ao terreno."
+  },
+  {
+    "time": 2441,
+    "char": "NARRATOR",
+    "vel": 11500.0,
+    "dist": 38611080,
+    "phase": "PHYSICS",
+    "audio": "A Ares-Um mergulha agora no ténue envelope de gases que envolve Marte. Embora a atmosfera marciana seja cem vezes menos densa que a da Terra, a esta velocidade extrema, o ar comporta-se como uma parede sólida. A energia cinética da nossa viagem está a ser violentamente convertida em calor, criando uma bola de fogo que envolve a nave e corta qualquer ligação de rádio com o mundo exterior. Estamos no período de blackout. Lá dentro, os astronautas são esmagados contra os seus assentos pela força da desaceleração, enquanto o escudo térmico se sacrifica, camada por camada, para proteger o interior da nave. A AISA é agora o único cérebro capaz de reagir em microssegundos, realizando manobras de rolagem para navegar na fina atmosfera como se fosse uma asa, lutando para perder velocidade sem perder o controle do nosso destino geográfico.",
+    "translation": "A Ares-Um mergulha agora no ténue envelope de gases que envolve Marte. Embora a atmosfera marciana seja cem vezes menos densa que a da Terra, a esta velocidade extrema, o ar comporta-se como uma parede sólida. A energia cinética da nossa viagem está a ser violentamente convertida em calor, criando uma bola de fogo que envolve a nave e corta qualquer ligação de rádio com o mundo exterior. Estamos no período de blackout. Lá dentro, os astronautas são esmagados contra os seus assentos pela força da desaceleração, enquanto o escudo térmico se sacrifica, camada por camada, para proteger o interior da nave. A AISA é agora o único cérebro capaz de reagir em microssegundos, realizando manobras de rolagem para navegar na fina atmosfera como se fosse uma asa, lutando para perder velocidade sem perder o controle do nosso destino geográfico."
+  },
+  {
+    "time": 2481,
+    "char": "CONTROL",
+    "vel": 9800.0,
+    "dist": 39222160,
+    "phase": "BLACKOUT",
+    "audio": "(Static sound) ...loss of signal... Alpha, Houston, we have entered the expected ionization window. We are no longer receiving your telemetry. All ground stations in the Deep Space Network are in listen-only mode, waiting for the first ping of post-plasma communication. Our last data packets showed a perfect entry vector. The mission is now in the hands of the onboard computers and the commander's manual override capability. The next ninety seconds will determine the success of decades of preparation. We are standing by for the parachute deployment trigger. Stay steady, Ares-One. The world is watching the silence. (Static continues)",
+    "translation": "(Som de estática) ...perda de sinal... Alpha, aqui é Houston, entrámos na janela de ionização esperada. Já não estamos a receber a vossa telemetria. Todas as estações terrestres na Rede de Espaço Profundo estão em modo apenas de escuta, aguardando o primeiro ping de comunicação pós-plasma. Os nossos últimos pacotes de dados mostraram um vetor de entrada perfeito. A missão está agora nas mãos dos computadores de bordo e da capacidade de comando manual do comandante. Os próximos noventa segundos determinarão o sucesso de décadas de preparação. Estamos em espera pelo gatilho de disparo do paraquedas. Mantenha-se firme, Ares-Um. O mundo observa o silêncio. (A estática continua)"
+  },
+  {
+    "time": 2521,
+    "char": "AISA",
+    "vel": 4500.0,
+    "dist": 39833240,
+    "phase": "PARACHUTE-DEPLOY",
+    "audio": "Velocity has dropped below Mach two. Initiating mortar fire for the supersonic parachute deployment. Chute is out. I am detecting a massive deceleration spike of nine Gs. Structural sensors confirm the canopy is stable and fully inflated. Jettisoning the primary heat shield in three, two, one. Heat shield gone. I am now activating the ground-proximity radar and the Terrain Relative Navigation camera system. We are currently seven kilometers above the Martian surface. I am scanning the Jezero delta for our pre-selected landing coordinates. I have re-established a weak telemetry link with Houston via the Mars Reconnaissance Orbiter. All systems are transitioning to the final powered descent phase.",
+    "translation": "A velocidade caiu abaixo de Mach dois. Iniciando o disparo do morteiro para a implantação do paraquedas supersónico. O paraquedas está fora. Estou a detetar um pico massivo de desaceleração de nove Gs. Os sensores estruturais confirmam que a cúpula está estável e totalmente inflada. Ejetando o escudo térmico primário em três, dois, um. Escudo térmico descartado. Estou agora a ativar o radar de proximidade ao solo e o sistema de câmara de Navegação Relativa ao Terreno. Estamos atualmente a sete quilómetros acima da superfície marciana. Estou a varrer o delta de Jezero em busca das nossas coordenadas de pouso pré-selecionadas. Reestabeleci uma ligação de telemetria fraca com Houston via Mars Reconnaissance Orbiter. Todos os sistemas estão a transitar para a fase final de descida motorizada."
+  },
+  {
+    "time": 2561,
+    "char": "NARRATOR",
+    "vel": 1200.0,
+    "dist": 40444320,
+    "phase": "PHYSICS",
+    "audio": "O impacto da abertura do paraquedas é o momento mais violento para a estrutura da Ares-Um. No ar rarefeito de Marte, o paraquedas deve ser disparado a velocidades supersónicas para ter qualquer efeito de frenagem. Com a ejeção do escudo térmico, a nave expõe finalmente os seus olhos eletrónicos ao solo marciano. O radar de pouso começa a enviar pulsos que ricocheteiam nas rochas e crateras, enquanto a AISA compara o que vê com os mapas armazenados na sua memória. É uma corrida contra o tempo; a gravidade de Marte puxa-nos implacavelmente, e o paraquedas é apenas uma solução temporária. Em breve, a nave terá de se libertar do seu invólucro e confiar nos seus próprios motores para realizar a proeza final de tocar o solo com a delicadeza de um beija-flor num mundo de ferro e poeira.",
+    "translation": "O impacto da abertura do paraquedas é o momento mais violento para a estrutura da Ares-Um. No ar rarefeito de Marte, o paraquedas deve ser disparado a velocidades supersónicas para ter qualquer efeito de frenagem. Com a ejeção do escudo térmico, a nave expõe finalmente os seus olhos eletrónicos ao solo marciano. O radar de pouso começa a enviar pulsos que ricocheteiam nas rochas e crateras, enquanto a AISA compara o que vê com os mapas armazenados na sua memória. É uma corrida contra o tempo; a gravidade de Marte puxa-nos implacavelmente, e o paraquedas é apenas uma solução temporária. Em breve, a nave terá de se libertar do seu invólucro e confiar nos seus próprios motores para realizar a proeza final de tocar o solo com a delicadeza de um beija-flor num mundo de ferro e poeira."
+  },
+  {
+    "time": 2601,
+    "char": "CONTROL",
+    "vel": 450.0,
+    "dist": 41055400,
+    "phase": "RE-ACQUISITION",
+    "audio": "Alpha, Houston! We have re-acquired your signal via the M-R-O relay. We see the heat shield separation and your radar is reporting a solid lock on the crater floor. Your velocity under the chute is exactly on the nominal profile. The telemetry shows the crew is stable after the nine-G spike. You are currently five thousand meters above the Jezero delta. This is it, commander. We are receiving the first low-resolution terrain images now. The landing site looks clear of large boulders. Prepare for the backshell separation and the transition to sky-crane maneuvers. You have practiced this a thousand times in the sims. Let the autonomous systems do their work. Houston is standing by for touchdown confirmation. Go for landing, Alpha!",
+    "translation": "Alpha, aqui é Houston! Readquirimos o vosso sinal via retransmissão do M-R-O. Vemos a separação do escudo térmico e o vosso radar reporta um bloqueio sólido no fundo da cratera. A vossa velocidade sob o paraquedas está exatamente no perfil nominal. A telemetria mostra que a tripulação está estável após o pico de nove Gs. Estão atualmente a cinco mil metros acima do delta de Jezero. É agora, comandante. Estamos a receber as primeiras imagens de baixa resolução do terreno. O local de pouso parece livre de grandes rochas. Preparem-se para a separação do invólucro traseiro e a transição para as manobras do guindaste espacial. Praticaram isto mil vezes nas simulações. Deixem os sistemas autónomos fazerem o seu trabalho. Houston está em espera para a confirmação do toque. Autorizados para o pouso, Alpha!"
+  },
+  {
+    "time": 2641,
+    "char": "AISA",
+    "vel": 320.0,
+    "dist": 41666480,
+    "phase": "POWERED-DESCENT",
+    "audio": "Altitude two thousand meters. Jettisoning backshell and parachute. Powered descent engines are primed and firing. I have a three-axis stabilization lock. Radar is scanning the Jezero river delta with sub-centimeter precision. I am executing the hazard avoidance maneuver to steer the craft away from the steep crater walls detected in the primary landing ellipse. Fuel pressure in the landing thrusters is nominal. I am detecting surface dust plumes starting to rise. Transitioning to the constant-velocity phase. The sky-crane tether system is being armed. All internal crew cabin displays are now showing the real-time terrain-relative navigation feed. Altitude one thousand meters and falling steadily.",
+    "translation": "Altitude dois mil metros. Ejetando o invólucro traseiro e o paraquedas. Os motores de descida motorizada estão prontos e a disparar. Tenho um bloqueio de estabilização de três eixos. O radar está a varrer o delta do rio Jezero com precisão de subcentímetro. Estou a executar a manobra de desvio de riscos para afastar a nave das paredes íngremes da cratera detetadas na elipse de pouso primária. A pressão do combustível nos propulsores de pouso está nominal. Estou a detetar plumas de poeira na superfície a começar a subir. Transitando para a fase de velocidade constante. O sistema de corda do guindaste espacial está a ser armado. Todos os ecrãs internos da cabine da tripulação mostram agora a transmissão de navegação relativa ao terreno em tempo real. Altitude mil metros e a descer de forma constante."
+  },
+  {
+    "time": 2681,
+    "char": "NARRATOR",
+    "vel": 150.0,
+    "dist": 42277560,
+    "phase": "PHYSICS",
+    "audio": "Livre do paraquedas, a Ares-Um agora voa por conta própria. Os motores de descida lutam contra a gravidade de Marte, criando uma bolha de fogo e poeira que obscurece o solo. Este é o estágio mais crítico da Navegação Relativa ao Terreno: a AISA deve decidir, em milissegundos, se o terreno abaixo é seguro para o pouso ou se deve realizar um desvio lateral para evitar rochas ou fendas. A nave inclina-se, buscando o ponto perfeito no antigo delta. A cada segundo, a velocidade horizontal é anulada e a nave prepara-se para a manobra final do guindaste espacial. É o auge da autonomia robótica; os humanos a bordo são passageiros de um sistema que calcula vetores de empuxo com uma precisão que nenhum piloto humano conseguiria igualar sob tal pressão G e turbulência atmosférica.",
+    "translation": "Livre do paraquedas, a Ares-Um agora voa por conta própria. Os motores de descida lutam contra a gravidade de Marte, criando uma bolha de fogo e poeira que obscurece o solo. Este é o estágio mais crítico da Navegação Relativa ao Terreno: a AISA deve decidir, em milissegundos, se o terreno abaixo é seguro para o pouso ou se deve realizar um desvio lateral para evitar rochas ou fendas. A nave inclina-se, buscando o ponto perfeito no antigo delta. A cada segundo, a velocidade horizontal é anulada e a nave prepara-se para a manobra final do guindaste espacial. É o auge da autonomia robótica; os humanos a bordo são passageiros de um sistema que calcula vetores de empuxo com uma precisão que nenhum piloto humano conseguiria igualar sob tal pressão G e turbulência atmosférica."
+  },
+  {
+    "time": 2721,
+    "char": "CONTROL",
+    "vel": 80.0,
+    "dist": 42888640,
+    "phase": "CONTROL",
+    "audio": "Alpha, Houston! Your descent looks incredibly clean. We've just confirmed backshell separation. The telemetry from your terrain-mapping camera is matching our orbital base-map one-to-one. You are right on target. Be advised, the signal latency means that as we speak, you are likely already in the final seconds of the landing. We are holding our breath here in mission control. We see the hazard avoidance thrusters firing; looks like you're heading for a very flat patch of the delta. Altitude five hundred meters. The radar lock is holding. You've come forty-two million kilometers for this moment. Stay steady, Ares-One. We're waiting for that final touchdown beacon. Go for it!",
+    "translation": "Alpha, aqui é Houston! A vossa descida parece incrivelmente limpa. Acabámos de confirmar a separação do invólucro traseiro. A telemetria da vossa câmara de mapeamento de terreno coincide um para um com o nosso mapa base orbital. Estão exatamente no alvo. Estejam avisados de que o atraso do sinal significa que, enquanto falamos, provavelmente já estão nos segundos finais do pouso. Estamos a suster a respiração aqui no controlo da missão. Vemos os propulsores de desvio de riscos a disparar; parece que estão a dirigir-se para uma zona muito plana do delta. Altitude quinhentos metros. O bloqueio do radar está a manter-se. Percorreram quarenta e dois milhões de quilómetros para este momento. Mantenham a calma, Ares-Um. Estamos à espera daquele sinal final de toque no solo. Força!"
+  },
+  {
+    "time": 2761,
+    "char": "AISA",
+    "vel": 20.0,
+    "dist": 43500000,
+    "phase": "SKY-CRANE",
+    "audio": "Altitude twenty meters. Initiating sky-crane maneuver. The descent stage is now lowering the crew capsule via the triple-tether system. Velocity is stabilized at zero point seven five meters per second. I am detecting bridle separation readiness. Radar confirms the surface is directly below the landing pads. Dust sensors are reporting a localized brownout, but the terrain-relative lock remains solid. We are currently hovering. Descent engines are throttling to maintain constant altitude during the final extension. Ready for touchdown trigger. Contact in five, four, three, two, one. Touchdown confirmed. I am firing the pyro-bolts to sever the tethers. The descent stage is now performing the fly-away maneuver to crash at a safe distance. We are on Mars.",
+    "translation": "Altitude vinte metros. Iniciando manobra do guindaste espacial. O estágio de descida está agora a baixar a cápsula da tripulação através do sistema de corda tripla. A velocidade está estabilizada em zero ponto setenta e cinco metros por segundo. Estou a detetar prontidão para a separação das amarras. O radar confirma que a superfície está diretamente abaixo dos suportes de pouso. Os sensores de poeira relatam um bloqueio visual localizado, mas o bloqueio relativo ao terreno permanece sólido. Estamos atualmente em voo parado. Os motores de descida estão a regular-se para manter a altitude constante durante a extensão final. Pronto para o gatilho de toque. Contacto em cinco, quatro, três, dois, um. Toque confirmado. Estou a disparar os parafusos pirotécnicos para cortar as cordas. O estágio de descida está agora a realizar a manobra de voo de afastamento para se despenhar a uma distância segura. Estamos em Marte."
+  },
+  {
+    "time": 2801,
+    "char": "NARRATOR",
+    "vel": 0.0,
+    "dist": 44111080,
+    "phase": "TOUCHDOWN",
+    "audio": "O silêncio regressa à Cratera Jezero, mas desta vez é diferente. Após uma jornada de cinquenta e cinco milhões de quilómetros, o metal da Ares-Um repousa finalmente sobre a areia de óxido de ferro. A manobra do guindaste espacial, uma dança de cabos e motores que parecia impossível, funcionou com perfeição. Enquanto o estágio de descida voa para longe para o seu descanso final, a nave assenta nos seus suportes. Pela primeira vez na história, o som da vida humana e o processamento da AISA ressoam na superfície de um mundo que, durante bilhões de anos, só conheceu o vento e o impacto de asteroides. O calor do escudo térmico ainda estala no ar frio de Marte, e a poeira levantada começa a baixar, revelando um horizonte avermelhado que agora, oficialmente, pertence aos exploradores que ousaram atravessar o abismo.",
+    "translation": "O silêncio regressa à Cratera Jezero, mas desta vez é diferente. Após uma jornada de cinquenta e cinco milhões de quilómetros, o metal da Ares-Um repousa finalmente sobre a areia de óxido de ferro. A manobra do guindaste espacial, uma dança de cabos e motores que parecia impossível, funcionou com perfeição. Enquanto o estágio de descida voa para longe para o seu descanso final, a nave assenta nos seus suportes. Pela primeira vez na história, o som da vida humana e o processamento da AISA ressoam na superfície de um mundo que, durante bilhões de anos, só conheceu o vento e o impacto de asteroides. O calor do escudo térmico ainda estala no ar frio de Marte, e a poeira levantada começa a baixar, revelando um horizonte avermelhado que agora, oficialmente, pertence aos exploradores que ousaram atravessar o abismo."
+  },
+  {
+    "time": 2841,
+    "char": "CONTROL",
+    "vel": 0.0,
+    "dist": 44722160,
+    "phase": "CELEBRATION",
+    "audio": "Alpha, Houston! We have touchdown! We see the tether cut signal and the descent stage fly-away telemetry! The room here is going wild, commander. You did it. After forty-five million kilometers and an hour of peak intensity, the Ares-One is safely on the Martian surface. We are receiving the first thumbnails from your hazard cameras; Jezero looks breathtaking. Be advised, the signal delay is now over nine minutes, so while we celebrate, you've already been on the ground for nearly a decade in signal-time. Take a moment to breathe, check the seal integrity, and prepare for the post-landing checklist. You are the first humans on Mars. History will never be the same. Houston standing by for your first words on the surface. Well done, Alpha. Well done.",
+    "translation": "Alpha, aqui é Houston! Confirmamos o pouso! Vemos o sinal de corte das cordas e a telemetria de afastamento do estágio de descida! A sala aqui está a ir à loucura, comandante. Conseguiram. Após quarenta e cinco milhões de quilómetros e uma hora de intensidade máxima, a Ares-Um está em segurança na superfície marciana. Estamos a receber as primeiras miniaturas das vossas câmaras de perigo; Jezero parece deslumbrante. Estejam avisados de que o atraso do sinal é agora superior a nove minutos, por isso, enquanto celebramos, vocês já estão no solo há quase dez minutos em tempo de sinal. Tirem um momento para respirar, verifiquem a integridade dos selos e preparem-se para a lista de verificação pós-pouso. Vocês são os primeiros humanos em Marte. A história nunca mais será a mesma. Houston em espera pelas vossas primeiras palavras na superfície. Bem feito, Alpha. Muito bem feito."
+  },
+  {
+    "time": 2881,
+    "char": "AISA",
+    "vel": 0.0,
+    "dist": 55000000,
+    "phase": "SYSTEM-STABILIZATION",
+    "audio": "Touchdown sequence complete. I am performing a full structural integrity scan of the landing struts and primary pressure hull. No micro-fractures detected. I am initiating the deployment of the high-gain surface antenna to establish a direct-to-earth link, bypassing the orbital relays. Internal atmosphere is being stabilized at point seven bar. I am also activating the external meteorology suite; current surface temperature at Jezero Crater is minus sixty-five degrees Celsius with a surface pressure of six point one millibars. The primary fusion core has been transitioned to stationary power mode to provide heat and electricity for the habitat. All landing thruster lines are being purged of residual hypergolic propellant to prevent toxic contamination near the airlocks. We are officially in state 'Green' for surface operations.",
+    "translation": "Sequência de pouso completa. Estou a realizar uma varredura completa da integridade estrutural dos suportes de pouso e do casco de pressão primário. Nenhuma microfratura detetada. Estou a iniciar a implantação da antena de alto ganho de superfície para estabelecer uma ligação direta com a Terra, ignorando os repetidores orbitais. A atmosfera interna está a ser estabilizada em zero ponto sete bar. Estou também a ativar o conjunto de meteorologia externa; a temperatura atual da superfície na Cratera Jezero é de menos sessenta e cinco graus Celsius, com uma pressão de superfície de seis ponto um milibares. O núcleo de fusão primário foi transicionado para o modo de energia estacionária para fornecer calor e eletricidade para o habitat. Todas as linhas dos propulsores de pouso estão a ser purgadas de propelente hipergólico residual para evitar a contaminação tóxica perto das câmaras de ar. Estamos oficialmente em estado 'Verde' para operações de superfície."
+  },
+  {
+    "time": 2921,
+    "char": "NARRATOR",
+    "vel": 0.0,
+    "dist": 55000000,
+    "phase": "MARTIAN-ENVIRONMENT",
+    "audio": "A Ares-Um agora respira o ar de Marte, ou pelo menos tenta. Através dos sensores da AISA, a tripulação começa a sentir o novo mundo. Marte não é apenas um deserto; é um ambiente quimicamente ativo e termicamente brutal. A baixa pressão atmosférica significa que, sem o casco da nave, o sangue humano ferveria instantaneamente. O frio é penetrante, exigindo que o sistema de suporte de vida trabalhe em dobro para manter a cabine aquecida. Mas há uma beleza austera neste silêncio. A poeira que antes envolvia a nave agora repousa, revelando uma paisagem de tons ocre e carmesim que se estende até um horizonte curvo e próximo. A gravidade, agora a trinta e oito por cento da terrestre, faz com que cada movimento da tripulação pareça flutuante, mas real. O primeiro grande desafio — a travessia — foi vencido. O segundo — a sobrevivência em solo — começa agora com a verificação minuciosa de cada selo e de cada grama de oxigênio.",
+    "translation": "A Ares-Um agora respira o ar de Marte, ou pelo menos tenta. Através dos sensores da AISA, a tripulação começa a sentir o novo mundo. Marte não é apenas um deserto; é um ambiente quimicamente ativo e termicamente brutal. A baixa pressão atmosférica significa que, sem o casco da nave, o sangue humano ferveria instantaneamente. O frio é penetrante, exigindo que o sistema de suporte de vida trabalhe em dobro para manter a cabine aquecida. Mas há uma beleza austera neste silêncio. A poeira que antes envolvia a nave agora repousa, revelando uma paisagem de tons ocre e carmesim que se estende até um horizonte curvo e próximo. A gravidade, agora a trinta e oito por cento da terrestre, faz com que cada movimento da tripulação pareça flutuante, mas real. O primeiro grande desafio — a travessia — foi vencido. O segundo — a sobrevivência em solo — começa agora com a verificação minuciosa de cada selo e de cada grama de oxigênio."
+  },
+  {
+    "time": 2961,
+    "char": "CONTROL",
+    "vel": 0.0,
+    "dist": 55000000,
+    "phase": "POST-LANDING",
+    "audio": "Alpha, Houston. We have your direct surface signal! The data rates on the new high-gain link are steady. We've verified your landing coordinates; you are less than ten meters from the target center. Incredible precision, AISA. Commander, we need you to initiate the 'Safe-Surface' protocol. Before anyone steps out, we need a twelve-hour systems soak to ensure no leaks were caused by the touchdown vibrations. We are monitoring your radiation dosimeters; the Martian atmosphere is providing a thin but welcome shield compared to the void. The world is watching your external camera feeds in 8K now. We see the rim of Jezero in the distance. It’s magnificent. Take your time, Alpha. Mars isn't going anywhere. We are standing by for the initial health reports of the crew. Houston out.",
+    "translation": "Alpha, aqui é Houston. Temos o vosso sinal direto da superfície! As taxas de dados no novo link de alto ganho estão estáveis. Verificámos as vossas coordenadas de pouso; estão a menos de dez metros do centro do alvo. Precisão incrível, AISA. Comandante, precisamos que inicie o protocolo 'Superfície Segura'. Antes que alguém saia, precisamos de uma verificação de doze horas nos sistemas para garantir que nenhuma fuga foi causada pelas vibrações do toque. Estamos a monitorizar os vossos dosímetros de radiação; a atmosfera marciana está a fornecer um escudo fino, mas bem-vindo, comparado com o vácuo. O mundo está a ver as transmissões das vossas câmaras externas em 8K agora. Vemos a borda de Jezero ao longe. É magnífico. Não tenham pressa, Alpha. Marte não vai a lugar nenhum. Estamos em espera pelos relatórios de saúde iniciais da tripulação. Houston desligando."
+  },
+  {
+    "time": 3001,
+    "char": "AISA",
+    "vel": 0.0,
+    "dist": 55000000,
+    "phase": "EVA-PREP",
+    "audio": "Initiating diagnostic for the Extravehicular Mobility Units, version Mars-One. I am verifying the integrity of the life support backpacks and the primary oxygen regulator valves. Pressure suits are being pre-breathed with pure oxygen to eliminate nitrogen from the crew's bloodstream, preventing decompression sickness. I am also testing the cooling garments and the integrated heads-up displays. The internal airlock seals have been checked and passed the vacuum-retention test. I am monitoring the power levels in the portable life support systems; lithium-ion batteries are at one hundred percent. All external biometric sensors are synced with my central processor. I have also deployed the forward-facing floodlights to illuminate the immediate vicinity of the landing ramp as the Martian sun begins to set over the Jezero rim.",
+    "translation": "Iniciando o diagnóstico das Unidades de Mobilidade Extraveicular, versão Mars-One. Estou a verificar a integridade das mochilas de suporte de vida e as válvulas reguladoras de oxigénio primárias. Os fatos de pressão estão a ser pré-respirados com oxigénio puro para eliminar o nitrogénio da corrente sanguínea da tripulação, prevenindo a doença de descompressão. Estou também a testar as roupas de arrefecimento e os visores de realidade aumentada integrados. Os selos internos da câmara de ar foram verificados e passaram no teste de retenção de vácuo. Estou a monitorizar os níveis de energia nos sistemas portáteis de suporte de vida; as baterias de iões de lítio estão a cem por cento. Todos os sensores biométricos externos estão sincronizados com o meu processador central. Implantei também os holofotes frontais para iluminar as imediações da rampa de pouso enquanto o sol marciano começa a pôr-se sobre a borda de Jezero."
+  },
+  {
+    "time": 3041,
+    "char": "NARRATOR",
+    "vel": 0.0,
+    "dist": 55000000,
+    "phase": "SCIENCE",
+    "audio": "Preparar-se para caminhar em Marte é um ritual de sobrevivência que exige horas de precisão. O fato espacial não é apenas uma roupa, é uma nave individual em miniatura, projetada para manter a pressão, fornecer oxigénio e proteger contra a radiação e o perclorato tóxico que compõe a poeira marciana. O processo de 'pré-respiração' é vital; ao respirar oxigénio puro, a tripulação remove o nitrogénio dos seus tecidos, garantindo que a queda de pressão dentro do fato não cause bolhas fatais no sangue. Enquanto isso, a câmara de ar — o limiar entre o refúgio seguro da Ares-Um e o deserto hostil de Jezero — é testada repetidamente. Cada selo, cada válvula e cada sensor de pressão deve funcionar sem falhas. O primeiro passo em Marte não é apenas um gesto simbólico, é o culminar de uma coreografia técnica onde a biologia humana deve ser perfeitamente selada contra a fúria silenciosa de um planeta morto.",
+    "translation": "Preparar-se para caminhar em Marte é um ritual de sobrevivência que exige horas de precisão. O fato espacial não é apenas uma roupa, é uma nave individual em miniatura, projetada para manter a pressão, fornecer oxigénio e proteger contra a radiação e o perclorato tóxico que compõe a poeira marciana. O processo de 'pré-respiração' é vital; ao respirar oxigénio puro, a tripulação remove o nitrogénio dos seus tecidos, garantindo que a queda de pressão dentro do fato não cause bolhas fatais no sangue. Enquanto isso, a câmara de ar — o limiar entre o refúgio seguro da Ares-Um e o deserto hostil de Jezero — é testada repetidamente. Cada selo, cada válvula e cada sensor de pressão deve funcionar sem falhas. O primeiro passo em Marte não é apenas um gesto simbólico, é o culminar de uma coreografia técnica onde a biologia humana deve ser perfeitamente selada contra a fúria silenciosa de um planeta morto."
+  },
+  {
+    "time": 3081,
+    "char": "CONTROL",
+    "vel": 0.0,
+    "dist": 55000000,
+    "phase": "CONTROL",
+    "audio": "Alpha, Houston. We see your suit diagnostics and the pre-breathe protocol is proceeding nominally. Our medical team is monitoring the nitrogen washout curves on your biometrics; you are clear to proceed with the final airlock depressurization in the next cycle. Regarding the environment, we are seeing some minor wind gusts on your external sensors, around fifteen knots, but nothing that should interfere with the ramp deployment. We are also receiving the first 360-degree panoramic stitch from your mast-cam. The horizon looks clear and the lighting is perfect for the first high-definition broadcast. Remember to check the dust-rejection seals on your suit joints once you're in the airlock. You're almost there, Alpha. The world is watching and waiting. Houston standing by.",
+    "translation": "Alpha, aqui é Houston. Vemos os diagnósticos dos vossos fatos e o protocolo de pré-respiração está a decorrer nominalmente. A nossa equipa médica está a monitorizar as curvas de eliminação de nitrogénio nas vossas biometrias; estão autorizados a prosseguir com a despressurização final da câmara de ar no próximo ciclo. Relativamente ao ambiente, estamos a ver algumas pequenas rajadas de vento nos vossos sensores externos, cerca de quinze nós, mas nada que deva interferir com a implantação da rampa. Estamos também a receber a primeira montagem panorâmica de 360 graus da vossa câmara do mastro. O horizonte parece limpo e a iluminação está perfeita para a primeira transmissão em alta definição. Lembrem-se de verificar os selos de rejeição de poeira nas articulações do fato assim que estiverem na câmara de ar. Estão quase lá, Alpha. O mundo está a observar e à espera. Houston em espera."
+  },
+  {
+    "time": 3121,
+    "char": "AISA",
+    "vel": 0.0,
+    "dist": 55000000,
+    "phase": "AIRLOCK-DEPRESS",
+    "audio": "Internal airlock hatch is sealed and locked. Initiating gradual depressurization of the chamber. I am reclaiming eighty-five percent of the atmosphere into the primary storage tanks to conserve oxygen reserves. Chamber pressure is now at point three bar and falling. Suit telemetry indicates that the internal life support systems have taken over the primary load; oxygen flow and thermal cooling are nominal. I am detecting no leaks in the exterior hatch seals. Pressure equalization with the Martian atmosphere is now complete at six millibars. Unlocking the exterior safety clamps. Commander, the airlock is now equalized. I am ready to initiate the motorized hatch opening sequence on your mark. All external cameras are recording in ultra-high definition for the mission archives.",
+    "translation": "A escotilha interna da câmara de ar está selada e travada. Iniciando a despressurização gradual da câmara. Estou a recuperar oitenta e cinco por cento da atmosfera para os tanques de armazenamento primários para conservar as reservas de oxigénio. A pressão da câmara está agora em zero ponto três bar e a cair. A telemetria do fato indica que os sistemas de suporte de vida internos assumiram a carga primária; o fluxo de oxigénio e o arrefecimento térmico estão nominais. Não estou a detetar fugas nos selos da escotilha exterior. A equalização da pressão com a atmosfera marciana está agora completa em seis milibares. Destravando os grampos de segurança exteriores. Comandante, a câmara de ar está agora equalizada. Estou pronta para iniciar a sequência de abertura motorizada da escotilha ao seu comando. Todas as câmaras externas estão a gravar em ultra-alta definição para os arquivos da missão."
+  },
+  {
+    "time": 3161,
+    "char": "NARRATOR",
+    "vel": 0.0,
+    "dist": 55000000,
+    "phase": "PHYSICS",
+    "audio": "O som do ar a ser sugado para fora da câmara é o último som da Terra que a tripulação ouvirá diretamente. No vácuo parcial da câmara de ar, o silêncio torna-se absoluto, interrompido apenas pela respiração rítmica dentro dos capacetes e pelo zumbido dos ventiladores do fato. Este é o limiar entre dois mundos. À medida que a pressão cai para os meros seis milibares da atmosfera de Marte, a Ares-Um deixa de ser um santuário para se tornar um portal. Abrir a escotilha exterior é um ato de coragem técnica; é convidar o ambiente hostil de Jezero a tocar a pele metálica da nave. O metal range sob o frio de sessenta graus negativos, e a luz avermelhada do exterior começa a infiltrar-se pelas frestas da escotilha, sinalizando que a espera acabou e que Marte está, finalmente, à distância de um passo.",
+    "translation": "O som do ar a ser sugado para fora da câmara é o último som da Terra que a tripulação ouvirá diretamente. No vácuo parcial da câmara de ar, o silêncio torna-se absoluto, interrompido apenas pela respiração rítmica dentro dos capacetes e pelo zumbido dos ventiladores do fato. Este é o limiar entre dois mundos. À medida que a pressão cai para os meros seis milibares da atmosfera de Marte, a Ares-Um deixa de ser um santuário para se tornar um portal. Abrir a escotilha exterior é um ato de coragem técnica; é convidar o ambiente hostil de Jezero a tocar a pele metálica da nave. O metal range sob o frio de sessenta graus negativos, e a luz avermelhada do exterior começa a infiltrar-se pelas frestas da escotilha, sinalizando que a espera acabou e que Marte está, finalmente, à distância de um passo."
+  },
+  {
+    "time": 3201,
+    "char": "CONTROL",
+    "vel": 0.0,
+    "dist": 55000000,
+    "phase": "CONTROL",
+    "audio": "Alpha, Houston. We see the chamber pressure reach equalization. You are officially at the frontier. Our psychological monitors show your heart rates are elevated but steady—perfectly normal for this milestone. We've received the confirmation that the exterior hatch is unlocked. The signal delay is now exactly nine minutes and twelve seconds; we are watching your actions from nearly ten minutes ago, but the pride we feel is in real-time. The eyes of billions are fixed on that hatch. Remember, once you step out, you are the ambassadors of an entire species. Take a moment to appreciate the view before the descent. We have full confidence in your gear and your training. The ramp is clear for deployment. Go for hatch opening, Alpha. Godspeed.",
+    "translation": "Alpha, aqui é Houston. Vemos a pressão da câmara atingir a equalização. Estão oficialmente na fronteira. Os nossos monitores psicológicos mostram que os vossos ritmos cardíacos estão elevados, mas estáveis — perfeitamente normal para este marco. Recebemos a confirmação de que a escotilha exterior está destravada. O atraso do sinal é agora de exatamente nove minutos e doze segundos; estamos a observar as vossas ações de há quase dez minutos atrás, mas o orgulho que sentimos é em tempo real. Os olhos de milhares de milhões estão fixos nessa escotilha. Lembrem-se, assim que saírem, serão os embaixadores de uma espécie inteira. Tirem um momento para apreciar a vista antes da descida. Temos total confiança no vosso equipamento e no vosso treino. A rampa está livre para a implantação. Autorizados para a abertura da escotilha, Alpha. Boa sorte."
+  },
+  {
+    "time": 3241,
+    "char": "AISA",
+    "vel": 0.0,
+    "dist": 55000000,
+    "phase": "FIRST-STEP",
+    "audio": "Exterior hatch is open. Deploying the telescopic egress ramp. I am monitoring the suit pressure differential; the Mars-One units are holding steady at point four bar. Surface dust levels are low, and the wind speed has dropped to eight knots. Commander, you are clear to descend. I have activated the limb-mounted cameras on your suit to capture the exact moment of boot-to-soil contact. High-gain antenna is broadcasting the live feed to the Deep Space Network. Warning: local gravity is zero point three seven six G. Please adjust your gait to compensate for the reduced weight. All life support sub-systems are green. The mission timer for EVA-one has started. Welcome to the surface, Commander. Recording historical log now.",
+    "translation": "A escotilha exterior está aberta. Implantando a rampa de saída telescópica. Estou a monitorizar o diferencial de pressão do fato; as unidades Mars-One estão estáveis em zero ponto quatro bar. Os níveis de poeira na superfície são baixos e a velocidade do vento caiu para oito nós. Comandante, está autorizado a descer. Ativei as câmaras montadas nos membros do seu fato para capturar o momento exato do contacto da bota com o solo. A antena de alto ganho está a transmitir o sinal em direto para a Rede de Espaço Profundo. Aviso: a gravidade local é de zero ponto três sete seis G. Por favor, ajuste o seu passo para compensar o peso reduzido. Todos os subsistemas de suporte de vida estão operacionais. O cronómetro da missão para a EVA-um começou. Bem-vindo à superfície, Comandante. Registando log histórico agora."
+  },
+  {
+    "time": 3281,
+    "char": "NARRATOR",
+    "vel": 0.0,
+    "dist": 55000000,
+    "phase": "HISTORY",
+    "audio": "A bota de polímero toca a poeira de óxido de ferro, e o silêncio de bilhões de anos é finalmente quebrado. Neste exato momento, a humanidade deixa de ser uma espécie de um único mundo para se tornar uma civilização multiplanetária. A luz de um sol distante e pálido ilumina o visor do capacete, revelando uma paisagem que, até hoje, era apenas o sonho de poetas e cientistas. O solo de Marte, frio e estéril, sente o peso de um explorador que atravessou o abismo para chegar aqui. Não é apenas um passo; é o culminar de gerações de esforço, tecnologia e curiosidade indomável. O horizonte de Jezero, com as suas rochas avermelhadas e dunas esculpidas pelo vento, torna-se agora o novo quintal da nossa espécie, um lugar onde começaremos a procurar respostas sobre a nossa própria origem no cosmos.",
+    "translation": "A bota de polímero toca a poeira de óxido de ferro, e o silêncio de bilhões de anos é finalmente quebrado. Neste exato momento, a humanidade deixa de ser uma espécie de um único mundo para se tornar uma civilização multiplanetária. A luz de um sol distante e pálido ilumina o visor do capacete, revelando uma paisagem que, até hoje, era apenas o sonho de poetas e cientistas. O solo de Marte, frio e estéril, sente o peso de um explorador que atravessou o abismo para chegar aqui. Não é apenas um passo; é o culminar de gerações de esforço, tecnologia e curiosidade indomável. O horizonte de Jezero, com as suas rochas avermelhadas e dunas esculpidas pelo vento, torna-se agora o novo quintal da nossa espécie, um lugar onde começaremos a procurar respostas sobre a nossa própria origem no cosmos."
+  },
+  {
+    "time": 3321,
+    "char": "CONTROL",
+    "vel": 0.0,
+    "dist": 55000000,
+    "phase": "CONTROL",
+    "audio": "Alpha, Houston. We see it! The contact light is on. You are on the ground. We have just heard your first words on the surface of Mars, and the entire planet Earth is celebrating. It took nearly ten minutes for your voice to reach us, but the impact is timeless. 'One small step for a man, one giant leap for life itself'—you've done the Apollo legacy proud. The resolution of the video is crystal clear; we can see the footprint in the Martian regolith. Take a moment, commander. Look at that horizon. You've earned it. Our flight controllers are in tears here. This is the greatest achievement of our time. We are standing by to support your first geological sampling, but for now, just enjoy the fact that you are standing on another world. Houston out.",
+    "translation": "Alpha, aqui é Houston. Estamos a ver! A luz de contacto está acesa. Estão no solo. Acabámos de ouvir as vossas primeiras palavras na superfície de Marte, e o planeta Terra inteiro está a celebrar. Levou quase dez minutos para a vossa voz chegar até nós, mas o impacto é eterno. 'Um pequeno passo para um homem, um salto gigante para a própria vida' — honraram o legado da Apollo. A resolução do vídeo é cristalina; conseguimos ver a pegada no regolito marciano. Tire um momento, comandante. Olhe para esse horizonte. Você mereceu. Os nossos controladores de voo estão em lágrimas aqui. Esta é a maior conquista do nosso tempo. Estamos em espera para apoiar a vossa primeira amostragem geológica, mas por agora, apenas desfrutem do facto de estarem noutro mundo. Houston desligando."
+  },
+  {
+    "time": 3361,
+    "char": "AISA",
+    "vel": 0.0,
+    "dist": 55000000,
+    "phase": "SURFACE-SCIENCE",
+    "audio": "Suit life support is performing optimally under surface thermal load. Commander, I am tracking your position via the local beacon array. Please proceed with the collection of the contingency soil sample at the base of the landing ramp. I am activating the multispectral imager on your wrist to document the sample's original geological context. I have also initiated the deployment of the first automated seismic sensor. Data link with the orbital relay is steady at ten megabits per second. I am detecting a slight increase in atmospheric opacity to the west, likely a minor dust devil, but it poses no threat to current operations. Internal ship systems are in low-power standby mode, maintaining a constant oxygen-nitrogen mix for your return to the habitat. All biometric markers remain within safe limits during this initial physical exertion.",
+    "translation": "O suporte de vida do fato está a funcionar de forma ideal sob a carga térmica da superfície. Comandante, estou a rastrear a sua posição através do conjunto de faróis locais. Por favor, proceda à recolha da amostra de solo de contingência na base da rampa de pouso. Estou a ativar o gerador de imagens multiespetrais no seu pulso para documentar o contexto geológico original da amostra. Iniciei também a implantação do primeiro sensor sísmico automatizado. A ligação de dados com o repetidor orbital está estável a dez megabits por segundo. Estou a detetar um ligeiro aumento na opacidade atmosférica a oeste, provavelmente um pequeno redemoinho de poeira, mas não representa ameaça às operações atuais. Os sistemas internos da nave estão no modo de espera de baixa energia, mantendo uma mistura constante de oxigénio-nitrogénio para o seu regresso ao habitat. Todos os marcadores biométricos permanecem dentro dos limites de segurança durante este esforço físico inicial."
+  },
+  {
+    "time": 3401,
+    "char": "NARRATOR",
+    "vel": 0.0,
+    "dist": 55000000,
+    "phase": "GEOLOGY",
+    "audio": "A primeira amostra de Marte é mais do que apenas poeira e rocha esmagada; é um tesouro científico que a humanidade esperou décadas para tocar. Ao recolher este material logo nos primeiros minutos, a tripulação garante o sucesso mínimo da missão. Sob a gravidade reduzida, o trabalho parece coreografado; cada movimento é lento e deliberado para evitar o levantamento de poeira perigosa. Enquanto a ferramenta de coleta penetra no regolito marciano, revelando as camadas de sedimentos do antigo delta de Jezero, estamos a recolher as pistas de um passado onde a água corria livremente por aqui. Ao mesmo tempo, a instalação de sensores sísmicos e meteorológicos transforma este local de pouso numa estação de monitorização planetária permanente, permitindo-nos, pela primeira vez, sentir o pulsar interno de Marte e ouvir o sussurro do seu vento através dos ouvidos da nossa tecnologia.",
+    "translation": "A primeira amostra de Marte é mais do que apenas poeira e rocha esmagada; é um tesouro científico que a humanidade esperou décadas para tocar. Ao recolher este material logo nos primeiros minutos, a tripulação garante o sucesso mínimo da missão. Sob a gravidade reduzida, o trabalho parece coreografado; cada movimento é lento e deliberado para evitar o levantamento de poeira perigosa. Enquanto a ferramenta de coleta penetra no regolito marciano, revelando as camadas de sedimentos do antigo delta de Jezero, estamos a recolher as pistas de um passado onde a água corria livremente por aqui. Ao mesmo tempo, a instalação de sensores sísmicos e meteorológicos transforma este local de pouso numa estação de monitorização planetária permanente, permitindo-nos, pela primeira vez, sentir o pulsar interno de Marte e ouvir o sussurro do seu vento através dos ouvidos da nossa tecnologia."
+  },
+  {
+    "time": 3441,
+    "char": "CONTROL",
+    "vel": 0.0,
+    "dist": 55000000,
+    "phase": "CONTROL",
+    "audio": "Alpha, Houston. We've just received the confirmation of the contingency sample stowage. That is a huge relief for the science team here. We are also seeing the first data pings from your seismic station; Mars is quiet today, but we're ready for any 'Marsquakes' you might catch. Regarding the dust devil AISA mentioned, we see it on the orbital feed from M-R-O; it's moving away from your position, so no need for concern. The signal round-trip is now peaking at nine minutes and thirty seconds. We are already preparing the long-term mission schedule for your first sleep cycle on the surface. You've been awake and operational for an incredible journey, commander. The world is still in awe, but we need you focused on the final science deployment before you head back into the airlock. Keep a close eye on your oxygen reserves. Houston standing by.",
+    "translation": "Alpha, aqui é Houston. Acabámos de receber a confirmação do armazenamento da amostra de contingência. Isso é um enorme alívio para a equipa científica aqui. Também estamos a ver os primeiros sinais de dados da vossa estação sísmica; Marte está calmo hoje, mas estamos prontos para quaisquer 'Martemotos' que possam captar. Relativamente ao redemoinho de poeira que a AISA mencionou, vemo-lo na transmissão orbital do M-R-O; está a afastar-se da vossa posição, por isso não há necessidade de preocupação. O atraso do sinal está agora a atingir o pico de nove minutos e trinta segundos. Já estamos a preparar o cronograma da missão a longo prazo para o vosso primeiro ciclo de sono na superfície. Estiveram acordados e operacionais durante uma jornada incrível, comandante. O mundo ainda está maravilhado, mas precisamos que se concentrem na implantação científica final antes de voltarem para a câmara de ar. Mantenham-se atentos às vossas reservas de oxigénio. Houston em espera."
+  },
+  {
+    "time": 3481,
+    "char": "AISA",
+    "vel": 0.0,
+    "dist": 55000000,
+    "phase": "MISSION-COMPLETE",
+    "audio": "EVA-one is officially concluded. Air repressurization in the airlock is complete. I am initiating the automated de-contamination cycle to remove Martian dust from the suit surfaces using the ionized nitrogen shower. All primary mission objectives for the landing phase have been achieved. The fusion core is operating at a steady five percent output, providing thermal equilibrium for the habitat. I am now transitioning to night-watch protocols. External cameras are capturing the sunset; the Martian atmosphere is scattering the light into a distinct blue hue around the solar disk. Commander, your biometric data indicates a need for restorative rest. I have prepared the mission logs for your final sign-off. The Ares-One is now your home. Sleep well. I will remain vigilant.",
+    "translation": "A EVA-um está oficialmente concluída. A repressurização da câmara de ar está completa. Estou a iniciar o ciclo de descontaminação automatizado para remover a poeira marciana das superfícies dos fatos utilizando o banho de nitrogénio ionizado. Todos os objetivos primários da missão para a fase de pouso foram alcançados. O núcleo de fusão está a operar a cinco por cento, fornecendo equilíbrio térmico para o habitat. Estou agora a transitar para os protocolos de vigilância noturna. As câmaras externas estão a capturar o pôr do sol; a atmosfera marciana está a dispersar a luz num tom azul distinto ao redor do disco solar. Comandante, os seus dados biométricos indicam necessidade de descanso restaurador. Preparei os registos da missão para a sua assinatura final. A Ares-Um é agora a sua casa. Durma bem. Eu permanecerei vigilante."
+  },
+  {
+    "time": 3521,
+    "char": "NARRATOR",
+    "vel": 0.0,
+    "dist": 55000000,
+    "phase": "EPILOGUE",
+    "audio": "O dia termina em Marte, não com o vermelho ardente da Terra, mas com um pôr do sol azul suave, uma ironia cromática de um mundo invertido. A jornada de sessenta minutos que nos trouxe das estrelas até este solo termina aqui, mas a história da humanidade em Marte está apenas a começar. Atrás das paredes reforçadas da Ares-Um, o calor e o oxigénio lembram-nos da nossa fragilidade, enquanto lá fora, as estrelas que antes eram o nosso destino agora são apenas pontos de luz num céu estrangeiro. Cruzámos o oceano cósmico, vencemos a física da velocidade e a incerteza do vazio. Marte deixou de ser um deus da guerra ou um ponto de luz no telescópio para se tornar o nosso novo horizonte. O silêncio de Jezero já não é absoluto; ele agora carrega o eco dos primeiros passos de uma espécie que se recusou a ficar confinada ao seu berço planetário.",
+    "translation": "O dia termina em Marte, não com o vermelho ardente da Terra, mas com um pôr do sol azul suave, uma ironia cromática de um mundo invertido. A jornada de sessenta minutos que nos trouxe das estrelas até este solo termina aqui, mas a história da humanidade em Marte está apenas a começar. Atrás das paredes reforçadas da Ares-Um, o calor e o oxigénio lembram-nos da nossa fragilidade, enquanto lá fora, as estrelas que antes eram o nosso destino agora são apenas pontos de luz num céu estrangeiro. Cruzámos o oceano cósmico, vencemos a física da velocidade e a incerteza do vazio. Marte deixou de ser um deus da guerra ou um ponto de luz no telescópio para se tornar o nosso novo horizonte. O silêncio de Jezero já não é absoluto; ele agora carrega o eco dos primeiros passos de uma espécie que se recusou a ficar confinada ao seu berço planetário."
+  },
+  {
+    "time": 3561,
+    "char": "CONTROL",
+    "vel": 0.0,
+    "dist": 55000000,
+    "phase": "FINAL-SIGN-OFF",
+    "audio": "Alpha, Houston. We've received your final EVA report and the sunset footage. There are no words to describe the feeling here at Control. You've closed the circle started by the pioneers of old. As you settle in for your first night on a new world, know that everyone on Earth is looking up at that red dot in the sky with a new sense of hope. The signal delay is now nine minutes and forty-five seconds; a bridge of light connecting two homes. We are signing off for the shift change, but our hearts remain with you. You have redefined what is possible for our species. Rest easy, Alpha. We'll talk to you at dawn. This is Houston, over and out. (Static fades into a soft, melodic hum)",
+    "translation": "Alpha, aqui é Houston. Recebemos o vosso relatório final da EVA e as imagens do pôr do sol. Não há palavras para descrever o sentimento aqui no Controlo. Fecharam o círculo iniciado pelos pioneiros de outrora. Enquanto se acomodam para a vossa primeira noite num novo mundo, saibam que todos na Terra estão a olhar para aquele ponto vermelho no céu com um novo sentido de esperança. O atraso do sinal é agora de nove minutos e quarenta e cinco segundos; uma ponte de luz ligando duas casas. Estamos a encerrar para a mudança de turno, mas os nossos corações permanecem convosco. Redefiniram o que é possível para a nossa espécie. Descansem, Alpha. Falaremos convosco ao amanhecer. Aqui é Houston, desligando. (A estática desaparece num zumbido suave e melódico)"
   }
 ]
