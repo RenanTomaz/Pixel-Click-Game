@@ -6,7 +6,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <title>Pixel Click - Ultra Neon Clean</title>
+    <title>Pixel Click - Random Neon Fullscreen</title>
     <style>
         :root {
             --neon-pink: #ff00ff;
@@ -16,6 +16,7 @@
             --bg-dark: #050505;
         }
 
+        /* ANIMAÇÃO DO GRADIENTE */
         @keyframes meshGradient {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -23,7 +24,7 @@
         }
 
         body {
-            background: linear-gradient(-45deg, #6a11cb, #2575fc, #ff00cc, #333399);
+            /* O background será definido via JavaScript para ser aleatório */
             background-size: 400% 400%;
             animation: meshGradient 10s ease infinite;
             margin: 0;
@@ -69,7 +70,6 @@
             box-shadow: 0 0 2vh var(--neon-yellow);
         }
 
-        /* TÍTULO CENTRALIZADO */
         .fixed-title {
             font-size: 4.2vh; 
             text-transform: uppercase;
@@ -81,7 +81,6 @@
             width: 100%;
         }
 
-        /* PERGUNTA COM TEXTO JUSTIFICADO */
         .question-container {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -100,7 +99,7 @@
         .question-text {
             font-size: 3vh; 
             color: white;
-            text-align: justify; /* Justificado conforme solicitado */
+            text-align: center;
             text-shadow: 0.3vh 0.3vh 0.5vh #000;
             line-height: 1.2;
         }
@@ -154,7 +153,6 @@
 
         .fade-out { opacity: 0.2 !important; filter: blur(2px); }
 
-        /* BOTÃO INFERIOR ATUALIZADO */
         .footer-brand {
             width: 100%;
             background: var(--neon-pink);
@@ -204,6 +202,25 @@
 <script src="entretenimento.js"></script>
 
 <script>
+    // --- LÓGICA DE CORES RANDÔMICAS ---
+    function getRandomNeonColor() {
+        const neonColors = ['#ff00ff', '#00ffff', '#ffff00', '#00ff00', '#ff4757', '#6c5ce7', '#ffa500', '#2575fc'];
+        return neonColors[Math.floor(Math.random() * neonColors.length)];
+    }
+
+    function applyRandomBackground() {
+        const color1 = getRandomNeonColor();
+        const color2 = getRandomNeonColor();
+        const color3 = getRandomNeonColor();
+        const color4 = '#050505'; // Mantém uma base escura para contraste
+        
+        document.body.style.background = `linear-gradient(-45deg, ${color1}, ${color2}, ${color3}, ${color4})`;
+        document.body.style.backgroundSize = '400% 400%';
+    }
+
+    // Aplica a cor assim que a página carrega
+    applyRandomBackground();
+
     const masterPool = [
         ...(typeof esportesData !== 'undefined' ? esportesData : []),
         ...(typeof geografiaData !== 'undefined' ? geografiaData : []),
@@ -234,6 +251,11 @@
     }
 
     function iniciarQuiz() {
+        const docElm = document.documentElement;
+        if (docElm.requestFullscreen) docElm.requestFullscreen();
+        else if (docElm.webkitRequestFullscreen) docElm.webkitRequestFullscreen();
+        else if (docElm.msRequestFullscreen) docElm.msRequestFullscreen();
+
         document.getElementById('overlay-start').style.display = 'none';
         createSteps();
         startSequence();
@@ -251,7 +273,6 @@
 
         document.getElementById(`step-${currentQ}`).classList.add('active');
         const data = selectedQuestions[currentQ];
-        
         document.getElementById('q-text').innerText = data.q;
         
         window.speechSynthesis.cancel();
@@ -314,7 +335,7 @@
             particleCount: 200,
             spread: 90,
             origin: { y: 0.6 },
-            colors: ['#ff00ff', '#00ffff', '#ffff00']
+            colors: [getRandomNeonColor(), getRandomNeonColor(), '#ffffff']
         });
 
         document.querySelectorAll('.option').forEach((el, i) => {
