@@ -77,10 +77,11 @@
             text-shadow: 0 0 1vh var(--neon-pink), 0 0 2vh var(--neon-pink);
             margin-top: 4vh;
             letter-spacing: 2px;
-            text-align: center; /* Centralização horizontal */
-            width: 100%; /* Garante que ocupe a largura para centralizar o texto */
+            text-align: center;
+            width: 100%;
         }
 
+        /* PERGUNTA COM TEXTO JUSTIFICADO */
         .question-container {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -99,8 +100,9 @@
         .question-text {
             font-size: 3vh; 
             color: white;
-            text-align: center;
+            text-align: justify; /* Justificado conforme solicitado */
             text-shadow: 0.3vh 0.3vh 0.5vh #000;
+            line-height: 1.2;
         }
 
         #timer-container {
@@ -152,6 +154,7 @@
 
         .fade-out { opacity: 0.2 !important; filter: blur(2px); }
 
+        /* BOTÃO INFERIOR ATUALIZADO */
         .footer-brand {
             width: 100%;
             background: var(--neon-pink);
