@@ -6,7 +6,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Russo+One&family=Montserrat:wght@600;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <title>Caderno Realista - Pilha Dinâmica</title>
+    <title>Caderno Quiz - Final Edition</title>
     <style>
         :root {
             --paper-color: #fdfdfd;
@@ -19,46 +19,22 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            width: 100vw;
+            margin: 0; padding: 0; height: 100vh; width: 100vw;
             background: var(--wood-brown);
-            /* Textura de mesa de madeira */
-            background-image: 
-                linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
                 url('https://www.transparenttextures.com/patterns/wood-pattern.png');
             font-family: 'Montserrat', sans-serif;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            overflow: hidden; display: flex; justify-content: center; align-items: center;
             perspective: 2000px;
         }
 
         #notebook-container {
-            width: 90vw;
-            height: 85vh;
-            max-width: 420px;
-            position: relative;
-            transform-style: preserve-3d;
-        }
-
-        /* Folha Base (estática por baixo para dar volume) */
-        .page-shadow {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: #eee;
-            border-radius: 5px 15px 15px 5px;
-            transform: translate(4px, 4px);
-            z-index: 0;
+            width: 90vw; height: 85vh; max-width: 420px;
+            position: relative; transform-style: preserve-3d;
         }
 
         .page {
-            position: absolute;
-            width: 100%;
-            height: 100%;
+            position: absolute; width: 100%; height: 100%;
             background: var(--paper-color);
             background-image: 
                 linear-gradient(90deg, transparent 39px, var(--margin-color) 39px, var(--margin-color) 41px, transparent 41px),
@@ -68,80 +44,83 @@
             border-radius: 5px 15px 15px 5px;
             box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
             padding: 6vh 8% 4vh 18%;
-            display: flex;
-            flex-direction: column;
+            display: flex; flex-direction: column;
             transform-origin: left center;
             transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
             backface-visibility: hidden;
         }
 
-        /* A folha virando */
-        .page.flipped {
-            transform: rotateY(-130deg);
-            pointer-events: none;
-        }
+        .page.flipped { transform: rotateY(-130deg); pointer-events: none; }
 
         .question-text {
-            font-family: 'Caveat', cursive;
-            color: var(--ink-color);
-            font-size: 3.4vh;
-            line-height: 1.2;
-            margin-top: 2vh;
-            margin-bottom: 2vh;
-            min-height: 18vh;
-            white-space: pre-wrap;
+            font-family: 'Caveat', cursive; color: var(--ink-color);
+            font-size: 3.2vh; line-height: 1.2; margin-top: 2vh;
+            min-height: 16vh; white-space: pre-wrap;
         }
 
         .options-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1.2vh;
-            margin-top: auto;
-            margin-bottom: 5vh;
-            opacity: 0;
+            display: flex; flex-direction: column; gap: 1vh;
+            margin-top: auto; margin-bottom: 4vh; opacity: 0;
             transition: opacity 0.5s ease;
         }
 
         .options-visible { opacity: 1; }
 
         .option {
-            font-family: 'Caveat', cursive;
-            font-size: 2.6vh;
-            color: #333;
-            padding: 0.8vh;
-            border-bottom: 1px dashed #ccc;
-            cursor: pointer;
-            position: relative;
+            font-family: 'Caveat', cursive; font-size: 2.5vh;
+            color: #333; padding: 0.8vh; border-bottom: 1px dashed #ccc;
+            cursor: pointer; transition: all 0.3s; position: relative;
         }
 
-        .option.correct::before { content: "✓"; position: absolute; left: -35px; color: #2ecc71; font-size: 4vh; }
-        .option.wrong::before { content: "✗"; position: absolute; left: -35px; color: #e74c3c; font-size: 4vh; }
+        /* Animações de Feedback */
+        @keyframes correctPulse {
+            0% { transform: scale(1); background: transparent; }
+            50% { transform: scale(1.05); background: rgba(46, 204, 113, 0.2); }
+            100% { transform: scale(1); background: rgba(46, 204, 113, 0.1); }
+        }
+
+        @keyframes wrongShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .option.correct {
+            animation: correctPulse 0.5s ease forwards;
+            color: #27ae60; font-weight: bold; border-bottom: 2px solid #27ae60;
+        }
+
+        .option.wrong {
+            animation: wrongShake 0.4s linear;
+            color: #c0392b; opacity: 0.7; text-decoration: line-through;
+        }
 
         .timer-container { width: 100%; height: 3px; background: rgba(0,0,0,0.05); margin-bottom: 2vh; }
-        .timer-bar { width: 100%; height: 100%; background: var(--ink-color); }
+        .timer-bar { width: 100%; height: 100%; background: var(--ink-color); transition: width 0.1s linear; }
 
         #overlay-start {
-            position: fixed; inset: 0;
-            background: rgba(0,0,0,0.9);
-            z-index: 9999;
-            display: flex; flex-direction: column; justify-content: center; align-items: center; color: white;
+            position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+            z-index: 9999; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; color: white;
         }
 
-        .btn-play {
-            margin-top: 20px; padding: 15px 50px; font-family: 'Russo One';
-            font-size: 3vh; background: #fff; color: #000; border: none; border-radius: 50px; cursor: pointer;
+        .btn-cta {
+            margin-top: 20px; padding: 15px 40px; font-family: 'Russo One';
+            font-size: 2.5vh; background: var(--ink-color); color: #fff; 
+            border: none; border-radius: 10px; cursor: pointer; text-decoration: none;
+            display: inline-block; text-align: center;
         }
     </style>
 </head>
 <body>
 
 <div id="overlay-start">
-    <h1 style="font-family: 'Caveat'; font-size: 6vh;">Meu Caderno</h1>
-    <button class="btn-play" onclick="iniciarQuiz()">ESTUDAR</button>
+    <h1 style="font-family: 'Caveat'; font-size: 6vh;">Desafio do Caderno</h1>
+    <button class="btn-cta" style="background:#fff; color:#000" onclick="iniciarQuiz()">COMEÇAR EXAME</button>
 </div>
 
 <div id="notebook-container">
-    <div class="page-shadow"></div>
+    <div style="position:absolute; width:100%; height:100%; background:#ddd; border-radius:5px 15px 15px 5px; transform:translate(4px,4px); z-index:0;"></div>
 </div>
 
 <script src="esportes.js"></script>
@@ -164,18 +143,18 @@
     const TOTAL_Q = 8;
     const selectedQuestions = masterPool.sort(() => 0.5 - Math.random()).slice(0, TOTAL_Q);
     let currentQ = 0;
+    const letras = ["A", "B", "C", "D"];
 
     const sfx = {
         flip: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-paper-slide-1530.mp3'] }),
         write: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-pencil-writing-on-paper-2101.mp3'], volume: 0.4, loop: true }),
-        correct: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-bonus-earned-in-video-game-2058.mp3'] })
+        correct: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-bonus-earned-in-video-game-2058.mp3'] }),
+        wrong: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-failing-armpit-fart-3091.mp3'], volume: 0.2 })
     };
 
     function iniciarQuiz() {
         if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
         document.getElementById('overlay-start').style.display = 'none';
-        
-        // Pré-carrega a primeira e a segunda página
         renderizarPagina(0);
         if (selectedQuestions.length > 1) renderizarPagina(1);
     }
@@ -185,30 +164,25 @@
 
         const data = selectedQuestions[index];
         const container = document.getElementById('notebook-container');
-
         const page = document.createElement('div');
         page.className = 'page';
         page.id = `page-${index}`;
-        // Z-index decrescente para que a página 0 fique no topo
         page.style.zIndex = TOTAL_Q - index;
 
         page.innerHTML = `
-            <div style="font-size: 1.5vh; color: #aaa; text-align: right;">Pág. ${index + 1}</div>
+            <div style="font-size: 1.5vh; color: #aaa; text-align: right;">Questão ${index + 1}</div>
             <div class="question-text" id="q-text-${index}"></div>
             <div class="timer-container"><div class="timer-bar" id="bar-${index}"></div></div>
             <div class="options-list" id="options-${index}">
                 ${data.options.map((opt, i) => `
-                    <div class="option" onclick="validar(this, ${i}, ${data.correct})">${opt}</div>
+                    <div class="option" onclick="validar(this, ${i}, ${data.correct})">
+                        ${letras[i]}) ${opt}
+                    </div>
                 `).join('')}
             </div>
         `;
-
         container.appendChild(page);
-
-        // Só inicia a escrita se for a página atual
-        if (index === currentQ) {
-            prepararEscrita(index, data);
-        }
+        if (index === currentQ) prepararEscrita(index, data);
     }
 
     async function prepararEscrita(index, data) {
@@ -226,7 +200,7 @@
                 if (i < text.length) {
                     element.innerHTML += text.charAt(i);
                     i++;
-                    setTimeout(type, 50);
+                    setTimeout(type, 40);
                 } else {
                     sfx.write.stop();
                     resolve();
@@ -240,7 +214,7 @@
         const bar = document.getElementById(`bar-${id}`);
         let width = 100;
         const timer = setInterval(() => {
-            width -= 0.6;
+            width -= 0.7;
             bar.style.width = width + '%';
             if (width <= 0) {
                 clearInterval(timer);
@@ -253,6 +227,14 @@
     function validar(el, escolhido, correto) {
         const bar = document.getElementById(`bar-${currentQ}`);
         if (bar) clearInterval(parseInt(bar.dataset.timerId));
+        
+        const parent = document.getElementById(`options-${currentQ}`);
+        if (parent.dataset.locked) return;
+        
+        if (escolhido !== correto) {
+            el.classList.add('wrong');
+            sfx.wrong.play();
+        }
         finalizarPergunta(correto);
     }
 
@@ -262,13 +244,10 @@
         parent.dataset.locked = "true";
 
         const options = parent.querySelectorAll('.option');
-        options.forEach((opt, i) => {
-            if (i === corretoIdx) opt.classList.add('correct');
-            else opt.classList.add('wrong');
-        });
-
-        sfx.correct.play();
-        confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 } });
+        options[corretoIdx].classList.add('correct');
+        
+        if (options[corretoIdx].classList.contains('correct')) sfx.correct.play();
+        confetti({ particleCount: 40, spread: 50, origin: { y: 0.8 } });
 
         setTimeout(() => {
             const pageAtual = document.getElementById(`page-${currentQ}`);
@@ -276,20 +255,34 @@
                 pageAtual.classList.add('flipped');
                 sfx.flip.play();
             }
-            
             currentQ++;
-            
-            // Renderiza a "página depois da próxima" para manter sempre uma folha por baixo
-            if (currentQ + 1 < TOTAL_Q) {
-                renderizarPagina(currentQ + 1);
-            }
-
-            // Inicia o processo na página que agora ficou no topo
             if (currentQ < TOTAL_Q) {
-                const proxData = selectedQuestions[currentQ];
-                prepararEscrita(currentQ, proxData);
+                renderizarPagina(currentQ + 1);
+                prepararEscrita(currentQ, selectedQuestions[currentQ]);
+            } else {
+                mostrarFinal();
             }
-        }, 2500);
+        }, 2200);
+    }
+
+    function mostrarFinal() {
+        const container = document.getElementById('notebook-container');
+        const finalPage = document.createElement('div');
+        finalPage.className = 'page';
+        finalPage.style.zIndex = 100;
+        finalPage.innerHTML = `
+            <div style="text-align:center; margin-top:5vh">
+                <h2 style="font-family:'Caveat'; font-size:5vh; color:var(--ink-color)">Prova Finalizada!</h2>
+                <p style="font-family:'Caveat'; font-size:3vh; margin: 3vh 0">
+                    Você demonstrou grande dedicação hoje. Quer continuar testando seus conhecimentos?
+                </p>
+                <div style="border: 2px dashed #ccc; padding: 2vh; margin-top: 5vh">
+                    <p style="font-family:'Montserrat'; font-weight:800; font-size:1.8vh">ACESSE AGORA:</p>
+                    <a href="https://www.pixelclick.fun" class="btn-cta">WWW.PIXELCLICK.FUN</a>
+                </div>
+            </div>
+        `;
+        container.appendChild(finalPage);
     }
 </script>
 </body>
