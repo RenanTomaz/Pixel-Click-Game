@@ -3,316 +3,276 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Montserrat:wght@600;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <title>Pixel Click - 9:16 Fullscreen Ultra</title>
+    <title>Caderno Realista Quiz</title>
     <style>
         :root {
-            --neon-pink: #ff00ff;
-            --neon-blue: #00ffff;
-            --neon-purple: #8a2be2;
-            --neon-green: #00ff00;
-            --bg-black: #000000;
+            --paper-color: #fcfcfc;
+            --line-color: #e0e9f5;
+            --margin-color: #ffadb0;
+            --ink-color: #1a2a6c;
         }
 
-        * { 
-            box-sizing: border-box; 
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
-        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             margin: 0;
             padding: 0;
             height: 100vh;
             width: 100vw;
-            background-color: var(--bg-black);
+            background: #1a1a1a; /* Mesa escura */
+            background-image: repeating-linear-gradient(45deg, #151515 0, #151515 1px, transparent 0, transparent 50%);
+            background-size: 10px 10px;
             font-family: 'Montserrat', sans-serif;
             overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
+            perspective: 1500px;
         }
 
-        /* Container Principal 9:16 */
-        #video-canvas {
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding: 4vh 7% 5vh 7%;
+        /* Container do Caderno */
+        #notebook-container {
+            width: 90vw;
+            height: 85vh;
+            max-width: 450px;
             position: relative;
-            /* Gradiente sem tons de marrom (apenas pretos e frios) */
-            background: radial-gradient(circle at center, #0a0a1a 0%, #000000 100%);
-            transition: background 0.8s ease;
+            transform-style: preserve-3d;
         }
 
-        /* Barra de Progresso Superior */
-        .progress-header {
-            display: flex;
-            gap: 1.2vw;
-            width: 100%;
-            z-index: 10;
-        }
-
-        .step {
-            flex: 1;
-            height: 0.8vh;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-        }
-
-        .step.active {
-            background: var(--neon-blue);
-            box-shadow: 0 0 15px var(--neon-blue);
-        }
-
-        /* Título */
-        .fixed-title {
-            font-family: 'Russo One', sans-serif;
-            font-size: 3.5vh;
-            text-align: center;
-            margin-top: 4vh;
-            margin-bottom: 2vh;
-            text-transform: uppercase;
-            color: #fff;
-            text-shadow: 0 0 10px var(--neon-purple);
-        }
-
-        /* Container da Pergunta */
-        .question-container {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(0, 255, 255, 0.2);
-            border-radius: 2.5vh;
-            padding: 3vh;
-            min-height: 18vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 2vh;
-            backdrop-filter: blur(10px);
-        }
-
-        .question-text {
-            font-size: 3vh;
-            font-weight: 900;
-            text-align: center;
-            color: #fff;
-            line-height: 1.2;
-        }
-
-        /* Timer */
-        #timer-container {
-            width: 100%;
-            height: 1.2vh;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 20px;
-            margin-bottom: 4vh;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        #timer-bar {
+        /* Folha de Papel */
+        .page {
+            position: absolute;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
-            transform-origin: left;
-        }
-
-        /* Opções */
-        .options-list {
+            background: var(--paper-color);
+            background-image: 
+                linear-gradient(90deg, transparent 39px, var(--margin-color) 39px, var(--margin-color) 41px, transparent 41px),
+                linear-gradient(var(--line-color) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 3.5vh;
+            border-radius: 5px 20px 20px 5px;
+            box-shadow: 2px 5px 15px rgba(0,0,0,0.3);
+            padding: 5vh 10% 5vh 15%;
             display: flex;
             flex-direction: column;
-            gap: 1.8vh;
-            flex-grow: 1;
-        }
-
-        .option {
-            background: rgba(255, 255, 255, 0.07);
-            border: 2px solid rgba(255, 255, 255, 0.15);
-            padding: 2.2vh;
-            border-radius: 1.5vh;
-            font-size: 2.3vh;
-            font-weight: 700;
-            color: #fff;
-            text-align: center;
-            opacity: 0;
-            transition: transform 0.2s;
-        }
-
-        .highlight-correct {
-            background: var(--neon-green) !important;
-            border-color: #fff !important;
-            color: #000 !important;
-            box-shadow: 0 0 30px var(--neon-green);
-            transform: scale(1.05);
+            transform-origin: left center;
+            transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+            backface-visibility: hidden;
             z-index: 2;
         }
 
-        .fade-out { opacity: 0.2 !important; }
-
-        /* Rodapé */
-        .footer-brand {
-            padding: 1.5vh;
-            background: var(--neon-pink);
-            color: #fff;
-            border-radius: 50px;
-            font-weight: 900;
-            font-size: 1.8vh;
-            text-align: center;
-            margin-top: 2vh;
-            box-shadow: 0 5px 15px rgba(255, 0, 255, 0.3);
+        /* Animação de virar folha */
+        .page.flipped {
+            transform: rotateY(-130deg);
+            z-index: 1;
         }
 
-        /* Iniciar */
-        #overlay-start {
-            position: fixed; inset: 0;
-            background: #000;
-            z-index: 9999;
+        /* Escrita à mão */
+        .handwritten {
+            font-family: 'Caveat', cursive;
+            color: var(--ink-color);
+            font-size: 3.8vh;
+            line-height: 1.1;
+            margin-bottom: 3vh;
+            opacity: 0;
+        }
+
+        .writing-animation {
+            opacity: 1;
+            border-right: 3px solid transparent;
+            white-space: normal;
+            overflow: hidden;
+            animation: typing 1.5s steps(40, end);
+        }
+
+        @keyframes typing {
+            from { max-height: 0; }
+            to { max-height: 50vh; }
+        }
+
+        /* Opções (Post-its ou botões discretos) */
+        .options-list {
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
+            gap: 2vh;
+            margin-top: auto;
         }
 
-        .btn-play {
-            padding: 3vh 8vh;
-            font-family: 'Russo One', sans-serif;
-            font-size: 4vh;
-            background: var(--neon-blue);
-            border: none;
-            border-radius: 50px;
-            box-shadow: 0 0 20px var(--neon-blue);
+        .option {
+            background: rgba(0,0,0,0.03);
+            border: 1px dashed rgba(0,0,0,0.2);
+            padding: 2vh;
+            border-radius: 5px;
+            font-size: 2.2vh;
+            color: #333;
+            text-align: left;
             cursor: pointer;
+            transition: 0.3s;
+            position: relative;
         }
 
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .option.correct {
+            background: rgba(0, 255, 0, 0.1);
+            border: 2px solid green;
+            color: green;
+            transform: rotate(-2deg);
+        }
+
+        .option.wrong {
+            background: rgba(255, 0, 0, 0.1);
+            border: 2px solid red;
+            color: red;
+            opacity: 0.5;
+        }
+
+        /* Timer (como uma linha de carregamento de caneta) */
+        #timer-wrap {
+            width: 100%;
+            height: 4px;
+            background: #eee;
+            margin: 2vh 0;
+        }
+        #timer-bar {
+            width: 100%;
+            height: 100%;
+            background: var(--ink-color);
+            transition: width 0.1s linear;
+        }
+
+        /* Overlay Inicial */
+        #start-screen {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+            z-index: 100; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; color: white;
+        }
+        .btn-pen {
+            padding: 20px 40px; font-size: 24px; font-family: 'Russo One';
+            background: #fff; color: #000; border: none; border-radius: 50px;
         }
     </style>
 </head>
 <body>
 
-<div id="overlay-start">
-    <button class="btn-play" onclick="entrarTelaCheia()">JOGAR!</button>
+<div id="start-screen">
+    <h1 style="margin-bottom: 30px;">QUIZ DE CADERNO</h1>
+    <button class="btn-pen" onclick="iniciarQuiz()">PEGAR CANETA</button>
 </div>
 
-<div id="video-canvas">
-    <div class="progress-header" id="step-container"></div>
-    <div class="fixed-title">VERDADEIRO OU FALSO?</div>
-    
-    <div class="question-container">
-        <div class="question-text" id="q-text">CARREGANDO...</div>
-    </div>
-
-    <div id="timer-container"><div id="timer-bar"></div></div>
-    
-    <div class="options-list" id="options-box"></div>
-    
-    <div class="footer-brand">WWW.PIXELCLICK.FUN</div>
+<div id="notebook-container">
+    <!-- As páginas serão geradas dinamicamente aqui -->
 </div>
+
+<script src="esportes.js"></script>
+<script src="geografia.js"></script>
+<script src="historia.js"></script>
+<script src="natureza.js"></script>
+<script src="ciencia.js"></script>
+<script src="entretenimento.js"></script>
 
 <script>
-    // --- CONFIGURAÇÃO E DADOS ---
-    const TOTAL_Q = 8;
-    let currentQ = 0;
-    
-    // Fallback de dados para garantir funcionamento
-    const quizData = [
-        {q: "O Sol é uma estrela?", options: ["Verdadeiro", "Falso"], correct: 0},
-        {q: "A Lua tem luz própria?", options: ["Verdadeiro", "Falso"], correct: 1},
-        {q: "O Brasil fica na África?", options: ["Verdadeiro", "Falso"], correct: 1},
-        {q: "A água ferve a 100°C?", options: ["Verdadeiro", "Falso"], correct: 0},
-        {q: "Existem 12 meses no ano?", options: ["Verdadeiro", "Falso"], correct: 0},
-        {q: "O oceano é feito de doce?", options: ["Verdadeiro", "Falso"], correct: 1},
-        {q: "O morcego é um pássaro?", options: ["Verdadeiro", "Falso"], correct: 1},
-        {q: "2 + 2 é igual a 4?", options: ["Verdadeiro", "Falso"], correct: 0}
+    const masterPool = [
+        ...(window.esportesData || []),
+        ...(window.geografiaData || []),
+        ...(window.historiaData || []),
+        ...(window.naturezaData || []),
+        ...(window.cienciaData || []),
+        ...(window.entretenimentoData || [])
     ];
 
+    const TOTAL_Q = 8;
+    const selectedQuestions = masterPool.sort(() => 0.5 - Math.random()).slice(0, TOTAL_Q);
+    let currentIdx = 0;
+
     const sfx = {
-        timer: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-stopwatch-ticking-644.mp3'], loop: true, volume: 0.2 }),
-        correct: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-reward-952.mp3'], volume: 0.5 })
+        flip: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-paper-slide-1530.mp3'] }),
+        write: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-pencil-writing-on-paper-2101.mp3'], volume: 0.5 })
     };
 
-    function entrarTelaCheia() {
+    function iniciarQuiz() {
         const doc = document.documentElement;
         if (doc.requestFullscreen) doc.requestFullscreen();
-        else if (doc.webkitRequestFullscreen) doc.webkitRequestFullscreen();
-        else if (doc.msRequestFullscreen) doc.msRequestFullscreen();
-
-        document.getElementById('overlay-start').style.display = 'none';
-        setupGame();
+        document.getElementById('start-screen').style.display = 'none';
+        renderPage();
     }
 
-    function setupGame() {
-        const container = document.getElementById('step-container');
-        for(let i=0; i<TOTAL_Q; i++) {
-            const div = document.createElement('div');
-            div.className = 'step';
-            div.id = `step-${i}`;
-            container.appendChild(div);
-        }
-        proximaPergunta();
-    }
-
-    function proximaPergunta() {
-        if (currentQ >= TOTAL_Q) {
-            document.getElementById('video-canvas').innerHTML = `<h1 style="color:white; text-align:center; margin-top:40vh">FIM DO QUIZ!</h1>`;
+    function renderPage() {
+        if (currentIdx >= TOTAL_Q) {
+            alert("Fim do caderno!");
             return;
         }
 
-        document.getElementById(`step-${currentQ}`).classList.add('active');
-        const data = quizData[currentQ];
-        document.getElementById('q-text').innerText = data.q;
+        const container = document.getElementById('notebook-container');
+        const data = selectedQuestions[currentIdx];
+
+        const page = document.createElement('div');
+        page.className = 'page';
+        page.id = `page-${currentIdx}`;
         
-        const box = document.getElementById('options-box');
-        box.innerHTML = '';
+        page.innerHTML = `
+            <div style="font-size: 1.5vh; color: #999; margin-bottom: 1vh;">Questão ${currentIdx + 1}/${TOTAL_Q}</div>
+            <div class="handwritten" id="text-${currentIdx}">${data.q}</div>
+            <div id="timer-wrap"><div id="timer-bar" id="bar-${currentIdx}"></div></div>
+            <div class="options-list">
+                ${data.options.map((opt, i) => `<div class="option" onclick="check(this, ${i}, ${data.correct})">${opt}</div>`).join('')}
+            </div>
+        `;
 
-        data.options.forEach((opt, i) => {
-            const div = document.createElement('div');
-            div.className = 'option';
-            div.innerText = opt;
-            div.style.animation = `slideIn 0.4s ease forwards ${i * 0.1}s`;
-            box.appendChild(div);
-        });
+        container.appendChild(page);
 
-        iniciarTimer(data.correct);
-    }
-
-    function iniciarTimer(correctIdx) {
-        sfx.timer.play();
-        const bar = document.getElementById('timer-bar');
-        let start = Date.now();
-        let duration = 5000; 
-
-        function frame() {
-            let elapsed = Date.now() - start;
-            let p = Math.max(0, 100 - (elapsed / duration * 100));
-            bar.style.width = p + "%";
-
-            if (elapsed < duration) requestAnimationFrame(frame);
-            else finalizarRodada(correctIdx);
-        }
-        requestAnimationFrame(frame);
-    }
-
-    function finalizarRodada(idx) {
-        sfx.timer.stop();
-        sfx.correct.play();
-
-        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-
-        const opts = document.querySelectorAll('.option');
-        opts.forEach((el, i) => {
-            if(i === idx) el.classList.add('highlight-correct');
-            else el.classList.add('fade-out');
-        });
-
+        // Animação de escrita e som
         setTimeout(() => {
-            currentQ++;
-            proximaPergunta();
+            const txt = document.getElementById(`text-${currentIdx}`);
+            txt.classList.add('writing-animation');
+            sfx.write.play();
+            
+            // Inicia Timer após escrita (2 segundos)
+            setTimeout(() => {
+                sfx.write.stop();
+                startTimer(page.querySelector('#timer-bar'), data.correct);
+            }, 1500);
+        }, 100);
+    }
+
+    function startTimer(bar, correctIdx) {
+        let width = 100;
+        const interval = setInterval(() => {
+            width -= 0.5;
+            bar.style.width = width + '%';
+            if (width <= 0) {
+                clearInterval(interval);
+                reveal(correctIdx);
+            }
+        }, 35); // Aprox 7 segundos
+    }
+
+    function reveal(correctIdx) {
+        const currentPage = document.getElementById(`page-${currentIdx}`);
+        const options = currentPage.querySelectorAll('.option');
+        
+        options.forEach((opt, i) => {
+            if (i === correctIdx) opt.classList.add('correct');
+            else opt.classList.add('wrong');
+        });
+
+        confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 } });
+
+        // Virar a página após 3 segundos
+        setTimeout(() => {
+            currentPage.classList.add('flipped');
+            sfx.flip.play();
+            currentIdx++;
+            setTimeout(renderPage, 400);
         }, 3000);
+    }
+
+    function check(el, clicked, correct) {
+        // Bloqueia cliques extras mas permite que o timer termine ou force o reveal
+        if (el.parentElement.classList.contains('locked')) return;
+        el.parentElement.classList.add('locked');
+        // O reveal oficial acontece pelo timer para manter a sincronia, 
+        // ou você pode chamar o reveal(correct) imediatamente aqui.
     }
 </script>
 </body>
