@@ -6,7 +6,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Russo+One&family=Montserrat:wght@600;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <title>Caderno Quiz - Pro</title>
+    <title>Pixel Click - Caderno de Questões</title>
     <style>
         :root {
             --paper-color: #fdfdfd;
@@ -14,6 +14,7 @@
             --margin-color: #ffadb0;
             --ink-color: #1a2a6c;
             --wood-brown: #3d2b1f; 
+            --red-pen: #d63031;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -24,12 +25,28 @@
             background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
                 url('https://www.transparenttextures.com/patterns/wood-pattern.png');
             font-family: 'Montserrat', sans-serif;
-            overflow: hidden; display: flex; justify-content: center; align-items: center;
+            overflow: hidden; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center;
             perspective: 2000px;
         }
 
+        /* Título do Projeto */
+        .notebook-label {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 2.2vh;
+            color: #333;
+            background: #eee;
+            padding: 8px 25px;
+            border-radius: 4px;
+            margin-bottom: 2vh;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            border-left: 10px solid var(--ink-color);
+            z-index: 10;
+        }
+
         #notebook-container {
-            width: 90vw; height: 85vh; max-width: 420px;
+            width: 92vw; height: 82vh; max-width: 420px;
             position: relative; transform-style: preserve-3d;
         }
 
@@ -41,13 +58,24 @@
                 linear-gradient(var(--line-color) 1px, transparent 1px);
             background-size: 100% 100%, 100% 3.2vh;
             background-position: 0 0, 0 5vh;
-            border-radius: 5px 15px 15px 5px;
+            border-radius: 2px 15px 15px 2px;
             box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
             padding: 6vh 8% 4vh 18%;
             display: flex; flex-direction: column;
             transform-origin: left center;
             transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
             backface-visibility: hidden;
+        }
+
+        /* Detalhe do espiral/furos */
+        .page::after {
+            content: '';
+            position: absolute; left: 10px; top: 0; bottom: 0;
+            width: 15px;
+            background-image: radial-gradient(circle, #333 40%, transparent 50%);
+            background-size: 15px 3.2vh;
+            background-position: 0 1vh;
+            opacity: 0.2;
         }
 
         .page.flipped { transform: rotateY(-130deg); pointer-events: none; }
@@ -60,23 +88,26 @@
 
         .options-list {
             display: flex; flex-direction: column; gap: 0.8vh;
-            margin-top: 2vh; /* Movido para cima */
-            opacity: 0;
+            margin-top: 2vh; opacity: 0;
             transition: opacity 0.5s ease;
         }
 
         .options-visible { opacity: 1; }
 
         .option {
-            font-family: 'Caveat', cursive; font-size: 2.5vh;
+            font-family: 'Caveat', cursive; font-size: 2.6vh;
             color: #333; padding: 0.6vh; border-bottom: 1px dashed #ccc;
             cursor: pointer; transition: all 0.3s; position: relative;
         }
 
-        @keyframes correctPulse {
-            0% { transform: scale(1); background: transparent; }
-            50% { transform: scale(1.03); background: rgba(46, 204, 113, 0.1); }
-            100% { transform: scale(1); background: rgba(46, 204, 113, 0.05); }
+        .option.correct {
+            color: #27ae60; font-weight: bold; border-bottom: 2px solid #27ae60;
+            background: rgba(46, 204, 113, 0.05);
+        }
+
+        .option.wrong {
+            color: var(--red-pen); opacity: 0.7; text-decoration: line-through;
+            animation: wrongShake 0.4s linear;
         }
 
         @keyframes wrongShake {
@@ -85,17 +116,7 @@
             75% { transform: translateX(4px); }
         }
 
-        .option.correct {
-            animation: correctPulse 0.5s ease forwards;
-            color: #27ae60; font-weight: bold; border-bottom: 2px solid #27ae60;
-        }
-
-        .option.wrong {
-            animation: wrongShake 0.4s linear;
-            color: #c0392b; opacity: 0.7; text-decoration: line-through;
-        }
-
-        .timer-container { width: 100%; height: 3px; background: rgba(0,0,0,0.05); margin-top: 1vh; margin-bottom: 1vh; }
+        .timer-container { width: 100%; height: 3px; background: rgba(0,0,0,0.05); margin-top: 1vh; }
         .timer-bar { width: 100%; height: 100%; background: var(--ink-color); }
 
         #overlay-start {
@@ -110,17 +131,38 @@
             border: none; border-radius: 10px; cursor: pointer; text-decoration: none;
             display: inline-block; text-align: center;
         }
+
+        .final-grade {
+            font-family: 'Caveat', cursive;
+            font-size: 10vh;
+            color: var(--red-pen);
+            border: 5px solid var(--red-pen);
+            width: 15vh; height: 15vh;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+            margin: 2vh auto;
+            transform: rotate(-15deg);
+            opacity: 0;
+            animation: stamp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes stamp {
+            from { transform: scale(3) rotate(0deg); opacity: 0; }
+            to { transform: scale(1) rotate(-15deg); opacity: 1; }
+        }
     </style>
 </head>
 <body>
 
 <div id="overlay-start">
-    <h1 style="font-family: 'Caveat'; font-size: 6vh;">Quiz de Caderno</h1>
-    <button class="btn-cta" style="background:#fff; color:#000" onclick="iniciarQuiz()">INICIAR TESTE</button>
+    <h1 style="font-family: 'Caveat'; font-size: 6vh;">Pixel Click</h1>
+    <button class="btn-cta" style="background:#fff; color:#000" onclick="iniciarQuiz()">ABRIR CADERNO</button>
 </div>
 
+<div class="notebook-label">CADERNO DE QUESTÕES</div>
+
 <div id="notebook-container">
-    <div style="position:absolute; width:100%; height:100%; background:#ddd; border-radius:5px 15px 15px 5px; transform:translate(4px,4px); z-index:0;"></div>
+    <div style="position:absolute; width:100%; height:100%; background:#ddd; border-radius:2px 15px 15px 2px; transform:translate(4px,4px); z-index:0;"></div>
 </div>
 
 <script src="esportes.js"></script>
@@ -143,6 +185,7 @@
     const TOTAL_Q = 8;
     const selectedQuestions = masterPool.sort(() => 0.5 - Math.random()).slice(0, TOTAL_Q);
     let currentQ = 0;
+    let acertos = 0;
     const letras = ["A", "B", "C", "D"];
 
     const sfx = {
@@ -163,7 +206,6 @@
         if (index >= TOTAL_Q || document.getElementById(`page-${index}`)) return;
 
         const data = selectedQuestions[index];
-        // Garantir o ponto de interrogação
         let pergunta = data.q.trim();
         if (!pergunta.endsWith('?')) pergunta += '?';
         data.q = pergunta;
@@ -175,7 +217,7 @@
         page.style.zIndex = TOTAL_Q - index;
 
         page.innerHTML = `
-            <div style="font-size: 1.4vh; color: #aaa; text-align: right; margin-bottom: 5px;">Pág. ${index + 1}</div>
+            <div style="font-size: 1.4vh; color: #aaa; text-align: right;">Questão ${index + 1}</div>
             <div class="question-text" id="q-text-${index}"></div>
             <div class="timer-container"><div class="timer-bar" id="bar-${index}"></div></div>
             <div class="options-list" id="options-${index}">
@@ -191,7 +233,6 @@
     }
 
     async function prepararEscrita(index, data) {
-        // Narração em tempo real (Voz)
         window.speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(data.q);
         utterance.lang = 'pt-BR';
@@ -212,7 +253,7 @@
                 if (i < text.length) {
                     element.innerHTML += text.charAt(i);
                     i++;
-                    setTimeout(type, 45); // Sincronizado com a velocidade da voz
+                    setTimeout(type, 45);
                 } else {
                     sfx.write.stop();
                     resolve();
@@ -226,11 +267,11 @@
         const bar = document.getElementById(`bar-${id}`);
         let width = 100;
         const timer = setInterval(() => {
-            width -= 0.7;
+            width -= 0.8;
             bar.style.width = width + '%';
             if (width <= 0) {
                 clearInterval(timer);
-                finalizarPergunta(correctIdx);
+                finalizarPergunta(correctIdx, false);
             }
         }, 50);
         bar.dataset.timerId = timer;
@@ -243,14 +284,17 @@
         const parent = document.getElementById(`options-${currentQ}`);
         if (parent.dataset.locked) return;
         
-        if (escolhido !== correto) {
+        let acertou = (escolhido === correto);
+        if (acertou) {
+            acertos++;
+        } else {
             el.classList.add('wrong');
             sfx.wrong.play();
         }
-        finalizarPergunta(correto);
+        finalizarPergunta(correto, acertou);
     }
 
-    function finalizarPergunta(corretoIdx) {
+    function finalizarPergunta(corretoIdx, foiAcerto) {
         const parent = document.getElementById(`options-${currentQ}`);
         if (!parent || parent.dataset.locked) return;
         parent.dataset.locked = "true";
@@ -258,8 +302,10 @@
         const options = parent.querySelectorAll('.option');
         options[corretoIdx].classList.add('correct');
         
-        sfx.correct.play();
-        confetti({ particleCount: 30, spread: 50, origin: { y: 0.8 } });
+        if (foiAcerto) {
+            sfx.correct.play();
+            confetti({ particleCount: 30, spread: 50, origin: { y: 0.8 } });
+        }
 
         setTimeout(() => {
             const pageAtual = document.getElementById(`page-${currentQ}`);
@@ -274,7 +320,14 @@
             } else {
                 mostrarFinal();
             }
-        }, 2500);
+        }, 2200);
+    }
+
+    function calcularNota() {
+        if (acertos === 8) return "A+";
+        if (acertos >= 6) return "B";
+        if (acertos >= 4) return "C";
+        return "F";
     }
 
     function mostrarFinal() {
@@ -282,22 +335,25 @@
         const finalPage = document.createElement('div');
         finalPage.className = 'page';
         finalPage.style.zIndex = 100;
+        
+        const nota = calcularNota();
+
         finalPage.innerHTML = `
-            <div style="text-align:center; margin-top:5vh">
-                <h2 style="font-family:'Caveat'; font-size:5vh; color:var(--ink-color)">Fim do Caderno!</h2>
-                <p style="font-family:'Caveat'; font-size:3.2vh; margin: 3vh 0">
-                    Você completou todas as lições. Parabéns pelo empenho!
+            <div style="text-align:center; margin-top:2vh">
+                <h2 style="font-family:'Caveat'; font-size:4.5vh; color:var(--ink-color); margin-bottom:0">Resultado Final</h2>
+                <div class="final-grade">${nota}</div>
+                <p style="font-family:'Caveat'; font-size:2.8vh; margin: 1vh 0">
+                    Você acertou ${acertos} de ${TOTAL_Q} questões.
                 </p>
-                <div style="border: 2px dashed #ccc; padding: 3vh; margin-top: 4vh">
-                    <p style="font-family:'Montserrat'; font-weight:800; font-size:1.8vh">GOSTOU DO DESAFIO?</p>
-                    <p style="font-family:'Caveat'; font-size:2.5vh">Acesse nosso portal para mais:</p>
+                <div style="border: 2px dashed #ccc; padding: 2vh; margin-top: 2vh">
+                    <p style="font-family:'Montserrat'; font-weight:800; font-size:1.6vh">DESAFIE SEUS AMIGOS</p>
                     <a href="https://www.pixelclick.fun" target="_blank" class="btn-cta">WWW.PIXELCLICK.FUN</a>
                 </div>
             </div>
         `;
         container.appendChild(finalPage);
         
-        const finalVoice = new SpeechSynthesisUtterance("Parabéns! Você completou o caderno. Acesse pixel click ponto fun para mais desafios.");
+        const finalVoice = new SpeechSynthesisUtterance(`Exame concluído. Sua nota final foi ${nota}. Visite pixel click ponto fun para novos desafios.`);
         finalVoice.lang = 'pt-BR';
         window.speechSynthesis.speak(finalVoice);
     }
