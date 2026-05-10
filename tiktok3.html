@@ -2,230 +2,205 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <title>Pixel Click - 9:16 Ultra Neon</title>
+    <title>Pixel Click - 9:16 Fullscreen Ultra</title>
     <style>
         :root {
             --neon-pink: #ff00ff;
             --neon-blue: #00ffff;
-            --neon-yellow: #ffff00;
+            --neon-purple: #8a2be2;
             --neon-green: #00ff00;
-            --bg-dark: #0a0a0a;
-            --glass: rgba(255, 255, 255, 0.1);
+            --bg-black: #000000;
         }
 
-        @keyframes meshGradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        * { 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
-
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             margin: 0;
             padding: 0;
+            height: 100vh;
+            width: 100vw;
+            background-color: var(--bg-black);
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            width: 100vw;
-            background-color: var(--bg-dark);
-            font-family: 'Montserrat', sans-serif;
-            overflow: hidden;
-            color: white;
         }
 
-        /* Container 9:16 */
+        /* Container Principal 9:16 */
         #video-canvas {
             width: 100vw;
             height: 100vh;
-            aspect-ratio: 9/16;
-            background-size: 400% 400%;
-            animation: meshGradient 12s ease infinite;
-            position: relative;
             display: flex;
             flex-direction: column;
-            padding: 2vh 6%;
-            overflow: hidden;
+            padding: 4vh 7% 5vh 7%;
+            position: relative;
+            /* Gradiente sem tons de marrom (apenas pretos e frios) */
+            background: radial-gradient(circle at center, #0a0a1a 0%, #000000 100%);
+            transition: background 0.8s ease;
         }
 
         /* Barra de Progresso Superior */
         .progress-header {
             display: flex;
-            gap: 1.5vw;
+            gap: 1.2vw;
             width: 100%;
-            margin-top: 1vh;
             z-index: 10;
         }
 
         .step {
             flex: 1;
             height: 0.8vh;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
-            transition: all 0.3s ease;
         }
 
         .step.active {
-            background: #fff;
-            box-shadow: 0 0 15px #fff;
+            background: var(--neon-blue);
+            box-shadow: 0 0 15px var(--neon-blue);
         }
 
-        /* Título Principal */
+        /* Título */
         .fixed-title {
             font-family: 'Russo One', sans-serif;
-            font-size: 3.2vh;
+            font-size: 3.5vh;
             text-align: center;
-            margin: 3vh 0;
+            margin-top: 4vh;
+            margin-bottom: 2vh;
             text-transform: uppercase;
-            line-height: 1;
-            background: linear-gradient(to bottom, #fff 40%, #ccc 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 8px rgba(255,255,255,0.3));
+            color: #fff;
+            text-shadow: 0 0 10px var(--neon-purple);
         }
 
         /* Container da Pergunta */
         .question-container {
-            background: var(--glass);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 2px solid rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.2);
             border-radius: 2.5vh;
-            padding: 3vh 2vh;
-            min-height: 20vh;
+            padding: 3vh;
+            min-height: 18vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 3vh;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-bottom: 2vh;
+            backdrop-filter: blur(10px);
         }
 
         .question-text {
             font-size: 3vh;
             font-weight: 900;
             text-align: center;
+            color: #fff;
             line-height: 1.2;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
-        /* Timer Minimalista */
+        /* Timer */
         #timer-container {
             width: 100%;
             height: 1.2vh;
-            background: rgba(0,0,0,0.3);
-            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
             margin-bottom: 4vh;
             overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         #timer-bar {
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
             transform-origin: left;
         }
 
-        /* Lista de Opções */
+        /* Opções */
         .options-list {
             display: flex;
             flex-direction: column;
-            gap: 2vh;
-            width: 100%;
+            gap: 1.8vh;
+            flex-grow: 1;
         }
 
         .option {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.07);
+            border: 2px solid rgba(255, 255, 255, 0.15);
             padding: 2.2vh;
-            border-radius: 2vh;
-            font-size: 2.4vh;
+            border-radius: 1.5vh;
+            font-size: 2.3vh;
             font-weight: 700;
+            color: #fff;
             text-align: center;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             opacity: 0;
-            position: relative;
+            transition: transform 0.2s;
         }
 
         .highlight-correct {
             background: var(--neon-green) !important;
             border-color: #fff !important;
             color: #000 !important;
-            transform: scale(1.05);
             box-shadow: 0 0 30px var(--neon-green);
-            z-index: 5;
+            transform: scale(1.05);
+            z-index: 2;
         }
 
-        .fade-out { opacity: 0.3 !important; transform: scale(0.95); filter: grayscale(1); }
+        .fade-out { opacity: 0.2 !important; }
 
-        /* Rodapé Estilizado */
+        /* Rodapé */
         .footer-brand {
-            margin-top: auto;
-            margin-bottom: 2vh;
-            padding: 1.8vh;
-            background: #fff;
-            color: #000;
+            padding: 1.5vh;
+            background: var(--neon-pink);
+            color: #fff;
             border-radius: 50px;
             font-weight: 900;
-            font-size: 2vh;
+            font-size: 1.8vh;
             text-align: center;
-            letter-spacing: 1px;
-            box-shadow: 0 5px 15px rgba(255,255,255,0.2);
+            margin-top: 2vh;
+            box-shadow: 0 5px 15px rgba(255, 0, 255, 0.3);
         }
 
-        /* Botão Iniciar Overlay */
+        /* Iniciar */
         #overlay-start {
-            position: fixed;
-            inset: 0;
+            position: fixed; inset: 0;
             background: #000;
             z-index: 9999;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 3vh;
         }
 
         .btn-play {
-            padding: 2.5vh 8vh;
+            padding: 3vh 8vh;
             font-family: 'Russo One', sans-serif;
             font-size: 4vh;
             background: var(--neon-blue);
-            color: #000;
             border: none;
             border-radius: 50px;
+            box-shadow: 0 0 20px var(--neon-blue);
             cursor: pointer;
-            box-shadow: 0 0 30px var(--neon-blue);
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
         }
 
         @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-30px); }
-            to { opacity: 1; transform: translateX(0); }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
 <div id="overlay-start">
-    <div style="font-family:'Russo One'; font-size: 4vh; color: var(--neon-pink); text-align:center; margin-bottom: 2vh;">PIXEL<br>CLICK</div>
-    <button class="btn-play" onclick="iniciarQuiz()">JOGAR!</button>
+    <button class="btn-play" onclick="entrarTelaCheia()">JOGAR!</button>
 </div>
 
-<div id="video-canvas" id="main-bg">
+<div id="video-canvas">
     <div class="progress-header" id="step-container"></div>
-    <div class="fixed-title">QUIZ FLASH</div>
+    <div class="fixed-title">VERDADEIRO OU FALSO?</div>
     
     <div class="question-container">
         <div class="question-text" id="q-text">CARREGANDO...</div>
@@ -239,148 +214,105 @@
 </div>
 
 <script>
-    /* LÓGICA DE CORES */
-    function getRandomNeonColor() {
-        const colors = ['#ff00ff', '#00ffff', '#ffff00', '#00ff00', '#ff4757', '#6c5ce7', '#ffa500'];
-        return colors[Math.floor(Math.random() * colors.length)];
-    }
-
-    function applyRandomBackground() {
-        const c1 = getRandomNeonColor();
-        const c2 = getRandomNeonColor();
-        const canvas = document.getElementById('video-canvas');
-        canvas.style.background = `linear-gradient(-45deg, ${c1}33, #050505, ${c2}33, #050505)`;
-        canvas.style.backgroundSize = '400% 400%';
-    }
-
-    // Dados Mockados para funcionamento independente (caso os scripts externos falhem)
-    const masterPool = [
-        {q: "Qual a capital da França?", options: ["Londres", "Berlim", "Paris", "Madrid"], correct: 2},
-        {q: "Quanto é 5x5?", options: ["20", "25", "30", "15"], correct: 1},
-        {q: "Qual planeta é o vermelho?", options: ["Marte", "Vênus", "Júpiter", "Saturno"], correct: 0},
-        {q: "Qual o maior oceano?", options: ["Atlântico", "Índico", "Glacial", "Pacífico"], correct: 3},
-        {q: "Quem pintou a Mona Lisa?", options: ["Van Gogh", "Da Vinci", "Picasso", "Monet"], correct: 1},
-        {q: "Qual a cor da esmeralda?", options: ["Azul", "Vermelho", "Verde", "Amarelo"], correct: 2},
-        {q: "Animal mais rápido?", options: ["Leão", "Guepardo", "Cavalo", "Falcão"], correct: 1},
-        {q: "Capital do Japão?", options: ["Seul", "Pequim", "Quioto", "Tóquio"], correct: 3}
-    ];
-
+    // --- CONFIGURAÇÃO E DADOS ---
     const TOTAL_Q = 8;
-    const selectedQuestions = masterPool.sort(() => 0.5 - Math.random()).slice(0, TOTAL_Q);
     let currentQ = 0;
+    
+    // Fallback de dados para garantir funcionamento
+    const quizData = [
+        {q: "O Sol é uma estrela?", options: ["Verdadeiro", "Falso"], correct: 0},
+        {q: "A Lua tem luz própria?", options: ["Verdadeiro", "Falso"], correct: 1},
+        {q: "O Brasil fica na África?", options: ["Verdadeiro", "Falso"], correct: 1},
+        {q: "A água ferve a 100°C?", options: ["Verdadeiro", "Falso"], correct: 0},
+        {q: "Existem 12 meses no ano?", options: ["Verdadeiro", "Falso"], correct: 0},
+        {q: "O oceano é feito de doce?", options: ["Verdadeiro", "Falso"], correct: 1},
+        {q: "O morcego é um pássaro?", options: ["Verdadeiro", "Falso"], correct: 1},
+        {q: "2 + 2 é igual a 4?", options: ["Verdadeiro", "Falso"], correct: 0}
+    ];
 
     const sfx = {
         timer: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-stopwatch-ticking-644.mp3'], loop: true, volume: 0.2 }),
-        correct: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3'], volume: 0.5 }),
-        transition: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-fast-sword-whoosh-2325.mp3'], volume: 0.4 })
+        correct: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-reward-952.mp3'], volume: 0.5 })
     };
 
-    function createSteps() {
+    function entrarTelaCheia() {
+        const doc = document.documentElement;
+        if (doc.requestFullscreen) doc.requestFullscreen();
+        else if (doc.webkitRequestFullscreen) doc.webkitRequestFullscreen();
+        else if (doc.msRequestFullscreen) doc.msRequestFullscreen();
+
+        document.getElementById('overlay-start').style.display = 'none';
+        setupGame();
+    }
+
+    function setupGame() {
         const container = document.getElementById('step-container');
-        container.innerHTML = '';
         for(let i=0; i<TOTAL_Q; i++) {
             const div = document.createElement('div');
             div.className = 'step';
             div.id = `step-${i}`;
             container.appendChild(div);
         }
+        proximaPergunta();
     }
 
-    function iniciarQuiz() {
-        applyRandomBackground();
-        document.getElementById('overlay-start').style.display = 'none';
-        createSteps();
-        startSequence();
-    }
-
-    function startSequence() {
+    function proximaPergunta() {
         if (currentQ >= TOTAL_Q) {
-            document.getElementById('video-canvas').innerHTML = `
-                <div style="text-align:center; padding-top:25vh">
-                    <div style="font-size:10vh">🏆</div>
-                    <h1 style="font-family:'Russo One'; color:var(--neon-yellow); font-size:6vh;">FIM DE JOGO!</h1>
-                    <p style="font-size:3vh; font-weight:900">VOCÊ É UM EXPERT!</p>
-                    <button onclick="location.reload()" style="margin-top:5vh; padding:2vh 5vh; border-radius:50px; border:none; background:#fff; font-weight:900;">JOGAR NOVO</button>
-                </div>`;
+            document.getElementById('video-canvas').innerHTML = `<h1 style="color:white; text-align:center; margin-top:40vh">FIM DO QUIZ!</h1>`;
             return;
         }
 
         document.getElementById(`step-${currentQ}`).classList.add('active');
-        const data = selectedQuestions[currentQ];
+        const data = quizData[currentQ];
         document.getElementById('q-text').innerText = data.q;
         
-        // Narrativa (Opcional - Voz)
-        window.speechSynthesis.cancel();
-        const msg = new SpeechSynthesisUtterance(data.q.toLowerCase());
-        msg.lang = 'pt-BR';
-        window.speechSynthesis.speak(msg);
-
         const box = document.getElementById('options-box');
         box.innerHTML = '';
-        
-        const correctTxt = data.options[data.correct];
-        let options = data.options.map(t => ({t})).sort(() => Math.random() - 0.5);
-        const correctIdx = options.findIndex(o => o.t === correctTxt);
 
-        options.forEach((opt, i) => {
+        data.options.forEach((opt, i) => {
             const div = document.createElement('div');
             div.className = 'option';
-            div.innerText = opt.t;
-            div.style.animation = `slideIn 0.4s ease forwards ${i * 0.15}s`;
+            div.innerText = opt;
+            div.style.animation = `slideIn 0.4s ease forwards ${i * 0.1}s`;
             box.appendChild(div);
         });
 
-        sfx.transition.play();
-        setTimeout(() => {
-            sfx.timer.play();
-            runTimer(correctIdx, correctTxt);
-        }, 800);
+        iniciarTimer(data.correct);
     }
 
-    function runTimer(correctIdx, text) {
+    function iniciarTimer(correctIdx) {
+        sfx.timer.play();
         const bar = document.getElementById('timer-bar');
-        const start = Date.now();
-        const duration = 6000; // 6 segundos para ser mais dinâmico
+        let start = Date.now();
+        let duration = 5000; 
 
-        function update() {
-            const elapsed = Date.now() - start;
-            const p = Math.max(0, 100 - (elapsed / duration * 100));
+        function frame() {
+            let elapsed = Date.now() - start;
+            let p = Math.max(0, 100 - (elapsed / duration * 100));
             bar.style.width = p + "%";
 
-            if (p < 30) bar.style.background = "var(--neon-pink)";
-            else bar.style.background = "linear-gradient(90deg, var(--neon-blue), var(--neon-green))";
-
-            if (elapsed < duration) {
-                requestAnimationFrame(update);
-            } else {
-                finishRound(correctIdx, text);
-            }
+            if (elapsed < duration) requestAnimationFrame(frame);
+            else finalizarRodada(correctIdx);
         }
-        update();
+        requestAnimationFrame(frame);
     }
 
-    function finishRound(idx, text) {
+    function finalizarRodada(idx) {
         sfx.timer.stop();
         sfx.correct.play();
-        
-        confetti({
-            particleCount: 150,
-            spread: 60,
-            origin: { y: 0.7 },
-            colors: [getRandomNeonColor(), '#ffffff', '#00ffff']
-        });
 
-        const allOpts = document.querySelectorAll('.option');
-        allOpts.forEach((el, i) => {
+        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+
+        const opts = document.querySelectorAll('.option');
+        opts.forEach((el, i) => {
             if(i === idx) el.classList.add('highlight-correct');
             else el.classList.add('fade-out');
         });
 
         setTimeout(() => {
             currentQ++;
-            applyRandomBackground();
-            startSequence();
-        }, 2800);
+            proximaPergunta();
+        }, 3000);
     }
 </script>
 </body>
