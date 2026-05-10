@@ -6,7 +6,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Russo+One&family=Montserrat:wght@600;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <title>Caderno Quiz - Final Edition</title>
+    <title>Caderno Quiz - Pro</title>
     <style>
         :root {
             --paper-color: #fdfdfd;
@@ -54,13 +54,14 @@
 
         .question-text {
             font-family: 'Caveat', cursive; color: var(--ink-color);
-            font-size: 3.2vh; line-height: 1.2; margin-top: 2vh;
-            min-height: 16vh; white-space: pre-wrap;
+            font-size: 3.2vh; line-height: 1.2; margin-top: 1vh;
+            min-height: 14vh; white-space: pre-wrap;
         }
 
         .options-list {
-            display: flex; flex-direction: column; gap: 1vh;
-            margin-top: auto; margin-bottom: 4vh; opacity: 0;
+            display: flex; flex-direction: column; gap: 0.8vh;
+            margin-top: 2vh; /* Movido para cima */
+            opacity: 0;
             transition: opacity 0.5s ease;
         }
 
@@ -68,21 +69,20 @@
 
         .option {
             font-family: 'Caveat', cursive; font-size: 2.5vh;
-            color: #333; padding: 0.8vh; border-bottom: 1px dashed #ccc;
+            color: #333; padding: 0.6vh; border-bottom: 1px dashed #ccc;
             cursor: pointer; transition: all 0.3s; position: relative;
         }
 
-        /* Animações de Feedback */
         @keyframes correctPulse {
             0% { transform: scale(1); background: transparent; }
-            50% { transform: scale(1.05); background: rgba(46, 204, 113, 0.2); }
-            100% { transform: scale(1); background: rgba(46, 204, 113, 0.1); }
+            50% { transform: scale(1.03); background: rgba(46, 204, 113, 0.1); }
+            100% { transform: scale(1); background: rgba(46, 204, 113, 0.05); }
         }
 
         @keyframes wrongShake {
             0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
         }
 
         .option.correct {
@@ -95,11 +95,11 @@
             color: #c0392b; opacity: 0.7; text-decoration: line-through;
         }
 
-        .timer-container { width: 100%; height: 3px; background: rgba(0,0,0,0.05); margin-bottom: 2vh; }
-        .timer-bar { width: 100%; height: 100%; background: var(--ink-color); transition: width 0.1s linear; }
+        .timer-container { width: 100%; height: 3px; background: rgba(0,0,0,0.05); margin-top: 1vh; margin-bottom: 1vh; }
+        .timer-bar { width: 100%; height: 100%; background: var(--ink-color); }
 
         #overlay-start {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+            position: fixed; inset: 0; background: rgba(0,0,0,0.95);
             z-index: 9999; display: flex; flex-direction: column; 
             justify-content: center; align-items: center; color: white;
         }
@@ -115,8 +115,8 @@
 <body>
 
 <div id="overlay-start">
-    <h1 style="font-family: 'Caveat'; font-size: 6vh;">Desafio do Caderno</h1>
-    <button class="btn-cta" style="background:#fff; color:#000" onclick="iniciarQuiz()">COMEÇAR EXAME</button>
+    <h1 style="font-family: 'Caveat'; font-size: 6vh;">Quiz de Caderno</h1>
+    <button class="btn-cta" style="background:#fff; color:#000" onclick="iniciarQuiz()">INICIAR TESTE</button>
 </div>
 
 <div id="notebook-container">
@@ -147,7 +147,7 @@
 
     const sfx = {
         flip: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-paper-slide-1530.mp3'] }),
-        write: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-pencil-writing-on-paper-2101.mp3'], volume: 0.4, loop: true }),
+        write: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-pencil-writing-on-paper-2101.mp3'], volume: 0.3, loop: true }),
         correct: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-bonus-earned-in-video-game-2058.mp3'] }),
         wrong: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-failing-armpit-fart-3091.mp3'], volume: 0.2 })
     };
@@ -163,6 +163,11 @@
         if (index >= TOTAL_Q || document.getElementById(`page-${index}`)) return;
 
         const data = selectedQuestions[index];
+        // Garantir o ponto de interrogação
+        let pergunta = data.q.trim();
+        if (!pergunta.endsWith('?')) pergunta += '?';
+        data.q = pergunta;
+
         const container = document.getElementById('notebook-container');
         const page = document.createElement('div');
         page.className = 'page';
@@ -170,7 +175,7 @@
         page.style.zIndex = TOTAL_Q - index;
 
         page.innerHTML = `
-            <div style="font-size: 1.5vh; color: #aaa; text-align: right;">Questão ${index + 1}</div>
+            <div style="font-size: 1.4vh; color: #aaa; text-align: right; margin-bottom: 5px;">Pág. ${index + 1}</div>
             <div class="question-text" id="q-text-${index}"></div>
             <div class="timer-container"><div class="timer-bar" id="bar-${index}"></div></div>
             <div class="options-list" id="options-${index}">
@@ -186,6 +191,13 @@
     }
 
     async function prepararEscrita(index, data) {
+        // Narração em tempo real (Voz)
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(data.q);
+        utterance.lang = 'pt-BR';
+        utterance.rate = 1.1;
+        window.speechSynthesis.speak(utterance);
+
         await typeWriter(`q-text-${index}`, data.q);
         document.getElementById(`options-${index}`).classList.add('options-visible');
         iniciarTimer(index, data.correct);
@@ -200,7 +212,7 @@
                 if (i < text.length) {
                     element.innerHTML += text.charAt(i);
                     i++;
-                    setTimeout(type, 40);
+                    setTimeout(type, 45); // Sincronizado com a velocidade da voz
                 } else {
                     sfx.write.stop();
                     resolve();
@@ -246,8 +258,8 @@
         const options = parent.querySelectorAll('.option');
         options[corretoIdx].classList.add('correct');
         
-        if (options[corretoIdx].classList.contains('correct')) sfx.correct.play();
-        confetti({ particleCount: 40, spread: 50, origin: { y: 0.8 } });
+        sfx.correct.play();
+        confetti({ particleCount: 30, spread: 50, origin: { y: 0.8 } });
 
         setTimeout(() => {
             const pageAtual = document.getElementById(`page-${currentQ}`);
@@ -262,7 +274,7 @@
             } else {
                 mostrarFinal();
             }
-        }, 2200);
+        }, 2500);
     }
 
     function mostrarFinal() {
@@ -272,17 +284,22 @@
         finalPage.style.zIndex = 100;
         finalPage.innerHTML = `
             <div style="text-align:center; margin-top:5vh">
-                <h2 style="font-family:'Caveat'; font-size:5vh; color:var(--ink-color)">Prova Finalizada!</h2>
-                <p style="font-family:'Caveat'; font-size:3vh; margin: 3vh 0">
-                    Você demonstrou grande dedicação hoje. Quer continuar testando seus conhecimentos?
+                <h2 style="font-family:'Caveat'; font-size:5vh; color:var(--ink-color)">Fim do Caderno!</h2>
+                <p style="font-family:'Caveat'; font-size:3.2vh; margin: 3vh 0">
+                    Você completou todas as lições. Parabéns pelo empenho!
                 </p>
-                <div style="border: 2px dashed #ccc; padding: 2vh; margin-top: 5vh">
-                    <p style="font-family:'Montserrat'; font-weight:800; font-size:1.8vh">ACESSE AGORA:</p>
-                    <a href="https://www.pixelclick.fun" class="btn-cta">WWW.PIXELCLICK.FUN</a>
+                <div style="border: 2px dashed #ccc; padding: 3vh; margin-top: 4vh">
+                    <p style="font-family:'Montserrat'; font-weight:800; font-size:1.8vh">GOSTOU DO DESAFIO?</p>
+                    <p style="font-family:'Caveat'; font-size:2.5vh">Acesse nosso portal para mais:</p>
+                    <a href="https://www.pixelclick.fun" target="_blank" class="btn-cta">WWW.PIXELCLICK.FUN</a>
                 </div>
             </div>
         `;
         container.appendChild(finalPage);
+        
+        const finalVoice = new SpeechSynthesisUtterance("Parabéns! Você completou o caderno. Acesse pixel click ponto fun para mais desafios.");
+        finalVoice.lang = 'pt-BR';
+        window.speechSynthesis.speak(finalVoice);
     }
 </script>
 </body>
