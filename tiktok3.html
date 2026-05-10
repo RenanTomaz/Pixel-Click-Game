@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Montserrat:wght@600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Russo+One&family=Montserrat:wght@600;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <title>Caderno Realista Quiz</title>
     <style>
         :root {
-            --paper-color: #fcfcfc;
-            --line-color: #e0e9f5;
+            --paper-color: #fdfdfd;
+            --line-color: #d1e4f9;
             --margin-color: #ffadb0;
             --ink-color: #1a2a6c;
+            --wood-dark: #121212;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -22,15 +23,18 @@
             padding: 0;
             height: 100vh;
             width: 100vw;
-            background: #1a1a1a; /* Mesa escura */
-            background-image: repeating-linear-gradient(45deg, #151515 0, #151515 1px, transparent 0, transparent 50%);
-            background-size: 10px 10px;
+            background: var(--wood-dark);
+            /* Textura de mesa de madeira escura */
+            background-image: 
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(0deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
             font-family: 'Montserrat', sans-serif;
             overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            perspective: 1500px;
+            perspective: 2000px; /* Crucial para o efeito 3D */
         }
 
         /* Container do Caderno */
@@ -48,122 +52,142 @@
             width: 100%;
             height: 100%;
             background: var(--paper-color);
+            /* Desenho das linhas do caderno via CSS */
             background-image: 
                 linear-gradient(90deg, transparent 39px, var(--margin-color) 39px, var(--margin-color) 41px, transparent 41px),
                 linear-gradient(var(--line-color) 1px, transparent 1px);
-            background-size: 100% 100%, 100% 3.5vh;
-            border-radius: 5px 20px 20px 5px;
-            box-shadow: 2px 5px 15px rgba(0,0,0,0.3);
-            padding: 5vh 10% 5vh 15%;
+            background-size: 100% 100%, 100% 3.2vh; /* Espaçamento das linhas */
+            background-position: 0 0, 0 5vh;
+            border-radius: 5px 15px 15px 5px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.5);
+            padding: 6vh 8% 4vh 18%; /* Margem maior à esquerda para o "espiral" */
             display: flex;
             flex-direction: column;
             transform-origin: left center;
-            transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+            transition: transform 1.2s cubic-bezier(0.645, 0.045, 0.355, 1);
             backface-visibility: hidden;
             z-index: 2;
         }
 
         /* Animação de virar folha */
         .page.flipped {
-            transform: rotateY(-130deg);
+            transform: rotateY(-140deg);
             z-index: 1;
         }
 
-        /* Escrita à mão */
-        .handwritten {
+        /* Texto da Pergunta (Manuscrito) */
+        .question-text {
             font-family: 'Caveat', cursive;
             color: var(--ink-color);
-            font-size: 3.8vh;
-            line-height: 1.1;
-            margin-bottom: 3vh;
+            font-size: 3.5vh;
+            line-height: 1.2;
+            margin-top: 2vh;
+            margin-bottom: 4vh;
+            min-height: 15vh;
             opacity: 0;
         }
 
-        .writing-animation {
+        .writing-active {
             opacity: 1;
-            border-right: 3px solid transparent;
-            white-space: normal;
-            overflow: hidden;
-            animation: typing 1.5s steps(40, end);
+            animation: inkFlow 2s ease-out forwards;
         }
 
-        @keyframes typing {
-            from { max-height: 0; }
-            to { max-height: 50vh; }
+        @keyframes inkFlow {
+            from { clip-path: inset(0 100% 0 0); }
+            to { clip-path: inset(0 0 0 0); }
         }
 
-        /* Opções (Post-its ou botões discretos) */
+        /* Lista de Opções (estilo itens de lista) */
         .options-list {
             display: flex;
             flex-direction: column;
-            gap: 2vh;
+            gap: 1.5vh;
             margin-top: auto;
+            margin-bottom: 5vh;
         }
 
         .option {
-            background: rgba(0,0,0,0.03);
-            border: 1px dashed rgba(0,0,0,0.2);
-            padding: 2vh;
-            border-radius: 5px;
-            font-size: 2.2vh;
+            font-family: 'Caveat', cursive;
+            font-size: 2.8vh;
             color: #333;
-            text-align: left;
+            padding: 1vh;
+            border-bottom: 1px dashed #ccc;
             cursor: pointer;
-            transition: 0.3s;
+            transition: all 0.3s;
             position: relative;
         }
 
-        .option.correct {
-            background: rgba(0, 255, 0, 0.1);
-            border: 2px solid green;
-            color: green;
-            transform: rotate(-2deg);
+        /* Marcador de resposta (como um X feito a caneta) */
+        .option.correct::before {
+            content: "✓";
+            position: absolute;
+            left: -35px;
+            color: #2ecc71;
+            font-size: 4vh;
+            font-weight: bold;
         }
 
-        .option.wrong {
-            background: rgba(255, 0, 0, 0.1);
-            border: 2px solid red;
-            color: red;
-            opacity: 0.5;
+        .option.wrong::before {
+            content: "✗";
+            position: absolute;
+            left: -35px;
+            color: #e74c3c;
+            font-size: 4vh;
         }
 
-        /* Timer (como uma linha de carregamento de caneta) */
-        #timer-wrap {
+        /* Timer (barra de progresso minimalista) */
+        .timer-container {
             width: 100%;
-            height: 4px;
+            height: 3px;
             background: #eee;
-            margin: 2vh 0;
+            margin-bottom: 2vh;
         }
-        #timer-bar {
+        .timer-bar {
             width: 100%;
             height: 100%;
             background: var(--ink-color);
-            transition: width 0.1s linear;
         }
 
         /* Overlay Inicial */
-        #start-screen {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.9);
-            z-index: 100; display: flex; flex-direction: column; 
-            justify-content: center; align-items: center; color: white;
+        #overlay-start {
+            position: fixed; inset: 0;
+            background: #000;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
         }
-        .btn-pen {
-            padding: 20px 40px; font-size: 24px; font-family: 'Russo One';
-            background: #fff; color: #000; border: none; border-radius: 50px;
+
+        .btn-play {
+            margin-top: 20px;
+            padding: 20px 60px;
+            font-family: 'Russo One', sans-serif;
+            font-size: 4vh;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255,255,255,0.2);
         }
     </style>
 </head>
 <body>
 
-<div id="start-screen">
-    <h1 style="margin-bottom: 30px;">QUIZ DE CADERNO</h1>
-    <button class="btn-pen" onclick="iniciarQuiz()">PEGAR CANETA</button>
+<div id="overlay-start">
+    <h1 style="font-family: 'Caveat'; font-size: 7vh;">Meu Caderno</h1>
+    <p style="font-family: 'Montserrat'; font-size: 2vh; opacity: 0.7;">Responda o Quiz nas páginas</p>
+    <button class="btn-play" onclick="iniciarQuiz()">ABRIR</button>
 </div>
 
 <div id="notebook-container">
-    <!-- As páginas serão geradas dinamicamente aqui -->
+    <!-- As páginas serão inseridas aqui via JS -->
 </div>
 
+<!-- IMPORTANTE: Estes arquivos devem estar na mesma pasta que este HTML -->
 <script src="esportes.js"></script>
 <script src="geografia.js"></script>
 <script src="historia.js"></script>
@@ -172,107 +196,134 @@
 <script src="entretenimento.js"></script>
 
 <script>
+    // Agregando os dados
     const masterPool = [
-        ...(window.esportesData || []),
-        ...(window.geografiaData || []),
-        ...(window.historiaData || []),
-        ...(window.naturezaData || []),
-        ...(window.cienciaData || []),
-        ...(window.entretenimentoData || [])
+        ...(typeof esportesData !== 'undefined' ? esportesData : []),
+        ...(typeof geografiaData !== 'undefined' ? geografiaData : []),
+        ...(typeof historiaData !== 'undefined' ? historiaData : []),
+        ...(typeof naturezaData !== 'undefined' ? naturezaData : []),
+        ...(typeof cienciaData !== 'undefined' ? cienciaData : []),
+        ...(typeof entretenimentoData !== 'undefined' ? entretenimentoData : [])
     ];
 
     const TOTAL_Q = 8;
     const selectedQuestions = masterPool.sort(() => 0.5 - Math.random()).slice(0, TOTAL_Q);
-    let currentIdx = 0;
+    let currentQ = 0;
 
+    // Sons (usando links de biblioteca para garantir que toque)
     const sfx = {
         flip: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-paper-slide-1530.mp3'] }),
-        write: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-pencil-writing-on-paper-2101.mp3'], volume: 0.5 })
+        write: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-pencil-writing-on-paper-2101.mp3'], volume: 0.5 }),
+        correct: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-bonus-earned-in-video-game-2058.mp3'] })
     };
 
     function iniciarQuiz() {
+        // Fullscreen
         const doc = document.documentElement;
         if (doc.requestFullscreen) doc.requestFullscreen();
-        document.getElementById('start-screen').style.display = 'none';
-        renderPage();
+        
+        document.getElementById('overlay-start').style.display = 'none';
+        renderizarPagina();
     }
 
-    function renderPage() {
-        if (currentIdx >= TOTAL_Q) {
-            alert("Fim do caderno!");
+    function renderizarPagina() {
+        if (currentQ >= TOTAL_Q) {
+            finalizar();
             return;
         }
 
+        const data = selectedQuestions[currentQ];
         const container = document.getElementById('notebook-container');
-        const data = selectedQuestions[currentIdx];
 
+        // Cria a nova página
         const page = document.createElement('div');
         page.className = 'page';
-        page.id = `page-${currentIdx}`;
-        
+        page.id = `page-${currentQ}`;
+        page.style.zIndex = TOTAL_Q - currentQ; // Empilhamento inverso
+
         page.innerHTML = `
-            <div style="font-size: 1.5vh; color: #999; margin-bottom: 1vh;">Questão ${currentIdx + 1}/${TOTAL_Q}</div>
-            <div class="handwritten" id="text-${currentIdx}">${data.q}</div>
-            <div id="timer-wrap"><div id="timer-bar" id="bar-${currentIdx}"></div></div>
-            <div class="options-list">
-                ${data.options.map((opt, i) => `<div class="option" onclick="check(this, ${i}, ${data.correct})">${opt}</div>`).join('')}
+            <div style="font-size: 1.5vh; color: #aaa; text-align: right;">Pág. ${currentQ + 1}</div>
+            <div class="question-text" id="q-text-${currentQ}">${data.q}</div>
+            <div class="timer-container"><div class="timer-bar" id="bar-${currentQ}"></div></div>
+            <div class="options-list" id="options-${currentQ}">
+                ${data.options.map((opt, i) => `
+                    <div class="option" onclick="validar(this, ${i}, ${data.correct})">${opt}</div>
+                `).join('')}
             </div>
         `;
 
         container.appendChild(page);
 
-        // Animação de escrita e som
+        // Animação de escrita
         setTimeout(() => {
-            const txt = document.getElementById(`text-${currentIdx}`);
-            txt.classList.add('writing-animation');
+            const txt = document.getElementById(`q-text-${currentQ}`);
+            txt.classList.add('writing-active');
             sfx.write.play();
             
-            // Inicia Timer após escrita (2 segundos)
             setTimeout(() => {
                 sfx.write.stop();
-                startTimer(page.querySelector('#timer-bar'), data.correct);
-            }, 1500);
-        }, 100);
+                iniciarTimer(currentQ, data.correct);
+            }, 2000);
+        }, 300);
     }
 
-    function startTimer(bar, correctIdx) {
+    function iniciarTimer(id, correctIdx) {
+        const bar = document.getElementById(`bar-${id}`);
         let width = 100;
-        const interval = setInterval(() => {
-            width -= 0.5;
+        const duration = 7000; // 7 segundos
+        const step = 100 / (duration / 50);
+
+        const timer = setInterval(() => {
+            width -= step;
             bar.style.width = width + '%';
+
             if (width <= 0) {
-                clearInterval(interval);
-                reveal(correctIdx);
+                clearInterval(timer);
+                finalizarPergunta(correctIdx);
             }
-        }, 35); // Aprox 7 segundos
+        }, 50);
+
+        // Armazena o timer para cancelar se o usuário clicar antes
+        bar.dataset.timerId = timer;
     }
 
-    function reveal(correctIdx) {
-        const currentPage = document.getElementById(`page-${currentIdx}`);
-        const options = currentPage.querySelectorAll('.option');
-        
+    function validar(el, escolhido, correto) {
+        const bar = document.getElementById(`bar-${currentQ}`);
+        clearInterval(parseInt(bar.dataset.timerId));
+        finalizarPergunta(correto);
+    }
+
+    function finalizarPergunta(corretoIdx) {
+        const parent = document.getElementById(`options-${currentQ}`);
+        if (parent.dataset.locked) return;
+        parent.dataset.locked = "true";
+
+        const options = parent.querySelectorAll('.option');
         options.forEach((opt, i) => {
-            if (i === correctIdx) opt.classList.add('correct');
+            if (i === corretoIdx) opt.classList.add('correct');
             else opt.classList.add('wrong');
         });
 
-        confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 } });
+        sfx.correct.play();
+        confetti({ particleCount: 100, spread: 70, origin: { y: 0.8 } });
 
-        // Virar a página após 3 segundos
+        // Virar página
         setTimeout(() => {
-            currentPage.classList.add('flipped');
+            const page = document.getElementById(`page-${currentQ}`);
+            page.classList.add('flipped');
             sfx.flip.play();
-            currentIdx++;
-            setTimeout(renderPage, 400);
+            currentQ++;
+            setTimeout(renderizarPagina, 600);
         }, 3000);
     }
 
-    function check(el, clicked, correct) {
-        // Bloqueia cliques extras mas permite que o timer termine ou force o reveal
-        if (el.parentElement.classList.contains('locked')) return;
-        el.parentElement.classList.add('locked');
-        // O reveal oficial acontece pelo timer para manter a sincronia, 
-        // ou você pode chamar o reveal(correct) imediatamente aqui.
+    function finalizar() {
+        document.getElementById('notebook-container').innerHTML = `
+            <div class="page" style="text-align:center; display:flex; flex-direction:column; justify-content:center;">
+                <h1 style="font-family:'Caveat'; font-size:6vh;">Fim do Quiz!</h1>
+                <p>Obrigado por participar.</p>
+                <button class="btn-play" onclick="location.reload()" style="background:#000; color:#fff; font-size:2vh;">RECOMEÇAR</button>
+            </div>`;
     }
 </script>
 </body>
