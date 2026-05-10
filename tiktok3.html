@@ -53,7 +53,7 @@
             background-position: 0 0, 0 5vh;
             border-radius: 2px 15px 15px 2px;
             box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
-            padding: 6vh 8% 6vh 18%; /* Padding inferior ajustado para rodapé */
+            padding: 6vh 8% 6vh 18%;
             display: flex; flex-direction: column;
             transform-origin: left center;
             transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -102,13 +102,11 @@
         .timer-container { width: 100%; height: 3px; background: rgba(0,0,0,0.05); margin-top: 1vh; }
         .timer-bar { width: 100%; height: 100%; background: var(--ink-color); }
 
-        /* Estilo da Tabela Final */
         .grade-table {
             width: 100%; border-collapse: collapse; margin-top: 2vh;
             font-family: 'Caveat', cursive; font-size: 2.2vh; color: #444;
         }
         .grade-table th, .grade-table td { border: 1px solid #ddd; padding: 5px; text-align: center; }
-        .current-row { background: rgba(214, 48, 49, 0.1); color: var(--red-pen); font-weight: bold; }
 
         #overlay-start {
             position: fixed; inset: 0; background: rgba(0,0,0,0.95);
@@ -123,15 +121,13 @@
             display: inline-block; text-align: center;
         }
 
-        .final-grade-stamp {
-            font-family: 'Caveat', cursive; font-size: 8vh; color: var(--red-pen);
-            border: 4px solid var(--red-pen); width: 12vh; height: 12vh;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 50%; margin: 1vh auto; transform: rotate(-15deg);
-            animation: stamp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        .ask-grade {
+            font-family: 'Caveat', cursive; font-size: 5.5vh; color: var(--red-pen);
+            margin: 2vh 0; line-height: 1.1; transform: rotate(-2deg);
+            animation: stamp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
-        @keyframes stamp { from { transform: scale(3) rotate(0deg); opacity: 0; } to { transform: scale(1) rotate(-15deg); opacity: 1; } }
+        @keyframes stamp { from { transform: scale(2); opacity: 0; } to { transform: scale(1) rotate(-2deg); opacity: 1; } }
     </style>
 </head>
 <body>
@@ -278,26 +274,28 @@
         finalPage.className = 'page';
         finalPage.style.zIndex = 100;
         
-        const escala = [
-            {n: "8", g: "A+"}, {n: "6-7", g: "B"}, {n: "4-5", g: "C"}, {n: "0-3", g: "F"}
-        ];
-        const notaAtual = acertos === 8 ? "A+" : acertos >= 6 ? "B" : acertos >= 4 ? "C" : "F";
-
         finalPage.innerHTML = `
             <div style="text-align:center;">
-                <h2 style="font-family:'Caveat'; font-size:4vh; color:var(--ink-color); margin:0;">Relatório Final</h2>
-                <div class="final-grade-stamp">${notaAtual}</div>
+                <h2 style="font-family:'Caveat'; font-size:4vh; color:var(--ink-color); margin:0;">Fim das Questões</h2>
+                
+                <p style="font-family:'Caveat'; font-size:3.2vh; margin: 2vh 0">Você acertou <b>${acertos}</b> de ${TOTAL_Q}.</p>
+                
+                <div class="ask-grade">Qual foi a sua nota?</div>
+
                 <table class="grade-table">
                     <tr><th>Acertos</th><th>Nota</th></tr>
-                    ${escala.map(e => `<tr class="${notaAtual === e.g ? 'current-row' : ''}"><td>${e.n}</td><td>${e.g}</td></tr>`).join('')}
+                    <tr><td>8</td><td>A+</td></tr>
+                    <tr><td>6-7</td><td>B</td></tr>
+                    <tr><td>4-5</td><td>C</td></tr>
+                    <tr><td>0-3</td><td>F</td></tr>
                 </table>
-                <p style="font-family:'Caveat'; font-size:2.5vh; margin: 1vh 0">Total: ${acertos} de ${TOTAL_Q} questões.</p>
-                <a href="https://www.pixelclick.fun" target="_blank" class="btn-cta" style="font-size:2vh; padding:10px 20px;">WWW.PIXELCLICK.FUN</a>
+
+                <a href="https://www.pixelclick.fun" target="_blank" class="btn-cta" style="font-size:2vh; padding:10px 20px; margin-top:3vh;">WWW.PIXELCLICK.FUN</a>
             </div>
             <div class="footer-site">www.pixelclick.fun</div>
         `;
         container.appendChild(finalPage);
-        window.speechSynthesis.speak(new SpeechSynthesisUtterance(`Concluído. Nota final ${notaAtual}.`));
+        window.speechSynthesis.speak(new SpeechSynthesisUtterance(`Você acertou ${acertos} de ${TOTAL_Q}. Me diga, qual foi a sua nota?`));
     }
 </script>
 </body>
