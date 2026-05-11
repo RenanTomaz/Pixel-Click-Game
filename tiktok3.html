@@ -30,21 +30,25 @@
             perspective: 2000px;
         }
 
-        /* Overlay de Contagem */
+        /* Overlay de Contagem - Ajustado para estabilidade */
         #countdown-overlay {
             position: fixed; inset: 0; 
             display: none; justify-content: center; align-items: center;
-            background: rgba(0,0,0,0.85); z-index: 10000;
+            background: rgba(0,0,0,0.9); z-index: 10000;
+            pointer-events: none;
         }
         #countdown-number {
             font-family: 'Russo One', sans-serif;
             font-size: 18vh; color: white;
             text-shadow: 0 0 30px var(--ink-color);
-            animation: pulseCount 1s infinite;
         }
-        @keyframes pulseCount {
-            0% { transform: scale(0.8); opacity: 0; }
-            50% { transform: scale(1.1); opacity: 1; }
+        
+        .animate-pop {
+            animation: popSfx 1s ease-out;
+        }
+        @keyframes popSfx {
+            0% { transform: scale(0.5); opacity: 0; }
+            20% { transform: scale(1.2); opacity: 1; }
             100% { transform: scale(1); opacity: 0; }
         }
 
@@ -120,14 +124,8 @@
         .timer-container { width: 100%; height: 3px; background: rgba(0,0,0,0.05); margin-top: 1vh; }
         .timer-bar { width: 100%; height: 100%; background: var(--ink-color); }
 
-        .grade-table {
-            width: 100%; border-collapse: collapse; margin-top: 2vh;
-            font-family: 'Caveat', cursive; font-size: 2.2vh; color: #444;
-        }
-        .grade-table th, .grade-table td { border: 1px solid #ddd; padding: 5px; text-align: center; }
-
         #overlay-start {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.95);
+            position: fixed; inset: 0; background: rgba(0,0,0,0.98);
             z-index: 9999; display: flex; flex-direction: column; 
             justify-content: center; align-items: center; color: white;
         }
@@ -136,23 +134,25 @@
             margin-top: 20px; padding: 15px 40px; font-family: 'Russo One';
             font-size: 2.5vh; background: var(--ink-color); color: #fff; 
             border: none; border-radius: 10px; cursor: pointer; text-decoration: none;
-            display: inline-block; text-align: center;
         }
+
+        .grade-table {
+            width: 100%; border-collapse: collapse; margin-top: 2vh;
+            font-family: 'Caveat', cursive; font-size: 2.2vh; color: #444;
+        }
+        .grade-table th, .grade-table td { border: 1px solid #ddd; padding: 5px; text-align: center; }
 
         .ask-grade {
             font-family: 'Caveat', cursive; font-size: 5.5vh; color: var(--red-pen);
-            margin: 2vh 0; line-height: 1.1; transform: rotate(-2deg);
+            margin: 2vh 0; transform: rotate(-2deg);
             animation: stamp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
-
         @keyframes stamp { from { transform: scale(2); opacity: 0; } to { transform: scale(1) rotate(-2deg); opacity: 1; } }
     </style>
 </head>
 <body>
 
-<div id="countdown-overlay">
-    <div id="countdown-number">5</div>
-</div>
+<div id="countdown-overlay"><div id="countdown-number">5</div></div>
 
 <div id="overlay-start">
     <h1 style="font-family: 'Caveat'; font-size: 6vh;">Pixel Click</h1>
@@ -165,7 +165,6 @@
     <div style="position:absolute; width:100%; height:100%; background:#ddd; border-radius:2px 15px 15px 2px; transform:translate(4px,4px); z-index:0;"></div>
 </div>
 
-<!-- Scripts de Dados -->
 <script src="esportes.js"></script>
 <script src="geografia.js"></script>
 <script src="historia.js"></script>
@@ -198,7 +197,13 @@
     };
 
     function iniciarQuiz() {
-        if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+        // Tentativa suave de fullscreen (se falhar, não trava a gravação)
+        try {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().catch(() => console.log("Fullscreen negado."));
+            }
+        } catch (e) {}
+
         document.getElementById('overlay-start').style.display = 'none';
         
         const overlay = document.getElementById('countdown-overlay');
@@ -206,31 +211,28 @@
         overlay.style.display = 'flex';
         
         let count = 5;
-        number.innerText = count;
-        sfx.tick.play();
-
-        const timer = setInterval(() => {
-            count--;
+        const runCount = () => {
             if (count > 0) {
                 number.innerText = count;
+                number.classList.remove('animate-pop');
+                void number.offsetWidth; // Force reflow
+                number.classList.add('animate-pop');
                 sfx.tick.play();
+                count--;
+                setTimeout(runCount, 1000);
             } else {
-                clearInterval(timer);
                 overlay.style.display = 'none';
                 renderizarPagina(0);
                 if (selectedQuestions.length > 1) renderizarPagina(1);
             }
-        }, 1000);
+        };
+        runCount();
     }
 
     function renderizarPagina(index) {
         if (index >= TOTAL_Q || document.getElementById(`page-${index}`)) return;
 
         const data = selectedQuestions[index];
-        let pergunta = data.q.trim();
-        if (!pergunta.endsWith('?')) pergunta += '?';
-        data.q = pergunta;
-
         const container = document.getElementById('notebook-container');
         const page = document.createElement('div');
         page.className = 'page';
@@ -290,12 +292,8 @@
         if (parent.dataset.locked) return;
         
         let acertou = (escolhido === correto);
-        if (acertou) {
-            acertos++;
-        } else {
-            el.classList.add('wrong');
-            sfx.wrong.play();
-        }
+        if (acertou) acertos++;
+        else { el.classList.add('wrong'); sfx.wrong.play(); }
         finalizarPergunta(correto, acertou);
     }
 
@@ -304,11 +302,9 @@
         if (!parent || parent.dataset.locked) return;
         parent.dataset.locked = "true";
         
-        // Aplica a classe correta na opção certa
         const correctOption = parent.querySelectorAll('.option')[corretoIdx];
         correctOption.classList.add('correct');
 
-        // Dispara Confetes SEMPRE que a resposta correta é revelada
         sfx.correct.play();
         confetti({
             particleCount: 100,
@@ -335,7 +331,6 @@
         const finalPage = document.createElement('div');
         finalPage.className = 'page';
         finalPage.style.zIndex = 100;
-        
         finalPage.innerHTML = `
             <div style="text-align:center;">
                 <h2 style="font-family:'Caveat'; font-size:4vh; color:var(--ink-color); margin:0;">Fim das Questões</h2>
@@ -347,12 +342,12 @@
                     <tr><td>4-5</td><td>C</td></tr>
                     <tr><td>0-3</td><td>F</td></tr>
                 </table>
-                <a href="https://www.pixelclick.fun" target="_blank" class="btn-cta" style="font-size:2vh; padding:10px 20px; margin-top:3vh;">WWW.PIXELCLICK.FUN</a>
+                <a href="https://www.pixelclick.fun" target="_blank" class="btn-cta" style="font-size:2vh; padding:10px 20px; margin-top:3vh; display:inline-block; background:var(--ink-color); color:white; border-radius:8px; text-decoration:none;">WWW.PIXELCLICK.FUN</a>
             </div>
             <div class="footer-site">www.pixelclick.fun</div>
         `;
         container.appendChild(finalPage);
-        window.speechSynthesis.speak(new SpeechSynthesisUtterance(`Fim do teste. Quantas você acertou? Verifique a sua nota e coloque nos comentários!`));
+        window.speechSynthesis.speak(new SpeechSynthesisUtterance(`Você acertou ${acertos} de ${TOTAL_Q}. Me diga, qual foi a sua nota?`));
     }
 </script>
 </body>
