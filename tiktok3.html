@@ -30,22 +30,22 @@
             perspective: 2000px;
         }
 
-        /* Estilo do Contador Regressivo */
+        /* Overlay de Contagem */
         #countdown-overlay {
             position: fixed; inset: 0; 
             display: none; justify-content: center; align-items: center;
-            background: rgba(0,0,0,0.8); z-index: 10000;
+            background: rgba(0,0,0,0.85); z-index: 10000;
         }
         #countdown-number {
             font-family: 'Russo One', sans-serif;
-            font-size: 15vh; color: white;
-            text-shadow: 0 0 20px var(--ink-color);
+            font-size: 18vh; color: white;
+            text-shadow: 0 0 30px var(--ink-color);
             animation: pulseCount 1s infinite;
         }
         @keyframes pulseCount {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.8; }
-            100% { transform: scale(1); opacity: 1; }
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0; }
         }
 
         .notebook-label {
@@ -150,7 +150,6 @@
 </head>
 <body>
 
-<!-- Overlay de Contagem Regressiva -->
 <div id="countdown-overlay">
     <div id="countdown-number">5</div>
 </div>
@@ -166,6 +165,7 @@
     <div style="position:absolute; width:100%; height:100%; background:#ddd; border-radius:2px 15px 15px 2px; transform:translate(4px,4px); z-index:0;"></div>
 </div>
 
+<!-- Scripts de Dados -->
 <script src="esportes.js"></script>
 <script src="geografia.js"></script>
 <script src="historia.js"></script>
@@ -194,34 +194,29 @@
         write: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-pencil-writing-on-paper-2101.mp3'], volume: 0.3, loop: true }),
         correct: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-bonus-earned-in-video-game-2058.mp3'] }),
         wrong: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-failing-armpit-fart-3091.mp3'], volume: 0.2 }),
-        tick: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-mechanical-clock-tick-1126.mp3'], volume: 0.5 }) // Som opcional para o contador
+        tick: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-click-melodic-tone-1129.mp3'], volume: 0.4 })
     };
 
     function iniciarQuiz() {
-        // Ativa Fullscreen
         if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
-        
-        // Esconde tela inicial
         document.getElementById('overlay-start').style.display = 'none';
         
-        // Inicia Contagem Regressiva
-        const countdownOverlay = document.getElementById('countdown-overlay');
-        const countdownNumber = document.getElementById('countdown-number');
-        countdownOverlay.style.display = 'flex';
+        const overlay = document.getElementById('countdown-overlay');
+        const number = document.getElementById('countdown-number');
+        overlay.style.display = 'flex';
         
         let count = 5;
-        countdownNumber.innerText = count;
+        number.innerText = count;
+        sfx.tick.play();
 
-        const interval = setInterval(() => {
+        const timer = setInterval(() => {
             count--;
             if (count > 0) {
-                countdownNumber.innerText = count;
-                sfx.tick.play(); // Som de 'tick' a cada segundo
+                number.innerText = count;
+                sfx.tick.play();
             } else {
-                clearInterval(interval);
-                countdownOverlay.style.display = 'none';
-                
-                // Só agora começa as perguntas
+                clearInterval(timer);
+                overlay.style.display = 'none';
                 renderizarPagina(0);
                 if (selectedQuestions.length > 1) renderizarPagina(1);
             }
@@ -295,8 +290,12 @@
         if (parent.dataset.locked) return;
         
         let acertou = (escolhido === correto);
-        if (acertou) acertos++;
-        else { el.classList.add('wrong'); sfx.wrong.play(); }
+        if (acertou) {
+            acertos++;
+        } else {
+            el.classList.add('wrong');
+            sfx.wrong.play();
+        }
         finalizarPergunta(correto, acertou);
     }
 
@@ -304,16 +303,31 @@
         const parent = document.getElementById(`options-${currentQ}`);
         if (!parent || parent.dataset.locked) return;
         parent.dataset.locked = "true";
-        parent.querySelectorAll('.option')[corretoIdx].classList.add('correct');
-        if (foiAcerto) { sfx.correct.play(); confetti({ particleCount: 30, spread: 50, origin: { y: 0.8 } }); }
+        
+        // Aplica a classe correta na opção certa
+        const correctOption = parent.querySelectorAll('.option')[corretoIdx];
+        correctOption.classList.add('correct');
+
+        // Dispara Confetes SEMPRE que a resposta correta é revelada
+        sfx.correct.play();
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#1a2a6c', '#27ae60', '#fdfdfd', '#ffadb0']
+        });
 
         setTimeout(() => {
             const pageAtual = document.getElementById(`page-${currentQ}`);
             if (pageAtual) { pageAtual.classList.add('flipped'); sfx.flip.play(); }
             currentQ++;
-            if (currentQ < TOTAL_Q) { renderizarPagina(currentQ + 1); prepararEscrita(currentQ, selectedQuestions[currentQ]); }
-            else { mostrarFinal(); }
-        }, 2200);
+            if (currentQ < TOTAL_Q) { 
+                renderizarPagina(currentQ + 1); 
+                prepararEscrita(currentQ, selectedQuestions[currentQ]); 
+            } else { 
+                mostrarFinal(); 
+            }
+        }, 2500);
     }
 
     function mostrarFinal() {
@@ -325,9 +339,7 @@
         finalPage.innerHTML = `
             <div style="text-align:center;">
                 <h2 style="font-family:'Caveat'; font-size:4vh; color:var(--ink-color); margin:0;">Fim das Questões</h2>
-                
                 <div class="ask-grade">Qual foi a sua nota?</div>
-
                 <table class="grade-table">
                     <tr><th>Acertos</th><th>Nota</th></tr>
                     <tr><td>8</td><td>A+</td></tr>
@@ -335,7 +347,6 @@
                     <tr><td>4-5</td><td>C</td></tr>
                     <tr><td>0-3</td><td>F</td></tr>
                 </table>
-
                 <a href="https://www.pixelclick.fun" target="_blank" class="btn-cta" style="font-size:2vh; padding:10px 20px; margin-top:3vh;">WWW.PIXELCLICK.FUN</a>
             </div>
             <div class="footer-site">www.pixelclick.fun</div>
