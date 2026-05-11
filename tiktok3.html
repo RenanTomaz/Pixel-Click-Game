@@ -30,6 +30,24 @@
             perspective: 2000px;
         }
 
+        /* Estilo do Contador Regressivo */
+        #countdown-overlay {
+            position: fixed; inset: 0; 
+            display: none; justify-content: center; align-items: center;
+            background: rgba(0,0,0,0.8); z-index: 10000;
+        }
+        #countdown-number {
+            font-family: 'Russo One', sans-serif;
+            font-size: 15vh; color: white;
+            text-shadow: 0 0 20px var(--ink-color);
+            animation: pulseCount 1s infinite;
+        }
+        @keyframes pulseCount {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
         .notebook-label {
             font-family: 'Montserrat', sans-serif;
             font-weight: 800; font-size: 2.2vh; color: #333;
@@ -132,6 +150,11 @@
 </head>
 <body>
 
+<!-- Overlay de Contagem Regressiva -->
+<div id="countdown-overlay">
+    <div id="countdown-number">5</div>
+</div>
+
 <div id="overlay-start">
     <h1 style="font-family: 'Caveat'; font-size: 6vh;">Pixel Click</h1>
     <button class="btn-cta" style="background:#fff; color:#000" onclick="iniciarQuiz()">ABRIR CADERNO</button>
@@ -170,14 +193,39 @@
         flip: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-paper-slide-1530.mp3'] }),
         write: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-pencil-writing-on-paper-2101.mp3'], volume: 0.3, loop: true }),
         correct: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-bonus-earned-in-video-game-2058.mp3'] }),
-        wrong: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-failing-armpit-fart-3091.mp3'], volume: 0.2 })
+        wrong: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-failing-armpit-fart-3091.mp3'], volume: 0.2 }),
+        tick: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-mechanical-clock-tick-1126.mp3'], volume: 0.5 }) // Som opcional para o contador
     };
 
     function iniciarQuiz() {
+        // Ativa Fullscreen
         if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+        
+        // Esconde tela inicial
         document.getElementById('overlay-start').style.display = 'none';
-        renderizarPagina(0);
-        if (selectedQuestions.length > 1) renderizarPagina(1);
+        
+        // Inicia Contagem Regressiva
+        const countdownOverlay = document.getElementById('countdown-overlay');
+        const countdownNumber = document.getElementById('countdown-number');
+        countdownOverlay.style.display = 'flex';
+        
+        let count = 5;
+        countdownNumber.innerText = count;
+
+        const interval = setInterval(() => {
+            count--;
+            if (count > 0) {
+                countdownNumber.innerText = count;
+                sfx.tick.play(); // Som de 'tick' a cada segundo
+            } else {
+                clearInterval(interval);
+                countdownOverlay.style.display = 'none';
+                
+                // Só agora começa as perguntas
+                renderizarPagina(0);
+                if (selectedQuestions.length > 1) renderizarPagina(1);
+            }
+        }, 1000);
     }
 
     function renderizarPagina(index) {
