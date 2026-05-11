@@ -30,7 +30,6 @@
             perspective: 2000px;
         }
 
-        /* Overlay de Contagem - Ajustado para estabilidade */
         #countdown-overlay {
             position: fixed; inset: 0; 
             display: none; justify-content: center; align-items: center;
@@ -43,9 +42,7 @@
             text-shadow: 0 0 30px var(--ink-color);
         }
         
-        .animate-pop {
-            animation: popSfx 1s ease-out;
-        }
+        .animate-pop { animation: popSfx 1s ease-out; }
         @keyframes popSfx {
             0% { transform: scale(0.5); opacity: 0; }
             20% { transform: scale(1.2); opacity: 1; }
@@ -196,11 +193,19 @@
         tick: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-click-melodic-tone-1129.mp3'], volume: 0.4 })
     };
 
+    // FUNÇÃO PARA "ACORDAR" A VOZ (Warm-up)
+    function wakeUpSpeech() {
+        const dummy = new SpeechSynthesisUtterance("");
+        window.speechSynthesis.speak(dummy);
+    }
+
     function iniciarQuiz() {
-        // Tentativa suave de fullscreen (se falhar, não trava a gravação)
+        // Acorda o motor de voz imediatamente no clique
+        wakeUpSpeech();
+
         try {
             if (document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen().catch(() => console.log("Fullscreen negado."));
+                document.documentElement.requestFullscreen().catch(() => {});
             }
         } catch (e) {}
 
@@ -215,13 +220,14 @@
             if (count > 0) {
                 number.innerText = count;
                 number.classList.remove('animate-pop');
-                void number.offsetWidth; // Force reflow
+                void number.offsetWidth;
                 number.classList.add('animate-pop');
                 sfx.tick.play();
                 count--;
                 setTimeout(runCount, 1000);
             } else {
                 overlay.style.display = 'none';
+                // Inicia a renderização e narração instantaneamente
                 renderizarPagina(0);
                 if (selectedQuestions.length > 1) renderizarPagina(1);
             }
@@ -253,9 +259,10 @@
     }
 
     async function prepararEscrita(index, data) {
-        window.speechSynthesis.cancel();
+        // Narração imediata sem cancelamento prévio para evitar delay
         const ut = new SpeechSynthesisUtterance(data.q);
-        ut.lang = 'pt-BR'; ut.rate = 1.1;
+        ut.lang = 'pt-BR'; 
+        ut.rate = 1.1;
         window.speechSynthesis.speak(ut);
 
         await typeWriter(`q-text-${index}`, data.q);
@@ -347,7 +354,10 @@
             <div class="footer-site">www.pixelclick.fun</div>
         `;
         container.appendChild(finalPage);
-        window.speechSynthesis.speak(new SpeechSynthesisUtterance(`Confira a sua nota final. E aí,qual foi a sua nota?`));
+        
+        const finalUt = new SpeechSynthesisUtterance(`Você acertou ${acertos} de ${TOTAL_Q}. Me diga, qual foi a sua nota?`);
+        finalUt.lang = 'pt-BR';
+        window.speechSynthesis.speak(finalUt);
     }
 </script>
 </body>
