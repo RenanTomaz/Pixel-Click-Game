@@ -113,7 +113,20 @@
             cursor: pointer; transition: all 0.3s;
         }
 
-        .option.correct { color: #27ae60; font-weight: bold; border-bottom: 2px solid #27ae60; }
+        /* Alteração 3: Animação na resposta correta (Pulso vermelho para verde) */
+        .option.correct { 
+            color: #27ae60; 
+            font-weight: bold; 
+            border-bottom: 2px solid #27ae60;
+            animation: correctHighlight 0.8s ease-in-out;
+        }
+
+        @keyframes correctHighlight {
+            0% { color: var(--red-pen); transform: scale(1); }
+            50% { color: var(--red-pen); transform: scale(1.05); }
+            100% { color: #27ae60; transform: scale(1); }
+        }
+
         .option.wrong { color: var(--red-pen); opacity: 0.7; text-decoration: line-through; animation: wrongShake 0.4s linear; }
 
         @keyframes wrongShake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
@@ -193,16 +206,13 @@
         tick: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-click-melodic-tone-1129.mp3'], volume: 0.4 })
     };
 
-    // FUNÇÃO PARA "ACORDAR" A VOZ (Warm-up)
     function wakeUpSpeech() {
         const dummy = new SpeechSynthesisUtterance("");
         window.speechSynthesis.speak(dummy);
     }
 
     function iniciarQuiz() {
-        // Acorda o motor de voz imediatamente no clique
         wakeUpSpeech();
-
         try {
             if (document.documentElement.requestFullscreen) {
                 document.documentElement.requestFullscreen().catch(() => {});
@@ -210,7 +220,6 @@
         } catch (e) {}
 
         document.getElementById('overlay-start').style.display = 'none';
-        
         const overlay = document.getElementById('countdown-overlay');
         const number = document.getElementById('countdown-number');
         overlay.style.display = 'flex';
@@ -227,7 +236,6 @@
                 setTimeout(runCount, 1000);
             } else {
                 overlay.style.display = 'none';
-                // Inicia a renderização e narração instantaneamente
                 renderizarPagina(0);
                 if (selectedQuestions.length > 1) renderizarPagina(1);
             }
@@ -239,6 +247,21 @@
         if (index >= TOTAL_Q || document.getElementById(`page-${index}`)) return;
 
         const data = selectedQuestions[index];
+
+        // Alteração 1: Adicionar interrogação se não houver
+        if (!data.q.trim().endsWith('?')) {
+            data.q = data.q.trim() + "?";
+        }
+
+        // Alteração 2: Embaralhar as opções e recalcular o índice correto
+        const originalCorrectOption = data.options[data.correct];
+        const shuffledOptions = [...data.options].sort(() => Math.random() - 0.5);
+        const newCorrectIndex = shuffledOptions.indexOf(originalCorrectOption);
+        
+        // Atualiza os dados da questão com a nova ordem
+        data.options = shuffledOptions;
+        data.correct = newCorrectIndex;
+
         const container = document.getElementById('notebook-container');
         const page = document.createElement('div');
         page.className = 'page';
@@ -259,7 +282,6 @@
     }
 
     async function prepararEscrita(index, data) {
-        // Narração imediata sem cancelamento prévio para evitar delay
         const ut = new SpeechSynthesisUtterance(data.q);
         ut.lang = 'pt-BR'; 
         ut.rate = 1.1;
