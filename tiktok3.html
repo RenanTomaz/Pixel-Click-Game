@@ -113,23 +113,34 @@
             cursor: pointer; transition: all 0.3s;
         }
 
-        /* Alteração 3: Animação na resposta correta (Pulso vermelho para verde) */
+        /* CORREÇÃO: Alternativa Correta DIRETO em VERDE */
         .option.correct { 
-            color: #27ae60; 
+            color: #27ae60 !important; 
             font-weight: bold; 
             border-bottom: 2px solid #27ae60;
-            animation: correctHighlight 0.8s ease-in-out;
+            animation: correctPulse 0.5s ease-in-out;
         }
 
-        @keyframes correctHighlight {
-            0% { color: var(--red-pen); transform: scale(1); }
-            50% { color: var(--red-pen); transform: scale(1.05); }
-            100% { color: #27ae60; transform: scale(1); }
+        @keyframes correctPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
 
-        .option.wrong { color: var(--red-pen); opacity: 0.7; text-decoration: line-through; animation: wrongShake 0.4s linear; }
+        /* Alternativas Incorretas permanecem em Vermelho */
+        .option.wrong { 
+            color: var(--red-pen) !important; 
+            opacity: 0.8; 
+            text-decoration: line-through; 
+            border-bottom: 1px solid var(--red-pen);
+            animation: wrongAnimate 0.4s linear forwards; 
+        }
 
-        @keyframes wrongShake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+        @keyframes wrongAnimate { 
+            0%, 100% { transform: translateX(0); } 
+            25% { transform: translateX(-4px); } 
+            75% { transform: translateX(4px); } 
+        }
 
         .timer-container { width: 100%; height: 3px; background: rgba(0,0,0,0.05); margin-top: 1vh; }
         .timer-bar { width: 100%; height: 100%; background: var(--ink-color); }
@@ -248,17 +259,14 @@
 
         const data = selectedQuestions[index];
 
-        // Alteração 1: Adicionar interrogação se não houver
         if (!data.q.trim().endsWith('?')) {
             data.q = data.q.trim() + "?";
         }
 
-        // Alteração 2: Embaralhar as opções e recalcular o índice correto
         const originalCorrectOption = data.options[data.correct];
         const shuffledOptions = [...data.options].sort(() => Math.random() - 0.5);
         const newCorrectIndex = shuffledOptions.indexOf(originalCorrectOption);
         
-        // Atualiza os dados da questão com a nova ordem
         data.options = shuffledOptions;
         data.correct = newCorrectIndex;
 
