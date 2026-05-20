@@ -174,7 +174,7 @@
 
 <div id="overlay-start">
     <h1 style="font-family: 'Orbitron'; font-size: 4vh; letter-spacing: 4px; text-shadow: 0 0 15px var(--neon-blue);">PIXEL CLICK</h1>
-    <button class="btn-cta" onclick="iniciarQuiz()">INICIAR CAPTURA</button>
+    <button class="btn-cta" onclick="iniciarQuiz()">INICIAR</button>
 </div>
 
 <div class="phone-viewport">
@@ -186,7 +186,7 @@
         
         <div class="quadrant q-red" id="quad-0">
             <div class="brand-watermark">PIXEL<br>CLICK</div>
-            <div class="node-header">NODE_RED // SECTOR_01</div>
+            <div class="node-header">_RED // SECTOR_01</div>
             <div class="question-text" id="q-text-0"></div>
             <div class="timer-line"><div class="timer-core" id="timer-0"></div></div>
             <div class="options-container" id="options-0"></div>
@@ -194,7 +194,7 @@
         
         <div class="quadrant q-blue" id="quad-1">
             <div class="brand-watermark">PIXEL<br>CLICK</div>
-            <div class="node-header">NODE_BLUE // SECTOR_02</div>
+            <div class="node-header">_BLUE // SECTOR_02</div>
             <div class="question-text" id="q-text-1"></div>
             <div class="timer-line"><div class="timer-core" id="timer-1"></div></div>
             <div class="options-container" id="options-1"></div>
@@ -202,7 +202,7 @@
         
         <div class="quadrant q-green" id="quad-2">
             <div class="brand-watermark">PIXEL<br>CLICK</div>
-            <div class="node-header">NODE_GREEN // SECTOR_03</div>
+            <div class="node-header">_GREEN // SECTOR_03</div>
             <div class="question-text" id="q-text-2"></div>
             <div class="timer-line"><div class="timer-core" id="timer-2"></div></div>
             <div class="options-container" id="options-2"></div>
@@ -210,7 +210,7 @@
         
         <div class="quadrant q-yellow" id="quad-3">
             <div class="brand-watermark">PIXEL<br>CLICK</div>
-            <div class="node-header">NODE_YELLOW // SECTOR_04</div>
+            <div class="node-header">_YELLOW // SECTOR_04</div>
             <div class="question-text" id="q-text-3"></div>
             <div class="timer-line"><div class="timer-core" id="timer-3"></div></div>
             <div class="options-container" id="options-3"></div>
@@ -416,16 +416,15 @@
         // 2. Renderiza e ativa o painel holográfico flutuante de resultados
         const finalOverlay = document.getElementById('final-overlay');
         finalOverlay.innerHTML = `
-            <h2 style="font-family:'Orbitron'; font-size:2.6vh; color:var(--neon-blue); margin:0; letter-spacing:2px;">SISTEMA CONCLUÍDO</h2>
-            <div class="ask-grade">SCORE: ${acertos}/${TOTAL_Q}</div>
+            <h2 style="font-family:'Orbitron'; font-size:2.6vh; color:var(--neon-blue); margin:0; letter-spacing:2px;">QUANTAS VOCÊ ACERTOU?</h2>
             <table class="grade-table">
                 <tr><th>Acertos</th><th>Rank</th></tr>
-                <tr><td>8</td><td>A+ (CYBER GOD)</td></tr>
-                <tr><td>6-7</td><td>B (NETRUNNER)</td></tr>
-                <tr><td>4-5</td><td>C (OPERATOR)</td></tr>
-                <tr><td>0-3</td><td>F (DISCONNECTED)</td></tr>
+                <tr><td>8</td><td>A+</td></tr>
+                <tr><td>6-7</td><td>B</td></tr>
+                <tr><td>4-5</td><td>C</td></tr>
+                <tr><td>0-3</td><td>F</td></tr>
             </table>
-            <a href="https://www.pixelclick.fun" target="_blank" class="btn-cta" style="font-size:1.8vh; padding:12px 30px; margin-top:4vh; display:inline-block; text-decoration:none;">RECONECTAR</a>
+            <a href="https://www.pixelclick.fun" target="_blank" class="btn-cta" style="font-size:1.8vh; padding:12px 30px; margin-top:4vh; display:inline-block; text-decoration:none;">www.pixelclick.fun</a>
         `;
         
         // Exibe o painel flutuante por cima do grid recuado
