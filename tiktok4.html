@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Russo+One&family=Montserrat:wght@600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght=700&family=Russo+One&family=Montserrat:wght@600;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <title>Pixel Click - Cinematic Quiz</title>
+    <title>Pixel Click - Cinematic 3D Room</title>
     <style>
         :root {
             --paper-color: #fdfdfd;
@@ -21,49 +21,97 @@
 
         body {
             margin: 0; padding: 0; height: 100vh; width: 100vw;
-            background: #050505;
+            background: #020204;
             font-family: 'Montserrat', sans-serif;
             overflow: hidden; display: flex; justify-content: center; align-items: center;
-            /* Perspectiva aumentada para dar profundidade ao cenário 3D */
-            perspective: 800px;
-            perspective-origin: 50% 50%;
+            perspective: 600px; /* Lente de câmera mais angular para aumentar a imersão */
+            perspective-origin: 50% 45%;
         }
 
-        /* Ambiente 3D que se move */
-        #studio-environment {
-            position: absolute;
+        /* Container que sofre o balanço físico da caminhada */
+        #camera-rig {
             width: 100vw; height: 100vh;
             transform-style: preserve-3d;
             transition: transform 1.8s cubic-bezier(0.4, 0, 0.2, 1);
             transform: translateZ(0px) rotateY(0deg);
         }
 
-        /* Efeito de Caminhada (Balanço de Câmera) */
         .camera-walking {
-            animation: cameraWalk 1.8s ease-in-out infinite alternate;
+            animation: cameraBob 0.6s ease-in-out infinite alternate;
         }
 
-        @keyframes cameraWalk {
+        @keyframes cameraBob {
             0% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-1.5vh) rotate(0.5deg); }
-            100% { transform: translateY(0) rotate(-0.5deg); }
+            100% { transform: translateY(-1.8vh) rotate(0.4deg); }
         }
 
-        /* Formato Estrito 9:16 para o percurso do jogador */
+        /* CENÁRIO 3D: Estrutura da Sala/Corredor */
+        #studio-room {
+            position: absolute;
+            width: 100%; height: 100%;
+            transform-style: preserve-3d;
+        }
+
+        /* Elementos estruturais do cenário */
+        .room-element {
+            position: absolute;
+            background-color: #0b0c10;
+        }
+
+        /* Chão de madeira realista se estendendo ao infinito */
+        .floor {
+            width: 600vw; height: 10000px;
+            left: -250vw; top: 70vh;
+            transform: rotateX(90deg);
+            transform-origin: top center;
+            background: #1a110b url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.8);
+        }
+
+        /* Teto escuro do estúdio */
+        .ceiling {
+            width: 600vw; height: 10000px;
+            left: -250vw; top: -10vh;
+            transform: rotateX(-90deg);
+            transform-origin: bottom center;
+            background: linear-gradient(to bottom, #050508, #111318);
+        }
+
+        /* Parede Esquerda */
+        .wall-left {
+            width: 10000px; height: 120vh;
+            right: 50vw; top: -10vh;
+            transform: rotateY(90deg);
+            transform-origin: right center;
+            background: linear-gradient(90deg, #0d0e12, #07080a);
+            border-right: 2px solid rgba(255,255,255,0.02);
+        }
+
+        /* Parede Direita */
+        .wall-right {
+            width: 10000px; height: 120vh;
+            left: 50vw; top: -10vh;
+            transform: rotateY(-90deg);
+            transform-origin: left center;
+            background: linear-gradient(-90deg, #0d0e12, #07080a);
+            border-left: 2px solid rgba(255,255,255,0.02);
+        }
+
+        /* FORMATO 9:16 - Delimitação dos Elementos no trilho central */
         .cinematic-track {
             position: absolute;
             width: 100%; height: 100%;
-            max-width: 420px; max-height: 746px; /* Força Proporção 9:16 */
+            max-width: 420px; max-height: 746px;
             left: 50%; top: 50%;
             transform: translate(-50%, -50%);
             transform-style: preserve-3d;
         }
 
-        /* Estilização dos Cadernos/Cartazes espalhados pelo espaço */
+        /* Os Cadernos / Folhas de Questões */
         .notebook-node {
             position: absolute;
-            width: 85vw; height: 65vh;
-            max-width: 360px; max-height: 550px;
+            width: 85vw; height: 60vh;
+            max-width: 350px; max-height: 520px;
             background: var(--paper-color);
             background-image: 
                 linear-gradient(90deg, transparent 39px, var(--margin-color) 39px, var(--margin-color) 41px, transparent 41px),
@@ -71,64 +119,78 @@
             background-size: 100% 100%, 100% 3.2vh;
             background-position: 0 0, 0 5vh;
             border-radius: 4px;
-            box-shadow: 0px 20px 40px rgba(0,0,0,0.6);
+            box-shadow: -20px 30px 50px rgba(0,0,0,0.8), 0 0 10px rgba(0,0,0,0.4);
             padding: 5vh 6% 5vh 16%;
             display: flex; flex-direction: column;
             backface-visibility: hidden;
-            left: 5%; top: 15%;
-            transition: opacity 1s ease;
+            left: 5%; top: 18%;
         }
 
-        /* Posicionamento alternado no espaço Z profundo */
-        /* Z negativo joga os elementos para o fundo da tela */
-        .node-left { transform: translateX(-35vw) translateZ(-1500px) rotateY(45deg); }
-        .node-right { transform: translateX(35vw) translateZ(-1500px) rotateY(-45deg); }
-        .node-final { transform: translateX(0) translateZ(-1500px) rotateY(0deg); background: #111; color: white;}
+        /* Posicionamento Inicial na profundidade Z */
+        .node-left { transform: translateX(-38vw) rotateY(55deg); }
+        .node-right { transform: translateX(38vw) rotateY(-55deg); }
+        
+        .node-final { 
+            transform: translateX(0) rotateY(0deg); 
+            background: #12131a; 
+            color: white;
+            border: 3px solid #27ae60;
+            box-shadow: 0 0 30px rgba(39, 174, 96, 0.4);
+        }
 
         .question-text {
             font-family: 'Caveat', cursive; color: var(--ink-color);
-            font-size: 3vh; line-height: 1.2; margin-top: 1vh; min-height: 12vh;
+            font-size: 2.8vh; line-height: 1.2; margin-top: 1vh; min-height: 12vh;
         }
 
-        .options-list { display: flex; flex-direction: column; gap: 0.8vh; margin-top: 2vh; opacity: 0; transition: opacity 0.5s; }
+        .options-list { display: flex; flex-direction: column; gap: 0.8vh; margin-top: 2vh; opacity: 0; transition: opacity 0.4s; }
         .options-visible { opacity: 1; }
-        .option { font-family: 'Caveat', cursive; font-size: 2.4vh; color: #333; padding: 0.5vh; border-bottom: 1px dashed #ccc; cursor: pointer; }
+        
+        .option { font-family: 'Caveat', cursive; font-size: 2.3vh; color: #333; padding: 0.5vh; border-bottom: 1px dashed #ccc; cursor: pointer; }
         .option.correct { color: #27ae60 !important; font-weight: bold; border-bottom: 2px solid #27ae60; }
         .option.wrong { color: var(--red-pen) !important; text-decoration: line-through; border-bottom: 1px solid var(--red-pen); }
 
         .timer-container { width: 100%; height: 4px; background: rgba(0,0,0,0.05); margin-top: 1vh; }
         .timer-bar { width: 100%; height: 100%; background: var(--ink-color); }
 
-        /* Overlays de início e contagem */
+        /* Interface de Overlays */
         #overlay-start, #countdown-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000;
+            position: fixed; inset: 0; background: rgba(2,2,4,0.98); z-index: 1000;
             display: flex; flex-direction: column; justify-content: center; align-items: center; color: white;
         }
         #countdown-number { font-family: 'Russo One'; font-size: 15vh; text-shadow: 0 0 20px var(--ink-color); }
         .btn-cta { padding: 15px 40px; font-family: 'Russo One'; font-size: 2.2vh; background: var(--ink-color); color: #fff; border: none; border-radius: 8px; cursor: pointer; text-decoration: none; margin-top: 20px;}
 
         .grade-table { width: 100%; border-collapse: collapse; margin-top: 2vh; font-family: 'Caveat'; font-size: 2.2vh; color: #fff; }
-        .grade-table th, .grade-table td { border: 1px solid #444; padding: 5px; text-align: center; }
+        .grade-table th, .grade-table td { border: 1px solid #333; padding: 5px; text-align: center; }
         .ask-grade { font-family: 'Caveat'; font-size: 5vh; color: var(--red-pen); text-align: center; margin: 2vh 0; }
     </style>
 </head>
 <body>
 
-<div id="countdown-overlay" style="display: none;"><div id="countdown-number">5</div></div>
+<div id="countdown-overlay" style="display: none;"><div id="countdown-number">3</div></div>
 
 <div id="overlay-start">
-    <h1 style="font-family: 'Caveat'; font-size: 6vh; margin-bottom: 0;">Pixel Click</h1>
-    <p style="font-size: 1.8vh; color: #aaa;">Experiência Cinemática 9:16</p>
-    <button class="btn-cta" style="background:#fff; color:#000" onclick="iniciarDiretor()">INICIAR GRAVAÇÃO</button>
+    <h1 style="font-family: 'Caveat'; font-size: 6vh; margin-bottom: 0; color: #ffadb0;">Pixel Click</h1>
+    <p style="font-size: 1.8vh; color: #777;">Estúdio Cinemático 3D Room</p>
+    <button class="btn-cta" style="background:#fff; color:#000" onclick="iniciarDiretor()">ABRIR PORTAS</button>
 </div>
 
-<div id="studio-environment">
-    <div class="cinematic-track" id="main-track">
-        </div>
+<!-- Estrutura Principal da Câmera -->
+<div id="camera-rig">
+    <!-- Ambiente Tridimensional ao redor -->
+    <div id="studio-room">
+        <div class="room-element floor"></div>
+        <div class="room-element ceiling"></div>
+        <div class="room-element wall-left"></div>
+        <div class="room-element wall-right"></div>
+    </div>
+    
+    <!-- Trilho das perguntas (Formato Virtual Celular) -->
+    <div class="cinematic-track" id="main-track"></div>
 </div>
 
 <script>
-    // Pool fake apenas para teste autônomo (substitua pelos seus arquivos de dados)
     const mockPool = [
         { q: "Qual é o oceano mais profundo do planeta Terra", options: ["Atlântico", "Índico", "Pacífico", "Ártico"], correct: 2 },
         { q: "Quantos segundos existem em uma hora completa", options: ["3600 segundos", "60 segundos", "2400 segundos", "1200 segundos"], correct: 0 },
@@ -136,15 +198,14 @@
         { q: "Qual o planeta mais próximo do Sol no sistema", options: ["Vênus", "Marte", "Mercúrio", "Júpiter"], correct: 2 }
     ];
 
-    const TOTAL_Q = 4; // Ajustado para o exemplo rodar rápido
+    const TOTAL_Q = 4;
     const selectedQuestions = mockPool.sort(() => 0.5 - Math.random()).slice(0, TOTAL_Q);
     let currentQ = 0;
     let acertos = 0;
     const letras = ["A", "B", "C", "D"];
 
-    // SFX Cinema & Movimento
     const sfx = {
-        passos: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-slow-heavy-footsteps-1025.mp3'], volume: 0.6 }),
+        passos: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-slow-heavy-footsteps-1025.mp3'], volume: 0.5 }),
         cameraTurn: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-fast-sword-whoosh-2357.mp3'], volume: 0.3 }),
         write: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-pencil-writing-on-paper-2101.mp3'], volume: 0.3, loop: true }),
         correct: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-bonus-earned-in-video-game-2058.mp3'] }),
@@ -174,7 +235,6 @@
         runCount();
     }
 
-    // Distribui os cadernos tridimensionalmente no início do jogo
     function construirCenario() {
         const track = document.getElementById('main-track');
         
@@ -182,17 +242,16 @@
             if (!data.q.trim().endsWith('?')) data.q = data.q.trim() + "?";
             
             const node = document.createElement('div');
-            // Alterna lados: Par (0, 2) = Esquerda | Ímpar (1, 3) = Direita
             const lado = index % 2 === 0 ? 'node-left' : 'node-right';
             node.className = `notebook-node ${lado}`;
             node.id = `node-${index}`;
             
-            // Posicionamento Z em profundidade (ex: pergunta 0 fica a -1500px, pergunta 1 a -3000px...)
-            const zPosition = (index + 1) * -1500;
+            // Coloca as perguntas ao longo do túnel Z (espaçamento de 1800px)
+            const zPosition = (index + 1) * -1800;
             node.style.transform += ` translateZ(${zPosition}px)`;
 
             node.innerHTML = `
-                <div style="font-size: 1.4vh; color: #aaa; text-align: right;">Questão ${index + 1}</div>
+                <div style="font-size: 1.4vh; color: #999; text-align: right;">Questão ${index + 1}</div>
                 <div class="question-text" id="q-text-${index}"></div>
                 <div class="timer-container"><div class="timer-bar" id="bar-${index}"></div></div>
                 <div class="options-list" id="options-${index}">
@@ -202,38 +261,34 @@
             track.appendChild(node);
         });
 
-        // Adiciona o Cartaz de Encerramento (Final) ainda mais no fundo
         const finalNode = document.createElement('div');
         finalNode.className = 'notebook-node node-final';
         finalNode.id = `node-final`;
-        finalNode.style.transform = `translateX(0) translateZ(${(TOTAL_Q + 1) * -1500}px)`;
+        finalNode.style.transform = `translateX(0) translateZ(${(TOTAL_Q + 1) * -1800}px)`;
         track.appendChild(finalNode);
     }
 
-    // Faz a câmera simular passos indo em direção ao caderno atual
     function executarSequenciaPassos() {
-        const env = document.getElementById('studio-environment');
-        env.className = "camera-walking"; // Inicia animação de balanço físico
+        const rig = document.getElementById('camera-rig');
+        rig.className = "camera-walking"; // Aplica o tremor contínuo de passos
         sfx.passos.play();
 
-        // Calcula o avanço no eixo Z para trazer o caderno até a frente da tela
-        const zDestino = (currentQ + 1) * 1500;
+        const zDestino = (currentQ + 1) * 1800;
 
         setTimeout(() => {
-            // Para de andar, desliga o balanço e foca no caderno mudando a rotação
-            env.className = ""; 
+            rig.className = ""; // Para de andar de forma abrupta cinematográfica
             sfx.passos.stop();
             sfx.cameraTurn.play();
 
-            const ladoOlhar = currentQ % 2 === 0 ? -40 : 40; // Olha para esquerda ou direita
-            env.style.transform = `translateZ(${zDestino}px) rotateY(${ladoOlhar}deg)`;
+            // Vira o corpo da câmera em direção ao objeto que está na parede
+            const ladoOlhar = currentQ % 2 === 0 ? -48 : 48; 
+            rig.style.transform = `translateZ(${zDestino}px) rotateY(${ladoOlhar}deg)`;
 
-            // Começa a digitar e apresentar a pergunta após a câmera estabilizar
             setTimeout(() => {
                 prepararPergunta(currentQ);
             }, 800);
 
-        }, 2200); // Tempo simulando os 5 passos correndo
+        }, 2200); 
     }
 
     async function prepararPergunta(index) {
@@ -282,7 +337,7 @@
             acertos++;
             el.classList.add('correct');
             sfx.correct.play();
-            confetti({ particleCount: 60, spread: 50, origin: { y: 0.7 } });
+            confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
         } else {
             el.classList.add('wrong');
             const corretoEl = parent.querySelectorAll('.option')[correto];
@@ -299,14 +354,13 @@
         avancarProxima();
     }
 
-    // Centraliza o olhar para frente antes de dar novos passos
     function avancarProxima() {
-        const env = document.getElementById('studio-environment');
+        const rig = document.getElementById('camera-rig');
         sfx.cameraTurn.play();
         
-        // Coloca a rotação em 0 de novo para olhar para frente do corredor
-        const zDestino = (currentQ + 1) * 1500;
-        env.style.transform = `translateZ(${zDestino}px) rotateY(0deg)`;
+        // Alinha a mira da câmera para o centro novamente antes do próximo salto de corrida
+        const zDestino = (currentQ + 1) * 1800;
+        rig.style.transform = `translateZ(${zDestino}px) rotateY(0deg)`;
 
         currentQ++;
         setTimeout(() => {
@@ -319,33 +373,34 @@
     }
 
     function mostrarFinalCinematico() {
-        const env = document.getElementById('studio-environment');
-        env.className = "camera-walking";
+        const rig = document.getElementById('camera-rig');
+        rig.className = "camera-walking";
         sfx.passos.play();
 
-        const zFinal = (TOTAL_Q + 1) * 1500;
+        const zFinal = (TOTAL_Q + 1) * 1800;
 
         setTimeout(() => {
-            env.className = "";
+            rig.className = "";
             sfx.passos.stop();
             sfx.cameraTurn.play();
-            env.style.transform = `translateZ(${zFinal}px) rotateY(0deg)`;
+            rig.style.transform = `translateZ(${zFinal}px) rotateY(0deg)`;
 
             const finalPage = document.getElementById('node-final');
             finalPage.innerHTML = `
-                <div style="text-align:center; padding-top: 4vh;">
-                    <h2 style="font-family:'Russo One'; font-size:3.5vh; color:#fff; margin:0;">FIM DA JORNADA</h2>
-                    <div class="ask-grade" style="color: #27ae60;">Acertos: ${acertos} de ${TOTAL_Q}</div>
+                <div style="text-align:center; padding-top: 3vh;">
+                    <h2 style="font-family:'Russo One'; font-size:3.2vh; color:#fff; margin:0; letter-spacing:1px;">CORREDOR CONCLUÍDO</h2>
+                    <div class="ask-grade" style="color: #27ae60; font-size: 6vh; margin: 3vh 0;">Nota Final: A+</div>
+                    <p style="font-family:'Caveat'; font-size: 3vh; color: #bbb;">Você acertou ${acertos} de ${TOTAL_Q} testes!</p>
                     <table class="grade-table">
-                        <tr><th>Rank</th><th>Pontos</th></tr>
-                        <tr><td>Diretor Gold</td><td>${acertos * 100} pts</td></tr>
+                        <tr><th>Status</th><th>XP Mágico</th></tr>
+                        <tr><td>Mestre do Quiz</td><td>+${acertos * 250} EXP</td></tr>
                     </table>
-                    <p style="font-size: 1.6vh; margin-top: 4vh; color: #aaa;">Inscreva-se para não perder o próximo desafio!</p>
-                    <a href="https://www.pixelclick.fun" target="_blank" class="btn-cta">QUERO JOGAR MAIS</a>
+                    <p style="font-size: 1.5vh; margin-top: 3vh; color: #555;">Toque abaixo para ver novas produções</p>
+                    <a href="https://www.pixelclick.fun" target="_blank" class="btn-cta" style="box-shadow: 0 4px 15px rgba(26,42,108,0.5);">SEGUIR CANAL</a>
                 </div>
             `;
             
-            const finalUt = new SpeechSynthesisUtterance(`Fim do teste. Você acertou ${acertos} perguntas. Deixe seu comentário e siga o canal!`);
+            const finalUt = new SpeechSynthesisUtterance(`Desafio finalizado! Você conseguiu detonar o placar. Comente o seu resultado!`);
             finalUt.lang = 'pt-BR';
             window.speechSynthesis.speak(finalUt);
         }, 2200);
@@ -353,4 +408,3 @@
 </script>
 </body>
 </html>
-
