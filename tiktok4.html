@@ -86,15 +86,21 @@
             transition: border 0.5s ease, box-shadow 0.5s ease;
         }
 
-        /* Canvas de Efeito Matrix de Fundo */
+        /* CORREÇÃO CRÍTICA: Canvas fixado como background absoluto na camada zero */
         .matrix-canvas {
-            position: absolute; inset: 0;
-            width: 100%; height: 100%;
-            pointer-events: none; opacity: 0.15; /* Controla a opacidade global do fundo */
-            z-index: 1;
+            position: absolute; 
+            top: 0; left: 0; 
+            width: 100% !important; height: 100% !important;
+            pointer-events: none; 
+            opacity: 0.12; 
+            z-index: 0;
         }
 
-        .quadrant > * { position: relative; z-index: 2; }
+        /* Força que o conteúdo visível suba para uma camada superior ao canvas */
+        .quadrant > div, .quadrant > button, .quadrant > section { 
+            position: relative; 
+            z-index: 2; 
+        }
 
         .q-red { background: linear-gradient(135deg, #070202, #140505); }
         .q-blue { background: linear-gradient(135deg, #02050c, #050e1a); }
@@ -109,6 +115,7 @@
         .brand-watermark {
             font-family: 'Orbitron', sans-serif; font-size: 3.5vh; font-weight: 900;
             letter-spacing: 4px; text-align: center; margin-bottom: 2vh; opacity: 0.85;
+            position: relative; z-index: 2;
         }
         .q-red .brand-watermark { color: #fff; text-shadow: 0 0 10px var(--neon-red); }
         .q-blue .brand-watermark { color: #fff; text-shadow: 0 0 10px var(--neon-blue); }
@@ -118,22 +125,24 @@
         .node-header {
             font-family: 'Orbitron', sans-serif; font-size: 1.6vh; font-weight: 900;
             padding: 10px 15px; border-radius: 8px; margin-bottom: 2vh; letter-spacing: 1px;
+            position: relative; z-index: 2;
         }
         .q-red .node-header { background: var(--panel-red); border: 1px solid var(--neon-red); color: var(--neon-red); }
         .q-blue .node-header { background: var(--panel-blue); border: 1px solid var(--neon-blue); color: var(--neon-blue); }
         .q-green .node-header { background: var(--panel-green); border: 1px solid var(--neon-green); color: var(--neon-green); }
         .q-yellow .node-header { background: var(--panel-yellow); border: 1px solid var(--neon-yellow); color: var(--neon-yellow); }
 
-        .question-text { color: #ffffff; font-size: 2.5vh; font-weight: 700; line-height: 1.4; min-height: 12vh; margin-bottom: 1vh; }
+        .question-text { color: #ffffff; font-size: 2.5vh; font-weight: 700; line-height: 1.4; min-height: 12vh; margin-bottom: 1vh; position: relative; z-index: 2; }
 
-        .timer-line { width: 100%; height: 4px; background: rgba(255,255,255,0.04); border-radius: 2px; overflow: hidden; margin-bottom: 2vh; }
+        .timer-line { width: 100%; height: 4px; background: rgba(255,255,255,0.04); border-radius: 2px; overflow: hidden; margin-bottom: 2vh; position: relative; z-index: 2; }
         .timer-core { width: 100%; height: 100%; background: #fff; }
 
-        /* Alteração: Reduzido margens para subir as alternativas mais perto do cronômetro */
+        /* Posicionamento reajustado para alternativas subirem próximas ao timer */
         .options-container { 
             display: flex; flex-direction: column; gap: 1.4vh; 
             margin-top: 0; margin-bottom: auto; 
             opacity: 0; transition: opacity 0.4s ease; 
+            position: relative; z-index: 2;
         }
         .options-visible { opacity: 1; }
 
@@ -266,7 +275,6 @@
         zoom: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-futuristic-space-ship-vibration-1473.mp3'], volume: 0.4 })
     };
 
-    // Inicializador do efeito Matrix nos Backgrounds
     function initMatrixRain() {
         const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         const charArr = chars.split("");
@@ -276,7 +284,6 @@
             const canvas = document.getElementById(`canvas-${idx}`);
             const ctx = canvas.getContext('2d');
             
-            // Define o tamanho real baseado na janela do viewport interno
             canvas.width = canvas.offsetWidth;
             canvas.height = canvas.offsetHeight;
 
@@ -285,11 +292,9 @@
             for (let x = 0; x < columns; x++) drops[x] = 1;
 
             function draw() {
-                // Efeito fade out sutil preto
                 ctx.fillStyle = "rgba(3, 5, 8, 0.06)";
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                // Aplica a cor do setor correspondente
                 ctx.fillStyle = SECTOR_COLS[idx];
                 ctx.font = fontSize + "px Orbitron";
 
@@ -314,7 +319,7 @@
 
     function iniciarQuiz() {
         wakeUpSpeech();
-        initMatrixRain(); // Inicia a chuva computacional assim que o jogo começa
+        initMatrixRain(); 
         
         try { if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(() => {}); } catch (e) {}
 
@@ -341,7 +346,7 @@
         runCount();
     }
 
-    function executarRodada() {
+    function ejecutarRodada() {
         if (currentQ >= TOTAL_Q) {
             mostrarFinal();
             return;
