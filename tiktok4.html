@@ -86,7 +86,6 @@
             transition: border 0.5s ease, box-shadow 0.5s ease;
         }
 
-        /* CORREÇÃO CRÍTICA: Canvas fixado como background absoluto na camada zero */
         .matrix-canvas {
             position: absolute; 
             top: 0; left: 0; 
@@ -96,7 +95,6 @@
             z-index: 0;
         }
 
-        /* Força que o conteúdo visível suba para uma camada superior ao canvas */
         .quadrant > div, .quadrant > button, .quadrant > section { 
             position: relative; 
             z-index: 2; 
@@ -137,7 +135,6 @@
         .timer-line { width: 100%; height: 4px; background: rgba(255,255,255,0.04); border-radius: 2px; overflow: hidden; margin-bottom: 2vh; position: relative; z-index: 2; }
         .timer-core { width: 100%; height: 100%; background: #fff; }
 
-        /* Posicionamento reajustado para alternativas subirem próximas ao timer */
         .options-container { 
             display: flex; flex-direction: column; gap: 1.4vh; 
             margin-top: 0; margin-bottom: auto; 
@@ -346,7 +343,8 @@
         runCount();
     }
 
-    function ejecutarRodada() {
+    function executarRodada() {
+        // CORREÇÃO CRÍTICA: Checagem de fim do quiz colocada no início absoluto do fluxo antes de ler dados
         if (currentQ >= TOTAL_Q) {
             mostrarFinal();
             return;
@@ -375,6 +373,8 @@
         document.getElementById(`q-text-${activeIdx}`).innerHTML = "";
         
         targetContainer.classList.remove('options-visible');
+        targetContainer.removeAttribute('data-locked'); // Libera cliques para a nova pergunta
+        
         targetContainer.innerHTML = data.options.map((opt, i) => 
             `<button class="option-btn" onclick="validar(this, ${i}, ${data.correct})"><span class="option-letter">${letras[i]}</span>${opt}</button>`
         ).join('');
@@ -390,6 +390,7 @@
     }
 
     async function prepararEscrita(data, activeIdx) {
+        window.speechSynthesis.cancel(); // Previne bugs de sobreposição de voz do navegador
         const ut = new SpeechSynthesisUtterance(data.q);
         ut.lang = 'pt-BR'; ut.rate = 1.1;
         window.speechSynthesis.speak(ut);
@@ -423,11 +424,11 @@
     }
 
     function validar(el, escolhido, correto) {
-        clearInterval(timerInterval);
         const activeIdx = currentQ % 4;
         const parent = document.getElementById(`options-${activeIdx}`);
         if (parent.dataset.locked) return;
         
+        clearInterval(timerInterval);
         let acertou = (escolhido === correto);
         if (acertou) acertos++;
         else { el.classList.add('wrong'); sfx.wrong.play(); }
@@ -440,7 +441,7 @@
         parent.dataset.locked = "true";
         
         const correctOption = parent.querySelectorAll('.option-btn')[corretoIdx];
-        correctOption.classList.add('correct');
+        if (correctOption) correctOption.classList.add('correct');
 
         sfx.correct.play();
         confetti({
@@ -449,7 +450,6 @@
         });
 
         setTimeout(() => {
-            parent.removeAttribute('data-locked');
             currentQ++;
             executarRodada();
         }, 2500);
