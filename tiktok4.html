@@ -6,7 +6,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;900&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <title>Pixel Click - Matrix Immersive 4 Quadrants</title>
+    <title>Pixel Click - Matrix Immersive 8 Qs</title>
     <style>
         :root {
             --bg-dark: #030508;
@@ -30,7 +30,6 @@
             overflow: hidden; display: flex; justify-content: center; align-items: center;
         }
 
-        /* Moldura de Gravação Global Fixo */
         .hud-frame {
             position: fixed; inset: 0;
             border: 2px solid rgba(255,255,255,0.05);
@@ -38,7 +37,6 @@
             box-shadow: inset 0 0 40px rgba(0,0,0,0.8);
         }
 
-        /* Overlay de Contagem */
         #countdown-overlay {
             position: fixed; inset: 0; 
             display: none; justify-content: center; align-items: center;
@@ -55,7 +53,6 @@
             100% { transform: scale(1); opacity: 0; }
         }
 
-        /* VIEWPORT 9:16 RIGIDA - Limita a visualização como a tela de um smartphone */
         .phone-viewport {
             height: 100vh;
             aspect-ratio: 9 / 16;
@@ -64,55 +61,58 @@
             background: #000;
         }
 
-        /* O PALCO DA MATRIZ (Contém os 4 quadrantes lado a lado em malha 2x2) */
         #matrix-grid {
             width: 200%; height: 200%;
             position: absolute; top: 0; left: 0;
             display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
             transition: transform 1.2s cubic-bezier(0.7, 0, 0.2, 1);
-            transform: scale(0.5) translate(-50%, -50%); /* Visão Geral Inicial */
+            transform: scale(0.5) translate(-50%, -50%);
         }
 
-        /* Estados da Câmera: Movimenta a malha e dá zoom de 100% no quadrante desejado */
+        /* Estados da Câmera baseados no loop dinâmico */
         #matrix-grid.focus-init { transform: scale(0.5) translate(-50%, -50%); }
-        #matrix-grid.focus-q1   { transform: scale(1) translate(0%, 0%); }       /* Q1 Vermelho ocupa 100% */
-        #matrix-grid.focus-q2   { transform: scale(1) translate(-50%, 0%); }     /* Q2 Azul ocupa 100% */
-        #matrix-grid.focus-q3   { transform: scale(1) translate(0%, -50%); }     /* Q3 Verde ocupa 100% */
-        #matrix-grid.focus-q4   { transform: scale(1) translate(-50%, -50%); }   /* Q4 Amarelo ocupa 100% */
-        #matrix-grid.focus-end  { transform: scale(0.5) translate(-50%, -50%); }
+        #matrix-grid.focus-q0   { transform: scale(1) translate(0%, 0%); }       /* Q1 - Vermelho */
+        #matrix-grid.focus-q1   { transform: scale(1) translate(-50%, 0%); }     /* Q2 - Azul */
+        #matrix-grid.focus-q2   { transform: scale(1) translate(0%, -50%); }     /* Q3 - Verde */
+        #matrix-grid.focus-q3   { transform: scale(1) translate(-50%, -50%); }   /* Q4 - Amarelo */
+        #matrix-grid.focus-end  { transform: scale(0.5) translate(-50%, -50%); opacity: 0.3; }
 
-        /* Estilização Geral de cada Quadrante da imagem de referência */
         .quadrant {
             width: 100%; height: 100%;
-            padding: 6vh 8% 4vh 8%;
+            padding: 7vh 8% 5vh 8%;
             display: flex; flex-direction: column;
             position: relative;
             background-color: var(--bg-dark);
-            /* Grid interno de dados sutil */
             background-image: linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
             background-size: 25px 25px;
-            border: 1px solid rgba(255, 255, 255, 0.03);
+            /* Bordas visíveis internas para delimitação na visão geral */
+            border: 2px solid rgba(255,255,255,0.03);
+            transition: border 0.5s ease, box-shadow 0.5s ease;
         }
 
-        /* Customizações específicas de identidade de cada quadrante */
-        .q-red { background: linear-gradient(135deg, #070202, #140505); border-top: 4px solid var(--neon-red); }
-        .q-blue { background: linear-gradient(135deg, #02050c, #050e1a); border-top: 4px solid var(--neon-blue); }
-        .q-green { background: linear-gradient(135deg, #020704, #05140b); border-top: 4px solid var(--neon-green); }
-        .q-yellow { background: linear-gradient(135deg, #080702, #1a1605); border-top: 4px solid var(--neon-yellow); }
+        /* Efeito de bordas visíveis de Neon quando aproximado */
+        .q-red { background: linear-gradient(135deg, #070202, #140505); }
+        .q-blue { background: linear-gradient(135deg, #02050c, #050e1a); }
+        .q-green { background: linear-gradient(135deg, #020704, #05140b); }
+        .q-yellow { background: linear-gradient(135deg, #080702, #1a1605); }
 
-        /* Marcas d'água decorativas de ID corporativo Pixel Click */
+        /* Classes ativas aplicadas via JS para destacar a borda no zoom */
+        .quadrant.active-border-0 { border: 3px solid var(--neon-red); box-shadow: inset 0 0 30px rgba(214, 48, 49, 0.3); }
+        .quadrant.active-border-1 { border: 3px solid var(--neon-blue); box-shadow: inset 0 0 30px rgba(0, 168, 255, 0.3); }
+        .quadrant.active-border-2 { border: 3px solid var(--neon-green); box-shadow: inset 0 0 30px rgba(39, 174, 96, 0.3); }
+        .quadrant.active-border-3 { border: 3px solid var(--neon-yellow); box-shadow: inset 0 0 30px rgba(241, 196, 15, 0.3); }
+
         .brand-watermark {
             font-family: 'Orbitron', sans-serif; font-size: 3.5vh; font-weight: 900;
-            letter-spacing: 4px; text-align: center; margin-bottom: 4vh; opacity: 0.85;
+            letter-spacing: 4px; text-align: center; margin-bottom: 3vh; opacity: 0.85;
         }
         .q-red .brand-watermark { color: #fff; text-shadow: 0 0 10px var(--neon-red); }
         .q-blue .brand-watermark { color: #fff; text-shadow: 0 0 10px var(--neon-blue); }
         .q-green .brand-watermark { color: #fff; text-shadow: 0 0 10px var(--neon-green); }
         .q-yellow .brand-watermark { color: #fff; text-shadow: 0 0 10px var(--neon-yellow); }
 
-        /* HUD Headers Internos */
         .node-header {
-            font-family: 'Orbitron', sans-serif; font-size: 1.8vh; font-weight: 900;
+            font-family: 'Orbitron', sans-serif; font-size: 1.6vh; font-weight: 900;
             padding: 10px 15px; border-radius: 8px; margin-bottom: 3vh; letter-spacing: 1px;
         }
         .q-red .node-header { background: var(--panel-red); border: 1px solid var(--neon-red); color: var(--neon-red); }
@@ -120,75 +120,52 @@
         .q-green .node-header { background: var(--panel-green); border: 1px solid var(--neon-green); color: var(--neon-green); }
         .q-yellow .node-header { background: var(--panel-yellow); border: 1px solid var(--neon-yellow); color: var(--neon-yellow); }
 
-        /* Corpo da Questão */
-        .question-text {
-            color: #ffffff; font-size: 2.6vh; font-weight: 700;
-            line-height: 1.4; min-height: 14vh; margin-bottom: 2vh;
-        }
+        .question-text { color: #ffffff; font-size: 2.5vh; font-weight: 700; line-height: 1.4; min-height: 14vh; margin-bottom: 1vh; }
 
-        /* Caixa das Alternativas */
-        .options-container {
-            display: flex; flex-direction: column; gap: 1.8vh;
-            margin-top: auto; margin-bottom: 2vh; opacity: 0; transition: opacity 0.4s ease;
-        }
+        .options-container { display: flex; flex-direction: column; gap: 1.6vh; margin-top: auto; margin-bottom: 1vh; opacity: 0; transition: opacity 0.4s ease; }
         .options-visible { opacity: 1; }
 
-        /* Estilização Rígida dos Botões */
         .option-btn {
-            font-family: 'Orbitron', sans-serif; font-size: 2vh; color: #fff;
-            padding: 1.8vh 20px; background: rgba(255,255,255,0.02);
+            font-family: 'Orbitron', sans-serif; font-size: 1.9vh; color: #fff;
+            padding: 1.6vh 20px; background: rgba(255,255,255,0.02);
             border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
             cursor: pointer; display: flex; align-items: center; gap: 15px;
             transition: all 0.2s ease; width: 100%; text-align: left;
         }
-        .option-letter {
-            font-weight: 900; padding-right: 10px; border-right: 1px solid rgba(255,255,255,0.2);
-        }
+        .option-letter { font-weight: 900; padding-right: 10px; border-right: 1px solid rgba(255,255,255,0.2); }
 
-        /* Vinculação de cores de destaque às bordas das opções baseadas no container ativo */
         .q-red .option-btn { border-left: 4px solid var(--neon-red); }
         .q-blue .option-btn { border-left: 4px solid var(--neon-blue); }
         .q-green .option-btn { border-left: 4px solid var(--neon-green); }
         .q-yellow .option-btn { border-left: 4px solid var(--neon-yellow); }
 
-        /* Comportamento de Status Operacionais (Certo / Errado) */
-        .option-btn.correct {
-            color: #fff !important; background: rgba(39, 174, 96, 0.25) !important;
-            border: 2px solid var(--neon-green) !important; box-shadow: 0 0 20px rgba(39, 174, 96, 0.4);
-        }
-        .option-btn.wrong {
-            color: #ffcccc !important; background: rgba(214, 48, 49, 0.2) !important;
-            border: 2px solid var(--neon-red) !important; box-shadow: 0 0 15px rgba(214, 48, 49, 0.3);
-            animation: wrongShake 0.4s linear;
-        }
+        .option-btn.correct { color: #fff !important; background: rgba(39, 174, 96, 0.25) !important; border: 2px solid var(--neon-green) !important; box-shadow: 0 0 20px rgba(39, 174, 96, 0.4); }
+        .option-btn.wrong { color: #ffcccc !important; background: rgba(214, 48, 49, 0.2) !important; border: 2px solid var(--neon-red) !important; box-shadow: 0 0 15px rgba(214, 48, 49, 0.3); animation: wrongShake 0.4s linear; }
         @keyframes wrongShake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
 
-        /* Cronômetros Lineares */
-        .timer-line { width: 100%; height: 4px; background: rgba(255,255,255,0.04); border-radius: 2px; overflow: hidden; margin-bottom: 4vh; }
+        .timer-line { width: 100%; height: 4px; background: rgba(255,255,255,0.04); border-radius: 2px; overflow: hidden; margin-bottom: 3vh; }
         .timer-core { width: 100%; height: 100%; background: #fff; }
 
-        /* Tela de Entrada */
-        #overlay-start {
-            position: fixed; inset: 0; background: var(--bg-dark);
-            z-index: 9999; display: flex; flex-direction: column; 
-            justify-content: center; align-items: center; color: white;
-        }
-        .btn-cta {
-            margin-top: 30px; padding: 18px 45px; font-family: 'Orbitron', sans-serif;
-            font-size: 2vh; font-weight: 900; background: transparent; color: #fff; 
-            border: 2px solid var(--neon-blue); border-radius: 30px; cursor: pointer;
-            letter-spacing: 2px; box-shadow: 0 0 15px rgba(0, 168, 255, 0.2);
-        }
+        #overlay-start { position: fixed; inset: 0; background: var(--bg-dark); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; }
+        .btn-cta { margin-top: 30px; padding: 18px 45px; font-family: 'Orbitron', sans-serif; font-size: 2vh; font-weight: 900; background: transparent; color: #fff; border: 2px solid var(--neon-blue); border-radius: 30px; cursor: pointer; letter-spacing: 2px; box-shadow: 0 0 15px rgba(0, 168, 255, 0.2); }
 
-        /* Resultados */
-        .end-panel {
-            width: 100%; height: 100%; display: flex; flex-direction: column;
+        /* NOVA TELA FINAL: Flutuante e Holográfica pós Zoom Out */
+        #final-overlay {
+            position: absolute; inset: 4vh 6%; 
+            background: rgba(5, 9, 18, 0.95);
+            border: 2px solid var(--neon-blue); border-radius: 24px;
+            box-shadow: 0 0 40px rgba(0, 168, 255, 0.4), inset 0 0 20px rgba(0, 168, 255, 0.2);
+            z-index: 500; display: none; flex-direction: column;
             justify-content: center; align-items: center; text-align: center; color: #fff;
-            padding: 0 20px;
+            backdrop-filter: blur(10px);
+            animation: finalPanelShow 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
-        .grade-table { width: 100%; border-collapse: collapse; margin-top: 3vh; font-size: 1.6vh; }
-        .grade-table th, .grade-table td { border: 1px solid rgba(255,255,255,0.1); padding: 10px; text-align: center; }
+        @keyframes finalPanelShow { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .grade-table { width: 100%; border-collapse: collapse; margin-top: 3vh; font-size: 1.5vh; }
+        .grade-table th, .grade-table td { border: 1px solid rgba(255,255,255,0.1); padding: 8px; text-align: center; }
         .grade-table th { color: var(--neon-blue); font-family: 'Orbitron'; }
+        .ask-grade { font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 3.2vh; color: var(--neon-yellow); margin: 2vh 0; text-shadow: 0 0 10px rgba(241, 196, 15, 0.4); }
     </style>
 </head>
 <body>
@@ -202,6 +179,8 @@
 
 <div class="phone-viewport">
     <div class="hud-frame"></div>
+    
+    <div id="final-overlay"></div>
     
     <div id="matrix-grid" class="focus-init">
         
@@ -257,15 +236,14 @@
         ...(typeof entretenimentoData !== 'undefined' ? entretenimentoData : [])
     ];
 
-    // Travado estritamente em 4 rodadas para preencher o Grid de Cores
-    const TOTAL_Q = 4;
+    // Alterado estritamente para apresentar 8 questões
+    const TOTAL_Q = 8;
     const selectedQuestions = masterPool.sort(() => 0.5 - Math.random()).slice(0, TOTAL_Q);
     let currentQ = 0;
     let acertos = 0;
     const letras = ["A", "B", "C", "D"];
     let timerInterval;
 
-    const CAMERA_CLASSES = ['focus-q1', 'focus-q2', 'focus-q3', 'focus-q4'];
     const SECTOR_COLS = ['#d63031', '#00a8ff', '#27ae60', '#f1c40f'];
 
     const sfx = {
@@ -316,39 +294,57 @@
 
         const data = selectedQuestions[currentQ];
         
-        // 1. Ativa o movimento de imersão de câmera da malha de quadrantes
-        sfx.zoom.play();
-        document.getElementById('matrix-grid').className = CAMERA_CLASSES[currentQ];
+        // Operação Resto (%) garante mapeamento cíclico dos 4 quadrantes (0, 1, 2, 3) nas 8 rodadas
+        const activeIdx = currentQ % 4;
 
-        // 2. Garante formatação gramatical estruturada
+        // Limpa bordas ativas anteriores de todos os quadrantes
+        for (let i = 0; i < 4; i++) {
+            document.getElementById(`quad-${i}`).className = `quadrant ${getQuadrantClass(i)}`;
+        }
+
+        // 1. Move a câmera para o quadrante correspondente
+        sfx.zoom.play();
+        document.getElementById('matrix-grid').className = `focus-q${activeIdx}`;
+
+        // 2. Aplica a classe de borda brilhante visível apenas no quadrante em foco
+        document.getElementById(`quad-${activeIdx}`).classList.add(`active-border-${activeIdx}`);
+
         if (!data.q.trim().endsWith('?')) data.q = data.q.trim() + "?";
 
-        // 3. Embaralha as respostas mantendo rastreio do ponteiro original
         const originalCorrectOption = data.options[data.correct];
         const shuffledOptions = [...data.options].sort(() => Math.random() - 0.5);
         data.options = shuffledOptions;
         data.correct = shuffledOptions.indexOf(originalCorrectOption);
 
-        // 4. Constrói a árvore DOM interna do bloco operacional correspondente
-        const targetContainer = document.getElementById(`options-${currentQ}`);
-        document.getElementById(`timer-${currentQ}`).style.backgroundColor = SECTOR_COLS[currentQ];
+        // 3. Monta a árvore de elementos no contêiner da rodada ativa
+        const targetContainer = document.getElementById(`options-${activeIdx}`);
+        document.getElementById(`timer-${activeIdx}`).style.backgroundColor = SECTOR_COLS[activeIdx];
+        document.getElementById(`q-text-${activeIdx}`).innerHTML = "";
         
+        // Garante que o container de alternativas fique invisível antes da escrita terminar
+        targetContainer.classList.remove('options-visible');
         targetContainer.innerHTML = data.options.map((opt, i) => 
             `<button class="option-btn" onclick="validar(this, ${i}, ${data.correct})"><span class="option-letter">${letras[i]}</span>${opt}</button>`
         ).join('');
 
-        // Dispara processos dinâmicos após estabilização da transição mecânica
-        setTimeout(() => prepararEscrita(data), 1000);
+        setTimeout(() => prepararEscrita(data, activeIdx), 1100);
     }
 
-    async function prepararEscrita(data) {
+    function getQuadrantClass(idx) {
+        if (idx === 0) return 'q-red';
+        if (idx === 1) return 'q-blue';
+        if (idx === 2) return 'q-green';
+        return 'q-yellow';
+    }
+
+    async function prepararEscrita(data, activeIdx) {
         const ut = new SpeechSynthesisUtterance(data.q);
         ut.lang = 'pt-BR'; ut.rate = 1.1;
         window.speechSynthesis.speak(ut);
 
-        await typeWriter(`q-text-${currentQ}`, data.q);
-        document.getElementById(`options-${currentQ}`).classList.add('options-visible');
-        iniciarTimer(data.correct);
+        await typeWriter(`q-text-${activeIdx}`, data.q);
+        document.getElementById(`options-${activeIdx}`).classList.add('options-visible');
+        iniciarTimer(data.correct, activeIdx);
     }
 
     function typeWriter(id, text) {
@@ -363,30 +359,31 @@
         });
     }
 
-    function iniciarTimer(correctIdx) {
-        const bar = document.getElementById(`timer-${currentQ}`);
+    function iniciarTimer(correctIdx, activeIdx) {
+        const bar = document.getElementById(`timer-${activeIdx}`);
         let width = 100;
         bar.style.width = '100%';
         
         timerInterval = setInterval(() => {
             width -= 0.8; bar.style.width = width + '%';
-            if (width <= 0) { clearInterval(timerInterval); finalizarPergunta(correctIdx, false); }
+            if (width <= 0) { clearInterval(timerInterval); finalizarPergunta(correctIdx, false, activeIdx); }
         }, 50);
     }
 
     function validar(el, escolhido, correto) {
         clearInterval(timerInterval);
-        const parent = document.getElementById(`options-${currentQ}`);
+        const activeIdx = currentQ % 4;
+        const parent = document.getElementById(`options-${activeIdx}`);
         if (parent.dataset.locked) return;
         
         let acertou = (escolhido === correto);
         if (acertou) acertos++;
         else { el.classList.add('wrong'); sfx.wrong.play(); }
-        finalizarPergunta(correto, acertou);
+        finalizarPergunta(correto, acertou, activeIdx);
     }
 
-    function finalizarPergunta(corretoIdx, foiAcerto) {
-        const parent = document.getElementById(`options-${currentQ}`);
+    function finalizarPergunta(corretoIdx, foiAcerto, activeIdx) {
+        const parent = document.getElementById(`options-${activeIdx}`);
         if (parent.dataset.locked) return;
         parent.dataset.locked = "true";
         
@@ -399,36 +396,40 @@
             colors: ['#00a8ff', '#27ae60', '#f1c40f', '#d63031']
         });
 
-        // Aguarda exibição do status antes de mover para o próximo quadrante
         setTimeout(() => {
+            parent.removeAttribute('data-locked');
             currentQ++;
             executarRodada();
         }, 2500);
     }
 
     function mostrarFinal() {
-        // Recua a câmera para visualização total estável
+        // 1. Executa o efeito de Zoom Out (Câmera recua mostrando a visão geral esmaecida)
+        sfx.zoom.play();
         document.getElementById('matrix-grid').className = 'focus-end';
         
-        // Substitui o quadrante amarelo (último) pela tela de pontuação global centralizada
-        const lastQuad = document.getElementById('quad-3');
-        lastQuad.style.background = 'var(--bg-dark)';
-        lastQuad.style.borderColor = 'var(--neon-blue)';
-        
-        lastQuad.innerHTML = `
-            <div class="end-panel">
-                <h2 style="font-family:'Orbitron'; font-size:2.4vh; color:var(--neon-blue); margin:0; letter-spacing:2px;">SISTEMA CONCLUÍDO</h2>
-                <div class="ask-grade" style="font-family:'Orbitron'; font-size:3.5vh; font-weight:900; color:var(--neon-yellow); margin:2vh 0;">SCORE: ${acertos}/${TOTAL_Q}</div>
-                <table class="grade-table">
-                    <tr><th>Acertos</th><th>Rank</th></tr>
-                    <tr><td>4</td><td>A+ (CYBER GOD)</td></tr>
-                    <tr><td>3</td><td>B (NETRUNNER)</td></tr>
-                    <tr><td>2</td><td>C (OPERATOR)</td></tr>
-                    <tr><td>0-1</td><td>F (DISCONNECTED)</td></tr>
-                </table>
-                <a href="https://www.pixelclick.fun" target="_blank" class="btn-cta" style="font-size:1.8vh; padding:12px 30px; margin-top:4vh; display:inline-block; text-decoration:none;">RECONECTAR</a>
-            </div>
+        // Limpa as bordas de destaque dos quadrantes
+        for (let i = 0; i < 4; i++) {
+            document.getElementById(`quad-${i}`).className = `quadrant ${getQuadrantClass(i)}`;
+        }
+
+        // 2. Renderiza e ativa o painel holográfico flutuante de resultados
+        const finalOverlay = document.getElementById('final-overlay');
+        finalOverlay.innerHTML = `
+            <h2 style="font-family:'Orbitron'; font-size:2.6vh; color:var(--neon-blue); margin:0; letter-spacing:2px;">SISTEMA CONCLUÍDO</h2>
+            <div class="ask-grade">SCORE: ${acertos}/${TOTAL_Q}</div>
+            <table class="grade-table">
+                <tr><th>Acertos</th><th>Rank</th></tr>
+                <tr><td>8</td><td>A+ (CYBER GOD)</td></tr>
+                <tr><td>6-7</td><td>B (NETRUNNER)</td></tr>
+                <tr><td>4-5</td><td>C (OPERATOR)</td></tr>
+                <tr><td>0-3</td><td>F (DISCONNECTED)</td></tr>
+            </table>
+            <a href="https://www.pixelclick.fun" target="_blank" class="btn-cta" style="font-size:1.8vh; padding:12px 30px; margin-top:4vh; display:inline-block; text-decoration:none;">RECONECTAR</a>
         `;
+        
+        // Exibe o painel flutuante por cima do grid recuado
+        finalOverlay.style.display = 'flex';
         
         const finalUt = new SpeechSynthesisUtterance("Quantas você acertou? Veja qual foi a sua nota e escreva nos comentários!");
         finalUt.lang = 'pt-BR'; window.speechSynthesis.speak(finalUt);
