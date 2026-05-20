@@ -69,12 +69,11 @@
             transform: scale(0.5) translate(-50%, -50%);
         }
 
-        /* Estados da Câmera baseados no loop dinâmico */
         #matrix-grid.focus-init { transform: scale(0.5) translate(-50%, -50%); }
-        #matrix-grid.focus-q0   { transform: scale(1) translate(0%, 0%); }       /* Q1 - Vermelho */
-        #matrix-grid.focus-q1   { transform: scale(1) translate(-50%, 0%); }     /* Q2 - Azul */
-        #matrix-grid.focus-q2   { transform: scale(1) translate(0%, -50%); }     /* Q3 - Verde */
-        #matrix-grid.focus-q3   { transform: scale(1) translate(-50%, -50%); }   /* Q4 - Amarelo */
+        #matrix-grid.focus-q0   { transform: scale(1) translate(0%, 0%); }       
+        #matrix-grid.focus-q1   { transform: scale(1) translate(-50%, 0%); }     
+        #matrix-grid.focus-q2   { transform: scale(1) translate(0%, -50%); }     
+        #matrix-grid.focus-q3   { transform: scale(1) translate(-50%, -50%); }   
         #matrix-grid.focus-end  { transform: scale(0.5) translate(-50%, -50%); opacity: 0.3; }
 
         .quadrant {
@@ -83,20 +82,25 @@
             display: flex; flex-direction: column;
             position: relative;
             background-color: var(--bg-dark);
-            background-image: linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
-            background-size: 25px 25px;
-            /* Bordas visíveis internas para delimitação na visão geral */
             border: 2px solid rgba(255,255,255,0.03);
             transition: border 0.5s ease, box-shadow 0.5s ease;
         }
 
-        /* Efeito de bordas visíveis de Neon quando aproximado */
+        /* Canvas de Efeito Matrix de Fundo */
+        .matrix-canvas {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            pointer-events: none; opacity: 0.15; /* Controla a opacidade global do fundo */
+            z-index: 1;
+        }
+
+        .quadrant > * { position: relative; z-index: 2; }
+
         .q-red { background: linear-gradient(135deg, #070202, #140505); }
         .q-blue { background: linear-gradient(135deg, #02050c, #050e1a); }
         .q-green { background: linear-gradient(135deg, #020704, #05140b); }
         .q-yellow { background: linear-gradient(135deg, #080702, #1a1605); }
 
-        /* Classes ativas aplicadas via JS para destacar a borda no zoom */
         .quadrant.active-border-0 { border: 3px solid var(--neon-red); box-shadow: inset 0 0 30px rgba(214, 48, 49, 0.3); }
         .quadrant.active-border-1 { border: 3px solid var(--neon-blue); box-shadow: inset 0 0 30px rgba(0, 168, 255, 0.3); }
         .quadrant.active-border-2 { border: 3px solid var(--neon-green); box-shadow: inset 0 0 30px rgba(39, 174, 96, 0.3); }
@@ -104,7 +108,7 @@
 
         .brand-watermark {
             font-family: 'Orbitron', sans-serif; font-size: 3.5vh; font-weight: 900;
-            letter-spacing: 4px; text-align: center; margin-bottom: 3vh; opacity: 0.85;
+            letter-spacing: 4px; text-align: center; margin-bottom: 2vh; opacity: 0.85;
         }
         .q-red .brand-watermark { color: #fff; text-shadow: 0 0 10px var(--neon-red); }
         .q-blue .brand-watermark { color: #fff; text-shadow: 0 0 10px var(--neon-blue); }
@@ -113,21 +117,29 @@
 
         .node-header {
             font-family: 'Orbitron', sans-serif; font-size: 1.6vh; font-weight: 900;
-            padding: 10px 15px; border-radius: 8px; margin-bottom: 3vh; letter-spacing: 1px;
+            padding: 10px 15px; border-radius: 8px; margin-bottom: 2vh; letter-spacing: 1px;
         }
         .q-red .node-header { background: var(--panel-red); border: 1px solid var(--neon-red); color: var(--neon-red); }
         .q-blue .node-header { background: var(--panel-blue); border: 1px solid var(--neon-blue); color: var(--neon-blue); }
         .q-green .node-header { background: var(--panel-green); border: 1px solid var(--neon-green); color: var(--neon-green); }
         .q-yellow .node-header { background: var(--panel-yellow); border: 1px solid var(--neon-yellow); color: var(--neon-yellow); }
 
-        .question-text { color: #ffffff; font-size: 2.5vh; font-weight: 700; line-height: 1.4; min-height: 14vh; margin-bottom: 1vh; }
+        .question-text { color: #ffffff; font-size: 2.5vh; font-weight: 700; line-height: 1.4; min-height: 12vh; margin-bottom: 1vh; }
 
-        .options-container { display: flex; flex-direction: column; gap: 1.6vh; margin-top: auto; margin-bottom: 1vh; opacity: 0; transition: opacity 0.4s ease; }
+        .timer-line { width: 100%; height: 4px; background: rgba(255,255,255,0.04); border-radius: 2px; overflow: hidden; margin-bottom: 2vh; }
+        .timer-core { width: 100%; height: 100%; background: #fff; }
+
+        /* Alteração: Reduzido margens para subir as alternativas mais perto do cronômetro */
+        .options-container { 
+            display: flex; flex-direction: column; gap: 1.4vh; 
+            margin-top: 0; margin-bottom: auto; 
+            opacity: 0; transition: opacity 0.4s ease; 
+        }
         .options-visible { opacity: 1; }
 
         .option-btn {
             font-family: 'Orbitron', sans-serif; font-size: 1.9vh; color: #fff;
-            padding: 1.6vh 20px; background: rgba(255,255,255,0.02);
+            padding: 1.5vh 20px; background: rgba(255,255,255,0.02);
             border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
             cursor: pointer; display: flex; align-items: center; gap: 15px;
             transition: all 0.2s ease; width: 100%; text-align: left;
@@ -143,13 +155,9 @@
         .option-btn.wrong { color: #ffcccc !important; background: rgba(214, 48, 49, 0.2) !important; border: 2px solid var(--neon-red) !important; box-shadow: 0 0 15px rgba(214, 48, 49, 0.3); animation: wrongShake 0.4s linear; }
         @keyframes wrongShake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
 
-        .timer-line { width: 100%; height: 4px; background: rgba(255,255,255,0.04); border-radius: 2px; overflow: hidden; margin-bottom: 3vh; }
-        .timer-core { width: 100%; height: 100%; background: #fff; }
-
         #overlay-start { position: fixed; inset: 0; background: var(--bg-dark); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; }
         .btn-cta { margin-top: 30px; padding: 18px 45px; font-family: 'Orbitron', sans-serif; font-size: 2vh; font-weight: 900; background: transparent; color: #fff; border: 2px solid var(--neon-blue); border-radius: 30px; cursor: pointer; letter-spacing: 2px; box-shadow: 0 0 15px rgba(0, 168, 255, 0.2); }
 
-        /* NOVA TELA FINAL: Flutuante e Holográfica pós Zoom Out */
         #final-overlay {
             position: absolute; inset: 4vh 6%; 
             background: rgba(5, 9, 18, 0.95);
@@ -185,6 +193,7 @@
     <div id="matrix-grid" class="focus-init">
         
         <div class="quadrant q-red" id="quad-0">
+            <canvas class="matrix-canvas" id="canvas-0"></canvas>
             <div class="brand-watermark">PIXEL<br>CLICK</div>
             <div class="node-header">_RED // SECTOR_01</div>
             <div class="question-text" id="q-text-0"></div>
@@ -193,6 +202,7 @@
         </div>
         
         <div class="quadrant q-blue" id="quad-1">
+            <canvas class="matrix-canvas" id="canvas-1"></canvas>
             <div class="brand-watermark">PIXEL<br>CLICK</div>
             <div class="node-header">_BLUE // SECTOR_02</div>
             <div class="question-text" id="q-text-1"></div>
@@ -201,6 +211,7 @@
         </div>
         
         <div class="quadrant q-green" id="quad-2">
+            <canvas class="matrix-canvas" id="canvas-2"></canvas>
             <div class="brand-watermark">PIXEL<br>CLICK</div>
             <div class="node-header">_GREEN // SECTOR_03</div>
             <div class="question-text" id="q-text-2"></div>
@@ -209,6 +220,7 @@
         </div>
         
         <div class="quadrant q-yellow" id="quad-3">
+            <canvas class="matrix-canvas" id="canvas-3"></canvas>
             <div class="brand-watermark">PIXEL<br>CLICK</div>
             <div class="node-header">_YELLOW // SECTOR_04</div>
             <div class="question-text" id="q-text-3"></div>
@@ -236,7 +248,6 @@
         ...(typeof entretenimentoData !== 'undefined' ? entretenimentoData : [])
     ];
 
-    // Alterado estritamente para apresentar 8 questões
     const TOTAL_Q = 8;
     const selectedQuestions = masterPool.sort(() => 0.5 - Math.random()).slice(0, TOTAL_Q);
     let currentQ = 0;
@@ -245,6 +256,7 @@
     let timerInterval;
 
     const SECTOR_COLS = ['#d63031', '#00a8ff', '#27ae60', '#f1c40f'];
+    const CAMERA_CLASSES = ['focus-q0', 'focus-q1', 'focus-q2', 'focus-q3'];
 
     const sfx = {
         write: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-pencil-writing-on-paper-2101.mp3'], volume: 0.08, loop: true }),
@@ -254,6 +266,47 @@
         zoom: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-futuristic-space-ship-vibration-1473.mp3'], volume: 0.4 })
     };
 
+    // Inicializador do efeito Matrix nos Backgrounds
+    function initMatrixRain() {
+        const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        const charArr = chars.split("");
+        const fontSize = 14;
+
+        for (let idx = 0; idx < 4; idx++) {
+            const canvas = document.getElementById(`canvas-${idx}`);
+            const ctx = canvas.getContext('2d');
+            
+            // Define o tamanho real baseado na janela do viewport interno
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
+            const columns = canvas.width / fontSize;
+            const drops = [];
+            for (let x = 0; x < columns; x++) drops[x] = 1;
+
+            function draw() {
+                // Efeito fade out sutil preto
+                ctx.fillStyle = "rgba(3, 5, 8, 0.06)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Aplica a cor do setor correspondente
+                ctx.fillStyle = SECTOR_COLS[idx];
+                ctx.font = fontSize + "px Orbitron";
+
+                for (let i = 0; i < drops.length; i++) {
+                    const text = charArr[Math.floor(Math.random() * charArr.length)];
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+            setInterval(draw, 40);
+        }
+    }
+
     function wakeUpSpeech() {
         const dummy = new SpeechSynthesisUtterance("");
         window.speechSynthesis.speak(dummy);
@@ -261,6 +314,8 @@
 
     function iniciarQuiz() {
         wakeUpSpeech();
+        initMatrixRain(); // Inicia a chuva computacional assim que o jogo começa
+        
         try { if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(() => {}); } catch (e) {}
 
         document.getElementById('overlay-start').style.display = 'none';
@@ -293,20 +348,14 @@
         }
 
         const data = selectedQuestions[currentQ];
-        
-        // Operação Resto (%) garante mapeamento cíclico dos 4 quadrantes (0, 1, 2, 3) nas 8 rodadas
         const activeIdx = currentQ % 4;
 
-        // Limpa bordas ativas anteriores de todos os quadrantes
         for (let i = 0; i < 4; i++) {
             document.getElementById(`quad-${i}`).className = `quadrant ${getQuadrantClass(i)}`;
         }
 
-        // 1. Move a câmera para o quadrante correspondente
         sfx.zoom.play();
-        document.getElementById('matrix-grid').className = `focus-q${activeIdx}`;
-
-        // 2. Aplica a classe de borda brilhante visível apenas no quadrante em foco
+        document.getElementById('matrix-grid').className = CAMERA_CLASSES[activeIdx];
         document.getElementById(`quad-${activeIdx}`).classList.add(`active-border-${activeIdx}`);
 
         if (!data.q.trim().endsWith('?')) data.q = data.q.trim() + "?";
@@ -316,12 +365,10 @@
         data.options = shuffledOptions;
         data.correct = shuffledOptions.indexOf(originalCorrectOption);
 
-        // 3. Monta a árvore de elementos no contêiner da rodada ativa
         const targetContainer = document.getElementById(`options-${activeIdx}`);
         document.getElementById(`timer-${activeIdx}`).style.backgroundColor = SECTOR_COLS[activeIdx];
         document.getElementById(`q-text-${activeIdx}`).innerHTML = "";
         
-        // Garante que o container de alternativas fique invisível antes da escrita terminar
         targetContainer.classList.remove('options-visible');
         targetContainer.innerHTML = data.options.map((opt, i) => 
             `<button class="option-btn" onclick="validar(this, ${i}, ${data.correct})"><span class="option-letter">${letras[i]}</span>${opt}</button>`
@@ -404,16 +451,13 @@
     }
 
     function mostrarFinal() {
-        // 1. Executa o efeito de Zoom Out (Câmera recua mostrando a visão geral esmaecida)
         sfx.zoom.play();
         document.getElementById('matrix-grid').className = 'focus-end';
         
-        // Limpa as bordas de destaque dos quadrantes
         for (let i = 0; i < 4; i++) {
             document.getElementById(`quad-${i}`).className = `quadrant ${getQuadrantClass(i)}`;
         }
 
-        // 2. Renderiza e ativa o painel holográfico flutuante de resultados
         const finalOverlay = document.getElementById('final-overlay');
         finalOverlay.innerHTML = `
             <h2 style="font-family:'Orbitron'; font-size:2.6vh; color:var(--neon-blue); margin:0; letter-spacing:2px;">QUANTAS VOCÊ ACERTOU?</h2>
@@ -427,7 +471,6 @@
             <a href="https://www.pixelclick.fun" target="_blank" class="btn-cta" style="font-size:1.8vh; padding:12px 30px; margin-top:4vh; display:inline-block; text-decoration:none;">www.pixelclick.fun</a>
         `;
         
-        // Exibe o painel flutuante por cima do grid recuado
         finalOverlay.style.display = 'flex';
         
         const finalUt = new SpeechSynthesisUtterance("Quantas você acertou? Veja qual foi a sua nota e escreva nos comentários!");
