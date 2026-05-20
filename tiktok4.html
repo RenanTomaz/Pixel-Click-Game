@@ -3,106 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;800&family=Russo+One&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;800&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <title>Pixel Click - Futuristic Lab Quiz</title>
+    <title>Pixel Click - SciFi Lab Core</title>
     <style>
         :root {
-            --bg-color: #060713;
-            --neon-blue: #00f3ff;
-            --neon-cyan: #00ffaa;
-            --text-color: #ffffff;
+            --white-panel: #eef5f8;
+            --screen-bg: rgba(220, 235, 245, 0.85);
             --wrong-color: #ff0055;
+            /* Variáveis dinâmicas controladas pela animação global */
+            --neon-primary: #00f3ff;
+            --neon-secondary: #ff00aa;
+        }
+
+        /* Animação global para alternar a iluminação do laboratório entre azul e rosa */
+        @keyframes pulseNeon {
+            0%, 100% {
+                --neon-primary: #00f3ff;
+                --neon-secondary: #00ffaa;
+            }
+            50% {
+                --neon-primary: #ff00aa;
+                --neon-secondary: #bc13fe;
+            }
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             margin: 0; padding: 0; height: 100vh; width: 100vw;
-            background: #ffffff; /* Céu branco de fundo que vaza pelo teto aberto */
+            background: #ffffff; 
             font-family: 'Montserrat', sans-serif;
             overflow: hidden; display: flex; justify-content: center; align-items: center;
-            /* Calibração precisa da lente de perspectiva e altura do olho */
-            perspective: 450px; 
+            perspective: 400px; 
             perspective-origin: 50% 50%;
+            animation: pulseNeon 8s ease-in-out infinite;
         }
 
-        /* Plataforma de Câmera com balanço suave e preciso */
+        /* Suporte principal da câmera com amortecimento mecânico */
         #camera-rig {
             width: 100vw; height: 100vh;
             transform-style: preserve-3d;
-            transition: transform 2s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: transform 2s cubic-bezier(0.2, 0.8, 0.2, 1);
             transform: translateZ(0px) rotateY(0deg);
         }
 
         .camera-walking {
-            animation: cameraSciFi 0.7s ease-in-out infinite alternate;
+            animation: scifiWalk 0.6s ease-in-out infinite alternate;
         }
 
-        @keyframes cameraSciFi {
+        @keyframes scifiWalk {
             0% { transform: translateY(0) rotate(0deg); }
-            100% { transform: translateY(-1.2vh) rotate(0.2deg); }
+            100% { transform: translateY(-1vh) rotate(0.15deg); }
         }
 
-        /* CENÁRIO 3D: Estrutura do Corredor do Laboratório */
+        /* CENÁRIO 3D: Construção Física do Corredor Branco da Imagem */
         #studio-room {
             position: absolute;
             width: 100%; height: 100%;
             transform-style: preserve-3d;
         }
 
-        .room-element {
+        .panel-surface {
             position: absolute;
-            background-color: var(--bg-color);
+            background: var(--white-panel);
         }
 
-        /* Chão metálico escuro com linhas neon reflexivas nas bordas */
+        /* Chão Branco Reflexivo */
         .floor {
-            width: 400vw; height: 15000px;
-            left: -150vw; top: 50vh;
+            width: 300vw; height: 20000px;
+            left: -100vw; top: 50vh;
             transform: rotateX(90deg);
             transform-origin: top center;
-            background: linear-gradient(to bottom, #111424, #060713);
-            border-left: 4px solid var(--neon-blue);
-            border-right: 4px solid var(--neon-blue);
-            box-shadow: 0 0 80px rgba(0, 243, 255, 0.3);
+            background: linear-gradient(to bottom, #ffffff, #dbeef5);
+            box-shadow: inset 0 0 100px rgba(255,255,255,1);
         }
 
-        /* Teto aberto simula painéis futuristas que deixam ver o fundo branco */
+        /* Teto Branco com Linhas de Fuga */
         .ceiling {
-            width: 80vw; height: 15000px;
-            left: 10vw; top: -50vh;
+            width: 300vw; height: 20000px;
+            left: -100vw; top: -50vh;
             transform: rotateX(-90deg);
             transform-origin: bottom center;
-            background: transparent;
-            border-left: 2px dashed rgba(0, 243, 255, 0.4);
-            border-right: 2px dashed rgba(0, 243, 255, 0.4);
+            background: linear-gradient(to top, #ffffff, #e6f0f5);
         }
 
-        /* Parede de Laboratório Esquerda */
+        /* Parede de Painéis Esquerda */
         .wall-left {
-            width: 15000px; height: 100vh;
+            width: 20000px; height: 100vh;
             right: 50vw; top: 0;
             transform: rotateY(90deg);
             transform-origin: right center;
-            background: linear-gradient(90deg, #090a1a, #0d1127);
-            border-bottom: 5px solid var(--neon-blue);
-            box-shadow: inset 0 -30px 50px rgba(0, 243, 255, 0.15);
+            background: linear-gradient(90deg, #f4fafc, #dceef5);
         }
 
-        /* Parede de Laboratório Direita */
+        /* Parede de Painéis Direita */
         .wall-right {
-            width: 15000px; height: 100vh;
+            width: 20000px; height: 100vh;
             left: 50vw; top: 0;
             transform: rotateY(-90deg);
             transform-origin: left center;
-            background: linear-gradient(-90deg, #090a1a, #0d1127);
-            border-bottom: 5px solid var(--neon-cyan);
-            box-shadow: inset 0 -30px 50px rgba(0, 255, 170, 0.15);
+            background: linear-gradient(-90deg, #f4fafc, #dceef5);
         }
 
-        /* FORMATO VERTICAL 9:16 TRILHO CENTRAL */
+        /* Arcos Estruturais de LED Neon (Simulando as molduras da imagem ao longo do corredor) */
+        .neon-ring {
+            position: absolute;
+            width: 100vw; height: 100vh;
+            border: 6px solid var(--neon-primary);
+            box-shadow: 0 0 30px var(--neon-primary), inset 0 0 30px var(--neon-primary);
+            border-radius: 40px; /* Curvatura característica dos portais da imagem */
+            left: 0; top: 0;
+            pointer-events: none;
+            backface-visibility: hidden;
+        }
+
+        /* FORMATO VERTICAL GERAL (9:16) */
         .cinematic-track {
             position: absolute;
             width: 100%; height: 100%;
@@ -112,88 +129,87 @@
             transform-style: preserve-3d;
         }
 
-        /* Monitores Holográficos de Computador Sci-Fi */
+        /* Janelas de Interface Gráfica dos Computadores de Bordo */
         .computer-screen {
             position: absolute;
-            width: 88vw; height: 50vh;
-            max-width: 370px; max-height: 400px;
-            background: rgba(10, 15, 35, 0.85);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 2px solid var(--neon-blue);
-            box-shadow: 0 0 30px rgba(0, 243, 255, 0.5), inset 0 0 20px rgba(0, 243, 255, 0.2);
-            border-radius: 12px;
-            padding: 3vh 6%;
+            width: 86vw; height: 52vh;
+            max-width: 360px; max-height: 420px;
+            background: var(--screen-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid #ffffff;
+            border-top: 6px solid var(--neon-primary);
+            box-shadow: 0 15px 35px rgba(150, 180, 200, 0.3), 0 0 15px rgba(255,255,255,0.6);
+            border-radius: 8px;
+            padding: 3.5vh 6%;
             display: flex; flex-direction: column;
             backface-visibility: hidden;
-            left: 6%; top: 25%; /* Centralização vertical precisa no viewport */
+            left: 7%; top: 24%;
+            transition: border-color 0.5s, box-shadow 0.5s;
         }
 
-        .node-left { transform: translateX(-45vw) rotateY(50deg); border-color: var(--neon-blue); box-shadow: 0 0 30px rgba(0,243,255,0.4); }
-        .node-right { transform: translateX(45vw) rotateY(-50deg); border-color: var(--neon-cyan); box-shadow: 0 0 30px rgba(0,255,170,0.4); }
+        .node-left { transform: translateX(-42vw) rotateY(45deg); }
+        .node-right { transform: translateX(42vw) rotateY(-45deg); }
         
         .node-final { 
             transform: translateX(0) rotateY(0deg); 
-            background: rgba(6, 7, 19, 0.95);
-            border: 3px solid var(--neon-cyan);
-            box-shadow: 0 0 40px var(--neon-cyan);
+            background: #ffffff;
+            border-top: 6px solid var(--neon-secondary);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
         }
 
         .question-text {
-            font-family: 'Orbitron', sans-serif; color: var(--text-color);
-            font-size: 2.2vh; font-weight: 500; line-height: 1.4; margin-top: 1vh; min-height: 10vh;
-            text-shadow: 0 0 8px rgba(255,255,255,0.6);
+            font-family: 'Orbitron', sans-serif; color: #1e293b;
+            font-size: 2.3vh; font-weight: 800; line-height: 1.4; margin-top: 1vh; min-height: 11vh;
         }
 
         .options-list { display: flex; flex-direction: column; gap: 1vh; margin-top: 2vh; opacity: 0; transition: opacity 0.3s; }
         .options-visible { opacity: 1; }
         
         .option { 
-            font-family: 'Montserrat', sans-serif; font-size: 1.8vh; color: #b2c0f0; 
-            padding: 1.2vh; background: rgba(255,255,255,0.03); border: 1px solid rgba(0,243,255,0.2);
-            border-radius: 6px; cursor: pointer; transition: all 0.2s ease;
+            font-family: 'Montserrat', sans-serif; font-size: 1.8vh; color: #334155; font-weight: 600;
+            padding: 1.2vh; background: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.8);
+            border-radius: 6px; cursor: pointer; transition: all 0.25s ease;
         }
-        .option.correct { color: #fff !important; background: rgba(0, 255, 170, 0.3); border-color: var(--neon-cyan); font-weight: bold; box-shadow: 0 0 15px var(--neon-cyan); }
-        .option.wrong { color: #fff !important; background: rgba(255, 0, 85, 0.3); border-color: var(--wrong-color); text-decoration: line-through; box-shadow: 0 0 15px var(--wrong-color); }
+        .option.correct { color: #fff !important; background: #00ffaa; border-color: #00ffaa; box-shadow: 0 0 15px rgba(0,255,170,0.6); }
+        .option.wrong { color: #fff !important; background: var(--wrong-color); border-color: var(--wrong-color); text-decoration: line-through; box-shadow: 0 0 15px rgba(255,0,85,0.4); }
 
-        .timer-container { width: 100%; height: 5px; background: rgba(255,255,255,0.1); margin-top: 1.5vh; border-radius: 3px; overflow: hidden; }
-        .timer-bar { width: 100%; height: 100%; background: var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue); }
+        .timer-container { width: 100%; height: 5px; background: rgba(0,0,0,0.05); margin-top: 1.5vh; border-radius: 3px; overflow: hidden; }
+        .timer-bar { width: 100%; height: 100%; background: var(--neon-primary); transition: background-color 0.5s; }
 
-        /* Interfaces de Sistema */
+        /* Interfaces Estáticas de Controle */
         #overlay-start, #countdown-overlay {
-            position: fixed; inset: 0; background: var(--bg-color); z-index: 1000;
-            display: flex; flex-direction: column; justify-content: center; align-items: center; color: white;
+            position: fixed; inset: 0; background: #ffffff; z-index: 1000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; color: #1e293b;
         }
-        #countdown-number { font-family: 'Orbitron'; font-size: 12vh; color: var(--neon-blue); text-shadow: 0 0 30px var(--neon-blue); }
-        .btn-cta { padding: 15px 40px; font-family: 'Orbitron'; font-weight: 800; font-size: 1.8vh; background: transparent; color: var(--neon-blue); border: 2px solid var(--neon-blue); border-radius: 6px; cursor: pointer; text-decoration: none; margin-top: 20px; box-shadow: 0 0 15px rgba(0,243,255,0.3); transition: 0.3s; }
-        .btn-cta:hover { background: var(--neon-blue); color: #000; }
+        #countdown-number { font-family: 'Orbitron'; font-size: 10vh; font-weight:800; color: var(--neon-primary); }
+        .btn-cta { padding: 16px 45px; font-family: 'Orbitron'; font-weight: 800; font-size: 1.8vh; background: #1e293b; color: #fff; border: none; border-radius: 30px; cursor: pointer; text-decoration: none; margin-top: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.15); transition: 0.3s; }
 
-        .grade-table { width: 100%; border-collapse: collapse; margin-top: 2vh; font-family: 'Montserrat'; font-size: 1.8vh; color: #fff; }
-        .grade-table th, .grade-table td { border: 1px solid rgba(0,255,170,0.2); padding: 8px; text-align: center; }
-        .ask-grade { font-family: 'Orbitron'; font-size: 3.5vh; color: var(--neon-cyan); text-align: center; margin: 2vh 0; text-shadow: 0 0 10px var(--neon-cyan); }
+        .grade-table { width: 100%; border-collapse: collapse; margin-top: 2vh; font-family: 'Montserrat'; font-size: 1.8vh; color: #1e293b; }
+        .grade-table th, .grade-table td { border: 1px solid #cbd5e1; padding: 8px; text-align: center; }
+        .ask-grade { font-family: 'Orbitron'; font-size: 3.5vh; color: var(--neon-secondary); text-align: center; margin: 2vh 0; font-weight: 800; }
     </style>
 </head>
 <body>
 
-<div id="countdown-overlay" style="display: none;"><div id="countdown-number">SYSTEM</div></div>
+<div id="countdown-overlay" style="display: none;"><div id="countdown-number">CONECTANDO</div></div>
 
 <div id="overlay-start">
-    <h1 style="font-family: 'Orbitron'; font-size: 4.5vh; margin-bottom: 0; color: var(--neon-blue); letter-spacing: 2px;">LAB CORE</h1>
-    <p style="font-size: 1.6vh; color: #525875; font-family: 'Orbitron';">INITIALIZE CINEMATIC MATRIX</p>
-    <button class="btn-cta" onclick="iniciarDiretor()">BOOT SYSTEM</button>
+    <h1 style="font-family: 'Orbitron'; font-size: 4.5vh; margin-bottom: 0; font-weight: 800; letter-spacing: -1px;">PIXEL LAB</h1>
+    <p style="font-size: 1.6vh; color: #94a3b8; font-family: 'Orbitron'; font-weight: 600;">SISTEMA DE DIAGNÓSTICO INTEGRADO</p>
+    <button class="btn-cta" onclick="iniciarDiretor()">INICIAR RECONHECIMENTO</button>
 </div>
 
-<!-- Estrutura Principal de Câmera Calibrada -->
 <div id="camera-rig">
-    <!-- Laboratório Sci-Fi -->
     <div id="studio-room">
-        <div class="room-element floor"></div>
-        <div class="room-element ceiling"></div>
-        <div class="room-element wall-left"></div>
-        <div class="room-element wall-right"></div>
+        <div class="panel-surface floor"></div>
+        <div class="panel-surface ceiling"></div>
+        <div class="panel-surface wall-left"></div>
+        <div class="panel-surface wall-right"></div>
+        
+        <div id="neon-rings-layer" style="transform-style: preserve-3d; position:absolute; inset:0;"></div>
     </div>
     
-    <!-- Linha de Deslocamento das Telas -->
     <div class="cinematic-track" id="main-track"></div>
 </div>
 
@@ -211,14 +227,13 @@
     let acertos = 0;
     const letras = ["A", "B", "C", "D"];
 
-    // Efeitos Sonoros Futuristas
     const sfx = {
-        passos: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-heavy-robot-footstep-2713.mp3'], volume: 0.4 }),
-        cameraTurn: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-futuristic-space-hiss-2908.mp3'], volume: 0.4 }),
-        write: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-computer-keyboard-typing-1386.mp3'], volume: 0.5, loop: true }),
-        correct: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-electronic-retro-win-sound-2703.mp3'], volume: 0.5 }),
+        passos: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-slow-heavy-footsteps-1025.mp3'], volume: 0.3 }),
+        cameraTurn: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-futuristic-space-hiss-2908.mp3'], volume: 0.3 }),
+        write: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-computer-keyboard-typing-1386.mp3'], volume: 0.4, loop: true }),
+        correct: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-electronic-retro-win-sound-2703.mp3'], volume: 0.4 }),
         wrong: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-system-fault-error-2911.mp3'], volume: 0.4 }),
-        tick: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-digital-quick-click-2305.mp3'], volume: 0.3 })
+        tick: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-digital-quick-click-2305.mp3'], volume: 0.2 })
     };
 
     function iniciarDiretor() {
@@ -230,7 +245,7 @@
         let count = 3;
         const runCount = () => {
             if (count > 0) {
-                number.innerText = `LOAD: ${count}`;
+                number.innerText = `LINKING: ${count}`;
                 sfx.tick.play();
                 count--;
                 setTimeout(runCount, 1000);
@@ -245,7 +260,16 @@
 
     function construirCenario() {
         const track = document.getElementById('main-track');
+        const ringsLayer = document.getElementById('neon-rings-layer');
         
+        // Gera aneis estruturais repetidos para dar a sensação exata de túnel modular da imagem
+        for(let r = 1; r <= (TOTAL_Q + 2) * 4; r++) {
+            const ring = document.createElement('div');
+            ring.className = 'neon-ring';
+            ring.style.transform = `translateZ(${r * -600}px)`;
+            ringsLayer.appendChild(ring);
+        }
+
         selectedQuestions.forEach((data, index) => {
             if (!data.q.trim().endsWith('?')) data.q = data.q.trim() + "?";
             
@@ -254,16 +278,15 @@
             node.className = `computer-screen ${lado}`;
             node.id = `node-${index}`;
             
-            // Definição precisa do espaçamento dos nós digitais (2200px para evitar sobreposição)
-            const zPosition = (index + 1) * -2200;
+            const zPosition = (index + 1) * -2400;
             node.style.transform += ` translateZ(${zPosition}px)`;
 
             node.innerHTML = `
-                <div style="font-family:'Orbitron'; font-size: 1.3vh; color: var(--neon-blue); letter-spacing: 1px;">SYSTEM NODE_0${index + 1}</div>
+                <div style="font-family:'Orbitron'; font-size: 1.3vh; color: var(--neon-primary); font-weight:800;">MONITOR // DATA_0${index + 1}</div>
                 <div class="question-text" id="q-text-${index}"></div>
                 <div class="timer-container"><div class="timer-bar" id="bar-${index}"></div></div>
                 <div class="options-list" id="options-${index}">
-                    ${data.options.map((opt, i) => `<div class="option" onclick="validar(this, ${i}, ${data.correct}, ${index})">${letras[i]} // ${opt}</div>`).join('')}
+                    ${data.options.map((opt, i) => `<div class="option" onclick="validar(this, ${i}, ${data.correct}, ${index})">${letras[i]} ➜ ${opt}</div>`).join('')}
                 </div>
             `;
             track.appendChild(node);
@@ -272,24 +295,24 @@
         const finalNode = document.createElement('div');
         finalNode.className = 'computer-screen node-final';
         finalNode.id = `node-final`;
-        finalNode.style.transform = `translateX(0) translateZ(${(TOTAL_Q + 1) * -2200}px)`;
+        finalNode.style.transform = `translateX(0) translateZ(${(TOTAL_Q + 1) * -2400}px)`;
         track.appendChild(finalNode);
     }
 
-    function ejecutarSequenciaPassos() {
+    function executarSequenciaPassos() {
         const rig = document.getElementById('camera-rig');
         rig.className = "camera-walking"; 
         sfx.passos.play();
 
-        const zDestino = (currentQ + 1) * 2200;
+        const zDestino = (currentQ + 1) * 2400;
 
         setTimeout(() => {
             rig.className = ""; 
             sfx.passos.stop();
             sfx.cameraTurn.play();
 
-            // Rotação ideal de observação em laboratórios (ângulo dinâmico de 42 graus)
-            const ladoOlhar = currentQ % 2 === 0 ? -42 : 42; 
+            // Desvio angular preciso para focar na tela acoplada à parede lateral
+            const ladoOlhar = currentQ % 2 === 0 ? -40 : 40; 
             rig.style.transform = `translateZ(${zDestino}px) rotateY(${ladoOlhar}deg)`;
 
             setTimeout(() => {
@@ -345,7 +368,7 @@
             acertos++;
             el.classList.add('correct');
             sfx.correct.play();
-            confetti({ particleCount: 40, spread: 50, colors: ['#00f3ff', '#00ffaa'], origin: { y: 0.7 } });
+            confetti({ particleCount: 40, spread: 50, colors: ['#00f3ff', '#ff00aa'], origin: { y: 0.7 } });
         } else {
             el.classList.add('wrong');
             const corretoEl = parent.querySelectorAll('.option')[correto];
@@ -366,7 +389,7 @@
         const rig = document.getElementById('camera-rig');
         sfx.cameraTurn.play();
         
-        const zDestino = (currentQ + 1) * 2200;
+        const zDestino = (currentQ + 1) * 2400;
         rig.style.transform = `translateZ(${zDestino}px) rotateY(0deg)`;
 
         currentQ++;
@@ -384,7 +407,7 @@
         rig.className = "camera-walking";
         sfx.passos.play();
 
-        const zFinal = (TOTAL_Q + 1) * 2200;
+        const zFinal = (TOTAL_Q + 1) * 2400;
 
         setTimeout(() => {
             rig.className = "";
@@ -394,20 +417,20 @@
 
             const finalPage = document.getElementById('node-final');
             finalPage.innerHTML = `
-                <div style="text-align:center; padding-top: 2vh;">
-                    <h2 style="font-family:'Orbitron'; font-size:2.8vh; color:#fff; margin:0; letter-spacing:2px;">CORE TERMINATED</h2>
-                    <div class="ask-grade" style="margin: 2vh 0;">RANK: OMEGA</div>
-                    <p style="font-size: 2vh; color: #b2c0f0;">Módulos processados: ${acertos} / ${TOTAL_Q}</p>
+                <div style="text-align:center; padding-top: 1.5vh;">
+                    <h2 style="font-family:'Orbitron'; font-size:2.8vh; color:#1e293b; margin:0; font-weight:800; letter-spacing:-1px;">ANÁLISE CONCLUÍDA</h2>
+                    <div class="ask-grade">MODULO: APEX</div>
+                    <p style="font-size: 1.9vh; color: #64748b; font-weight:600;">Assertividade de dados: ${acertos} de ${TOTAL_Q}</p>
                     <table class="grade-table">
-                        <tr><th>DADOS</th><th>INTEGRIDADE</th></tr>
-                        <tr><td>Sincronia</td><td>${(acertos/TOTAL_Q)*100}%</td></tr>
+                        <tr><th>MÓDULO</th><th>STATUS</th></tr>
+                        <tr><td>Protocolo</td><td>Sincronizado</td></tr>
                     </table>
-                    <p style="font-size: 1.4vh; margin-top: 4vh; color: #525875; font-family:'Orbitron'">CLIQUE PARA COMPARTILHAR O FEED</p>
-                    <a href="https://www.pixelclick.fun" target="_blank" class="btn-cta" style="border-color: var(--neon-cyan); color: var(--neon-cyan); box-shadow: 0 0 15px rgba(0,255,170,0.2);">SUBSCRIBE MATRIX</a>
+                    <p style="font-size: 1.4vh; margin-top: 3vh; color: #94a3b8; font-family:'Orbitron'; font-weight:600;">INSCREVA-SE PARA NOVOS TESTES</p>
+                    <a href="https://www.pixelclick.fun" target="_blank" class="btn-cta" style="background: var(--neon-secondary); box-shadow: 0 10px 25px rgba(255,0,170,0.3);">ACESSAR REDE</a>
                 </div>
             `;
             
-            const finalUt = new SpeechSynthesisUtterance(`Terminal finalizado. Resultados consolidados no banco de dados. Deixe seu like!`);
+            const finalUt = new SpeechSynthesisUtterance(`Varredura completa. Resultados salvos na central. Inscreva-se e deixe seu comentário!`);
             finalUt.lang = 'pt-BR';
             window.speechSynthesis.speak(finalUt);
         }, 2200);
