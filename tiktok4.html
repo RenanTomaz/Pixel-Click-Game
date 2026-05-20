@@ -1,1 +1,387 @@
 
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;900&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <title>Pixel Click - Matrix Immersive Quiz</title>
+    <style>
+        :root {
+            --bg-dark: #04060a;
+            --panel-bg: rgba(6, 10, 20, 0.85);
+            --neon-red: #d63031;
+            --neon-blue: #00a8ff;
+            --neon-green: #27ae60;
+            --neon-yellow: #f1c40f;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            margin: 0; padding: 0; height: 100vh; width: 100vw;
+            background: var(--bg-dark);
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center;
+        }
+
+        /* Moldura de Captura / HUD de Gravação */
+        .hud-frame {
+            position: fixed; inset: 2vh;
+            border: 1px solid rgba(0, 168, 255, 0.2);
+            pointer-events: none; z-index: 999;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.8);
+        }
+        .hud-frame::before {
+            content: 'REC •'; position: absolute; top: 20px; left: 20px;
+            color: var(--neon-red); font-family: 'Orbitron'; font-size: 14px; font-weight: 900;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* Overlay de Contagem */
+        #countdown-overlay {
+            position: fixed; inset: 0; 
+            display: none; justify-content: center; align-items: center;
+            background: rgba(4, 6, 12, 0.95); z-index: 10000;
+        }
+        #countdown-number {
+            font-family: 'Orbitron', sans-serif; font-size: 20vh; color: #fff;
+            text-shadow: 0 0 20px var(--neon-blue);
+        }
+        .animate-pop { animation: popSfx 1s ease-out; }
+        @keyframes popSfx {
+            0% { transform: scale(0.6); opacity: 0; }
+            20% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0; }
+        }
+
+        /* PALCO DA CÂMERA (O segredo do Zoom e Movimento) */
+        #camera-stage {
+            width: 100vw; height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            transition: transform 1.2s cubic-bezier(0.65, 0, 0.35, 1);
+            transform: scale(1) translate(0, 0); /* Estado Inicial */
+        }
+
+        /* Posições da Câmera focando nos Quadrantes com Super Zoom */
+        #camera-stage.focus-q1 { transform: scale(2.2) translate(23%, 23%); }   /* Canto Superior Esquerdo - Vermelho */
+        #camera-stage.focus-q2 { transform: scale(2.2) translate(-23%, 23%); }  /* Canto Superior Direito - Azul */
+        #camera-stage.focus-q3 { transform: scale(2.2) translate(23%, -23%); }  /* Canto Inferior Esquerdo - Verde */
+        #camera-stage.focus-q4 { transform: scale(2.2) translate(-23%, -23%); } /* Canto Inferior Direito - Amarelo */
+        #camera-stage.focus-end { transform: scale(1) translate(0, 0); }        /* Fim - Visão Geral */
+
+        /* Painel Base do Quiz */
+        .quiz-card {
+            width: 90vw; height: 85vh; max-width: 400px;
+            background: var(--panel-bg);
+            border: 2px solid rgba(255, 255, 255, 0.08); border-radius: 24px;
+            padding: 4vh 6%; display: flex; flex-direction: column;
+            box-shadow: 0 0 50px rgba(0,0,0,0.9);
+            backdrop-filter: blur(15px);
+            transition: border-color 0.8s ease, box-shadow 0.8s ease;
+        }
+
+        /* Identificadores de Bordas Dinâmicas de acordo com o quadrante ativo */
+        .card-red { border-color: var(--neon-red); box-shadow: 0 0 30px rgba(214, 48, 49, 0.3); }
+        .card-blue { border-color: var(--neon-blue); box-shadow: 0 0 30px rgba(0, 168, 255, 0.3); }
+        .card-green { border-color: var(--neon-green); box-shadow: 0 0 30px rgba(39, 174, 96, 0.3); }
+        .card-yellow { border-color: var(--neon-yellow); box-shadow: 0 0 30px rgba(241, 196, 15, 0.3); }
+
+        .question-header {
+            font-family: 'Orbitron', sans-serif; font-size: 1.6vh; font-weight: 900;
+            letter-spacing: 2px; margin-bottom: 2vh; transition: color 0.5s;
+        }
+
+        .question-text {
+            font-family: 'Montserrat', sans-serif; font-weight: 700;
+            color: #ffffff; font-size: 2.8vh; line-height: 1.35;
+            min-height: 16vh;
+        }
+
+        /* Lista de Opções */
+        .options-list {
+            display: flex; flex-direction: column; gap: 1.5vh;
+            margin-top: auto; opacity: 0; transition: opacity 0.5s ease;
+        }
+        .options-visible { opacity: 1; }
+
+        .option {
+            font-family: 'Orbitron', sans-serif; font-size: 2.2vh; color: #fff;
+            padding: 1.8vh 20px; background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
+            cursor: pointer; transition: all 0.2s ease;
+        }
+        .option:hover { background: rgba(255,255,255,0.06); transform: scale(1.02); }
+
+        /* Status de Respostas */
+        .option.correct { 
+            color: #fff !important; background: rgba(39, 174, 96, 0.2) !important;
+            border: 2px solid var(--neon-green) !important;
+            box-shadow: 0 0 20px rgba(39, 174, 96, 0.5); font-weight: bold;
+        }
+        .option.wrong { 
+            color: #ffcccc !important; background: rgba(214, 48, 49, 0.15) !important;
+            border: 2px solid var(--neon-red) !important;
+            box-shadow: 0 0 15px rgba(214, 48, 49, 0.3);
+            animation: wrongShake 0.4s linear; 
+        }
+        @keyframes wrongShake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+
+        /* Timer HUD */
+        .timer-container { width: 100%; height: 4px; background: rgba(255,255,255,0.05); margin-top: 2vh; border-radius: 2px; overflow: hidden; }
+        .timer-bar { width: 100%; height: 100%; background: #fff; transition: width 0.05s linear; }
+
+        /* Tela Inicial */
+        #overlay-start {
+            position: fixed; inset: 0; background: var(--bg-dark);
+            z-index: 9999; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; color: white;
+        }
+        .btn-cta {
+            margin-top: 30px; padding: 18px 50px; font-family: 'Orbitron', sans-serif;
+            font-size: 2.2vh; font-weight: 900; background: transparent; color: #fff; 
+            border: 2px solid var(--neon-blue); border-radius: 30px; cursor: pointer;
+            letter-spacing: 2px; box-shadow: 0 0 15px rgba(0, 168, 255, 0.2);
+            transition: all 0.3s;
+        }
+        .btn-cta:hover { background: var(--neon-blue); box-shadow: 0 0 25px rgba(0, 168, 255, 0.5); }
+
+        .grade-table { width: 100%; border-collapse: collapse; margin-top: 2vh; color: #fff; font-size: 1.8vh;}
+        .grade-table th, .grade-table td { border: 1px solid rgba(255,255,255,0.1); padding: 8px; text-align: center; }
+        .grade-table th { color: var(--neon-blue); font-family: 'Orbitron'; }
+    </style>
+</head>
+<body>
+
+<div class="hud-frame"></div>
+<div id="countdown-overlay"><div id="countdown-number">5</div></div>
+
+<div id="overlay-start">
+    <h1 style="font-family: 'Orbitron'; font-size: 5vh; letter-spacing: 4px; text-shadow: 0 0 15px var(--neon-blue);">MATRIX SYSTEM</h1>
+    <button class="btn-cta" onclick="iniciarQuiz()">INICIAR CAPTURA</button>
+</div>
+
+<div id="camera-stage">
+    <div class="quiz-card" id="quiz-card">
+        <div class="question-header" id="q-hud">LOADING NODE...</div>
+        <div class="question-text" id="q-text"></div>
+        <div class="timer-container"><div class="timer-bar" id="timer-bar"></div></div>
+        <div class="options-list" id="options-block"></div>
+    </div>
+</div>
+
+<script src="esportes.js"></script>
+<script src="geografia.js"></script>
+<script src="historia.js"></script>
+<script src="natureza.js"></script>
+<script src="ciencia.js"></script>
+<script src="entretenimento.js"></script>
+
+<script>
+    const masterPool = [
+        ...(typeof esportesData !== 'undefined' ? esportesData : []),
+        ...(typeof geografiaData !== 'undefined' ? geografiaData : []),
+        ...(typeof historiaData !== 'undefined' ? historiaData : []),
+        ...(typeof naturezaData !== 'undefined' ? naturezaData : []),
+        ...(typeof cienciaData !== 'undefined' ? cienciaData : []),
+        ...(typeof entretenimentoData !== 'undefined' ? entretenimentoData : [])
+    ];
+
+    // Limitado a 4 perguntas para casar perfeitamente com os 4 quadrantes de cores
+    const TOTAL_Q = 4;
+    const selectedQuestions = masterPool.sort(() => 0.5 - Math.random()).slice(0, TOTAL_Q);
+    let currentQ = 0;
+    let acertos = 0;
+    const letras = ["A", "B", "C", "D"];
+    let timerInterval;
+
+    // Mapeamento de cores e posições da câmera para cada rodada
+    const HUD_MODES = [
+        { class: 'focus-q1', border: 'card-red', color: '#d63031', name: 'NODE_RED // SECTOR_01' },
+        { class: 'focus-q2', border: 'card-blue', color: '#00a8ff', name: 'NODE_BLUE // SECTOR_02' },
+        { class: 'focus-q3', border: 'card-green', color: '#27ae60', name: 'NODE_GREEN // SECTOR_03' },
+        { class: 'focus-q4', border: 'card-yellow', color: '#f1c40f', name: 'NODE_YELLOW // SECTOR_04' }
+    ];
+
+    const sfx = {
+        write: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-pencil-writing-on-paper-2101.mp3'], volume: 0.1, loop: true }),
+        correct: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-bonus-earned-in-video-game-2058.mp3'] }),
+        wrong: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-failing-armpit-fart-3091.mp3'], volume: 0.2 }),
+        tick: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-click-melodic-tone-1129.mp3'], volume: 0.4 }),
+        zoom: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-futuristic-space-ship-vibration-1473.mp3'], volume: 0.5 })
+    };
+
+    function wakeUpSpeech() {
+        const dummy = new SpeechSynthesisUtterance("");
+        window.speechSynthesis.speak(dummy);
+    }
+
+    function iniciarQuiz() {
+        wakeUpSpeech();
+        try { if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(() => {}); } catch (e) {}
+
+        document.getElementById('overlay-start').style.display = 'none';
+        const overlay = document.getElementById('countdown-overlay');
+        const number = document.getElementById('countdown-number');
+        overlay.style.display = 'flex';
+        
+        let count = 5;
+        const runCount = () => {
+            if (count > 0) {
+                number.innerText = count;
+                number.classList.remove('animate-pop');
+                void number.offsetWidth;
+                number.classList.add('animate-pop');
+                sfx.tick.play();
+                count--;
+                setTimeout(runCount, 1000);
+            } else {
+                overlay.style.display = 'none';
+                carregarQuestaoAtual();
+            }
+        };
+        runCount();
+    }
+
+    function carregarQuestaoAtual() {
+        if (currentQ >= TOTAL_Q) {
+            mostrarFinal();
+            return;
+        }
+
+        const data = selectedQuestions[currentQ];
+        const config = HUD_MODES[currentQ];
+
+        // 1. Movimenta a Câmera e altera o estilo do card para a cor do setor
+        sfx.zoom.play();
+        const stage = document.getElementById('camera-stage');
+        const card = document.getElementById('quiz-card');
+        
+        // Limpa classes antigas de foco e borda
+        stage.className = config.class;
+        card.className = 'quiz-card ' + config.border;
+
+        // 2. Configura os textos do HUD
+        document.getElementById('q-hud').innerText = config.name;
+        document.getElementById('q-hud').style.color = config.color;
+        document.getElementById('timer-bar').style.backgroundColor = config.color;
+
+        if (!data.q.trim().endsWith('?')) data.q = data.q.trim() + "?";
+
+        // Embaralhar as opções dinamicamente
+        const originalCorrectOption = data.options[data.correct];
+        const shuffledOptions = [...data.options].sort(() => Math.random() - 0.5);
+        data.options = shuffledOptions;
+        data.correct = shuffledOptions.indexOf(originalCorrectOption);
+
+        // Limpa blocos anteriores
+        document.getElementById('q-text').innerHTML = "";
+        const optionsBlock = document.getElementById('options-block');
+        optionsBlock.classList.remove('options-visible');
+        optionsBlock.innerHTML = data.options.map((opt, i) => 
+            `<div class="option" onclick="validar(this, ${i}, ${data.correct})">${letras[i]}) ${opt}</div>`
+        ).join('');
+
+        // Dispara a escrita da pergunta e a narração
+        setTimeout(() => prepararEscrita(data), 600); // Pequeno delay para a câmera se mover primeiro
+    }
+
+    async function prepararEscrita(data) {
+        const ut = new SpeechSynthesisUtterance(data.q);
+        ut.lang = 'pt-BR'; ut.rate = 1.1;
+        window.speechSynthesis.speak(ut);
+
+        await typeWriter(data.q);
+        document.getElementById('options-block').classList.add('options-visible');
+        iniciarTimer(data.correct);
+    }
+
+    function typeWriter(text) {
+        return new Promise((res) => {
+            let i = 0; const el = document.getElementById('q-text');
+            sfx.write.play();
+            function type() {
+                if (i < text.length) { el.innerHTML += text.charAt(i); i++; setTimeout(type, 35); }
+                else { sfx.write.stop(); res(); }
+            }
+            type();
+        });
+    }
+
+    function iniciarTimer(correctIdx) {
+        const bar = document.getElementById('timer-bar');
+        let width = 100;
+        bar.style.width = '100%';
+        
+        timerInterval = setInterval(() => {
+            width -= 0.8; bar.style.width = width + '%';
+            if (width <= 0) { clearInterval(timerInterval); finalizarPergunta(correctIdx, false); }
+        }, 50);
+    }
+
+    function validar(el, escolhido, correto) {
+        clearInterval(timerInterval);
+        const parent = document.getElementById('options-block');
+        if (parent.dataset.locked) return;
+        
+        let acertou = (escolhido === correto);
+        if (acertou) acertos++;
+        else { el.classList.add('wrong'); sfx.wrong.play(); }
+        finalizarPergunta(correto, acertou);
+    }
+
+    function finalizarPergunta(corretoIdx, foiAcerto) {
+        const parent = document.getElementById('options-block');
+        if (parent.dataset.locked) return;
+        parent.dataset.locked = "true";
+        
+        const correctOption = parent.querySelectorAll('.option')[corretoIdx];
+        correctOption.classList.add('correct');
+
+        sfx.correct.play();
+        confetti({
+            particleCount: 80, spread: 60, origin: { y: 0.6 },
+            colors: ['#00a8ff', '#27ae60', '#f1c40f', '#d63031']
+        });
+
+        // Transiciona para o próximo Setor/Quadrante após 2.5 segundos
+        setTimeout(() => {
+            parent.removeAttribute('data-locked');
+            currentQ++;
+            carregarQuestaoAtual();
+        }, 2500);
+    }
+
+    function mostrarFinal() {
+        // Retorna a câmera para a visão geral estável
+        document.getElementById('camera-stage').className = 'focus-end';
+        
+        const card = document.getElementById('quiz-card');
+        card.className = 'quiz-card';
+        card.style.borderColor = 'var(--neon-blue)';
+
+        card.innerHTML = `
+            <div style="text-align:center; margin: auto 0;">
+                <h2 style="font-family:'Orbitron'; font-size:2.6vh; color:var(--neon-blue); margin:0; letter-spacing:2px;">SISTEMA CONCLUÍDO</h2>
+                <div class="ask-grade">ACERTOS: ${acertos}/${TOTAL_Q}</div>
+                <table class="grade-table">
+                    <tr><th>Acertos</th><th>Rank</th></tr>
+                    <tr><td>4</td><td>A+ (CYBER GOD)</td></tr>
+                    <tr><td>3</td><td>B (NETRUNNER)</td></tr>
+                    <tr><td>2</td><td>C (OPERATOR)</td></tr>
+                    <tr><td>0-1</td><td>F (DISCONNECTED)</td></tr>
+                </table>
+                <a href="https://www.pixelclick.fun" target="_blank" class="btn-cta" style="font-size:1.8vh; padding:12px 30px; margin-top:4vh; display:inline-block; text-decoration:none;">RECONECTAR</a>
+            </div>
+        `;
+        
+        const finalUt = new SpeechSynthesisUtterance(`Quantas você acertou? Veja qual foi a sua nota e escreva nos comentários!`);
+        finalUt.lang = 'pt-BR'; window.speechSynthesis.speak(finalUt);
+    }
+</script>
+</body>
+</html>
