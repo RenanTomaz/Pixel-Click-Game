@@ -3,101 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght=700&family=Russo+One&family=Montserrat:wght@600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;800&family=Russo+One&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <title>Pixel Click - Cinematic 3D Room</title>
+    <title>Pixel Click - Futuristic Lab Quiz</title>
     <style>
         :root {
-            --paper-color: #fdfdfd;
-            --line-color: #d1e4f9;
-            --margin-color: #ffadb0;
-            --ink-color: #1a2a6c;
-            --wood-brown: #251a12; 
-            --red-pen: #d63031;
+            --bg-color: #060713;
+            --neon-blue: #00f3ff;
+            --neon-cyan: #00ffaa;
+            --text-color: #ffffff;
+            --wrong-color: #ff0055;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             margin: 0; padding: 0; height: 100vh; width: 100vw;
-            background: #020204;
+            background: #ffffff; /* Céu branco de fundo que vaza pelo teto aberto */
             font-family: 'Montserrat', sans-serif;
             overflow: hidden; display: flex; justify-content: center; align-items: center;
-            perspective: 600px; /* Lente de câmera mais angular para aumentar a imersão */
-            perspective-origin: 50% 45%;
+            /* Calibração precisa da lente de perspectiva e altura do olho */
+            perspective: 450px; 
+            perspective-origin: 50% 50%;
         }
 
-        /* Container que sofre o balanço físico da caminhada */
+        /* Plataforma de Câmera com balanço suave e preciso */
         #camera-rig {
             width: 100vw; height: 100vh;
             transform-style: preserve-3d;
-            transition: transform 1.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 2s cubic-bezier(0.25, 1, 0.5, 1);
             transform: translateZ(0px) rotateY(0deg);
         }
 
         .camera-walking {
-            animation: cameraBob 0.6s ease-in-out infinite alternate;
+            animation: cameraSciFi 0.7s ease-in-out infinite alternate;
         }
 
-        @keyframes cameraBob {
+        @keyframes cameraSciFi {
             0% { transform: translateY(0) rotate(0deg); }
-            100% { transform: translateY(-1.8vh) rotate(0.4deg); }
+            100% { transform: translateY(-1.2vh) rotate(0.2deg); }
         }
 
-        /* CENÁRIO 3D: Estrutura da Sala/Corredor */
+        /* CENÁRIO 3D: Estrutura do Corredor do Laboratório */
         #studio-room {
             position: absolute;
             width: 100%; height: 100%;
             transform-style: preserve-3d;
         }
 
-        /* Elementos estruturais do cenário */
         .room-element {
             position: absolute;
-            background-color: #0b0c10;
+            background-color: var(--bg-color);
         }
 
-        /* Chão de madeira realista se estendendo ao infinito */
+        /* Chão metálico escuro com linhas neon reflexivas nas bordas */
         .floor {
-            width: 600vw; height: 10000px;
-            left: -250vw; top: 70vh;
+            width: 400vw; height: 15000px;
+            left: -150vw; top: 50vh;
             transform: rotateX(90deg);
             transform-origin: top center;
-            background: #1a110b url('https://www.transparenttextures.com/patterns/wood-pattern.png');
-            box-shadow: inset 0 0 100px rgba(0,0,0,0.8);
+            background: linear-gradient(to bottom, #111424, #060713);
+            border-left: 4px solid var(--neon-blue);
+            border-right: 4px solid var(--neon-blue);
+            box-shadow: 0 0 80px rgba(0, 243, 255, 0.3);
         }
 
-        /* Teto escuro do estúdio */
+        /* Teto aberto simula painéis futuristas que deixam ver o fundo branco */
         .ceiling {
-            width: 600vw; height: 10000px;
-            left: -250vw; top: -10vh;
+            width: 80vw; height: 15000px;
+            left: 10vw; top: -50vh;
             transform: rotateX(-90deg);
             transform-origin: bottom center;
-            background: linear-gradient(to bottom, #050508, #111318);
+            background: transparent;
+            border-left: 2px dashed rgba(0, 243, 255, 0.4);
+            border-right: 2px dashed rgba(0, 243, 255, 0.4);
         }
 
-        /* Parede Esquerda */
+        /* Parede de Laboratório Esquerda */
         .wall-left {
-            width: 10000px; height: 120vh;
-            right: 50vw; top: -10vh;
+            width: 15000px; height: 100vh;
+            right: 50vw; top: 0;
             transform: rotateY(90deg);
             transform-origin: right center;
-            background: linear-gradient(90deg, #0d0e12, #07080a);
-            border-right: 2px solid rgba(255,255,255,0.02);
+            background: linear-gradient(90deg, #090a1a, #0d1127);
+            border-bottom: 5px solid var(--neon-blue);
+            box-shadow: inset 0 -30px 50px rgba(0, 243, 255, 0.15);
         }
 
-        /* Parede Direita */
+        /* Parede de Laboratório Direita */
         .wall-right {
-            width: 10000px; height: 120vh;
-            left: 50vw; top: -10vh;
+            width: 15000px; height: 100vh;
+            left: 50vw; top: 0;
             transform: rotateY(-90deg);
             transform-origin: left center;
-            background: linear-gradient(-90deg, #0d0e12, #07080a);
-            border-left: 2px solid rgba(255,255,255,0.02);
+            background: linear-gradient(-90deg, #090a1a, #0d1127);
+            border-bottom: 5px solid var(--neon-cyan);
+            box-shadow: inset 0 -30px 50px rgba(0, 255, 170, 0.15);
         }
 
-        /* FORMATO 9:16 - Delimitação dos Elementos no trilho central */
+        /* FORMATO VERTICAL 9:16 TRILHO CENTRAL */
         .cinematic-track {
             position: absolute;
             width: 100%; height: 100%;
@@ -107,78 +112,80 @@
             transform-style: preserve-3d;
         }
 
-        /* Os Cadernos / Folhas de Questões */
-        .notebook-node {
+        /* Monitores Holográficos de Computador Sci-Fi */
+        .computer-screen {
             position: absolute;
-            width: 85vw; height: 60vh;
-            max-width: 350px; max-height: 520px;
-            background: var(--paper-color);
-            background-image: 
-                linear-gradient(90deg, transparent 39px, var(--margin-color) 39px, var(--margin-color) 41px, transparent 41px),
-                linear-gradient(var(--line-color) 1px, transparent 1px);
-            background-size: 100% 100%, 100% 3.2vh;
-            background-position: 0 0, 0 5vh;
-            border-radius: 4px;
-            box-shadow: -20px 30px 50px rgba(0,0,0,0.8), 0 0 10px rgba(0,0,0,0.4);
-            padding: 5vh 6% 5vh 16%;
+            width: 88vw; height: 50vh;
+            max-width: 370px; max-height: 400px;
+            background: rgba(10, 15, 35, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 2px solid var(--neon-blue);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.5), inset 0 0 20px rgba(0, 243, 255, 0.2);
+            border-radius: 12px;
+            padding: 3vh 6%;
             display: flex; flex-direction: column;
             backface-visibility: hidden;
-            left: 5%; top: 18%;
+            left: 6%; top: 25%; /* Centralização vertical precisa no viewport */
         }
 
-        /* Posicionamento Inicial na profundidade Z */
-        .node-left { transform: translateX(-38vw) rotateY(55deg); }
-        .node-right { transform: translateX(38vw) rotateY(-55deg); }
+        .node-left { transform: translateX(-45vw) rotateY(50deg); border-color: var(--neon-blue); box-shadow: 0 0 30px rgba(0,243,255,0.4); }
+        .node-right { transform: translateX(45vw) rotateY(-50deg); border-color: var(--neon-cyan); box-shadow: 0 0 30px rgba(0,255,170,0.4); }
         
         .node-final { 
             transform: translateX(0) rotateY(0deg); 
-            background: #12131a; 
-            color: white;
-            border: 3px solid #27ae60;
-            box-shadow: 0 0 30px rgba(39, 174, 96, 0.4);
+            background: rgba(6, 7, 19, 0.95);
+            border: 3px solid var(--neon-cyan);
+            box-shadow: 0 0 40px var(--neon-cyan);
         }
 
         .question-text {
-            font-family: 'Caveat', cursive; color: var(--ink-color);
-            font-size: 2.8vh; line-height: 1.2; margin-top: 1vh; min-height: 12vh;
+            font-family: 'Orbitron', sans-serif; color: var(--text-color);
+            font-size: 2.2vh; font-weight: 500; line-height: 1.4; margin-top: 1vh; min-height: 10vh;
+            text-shadow: 0 0 8px rgba(255,255,255,0.6);
         }
 
-        .options-list { display: flex; flex-direction: column; gap: 0.8vh; margin-top: 2vh; opacity: 0; transition: opacity 0.4s; }
+        .options-list { display: flex; flex-direction: column; gap: 1vh; margin-top: 2vh; opacity: 0; transition: opacity 0.3s; }
         .options-visible { opacity: 1; }
         
-        .option { font-family: 'Caveat', cursive; font-size: 2.3vh; color: #333; padding: 0.5vh; border-bottom: 1px dashed #ccc; cursor: pointer; }
-        .option.correct { color: #27ae60 !important; font-weight: bold; border-bottom: 2px solid #27ae60; }
-        .option.wrong { color: var(--red-pen) !important; text-decoration: line-through; border-bottom: 1px solid var(--red-pen); }
+        .option { 
+            font-family: 'Montserrat', sans-serif; font-size: 1.8vh; color: #b2c0f0; 
+            padding: 1.2vh; background: rgba(255,255,255,0.03); border: 1px solid rgba(0,243,255,0.2);
+            border-radius: 6px; cursor: pointer; transition: all 0.2s ease;
+        }
+        .option.correct { color: #fff !important; background: rgba(0, 255, 170, 0.3); border-color: var(--neon-cyan); font-weight: bold; box-shadow: 0 0 15px var(--neon-cyan); }
+        .option.wrong { color: #fff !important; background: rgba(255, 0, 85, 0.3); border-color: var(--wrong-color); text-decoration: line-through; box-shadow: 0 0 15px var(--wrong-color); }
 
-        .timer-container { width: 100%; height: 4px; background: rgba(0,0,0,0.05); margin-top: 1vh; }
-        .timer-bar { width: 100%; height: 100%; background: var(--ink-color); }
+        .timer-container { width: 100%; height: 5px; background: rgba(255,255,255,0.1); margin-top: 1.5vh; border-radius: 3px; overflow: hidden; }
+        .timer-bar { width: 100%; height: 100%; background: var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue); }
 
-        /* Interface de Overlays */
+        /* Interfaces de Sistema */
         #overlay-start, #countdown-overlay {
-            position: fixed; inset: 0; background: rgba(2,2,4,0.98); z-index: 1000;
+            position: fixed; inset: 0; background: var(--bg-color); z-index: 1000;
             display: flex; flex-direction: column; justify-content: center; align-items: center; color: white;
         }
-        #countdown-number { font-family: 'Russo One'; font-size: 15vh; text-shadow: 0 0 20px var(--ink-color); }
-        .btn-cta { padding: 15px 40px; font-family: 'Russo One'; font-size: 2.2vh; background: var(--ink-color); color: #fff; border: none; border-radius: 8px; cursor: pointer; text-decoration: none; margin-top: 20px;}
+        #countdown-number { font-family: 'Orbitron'; font-size: 12vh; color: var(--neon-blue); text-shadow: 0 0 30px var(--neon-blue); }
+        .btn-cta { padding: 15px 40px; font-family: 'Orbitron'; font-weight: 800; font-size: 1.8vh; background: transparent; color: var(--neon-blue); border: 2px solid var(--neon-blue); border-radius: 6px; cursor: pointer; text-decoration: none; margin-top: 20px; box-shadow: 0 0 15px rgba(0,243,255,0.3); transition: 0.3s; }
+        .btn-cta:hover { background: var(--neon-blue); color: #000; }
 
-        .grade-table { width: 100%; border-collapse: collapse; margin-top: 2vh; font-family: 'Caveat'; font-size: 2.2vh; color: #fff; }
-        .grade-table th, .grade-table td { border: 1px solid #333; padding: 5px; text-align: center; }
-        .ask-grade { font-family: 'Caveat'; font-size: 5vh; color: var(--red-pen); text-align: center; margin: 2vh 0; }
+        .grade-table { width: 100%; border-collapse: collapse; margin-top: 2vh; font-family: 'Montserrat'; font-size: 1.8vh; color: #fff; }
+        .grade-table th, .grade-table td { border: 1px solid rgba(0,255,170,0.2); padding: 8px; text-align: center; }
+        .ask-grade { font-family: 'Orbitron'; font-size: 3.5vh; color: var(--neon-cyan); text-align: center; margin: 2vh 0; text-shadow: 0 0 10px var(--neon-cyan); }
     </style>
 </head>
 <body>
 
-<div id="countdown-overlay" style="display: none;"><div id="countdown-number">3</div></div>
+<div id="countdown-overlay" style="display: none;"><div id="countdown-number">SYSTEM</div></div>
 
 <div id="overlay-start">
-    <h1 style="font-family: 'Caveat'; font-size: 6vh; margin-bottom: 0; color: #ffadb0;">Pixel Click</h1>
-    <p style="font-size: 1.8vh; color: #777;">Estúdio Cinemático 3D Room</p>
-    <button class="btn-cta" style="background:#fff; color:#000" onclick="iniciarDiretor()">ABRIR PORTAS</button>
+    <h1 style="font-family: 'Orbitron'; font-size: 4.5vh; margin-bottom: 0; color: var(--neon-blue); letter-spacing: 2px;">LAB CORE</h1>
+    <p style="font-size: 1.6vh; color: #525875; font-family: 'Orbitron';">INITIALIZE CINEMATIC MATRIX</p>
+    <button class="btn-cta" onclick="iniciarDiretor()">BOOT SYSTEM</button>
 </div>
 
-<!-- Estrutura Principal da Câmera -->
+<!-- Estrutura Principal de Câmera Calibrada -->
 <div id="camera-rig">
-    <!-- Ambiente Tridimensional ao redor -->
+    <!-- Laboratório Sci-Fi -->
     <div id="studio-room">
         <div class="room-element floor"></div>
         <div class="room-element ceiling"></div>
@@ -186,7 +193,7 @@
         <div class="room-element wall-right"></div>
     </div>
     
-    <!-- Trilho das perguntas (Formato Virtual Celular) -->
+    <!-- Linha de Deslocamento das Telas -->
     <div class="cinematic-track" id="main-track"></div>
 </div>
 
@@ -204,13 +211,14 @@
     let acertos = 0;
     const letras = ["A", "B", "C", "D"];
 
+    // Efeitos Sonoros Futuristas
     const sfx = {
-        passos: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-slow-heavy-footsteps-1025.mp3'], volume: 0.5 }),
-        cameraTurn: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-fast-sword-whoosh-2357.mp3'], volume: 0.3 }),
-        write: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-pencil-writing-on-paper-2101.mp3'], volume: 0.3, loop: true }),
-        correct: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-bonus-earned-in-video-game-2058.mp3'] }),
-        wrong: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-failing-armpit-fart-3091.mp3'], volume: 0.2 }),
-        tick: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-click-melodic-tone-1129.mp3'], volume: 0.4 })
+        passos: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-heavy-robot-footstep-2713.mp3'], volume: 0.4 }),
+        cameraTurn: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-futuristic-space-hiss-2908.mp3'], volume: 0.4 }),
+        write: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-computer-keyboard-typing-1386.mp3'], volume: 0.5, loop: true }),
+        correct: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-electronic-retro-win-sound-2703.mp3'], volume: 0.5 }),
+        wrong: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-system-fault-error-2911.mp3'], volume: 0.4 }),
+        tick: new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-digital-quick-click-2305.mp3'], volume: 0.3 })
     };
 
     function iniciarDiretor() {
@@ -222,7 +230,7 @@
         let count = 3;
         const runCount = () => {
             if (count > 0) {
-                number.innerText = count;
+                number.innerText = `LOAD: ${count}`;
                 sfx.tick.play();
                 count--;
                 setTimeout(runCount, 1000);
@@ -243,52 +251,52 @@
             
             const node = document.createElement('div');
             const lado = index % 2 === 0 ? 'node-left' : 'node-right';
-            node.className = `notebook-node ${lado}`;
+            node.className = `computer-screen ${lado}`;
             node.id = `node-${index}`;
             
-            // Coloca as perguntas ao longo do túnel Z (espaçamento de 1800px)
-            const zPosition = (index + 1) * -1800;
+            // Definição precisa do espaçamento dos nós digitais (2200px para evitar sobreposição)
+            const zPosition = (index + 1) * -2200;
             node.style.transform += ` translateZ(${zPosition}px)`;
 
             node.innerHTML = `
-                <div style="font-size: 1.4vh; color: #999; text-align: right;">Questão ${index + 1}</div>
+                <div style="font-family:'Orbitron'; font-size: 1.3vh; color: var(--neon-blue); letter-spacing: 1px;">SYSTEM NODE_0${index + 1}</div>
                 <div class="question-text" id="q-text-${index}"></div>
                 <div class="timer-container"><div class="timer-bar" id="bar-${index}"></div></div>
                 <div class="options-list" id="options-${index}">
-                    ${data.options.map((opt, i) => `<div class="option" onclick="validar(this, ${i}, ${data.correct}, ${index})">${letras[i]}) ${opt}</div>`).join('')}
+                    ${data.options.map((opt, i) => `<div class="option" onclick="validar(this, ${i}, ${data.correct}, ${index})">${letras[i]} // ${opt}</div>`).join('')}
                 </div>
             `;
             track.appendChild(node);
         });
 
         const finalNode = document.createElement('div');
-        finalNode.className = 'notebook-node node-final';
+        finalNode.className = 'computer-screen node-final';
         finalNode.id = `node-final`;
-        finalNode.style.transform = `translateX(0) translateZ(${(TOTAL_Q + 1) * -1800}px)`;
+        finalNode.style.transform = `translateX(0) translateZ(${(TOTAL_Q + 1) * -2200}px)`;
         track.appendChild(finalNode);
     }
 
-    function executarSequenciaPassos() {
+    function ejecutarSequenciaPassos() {
         const rig = document.getElementById('camera-rig');
-        rig.className = "camera-walking"; // Aplica o tremor contínuo de passos
+        rig.className = "camera-walking"; 
         sfx.passos.play();
 
-        const zDestino = (currentQ + 1) * 1800;
+        const zDestino = (currentQ + 1) * 2200;
 
         setTimeout(() => {
-            rig.className = ""; // Para de andar de forma abrupta cinematográfica
+            rig.className = ""; 
             sfx.passos.stop();
             sfx.cameraTurn.play();
 
-            // Vira o corpo da câmera em direção ao objeto que está na parede
-            const ladoOlhar = currentQ % 2 === 0 ? -48 : 48; 
+            // Rotação ideal de observação em laboratórios (ângulo dinâmico de 42 graus)
+            const ladoOlhar = currentQ % 2 === 0 ? -42 : 42; 
             rig.style.transform = `translateZ(${zDestino}px) rotateY(${ladoOlhar}deg)`;
 
             setTimeout(() => {
                 prepararPergunta(currentQ);
             }, 800);
 
-        }, 2200); 
+        }, 2000); 
     }
 
     async function prepararPergunta(index) {
@@ -307,7 +315,7 @@
             let i = 0; const el = document.getElementById(id);
             sfx.write.play();
             function type() {
-                if (i < text.length) { el.innerHTML += text.charAt(i); i++; setTimeout(type, 45); }
+                if (i < text.length) { el.innerHTML += text.charAt(i); i++; setTimeout(type, 40); }
                 else { sfx.write.stop(); res(); }
             }
             type();
@@ -337,7 +345,7 @@
             acertos++;
             el.classList.add('correct');
             sfx.correct.play();
-            confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+            confetti({ particleCount: 40, spread: 50, colors: ['#00f3ff', '#00ffaa'], origin: { y: 0.7 } });
         } else {
             el.classList.add('wrong');
             const corretoEl = parent.querySelectorAll('.option')[correto];
@@ -358,8 +366,7 @@
         const rig = document.getElementById('camera-rig');
         sfx.cameraTurn.play();
         
-        // Alinha a mira da câmera para o centro novamente antes do próximo salto de corrida
-        const zDestino = (currentQ + 1) * 1800;
+        const zDestino = (currentQ + 1) * 2200;
         rig.style.transform = `translateZ(${zDestino}px) rotateY(0deg)`;
 
         currentQ++;
@@ -377,7 +384,7 @@
         rig.className = "camera-walking";
         sfx.passos.play();
 
-        const zFinal = (TOTAL_Q + 1) * 1800;
+        const zFinal = (TOTAL_Q + 1) * 2200;
 
         setTimeout(() => {
             rig.className = "";
@@ -387,20 +394,20 @@
 
             const finalPage = document.getElementById('node-final');
             finalPage.innerHTML = `
-                <div style="text-align:center; padding-top: 3vh;">
-                    <h2 style="font-family:'Russo One'; font-size:3.2vh; color:#fff; margin:0; letter-spacing:1px;">CORREDOR CONCLUÍDO</h2>
-                    <div class="ask-grade" style="color: #27ae60; font-size: 6vh; margin: 3vh 0;">Nota Final: A+</div>
-                    <p style="font-family:'Caveat'; font-size: 3vh; color: #bbb;">Você acertou ${acertos} de ${TOTAL_Q} testes!</p>
+                <div style="text-align:center; padding-top: 2vh;">
+                    <h2 style="font-family:'Orbitron'; font-size:2.8vh; color:#fff; margin:0; letter-spacing:2px;">CORE TERMINATED</h2>
+                    <div class="ask-grade" style="margin: 2vh 0;">RANK: OMEGA</div>
+                    <p style="font-size: 2vh; color: #b2c0f0;">Módulos processados: ${acertos} / ${TOTAL_Q}</p>
                     <table class="grade-table">
-                        <tr><th>Status</th><th>XP Mágico</th></tr>
-                        <tr><td>Mestre do Quiz</td><td>+${acertos * 250} EXP</td></tr>
+                        <tr><th>DADOS</th><th>INTEGRIDADE</th></tr>
+                        <tr><td>Sincronia</td><td>${(acertos/TOTAL_Q)*100}%</td></tr>
                     </table>
-                    <p style="font-size: 1.5vh; margin-top: 3vh; color: #555;">Toque abaixo para ver novas produções</p>
-                    <a href="https://www.pixelclick.fun" target="_blank" class="btn-cta" style="box-shadow: 0 4px 15px rgba(26,42,108,0.5);">SEGUIR CANAL</a>
+                    <p style="font-size: 1.4vh; margin-top: 4vh; color: #525875; font-family:'Orbitron'">CLIQUE PARA COMPARTILHAR O FEED</p>
+                    <a href="https://www.pixelclick.fun" target="_blank" class="btn-cta" style="border-color: var(--neon-cyan); color: var(--neon-cyan); box-shadow: 0 0 15px rgba(0,255,170,0.2);">SUBSCRIBE MATRIX</a>
                 </div>
             `;
             
-            const finalUt = new SpeechSynthesisUtterance(`Desafio finalizado! Você conseguiu detonar o placar. Comente o seu resultado!`);
+            const finalUt = new SpeechSynthesisUtterance(`Terminal finalizado. Resultados consolidados no banco de dados. Deixe seu like!`);
             finalUt.lang = 'pt-BR';
             window.speechSynthesis.speak(finalUt);
         }, 2200);
