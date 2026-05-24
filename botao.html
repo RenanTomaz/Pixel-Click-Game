@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Championship AI</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        .aspect-9-16 { aspect-ratio: 9 / 16; }
+        .sidebar-transition { transition: transform 0.3s ease-in-out; }
+        .button-token {
+            touch-action: none;
+            user-select: none;
+            transition: left 0.1s linear, top 0.1s linear;
+        }
+        #aimLine {
+            display: none;
+            position: absolute;
+            height: 3px;
+            background: #22c55e;
+            box-shadow: 0 0 8px #22c55e;
+            transform-origin: top left;
+            z-index: 50;
+            pointer-events: none;
+        }
+        
+        /* --- ANIMAÇÃO DO GOL: FLASH EM VERDE-NEON RADIANTE --- */
+        @keyframes goalFlash {
+            0%, 100% { 
+                border-color: #334155;
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+                filter: brightness(1);
+            }
+            50% { 
+                border-color: #22c55e; /* Mureta de concreto pisca em verde */
+                box-shadow: 0 0 60px #22c55e, inset 0 0 50px #22c55e; /* Super brilho interno e externo */
+                filter: brightness(1.3); /* Dá um pico de luz no gramado */
+            }
+        }
+        .goal-animation #footballField {
+            animation: goalFlash 0.3s ease-in-out 4;
+        }
+
+        /* --- ESTILIZAÇÃO DO ESTÁDIO DE FUTEBOL EM VOLTA DO CAMPO --- */
+        #mainContainer {
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(234,179,8,0.2) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(220,38,38,0.2) 0%, transparent 40%),
+                radial-gradient(ellipse at center, rgba(15,23,42,0.3) 0%, rgba(2,6,23,1) 80%),
+                repeating-linear-gradient(45deg, #1e293b 0px, #1e293b 2px, #0f172a 2px, #0f172a 10px);
+            box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.95);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #mainContainer::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: 
+                radial-gradient(circle at 5% 5%, rgba(255,255,255,0.12) 0%, transparent 50%),
+                radial-gradient(circle at 95% 5%, rgba(255,255,255,0.12) 0%, transparent 50%),
+                radial-gradient(circle at 5% 95%, rgba(255,255,255,0.12) 0%, transparent 50%),
+                radial-gradient(circle at 95% 95%, rgba(255,255,255,0.12) 0%, transparent 50%);
+            z-index: 50;
+        }
+
+        #footballField {
+            border: 14px solid #334155; 
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.7), 
+                0 0 40px rgba(34, 197, 94, 0.15), 
+                inset 0 0 20px rgba(0,0,0,0.6);
+            background-image: 
+                linear-gradient(to bottom, rgba(0,0,0,0.15), transparent),
+                repeating-linear-gradient(90deg, #15803d 0px, #15803d 40px, #166534 40px, #166534 80px); 
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-white font-sans h-screen flex overflow-hidden">
+
+    <button id="openSidebarBtn" class="absolute top-4 left-4 z-50 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 transition-all hidden">
+        ☰ Opções
+    </button>
+
+    <aside id="sidebar" class="w-80 bg-slate-800 border-r border-slate-700 p-4 flex flex-col justify-between sidebar-transition z-40 h-full shrink-0">
+        <div>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-cyan-400">Painel de Controle</h2>
+                <button id="closeSidebarBtn" class="text-slate-400 hover:text-white text-2xl p-1">&times;</button>
+            </div>
+            
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-700 text-center mb-4 shadow-inner">
+                <span id="matchPeriod" class="text-xs font-bold tracking-widest uppercase text-emerald-400 block mb-1">1º TEMPO</span>
+                <div id="gameClock" class="text-4xl font-mono font-black text-white tracking-wider">00:00</div>
+            </div>
+
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-700 space-y-4 mb-6">
+                <div class="text-center">
+                    <span class="text-xs uppercase tracking-wider text-slate-400 block mb-1">Placar</span>
+                    <div class="text-3xl font-black text-white tracking-widest flex justify-center items-center gap-3">
+                        <span class="text-amber-400 bg-amber-500/10 px-3 py-1 rounded-lg" id="scoreYellow">0</span>
+                        <span class="text-slate-500">:</span>
+                        <span class="text-red-500 bg-red-500/10 px-3 py-1 rounded-lg" id="scoreRed">0</span>
+                    </div>
+                </div>
+                <hr class="border-slate-800">
+                <div class="text-center">
+                    <span class="text-xs uppercase tracking-wider text-slate-400 block mb-1">Posse de Bola</span>
+                    <div id="turnIndicator" class="text-sm font-bold text-amber-400">🟡 VEZ DO AMARELO</div>
+                </div>
+            </div>
+
+            <div class="space-y-3 text-xs text-slate-300 bg-slate-900/40 p-3 rounded-lg border border-slate-700/50">
+                <p>⚔️ <strong class="text-cyan-400">Em Ataque:</strong> Com a posse, os jogadores avançam coordenados abrindo linhas de passe e pressionando a saída.</p>
+                <p>🛡️ <strong class="text-red-400">Em Defesa:</strong> Sem a bola, o time ativa a retração, deslizando lentamente de volta para as posições de marcação originais.</p>
+            </div>
+
+            <div class="space-y-4 mt-6">
+                <button id="resetBtn" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                    🔄 Reiniciar Partida
+                </button>
+            </div>
+        </div>
+        <div class="text-xs text-slate-500 text-center pb-2">Futebol de Botão</div>
+    </aside>
+
+    <main id="mainContainer" class="flex-1 flex items-center justify-center p-4 bg-zinc-950 relative h-full transition-colors duration-200">
+        <div id="footballField" class="relative aspect-9-16 h-full max-h-[92vh] rounded-2xl overflow-hidden">
+            
+            <div id="aimLine"></div>
+
+            <div class="absolute top-1/2 left-0 w-full h-0.5 bg-cyan-300/60 shadow-[0_0_4px_rgba(103,232,249,0.5)]"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/4 aspect-square rounded-full border-2 border-cyan-300/60 shadow-[0_0_4px_rgba(103,232,249,0.5)] flex items-center justify-center">
+                <div class="w-1.5 h-1.5 bg-cyan-300 rounded-full"></div>
+            </div>
+            
+            <div id="goalTop" class="absolute top-0 left-1/2 -translate-x-1/2 w-[20%] h-[2.5%] bg-slate-700/90 border-b-2 border-x-2 border-white rounded-b z-10 flex items-center justify-center text-[9px] text-white/60 font-bold">GOL</div>
+            <div id="goalBottom" class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[20%] h-[2.5%] bg-slate-700/90 border-t-2 border-x-2 border-white rounded-t z-10 flex items-center justify-center text-[9px] text-white/60 font-bold">GOL</div>
+
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-7/12 h-[15%] border-b-2 border-x-2 border-cyan-300/60 rounded-b"></div>
+            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-7/12 h-[15%] border-t-2 border-x-2 border-cyan-300/60 rounded-t"></div>
+
+            <div id="playersContainer"></div>
+            
+            <div id="ball" class="absolute w-[4.5%] aspect-square bg-white border border-slate-900 rounded-full shadow-md flex items-center justify-center font-bold text-[10px] text-black select-none z-30" style="transform: translate(-50%, -50%);">
+                ⚽
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const teamYellowPositions = [
+            { id: 1,  role: 'gk',  x: 50, y: 5 },   { id: 2,  role: 'def', x: 35, y: 15 }, { id: 3,  role: 'def', x: 65, y: 15 },  
+            { id: 4,  role: 'def', x: 15, y: 22 },  { id: 5,  role: 'def', x: 85, y: 22 }, { id: 6,  role: 'def', x: 38, y: 28 },  
+            { id: 7,  role: 'def', x: 62, y: 28 },  { id: 9,  role: 'atk', x: 25, y: 36 }, { id: 10, role: 'atk', x: 50, y: 36 },  
+            { id: 11, role: 'atk', x: 75, y: 36 },  { id: 8,  role: 'atk', x: 50, y: 45 }
+        ];
+
+        const teamRedPositions = [
+            { id: 12, role: 'gk',  x: 50, y: 95 },  { id: 14, role: 'def', x: 37, y: 85 }, { id: 15, role: 'def', x: 63, y: 85 },  
+            { id: 13, role: 'def', x: 15, y: 78 },  { id: 16, role: 'def', x: 85, y: 78 }, { id: 17, role: 'def', x: 38, y: 72 },  
+            { id: 18, role: 'def', x: 62, y: 72 },  { id: 20, role: 'atk', x: 25, y: 64 }, { id: 19, role: 'atk', x: 50, y: 64 },  
+            { id: 22, role: 'atk', x: 75, y: 64 },  { id: 21, role: 'atk', x: 50, y: 55 }
+        ];
+
+        let runtimePlayers = [];
+        let currentTurn = 'yellow'; 
+        let isMovingStage = false;  
+        let isGoalScoredState = false; 
+        let isHalfTimePaused = false;
+        let aiThinkingTimeout = null;
+        
+        let playerWithBall = null; 
+        let lastStriker = null;      
+        let possessionCooldown = 0;  
+        let isInitialKickoff = true; 
+
+        let scoreYellow = parseInt(localStorage.getItem('scoreYellow')) || 0;
+        let scoreRed = parseInt(localStorage.getItem('scoreRed')) || 0;
+        let currentHalf = parseInt(localStorage.getItem('currentHalf')) || 1;
+        let elapsedRealSeconds = parseFloat(localStorage.getItem('elapsedRealSeconds')) || 0;
+        let nextKickoffTurn = localStorage.getItem('nextKickoffTurn') || 'yellow';
+
+        let lastTimeStamp = null; 
+
+        let ballState = {
+            element: document.getElementById('ball'),
+            x: 50, y: 50, vx: 0, vy: 0, radius: 2.25, radius: 2.25, friction: 0.985
+        };
+
+        const playerRadius = 4.25; 
+        const playerDiameter = playerRadius * 2;
+        const field = document.getElementById('footballField');
+        const mainContainer = document.getElementById('mainContainer');
+        const aimLine = document.getElementById('aimLine');
+        const turnIndicator = document.getElementById('turnIndicator');
+
+        function initGame() {
+            isMovingStage = false;
+            isInitialKickoff = true; 
+            isGoalScoredState = false;
+
+            runtimePlayers = [];
+            
+            teamYellowPositions.forEach(p => {
+                let defY = (currentHalf === 1) ? p.y : 100 - p.y;
+                let atkY = defY + ((currentHalf === 1) ? 22 : -22); 
+                runtimePlayers.push({ ...p, team: 'yellow', baseX: p.x, defY: defY, atkY: atkY, x: p.x, y: defY, vx: 0, vy: 0, element: null, friction: 0.94 });
+            });
+
+            teamRedPositions.forEach(p => {
+                let defY = (currentHalf === 1) ? p.y : 100 - p.y;
+                let atkY = defY + ((currentHalf === 1) ? -22 : 22); 
+                runtimePlayers.push({ ...p, team: 'red', baseX: p.x, defY: defY, atkY: atkY, x: p.x, y: defY, vx: 0, vy: 0, element: null, friction: 0.94 });
+            });
+
+            ballState.x = 50; ballState.y = 50; ballState.vx = 0; ballState.vy = 0;
+            currentTurn = nextKickoffTurn;
+            playerWithBall = runtimePlayers.find(p => p.team === currentTurn && p.baseX === 50 && (p.id === 10 || p.id === 19));
+
+            document.getElementById('scoreYellow').innerText = scoreYellow;
+            document.getElementById('scoreRed').innerText = scoreRed;
+            document.getElementById('matchPeriod').innerText = (currentHalf === 1) ? "1º TEMPO" : "2º TEMPO";
+
+            updateTurnUI();
+            renderField();
+            planAIMove();
+        }
+
+        function updateFluideClock(deltaTimeInSeconds) {
+            if (isGoalScoredState || isHalfTimePaused) return;
+
+            elapsedRealSeconds += deltaTimeInSeconds;
+            localStorage.setItem('elapsedRealSeconds', elapsedRealSeconds);
+
+            let totalVirtualSeconds = elapsedRealSeconds * 45;
+            
+            let virtualMinutes = Math.floor(totalVirtualSeconds / 60);
+            let virtualSeconds = Math.floor(totalVirtualSeconds % 60);
+
+            if (currentHalf === 2) {
+                virtualMinutes += 45;
+            }
+
+            document.getElementById('gameClock').innerText = `${String(virtualMinutes).padStart(2, '0')}:${String(virtualSeconds).padStart(2, '0')}`;
+
+            if (elapsedRealSeconds >= 60) {
+                triggerPeriodEnd();
+            }
+        }
+
+        function triggerPeriodEnd() {
+            isHalfTimePaused = true;
+            if (currentHalf === 1) {
+                alert("Fim do 1º Tempo!.");
+                localStorage.setItem('currentHalf', 2);
+                localStorage.setItem('elapsedRealSeconds', 0);
+                localStorage.setItem('nextKickoffTurn', 'red'); 
+                location.reload(); 
+            } else {
+                alert(`Fim de Jogo!\nPlacar: Amarelo ${scoreYellow} x ${scoreRed} Vermelho`);
+                resetWholeChampionship();
+            }
+        }
+
+        function updateTurnUI() {
+            if (currentTurn === 'yellow') {
+                turnIndicator.innerText = "🟡AMARELO";
+                turnIndicator.className = "text-sm font-bold text-amber-400";
+            } else {
+                turnIndicator.innerText = "🔴VERMELHO";
+                turnIndicator.className = "text-sm font-bold text-red-500";
+            }
+        }
+
+        function renderField() {
+            const container = document.getElementById('playersContainer');
+            container.innerHTML = '';
+            runtimePlayers.forEach(p => {
+                const el = document.createElement('div');
+                el.className = `button-token absolute w-[8.5%] aspect-square rounded-full flex items-center justify-center font-bold text-sm sm:text-base border-2 shadow-lg z-20`;
+                el.className += (p.team === 'yellow') ? ' bg-amber-400 text-slate-900 border-amber-200 ring-4 ring-amber-500/10' : ' bg-red-600 text-white border-red-400 ring-4 ring-red-700/10';
+                el.innerText = p.id;
+                el.style.left = `${p.x}%`; el.style.top = `${p.y}%`;
+                el.style.transform = 'translate(-50%, -50%)';
+                p.element = el;
+                container.appendChild(el);
+            });
+        }
+
+        function planAIMove() {
+            if (isMovingStage || isGoalScoredState || isHalfTimePaused) return;
+
+            const availablePlayers = runtimePlayers.filter(p => p.team === currentTurn);
+            if (availablePlayers.length === 0) return;
+
+            let striker = null;
+            if (playerWithBall && playerWithBall.team === currentTurn) {
+                striker = playerWithBall;
+            } else {
+                let minDist = Infinity;
+                availablePlayers.filter(p => p.role !== 'gk').forEach(p => {
+                    let d = Math.geometryDist(ballState.x, ballState.y, p.x, p.y);
+                    if (d < minDist) { minDist = d; striker = p; }
+                });
+            }
+
+            if(!striker) striker = availablePlayers[0];
+
+            aiThinkingTimeout = setTimeout(() => { executeTacticalShot(striker); }, 650);
+        }
+
+        Math.geometryDist = function(x1, y1, x2, y2) {
+            return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+        };
+
+        function executeTacticalShot(player) {
+            if (isGoalScoredState || isHalfTimePaused) return;
+
+            let angle = 0;
+            let power = 1.4 + Math.random() * 0.6;
+            const rivals = runtimePlayers.filter(p => p.team !== currentTurn);
+
+            if (isInitialKickoff) isInitialKickoff = false;
+
+            if (playerWithBall === player) {
+                if (player.role === 'def' || player.role === 'gk') {
+                    const teamAtkers = runtimePlayers.filter(p => p.team === currentTurn && p.role === 'atk');
+                    let bestTarget = teamAtkers[0]; let cleanestAngle = 0; let lowestThreat = Infinity;
+
+                    teamAtkers.forEach(atk => {
+                        let tAngle = Math.atan2(atk.y - player.y, atk.x - player.x);
+                        let threat = 0;
+                        rivals.forEach(riv => {
+                            if (Math.abs(tAngle - Math.atan2(riv.y - player.y, riv.x - player.x)) < 0.22) threat++;
+                        });
+                        if (threat < lowestThreat) { lowestThreat = threat; bestTarget = atk; cleanestAngle = tAngle; }
+                    });
+                    angle = cleanestAngle !== 0 ? cleanestAngle : Math.atan2(bestTarget.y - player.y, bestTarget.x - player.x);
+                    power = 1.35;
+                } else {
+                    let goalTargetY = (currentHalf === 1) ? ((player.team === 'yellow') ? 97 : 3) : ((player.team === 'yellow') ? 3 : 97);
+                    angle = Math.atan2(goalTargetY - player.y, 50 - player.x);
+
+                    for (let rival of rivals) {
+                        if (Math.geometryDist(player.x, player.y, rival.x, rival.y) < 26) {
+                            let rAngle = Math.atan2(rival.y - player.y, rival.x - player.x);
+                            if (Math.abs(angle - rAngle) < 0.25) { angle += (rAngle > angle) ? -0.35 : 0.35; break; }
+                        }
+                    }
+                    power = 2.1;
+                }
+                playerWithBall = null; lastStriker = player; possessionCooldown = 40;
+                ballState.vx = Math.cos(angle) * (power * 1.15); ballState.vy = Math.sin(angle) * (power * 1.15);
+            } else {
+                angle = Math.atan2(ballState.y - player.y, ballState.x - player.x);
+            }
+
+            const rect = field.getBoundingClientRect();
+            const tokenRect = player.element.getBoundingClientRect();
+            aimLine.style.display = 'block';
+            aimLine.style.left = `${tokenRect.left + tokenRect.width/2 - rect.left}px`;
+            aimLine.style.top = `${tokenRect.top + tokenRect.height/2 - rect.top}px`;
+            aimLine.style.width = `${power * 45}px`; aimLine.style.transform = `rotate(${angle}rad)`;
+
+            setTimeout(() => {
+                aimLine.style.display = 'none';
+                if (isGoalScoredState || isHalfTimePaused) return;
+                player.vx = Math.cos(angle) * power; player.vy = Math.sin(angle) * power;
+                isMovingStage = true;
+            }, 250);
+        }
+
+        function handleCollisions() {
+            for (let i = 0; i < runtimePlayers.length; i++) {
+                for (let j = i + 1; j < runtimePlayers.length; j++) {
+                    let p1 = runtimePlayers[i]; let p2 = runtimePlayers[j];
+                    let dx = p2.x - p1.x; let dy = p2.y - p1.y;
+                    let dist = Math.sqrt(dx*dx + dy*dy);
+
+                    if (dist < playerDiameter) {
+                        let overlap = playerDiameter - dist;
+                        let nx = dx / dist; let ny = dy / dist;
+                        p1.x -= nx * (overlap / 2); p1.y -= ny * (overlap / 2);
+                        p2.x += nx * (overlap / 2); p2.y += ny * (overlap / 2);
+                        let kx = p1.vx - p2.vx; let ky = p1.vy - p2.vy;
+                        let p = nx * kx + ny * ky;
+                        if (p > 0) { p1.vx -= nx * p; p1.vy -= ny * p; p2.vx += nx * p; p2.vy += ny * p; }
+                    }
+                }
+            }
+        }
+
+        function updateGamePhysics(currentTimeStamp) {
+            if (!lastTimeStamp) lastTimeStamp = currentTimeStamp;
+            let deltaTimeInSeconds = (currentTimeStamp - lastTimeStamp) / 1000;
+            lastTimeStamp = currentTimeStamp;
+
+            if (deltaTimeInSeconds > 0.1) deltaTimeInSeconds = 0.1;
+
+            updateFluideClock(deltaTimeInSeconds);
+
+            if (isGoalScoredState || isHalfTimePaused) {
+                requestAnimationFrame(updateGamePhysics);
+                return;
+            }
+
+            let totalVelocityInField = 0;
+            if (possessionCooldown > 0) possessionCooldown--;
+            if (possessionCooldown === 0) lastStriker = null;
+
+            let teamWithPossession = currentTurn;
+            if (playerWithBall) {
+                teamWithPossession = playerWithBall.team;
+                ballState.vx = 0; ballState.vy = 0;
+                let offsetDir = (currentHalf === 1) ? ((playerWithBall.team === 'yellow') ? playerRadius : -playerRadius) : ((playerWithBall.team === 'yellow') ? -playerRadius : playerRadius);
+                ballState.x = playerWithBall.x; ballState.y = playerWithBall.y + offsetDir;
+            } else {
+                ballState.vx *= ballState.friction; ballState.vy *= ballState.friction;
+                ballState.x += ballState.vx; ballState.y += ballState.vy;
+                totalVelocityInField += Math.abs(ballState.vx) + Math.abs(ballState.vy);
+
+                if (ballState.x + ballState.radius >= 40 && ballState.x - ballState.radius <= 60) {
+                    if (ballState.y - ballState.radius <= 2.5) {
+                        if (currentHalf === 1) { scoreRed++; localStorage.setItem('scoreRed', scoreRed); } else { scoreYellow++; localStorage.setItem('scoreYellow', scoreYellow); }
+                        localStorage.setItem('nextKickoffTurn', (currentHalf === 1) ? 'yellow' : 'red');
+                        triggerGoalSequence(); return;
+                    }
+                    if (ballState.y + ballState.radius >= 97.5) {
+                        if (currentHalf === 1) { scoreYellow++; localStorage.setItem('scoreYellow', scoreYellow); } else { scoreRed++; localStorage.setItem('scoreRed', scoreRed); }
+                        localStorage.setItem('nextKickoffTurn', (currentHalf === 1) ? 'red' : 'yellow');
+                        triggerGoalSequence(); return;
+                    }
+                }
+
+                if (ballState.x <= ballState.radius) { ballState.x = ballState.radius; ballState.vx *= -1; }
+                if (ballState.x >= 100 - ballState.radius) { ballState.x = 100 - ballState.radius; ballState.vx *= -1; }
+                if (ballState.y <= ballState.radius) { ballState.y = ballState.radius; ballState.vy *= -1; }
+                if (ballState.y >= 100 - ballState.radius) { ballState.y = 100 - ballState.radius; ballState.vy *= -1; }
+            }
+
+            runtimePlayers.forEach(p => {
+                p.vx *= p.friction; p.vy *= p.friction; p.x += p.vx; p.y += p.vy;
+                if (Math.abs(p.vx) < 0.005) p.vx = 0;
+                if (Math.abs(p.vy) < 0.005) p.vy = 0;
+                totalVelocityInField += Math.abs(p.vx) + Math.abs(p.vy);
+
+                if (p.vx === 0 && p.vy === 0 && p.role !== 'gk' && !isInitialKickoff) {
+                    let slowSpeed = 0.045; 
+                    let targetY = (p.team === teamWithPossession) ? p.atkY : p.defY;
+                    
+                    if (p.y < targetY - 0.2) {
+                        p.y += slowSpeed;
+                    } else if (p.y > targetY + 0.2) {
+                        p.y -= slowSpeed;
+                    }
+                }
+
+                if (p.x <= playerRadius) { p.x = playerRadius; p.vx *= -0.5; }
+                if (p.x >= 100 - playerRadius) { p.x = 100 - playerRadius; p.vx *= -0.5; }
+                if (p.y <= playerRadius) { p.y = playerRadius; p.vy *= -0.5; }
+                if (p.y >= 100 - playerRadius) { p.y = 100 - playerRadius; p.vy *= -0.5; }
+
+                if (!playerWithBall && p !== lastStriker) {
+                    if (Math.geometryDist(ballState.x, ballState.y, p.x, p.y) < playerRadius + ballState.radius) {
+                        playerWithBall = p; ballState.vx = 0; ballState.vy = 0;
+                    }
+                }
+
+                if (p.vx === 0 && p.vy === 0) {
+                    if (p.role === 'gk') {
+                        p.y = (p.y < 50) ? 5 : 95; p.x = Math.max(38, Math.min(62, p.x));
+                    } else if (isInitialKickoff) {
+                        if (currentHalf === 1) {
+                            if (p.team === 'yellow' && p.y > 47) p.y = 47; if (p.team === 'red' && p.y < 53) p.y = 53;
+                        } else {
+                            if (p.team === 'red' && p.y > 47) p.y = 47; if (p.team === 'yellow' && p.y < 53) p.y = 53;
+                        }
+                    }
+                }
+            });
+
+            handleCollisions();
+
+            if (isMovingStage && totalVelocityInField < 0.001) {
+                ballState.vx = 0; ballState.vy = 0; runtimePlayers.forEach(p => { p.vx = 0; p.vy = 0; });
+                isMovingStage = false;
+                currentTurn = playerWithBall ? playerWithBall.team : (currentTurn === 'yellow' ? 'red' : 'yellow');
+                updateTurnUI(); planAIMove();
+            }
+
+            runtimePlayers.forEach(p => {
+                if (p.element) {
+                    p.element.style.left = `${p.x}%`; p.element.style.top = `${p.y}%`;
+                    p.element.style.boxShadow = (playerWithBall === p) ? "0 0 14px #ffffff" : "";
+                }
+            });
+            ballState.element.style.left = `${ballState.x}%`; ballState.element.style.top = `${ballState.y}%`;
+
+            requestAnimationFrame(updateGamePhysics);
+        }
+
+        function triggerGoalSequence() {
+            isGoalScoredState = true;
+            clearTimeout(aiThinkingTimeout);
+            mainContainer.classList.add('goal-animation');
+
+            setTimeout(() => {
+                location.reload(); 
+            }, 1200);
+        }
+
+        function resetWholeChampionship() {
+            localStorage.clear();
+            scoreYellow = 0; scoreRed = 0; currentHalf = 1; elapsedRealSeconds = 0; nextKickoffTurn = 'yellow';
+            location.reload();
+        }
+
+        document.getElementById('resetBtn').addEventListener('click', resetWholeChampionship);
+        const sidebar = document.getElementById('sidebar');
+        document.getElementById('closeSidebarBtn').addEventListener('click', () => { sidebar.classList.add('-translate-x-full'); setTimeout(() => { sidebar.classList.add('hidden'); document.getElementById('openSidebarBtn').classList.remove('hidden'); }, 300); });
+        document.getElementById('openSidebarBtn').addEventListener('click', () => { sidebar.classList.remove('hidden'); document.getElementById('openSidebarBtn').classList.add('hidden'); setTimeout(() => { sidebar.classList.remove('-translate-x-full'); }, 10); });
+
+        initGame();
+        requestAnimationFrame(updateGamePhysics);
+    </script>
+</body>
+</html>
