@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Long Marble Race 9:16 - Pinball Edition</title>
+    <title>Long Marble Race 9:16 - Pixel Forest Edition</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
     <style>
         * {
@@ -13,8 +13,8 @@
         }
 
         body {
-            background-color: #121212;
-            font-family: Arial, sans-serif;
+            background-color: #0b0f19;
+            font-family: 'Courier New', Courier, monospace;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -28,23 +28,25 @@
             height: calc(100vw * 16 / 9);
             max-height: 100vh;
             max-width: calc(100vh * 9 / 16);
-            background: linear-gradient(180deg, #0f2027, #203a43, #2c5364);
-            box-shadow: 0 0 30px rgba(0,0,0,0.7);
+            /* Gradiente inspirado na imagem enviada (Céu noturno florestal) */
+            background: linear-gradient(180deg, #0d1321, #131c31, #1b263b);
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            border: 4px solid #3e5c76;
         }
 
         #scoreboard {
             display: flex;
             justify-content: space-around;
             align-items: center;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(13, 19, 33, 0.95);
             padding: 12px;
-            color: white;
+            color: #e0e1dd;
             font-weight: bold;
-            font-size: 1.2rem;
-            border-bottom: 2px solid #444;
+            font-size: 1.1rem;
+            border-bottom: 4px solid #3e5c76;
             z-index: 10;
         }
 
@@ -56,11 +58,12 @@
         }
 
         .score {
-            font-size: 2.2rem;
+            font-size: 2rem;
+            font-family: monospace;
         }
 
-        #team-a-score { color: #3498db; }
-        #team-b-score { color: #e74c3c; }
+        #team-a-score { color: #52b788; text-shadow: 0 0 5px #52b788; }
+        #team-b-score { color: #ffadad; text-shadow: 0 0 5px #ffadad; }
 
         #canvas-container {
             flex: 1;
@@ -83,15 +86,14 @@
         }
 
         .btn {
-            background-color: #2ecc71;
-            color: white;
-            border: none;
+            background-color: #3e5c76;
+            color: #e0e1dd;
+            border: 2px solid #748cab;
             padding: 12px 30px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: bold;
-            border-radius: 25px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
         
         #winner-announcement {
@@ -99,16 +101,15 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.9);
-            color: gold;
-            padding: 20px;
-            border-radius: 10px;
-            font-size: 1.8rem;
+            background: rgba(11, 15, 25, 0.95);
+            color: #ffd166;
+            padding: 25px;
+            font-size: 1.6rem;
             font-weight: bold;
             text-align: center;
             z-index: 20;
             display: none;
-            border: 2px solid gold;
+            border: 4px dashed #ffd166;
         }
     </style>
 </head>
@@ -117,12 +118,12 @@
     <div id="tiktok-container">
         <div id="scoreboard">
             <div class="team">
-                <span>AZUL</span>
+                <span>BOLA VERDE</span>
                 <span id="team-a-score" class="score">0 GOLS</span>
             </div>
-            <div style="color: #aaa;">VS</div>
+            <div style="color: #748cab;">VS</div>
             <div class="team">
-                <span>VERMELHO</span>
+                <span>BOLA ROSA</span>
                 <span id="team-b-score" class="score">0 GOLS</span>
             </div>
         </div>
@@ -131,21 +132,19 @@
         <div id="winner-announcement">FIM DE JOGO!</div>
 
         <div id="control-panel">
-            <button class="btn" id="start-btn" onclick="startRace()">INICIAR CORRIDA</button>
+            <button class="btn" id="start-btn" onclick="startRace()">GERAR PARTIDA</button>
         </div>
     </div>
 
     <script>
-        const { Engine, Render, Runner, Bodies, Composite, Events, Body } = Matter;
+        const { Engine, Render, Runner, Bodies, Composite, Events, Constraint, Body } = Matter;
 
         const container = document.getElementById('canvas-container');
         const width = container.clientWidth;
         const height = container.clientHeight;
 
-        // Pista gigante com 25.000 pixels de altura
         const trackLength = 25000; 
-
-        const engine = Engine.create({ gravity: { y: 0.45 } }); 
+        const engine = Engine.create({ gravity: { y: 0.5 } }); 
         const world = engine.world;
 
         const render = Render.create({
@@ -167,79 +166,86 @@
         let ballA, ballB;
         let raceStarted = false;
 
-        // 1. GERAÇÃO DA PISTA LONGA (Obstáculos e Paredes)
+        // Limites Invisíveis das laterais
         Composite.add(world, [
             Bodies.rectangle(-10, trackLength / 2, 20, trackLength, { isStatic: true, render: { visible: false } }),
             Bodies.rectangle(width + 10, trackLength / 2, 20, trackLength, { isStatic: true, render: { visible: false } })
         ]);
 
-        // Espalhar pinos normais pelo mapa
-        for (let y = 200; y < trackLength - 600; y += 100) {
-            let isEven = (y / 100) % 2 === 0;
-            let pins = isEven ? 5 : 4;
-            let spacing = width / (pins + 1);
+        // 1. DISTRIBUIÇÃO EM TODA A TELA (GANGORRAS + PLATAFORMAS ESTILO PIXEL)
+        // O loop varre toda a extensão preenchendo todos os cantos sem deixar pontos vazios
+        for (let y = 250; y < trackLength - 800; y += 180) {
+            
+            // Decisão de layout alternada por nível para preencher extremidades esquerda/direita e centro
+            if ((y / 180) % 2 === 0) {
+                // Gangorra centralizada
+                createSeesaw(width / 2, y, width * 0.55);
+                
+                // Pequenas plataformas fixas musgosas nos cantos esquerdo e direito para não deixar áreas livres vazias
+                Composite.add(world, Bodies.rectangle(20, y + 60, 60, 15, { isStatic: true, render: { fillStyle: '#2d6a4f' } }));
+                Composite.add(world, Bodies.rectangle(width - 20, y + 60, 60, 15, { isStatic: true, render: { fillStyle: '#2d6a4f' } }));
+            } else {
+                // Duas gangorras menores dividindo as duas metades laterais simetricamente
+                createSeesaw(width * 0.25, y, width * 0.4);
+                createSeesaw(width * 0.75, y, width * 0.4);
 
-            for (let j = 0; j < pins; j++) {
-                // Pulamos algumas posições para dar espaço aos Bumpers de Pinball mais abaixo
-                if (Math.random() > 0.85) continue; 
+                // Pequena plataforma flutuante no meio estática para reter o fluxo direto
+                Composite.add(world, Bodies.rectangle(width / 2, y + 40, 40, 15, { isStatic: true, render: { fillStyle: '#1b4332' } }));
+            }
 
-                let x = (j + 1) * spacing + (isEven ? 0 : spacing / 2);
-                x += (Math.random() - 0.5) * 15; 
-
-                Composite.add(world, Bodies.circle(x, y, 6, {
-                    isStatic: true,
-                    render: { fillStyle: '#ffffff', opacity: 0.5 }
-                }));
+            // Elementos visuais decorativos simulando árvores/nuvens do cenário pixel art no fundo
+            if (Math.random() > 0.6) {
+                Composite.add(world, Bodies.circle(Math.random() * width, y - 50, 12, { isStatic: true, isSensor: true, render: { fillStyle: '#40916c', opacity: 0.15 } }));
             }
         }
 
-        // 2. ADICIONANDO BUMPERS DE PINBALL (REBATEDORES ATIVOS)
-        // Eles são espalhados a cada 400 pixels ao longo da descida
-        for (let y = 500; y < trackLength - 1000; y += 400) {
-            // Escolhe uma posição X aleatória na pista, mantendo margem das paredes
-            let x = Math.random() * (width - 120) + 60; 
-            
-            let bumper = Bodies.circle(x, y, 22, {
-                isStatic: true,
-                label: 'pinball_bumper',
-                render: { 
-                    fillStyle: '#9b59b6', // Roxo por padrão
-                    strokeStyle: '#fff', 
-                    lineWidth: 3 
-                }
+        // Função auxiliar para construir uma estrutura gangorra funcional
+        function createSeesaw(x, y, length) {
+            // A barra que vai girar
+            let bar = Bodies.rectangle(x, y, length, 12, {
+                frictionAir: 0.05,
+                render: { fillStyle: '#748cab', strokeStyle: '#3e5c76', lineWidth: 1 }
             });
-            Composite.add(world, bumper);
+
+            // O pino central de suporte
+            let pivot = Bodies.circle(x, y, 5, { isStatic: true, render: { fillStyle: '#ffd166' } });
+
+            // Junta que prende a barra no pino impedindo que ela caia, mas permitindo rotação total
+            let joint = Constraint.create({
+                bodyA: bar,
+                pointB: { x: x, y: y },
+                stiffness: 1,
+                length: 0,
+                render: { visible: false }
+            });
+
+            Composite.add(world, [bar, pivot, joint]);
         }
 
-        // 3. CONFIGURAÇÃO DOS 6 EVENTOS DE GOL NO CAMINHO
+        // 2. CONFIGURAÇÃO DOS 6 EVENTOS DE GOL (Portões de Energia Musgosa)
         const goalPositions = [4000, 8000, 12000, 16000, 20000, 23500];
         
         goalPositions.forEach((yPos) => {
-            let gateA = Bodies.rectangle(width * 0.25, yPos, width * 0.4, 30, {
+            let gateA = Bodies.rectangle(width * 0.25, yPos, width * 0.45, 25, {
                 isStatic: true, isSensor: true, label: 'gate_A',
-                render: { fillStyle: 'rgba(52, 152, 219, 0.2)', strokeStyle: '#3498db', lineWidth: 2 }
+                render: { fillStyle: 'rgba(82, 183, 136, 0.15)', strokeStyle: '#52b788', lineWidth: 1 }
             });
-            let gateB = Bodies.rectangle(width * 0.75, yPos, width * 0.4, 30, {
+            let gateB = Bodies.rectangle(width * 0.75, yPos, width * 0.45, 25, {
                 isStatic: true, isSensor: true, label: 'gate_B',
-                render: { fillStyle: 'rgba(231, 76, 60, 0.2)', strokeStyle: '#e74c3c', lineWidth: 2 }
+                render: { fillStyle: 'rgba(255, 173, 173, 0.15)', strokeStyle: '#ffadad', lineWidth: 1 }
             });
             Composite.add(world, [gateA, gateB]);
         });
 
-        // 4. LINHA DE CHEGADA SIMPLES
+        // 3. LINHA DE CHEGADA SIMPLES
         const finishY = trackLength - 300;
-        const finishLine = Bodies.rectangle(width / 2, finishY, width, 10, {
+        const finishLine = Bodies.rectangle(width / 2, finishY, width, 8, {
             isStatic: true, isSensor: true, label: 'finish_line',
-            render: { fillStyle: '#fff', strokeStyle: '#000', lineWidth: 4 }
+            render: { fillStyle: '#e0e1dd' }
         });
         Composite.add(world, finishLine);
 
-        for(let x=20; x<width; x+=40) {
-            Composite.add(world, Bodies.rectangle(x, finishY + 15, 20, 20, { isStatic: true, render: { fillStyle: '#fff' } }));
-            Composite.add(world, Bodies.rectangle(x+20, finishY + 35, 20, 20, { isStatic: true, render: { fillStyle: '#fff' } }));
-        }
-
-        // 5. FUNÇÃO PARA INICIAR CORRIDA
+        // 4. INICIAR FUNÇÃO DA PARTIDA
         function startRace() {
             if (ballA) Composite.remove(world, ballA);
             if (ballB) Composite.remove(world, ballB);
@@ -249,14 +255,15 @@
             document.getElementById('team-b-score').innerText = "0 GOLS";
             document.getElementById('winner-announcement').style.display = 'none';
 
-            ballA = Bodies.circle(width * 0.45, 60, 14, {
-                restitution: 0.4, friction: 0.01, label: 'ball_A',
-                render: { fillStyle: '#3498db', strokeStyle: '#fff', lineWidth: 2 }
+            // Bolas baseadas no espectro verde e rosa do estilo pixel art florestal
+            ballA = Bodies.circle(width * 0.42, 80, 13, {
+                restitution: 0.3, friction: 0.02, label: 'ball_A',
+                render: { fillStyle: '#52b788', strokeStyle: '#fff', lineWidth: 1 }
             });
 
-            ballB = Bodies.circle(width * 0.55, 60, 14, {
-                restitution: 0.4, friction: 0.01, label: 'ball_B',
-                render: { fillStyle: '#e74c3c', strokeStyle: '#fff', lineWidth: 2 }
+            ballB = Bodies.circle(width * 0.58, 80, 13, {
+                restitution: 0.3, friction: 0.02, label: 'ball_B',
+                render: { fillStyle: '#ffadad', strokeStyle: '#fff', lineWidth: 1 }
             });
 
             ballA.crossedGates = new Set();
@@ -266,56 +273,37 @@
             raceStarted = true;
         }
 
-        // 6. SISTEMA DE DETECÇÃO (GOLS + PINBALL BUMPERS)
+        // 5. DETECÇÃO DE PONTOS E ENCERRAMENTO
         Events.on(engine, 'collisionStart', function(event) {
             event.pairs.forEach(pair => {
                 let bodies = [pair.bodyA, pair.bodyB];
                 let ball = bodies.find(b => b.label === 'ball_A' || b.label === 'ball_B');
-                let obstacle = bodies.find(o => o.label === 'pinball_bumper' || o.label === 'gate_A' || o.label === 'gate_B' || o.label === 'finish_line');
+                let target = bodies.find(t => t.label === 'gate_A' || t.label === 'gate_B' || t.label === 'finish_line');
 
-                if (ball && obstacle) {
-                    // AÇÃO DO BUMPER DO PINBALL (Joga para cima com força e ângulo aleatório)
-                    if (obstacle.label === 'pinball_bumper') {
-                        // Força vertical para cima significativa (-0.02 a -0.035)
-                        let forceY = -(0.022 + Math.random() * 0.013); 
-                        // Força horizontal aleatória para espalhar para os lados (-0.01 a 0.01)
-                        let forceX = (Math.random() - 0.5) * 0.02; 
-
-                        // Aplica o impulso físico na bola no momento do impacto
-                        Body.applyForce(ball, ball.position, { x: forceX, y: forceY });
-
-                        // Efeito visual de piscar (Pinball Style)
-                        obstacle.render.fillStyle = '#f1c40f'; // Pisca amarelo
-                        setTimeout(() => {
-                            obstacle.render.fillStyle = '#9b59b6'; // Retorna ao roxo
-                        }, 150);
-                    }
-
-                    // Fim de corrida
-                    if (obstacle.label === 'finish_line' && raceStarted) {
+                if (ball && target) {
+                    if (target.label === 'finish_line' && raceStarted) {
                         raceStarted = false;
-                        let winnerText = scoreA > scoreB ? "VITÓRIA DO AZUL!" : (scoreB > scoreA ? "VITÓRIA DO VERMELHO!" : "EMPATE TÉCNICO!");
+                        let winnerText = scoreA > scoreB ? "BOLA VERDE VENCEU!" : (scoreB > scoreA ? "BOLA ROSA VENCEU!" : "EMPATE NA FLORESTA!");
                         let el = document.getElementById('winner-announcement');
-                        el.innerText = `FIM DE CORRIDA!\n${winnerText}`;
+                        el.innerText = `FIM DA DESCIDA!\n${winnerText}`;
                         el.style.display = 'block';
                     }
 
-                    // Marcação dos portões de Gol
-                    if (ball.label === 'ball_A' && obstacle.label === 'gate_A' && !ball.crossedGates.has(obstacle.id)) {
+                    if (ball.label === 'ball_A' && target.label === 'gate_A' && !ball.crossedGates.has(target.id)) {
                         scoreA++;
-                        ball.crossedGates.add(obstacle.id);
+                        ball.crossedGates.add(target.id);
                         document.getElementById('team-a-score').innerText = `${scoreA} GOLS`;
                     }
-                    if (ball.label === 'ball_B' && obstacle.label === 'gate_B' && !ball.crossedGates.has(obstacle.id)) {
+                    if (ball.label === 'ball_B' && target.label === 'gate_B' && !ball.crossedGates.has(target.id)) {
                         scoreB++;
-                        ball.crossedGates.add(obstacle.id);
+                        ball.crossedGates.add(target.id);
                         document.getElementById('team-b-score').innerText = `${scoreB} GOLS`;
                     }
                 }
             });
         });
 
-        // 7. CÂMERA SEGUIDORA DINÂMICA
+        // 6. CÂMERA DINÂMICA
         Events.on(render, 'beforeRender', function() {
             if (!raceStarted || !ballA || !ballB) return;
 
