@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Long Marble Race 9:16</title>
+    <title>Long Marble Race 9:16 - Pinball Edition</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
     <style>
         * {
@@ -128,7 +128,7 @@
         </div>
 
         <div id="canvas-container"></div>
-        <div id="winner-announcement" id="winner-text">FIM DE JOGO!</div>
+        <div id="winner-announcement">FIM DE JOGO!</div>
 
         <div id="control-panel">
             <button class="btn" id="start-btn" onclick="startRace()">INICIAR CORRIDA</button>
@@ -136,16 +136,16 @@
     </div>
 
     <script>
-        const { Engine, Render, Runner, Bodies, Composite, Events } = Matter;
+        const { Engine, Render, Runner, Bodies, Composite, Events, Body } = Matter;
 
         const container = document.getElementById('canvas-container');
         const width = container.clientWidth;
         const height = container.clientHeight;
 
-        // Uma pista gigante com 25.000 pixels de altura para garantir ~1m20s de queda lenta
+        // Pista gigante com 25.000 pixels de altura
         const trackLength = 25000; 
 
-        const engine = Engine.create({ gravity: { y: 0.4 } }); // Gravidade um pouco menor para a queda durar mais
+        const engine = Engine.create({ gravity: { y: 0.45 } }); 
         const world = engine.world;
 
         const render = Render.create({
@@ -168,50 +168,65 @@
         let raceStarted = false;
 
         // 1. GERAÇÃO DA PISTA LONGA (Obstáculos e Paredes)
-        // Paredes laterais estendidas até o fim da pista
         Composite.add(world, [
             Bodies.rectangle(-10, trackLength / 2, 20, trackLength, { isStatic: true, render: { visible: false } }),
             Bodies.rectangle(width + 10, trackLength / 2, 20, trackLength, { isStatic: true, render: { visible: false } })
         ]);
 
-        // Espalhar pinos/obstáculos alternados ao longo de todo o percurso
-        for (let y = 200; y < trackLength - 600; y += 90) {
-            let isEven = (y / 90) % 2 === 0;
+        // Espalhar pinos normais pelo mapa
+        for (let y = 200; y < trackLength - 600; y += 100) {
+            let isEven = (y / 100) % 2 === 0;
             let pins = isEven ? 5 : 4;
             let spacing = width / (pins + 1);
 
             for (let j = 0; j < pins; j++) {
+                // Pulamos algumas posições para dar espaço aos Bumpers de Pinball mais abaixo
+                if (Math.random() > 0.85) continue; 
+
                 let x = (j + 1) * spacing + (isEven ? 0 : spacing / 2);
-                // Pequena variação para não ficar perfeitamente simétrico
                 x += (Math.random() - 0.5) * 15; 
 
-                Composite.add(world, Bodies.circle(x, y, 7, {
+                Composite.add(world, Bodies.circle(x, y, 6, {
                     isStatic: true,
-                    render: { fillStyle: '#ffffff', opacity: 0.7 }
+                    render: { fillStyle: '#ffffff', opacity: 0.5 }
                 }));
             }
         }
 
-        // 2. CONFIGURAÇÃO DOS 6 EVENTOS DE GOL NO CAMINHO
-        // Distribui os portões proporcionalmente ao longo dos 25.000 pixels
+        // 2. ADICIONANDO BUMPERS DE PINBALL (REBATEDORES ATIVOS)
+        // Eles são espalhados a cada 400 pixels ao longo da descida
+        for (let y = 500; y < trackLength - 1000; y += 400) {
+            // Escolhe uma posição X aleatória na pista, mantendo margem das paredes
+            let x = Math.random() * (width - 120) + 60; 
+            
+            let bumper = Bodies.circle(x, y, 22, {
+                isStatic: true,
+                label: 'pinball_bumper',
+                render: { 
+                    fillStyle: '#9b59b6', // Roxo por padrão
+                    strokeStyle: '#fff', 
+                    lineWidth: 3 
+                }
+            });
+            Composite.add(world, bumper);
+        }
+
+        // 3. CONFIGURAÇÃO DOS 6 EVENTOS DE GOL NO CAMINHO
         const goalPositions = [4000, 8000, 12000, 16000, 20000, 23500];
         
-        goalPositions.forEach((yPos, index) => {
-            // Portão para a Bola Azul (Lado Esquerdo)
+        goalPositions.forEach((yPos) => {
             let gateA = Bodies.rectangle(width * 0.25, yPos, width * 0.4, 30, {
                 isStatic: true, isSensor: true, label: 'gate_A',
                 render: { fillStyle: 'rgba(52, 152, 219, 0.2)', strokeStyle: '#3498db', lineWidth: 2 }
             });
-            // Portão para a Bola Vermelha (Lado Direito)
             let gateB = Bodies.rectangle(width * 0.75, yPos, width * 0.4, 30, {
                 isStatic: true, isSensor: true, label: 'gate_B',
                 render: { fillStyle: 'rgba(231, 76, 60, 0.2)', strokeStyle: '#e74c3c', lineWidth: 2 }
             });
-
             Composite.add(world, [gateA, gateB]);
         });
 
-        // 3. LINHA DE CHEGADA SIMPLES (No final do mapa)
+        // 4. LINHA DE CHEGADA SIMPLES
         const finishY = trackLength - 300;
         const finishLine = Bodies.rectangle(width / 2, finishY, width, 10, {
             isStatic: true, isSensor: true, label: 'finish_line',
@@ -219,13 +234,12 @@
         });
         Composite.add(world, finishLine);
 
-        // Placa visual de chegada
         for(let x=20; x<width; x+=40) {
             Composite.add(world, Bodies.rectangle(x, finishY + 15, 20, 20, { isStatic: true, render: { fillStyle: '#fff' } }));
             Composite.add(world, Bodies.rectangle(x+20, finishY + 35, 20, 20, { isStatic: true, render: { fillStyle: '#fff' } }));
         }
 
-        // 4. FUNÇÃO PARA INICIAR
+        // 5. FUNÇÃO PARA INICIAR CORRIDA
         function startRace() {
             if (ballA) Composite.remove(world, ballA);
             if (ballB) Composite.remove(world, ballB);
@@ -235,18 +249,16 @@
             document.getElementById('team-b-score').innerText = "0 GOLS";
             document.getElementById('winner-announcement').style.display = 'none';
 
-            // Bolas começam no topo perto uma da outra
             ballA = Bodies.circle(width * 0.45, 60, 14, {
-                restitution: 0.5, friction: 0.02, label: 'ball_A',
+                restitution: 0.4, friction: 0.01, label: 'ball_A',
                 render: { fillStyle: '#3498db', strokeStyle: '#fff', lineWidth: 2 }
             });
 
             ballB = Bodies.circle(width * 0.55, 60, 14, {
-                restitution: 0.5, friction: 0.02, label: 'ball_B',
+                restitution: 0.4, friction: 0.01, label: 'ball_B',
                 render: { fillStyle: '#e74c3c', strokeStyle: '#fff', lineWidth: 2 }
             });
 
-            // Armazenar os IDs dos portões que cada bola já cruzou para evitar contagem dupla repetida na mesma área
             ballA.crossedGates = new Set();
             ballB.crossedGates = new Set();
 
@@ -254,52 +266,65 @@
             raceStarted = true;
         }
 
-        // 5. DETECÇÃO DE GOLS (SENSORES)
+        // 6. SISTEMA DE DETECÇÃO (GOLS + PINBALL BUMPERS)
         Events.on(engine, 'collisionStart', function(event) {
             event.pairs.forEach(pair => {
                 let bodies = [pair.bodyA, pair.bodyB];
                 let ball = bodies.find(b => b.label === 'ball_A' || b.label === 'ball_B');
-                let gate = bodies.find(g => g.label === 'gate_A' || g.label === 'gate_B' || g.label === 'finish_line');
+                let obstacle = bodies.find(o => o.label === 'pinball_bumper' || o.label === 'gate_A' || o.label === 'gate_B' || o.label === 'finish_line');
 
-                if (ball && gate) {
-                    // Se cruzou a linha de chegada final
-                    if (gate.label === 'finish_line' && raceStarted) {
+                if (ball && obstacle) {
+                    // AÇÃO DO BUMPER DO PINBALL (Joga para cima com força e ângulo aleatório)
+                    if (obstacle.label === 'pinball_bumper') {
+                        // Força vertical para cima significativa (-0.02 a -0.035)
+                        let forceY = -(0.022 + Math.random() * 0.013); 
+                        // Força horizontal aleatória para espalhar para os lados (-0.01 a 0.01)
+                        let forceX = (Math.random() - 0.5) * 0.02; 
+
+                        // Aplica o impulso físico na bola no momento do impacto
+                        Body.applyForce(ball, ball.position, { x: forceX, y: forceY });
+
+                        // Efeito visual de piscar (Pinball Style)
+                        obstacle.render.fillStyle = '#f1c40f'; // Pisca amarelo
+                        setTimeout(() => {
+                            obstacle.render.fillStyle = '#9b59b6'; // Retorna ao roxo
+                        }, 150);
+                    }
+
+                    // Fim de corrida
+                    if (obstacle.label === 'finish_line' && raceStarted) {
                         raceStarted = false;
                         let winnerText = scoreA > scoreB ? "VITÓRIA DO AZUL!" : (scoreB > scoreA ? "VITÓRIA DO VERMELHO!" : "EMPATE TÉCNICO!");
                         let el = document.getElementById('winner-announcement');
                         el.innerText = `FIM DE CORRIDA!\n${winnerText}`;
                         el.style.display = 'block';
-                        return;
                     }
 
-                    // Sistema de marcação de Gol por área
-                    if (ball.label === 'ball_A' && gate.label === 'gate_A' && !ball.crossedGates.has(gate.id)) {
+                    // Marcação dos portões de Gol
+                    if (ball.label === 'ball_A' && obstacle.label === 'gate_A' && !ball.crossedGates.has(obstacle.id)) {
                         scoreA++;
-                        ball.crossedGates.add(gate.id);
+                        ball.crossedGates.add(obstacle.id);
                         document.getElementById('team-a-score').innerText = `${scoreA} GOLS`;
                     }
-                    if (ball.label === 'ball_B' && gate.label === 'gate_B' && !ball.crossedGates.has(gate.id)) {
+                    if (ball.label === 'ball_B' && obstacle.label === 'gate_B' && !ball.crossedGates.has(obstacle.id)) {
                         scoreB++;
-                        ball.crossedGates.add(gate.id);
+                        ball.crossedGates.add(obstacle.id);
                         document.getElementById('team-b-score').innerText = `${scoreB} GOLS`;
                     }
                 }
             });
         });
 
-        // 6. SISTEMA DE CÂMERA DINÂMICA (Acompanha o Líder)
+        // 7. CÂMERA SEGUIDORA DINÂMICA
         Events.on(render, 'beforeRender', function() {
             if (!raceStarted || !ballA || !ballB) return;
 
-            // Identifica qual bola está mais abaixo na tela (maior valor de Y)
             let leaderY = Math.max(ballA.position.y, ballB.position.y);
-
-            // Centraliza a visão verticalmente na bola líder, respeitando limites do topo
             let targetY = leaderY - (height / 3);
+
             if (targetY < 0) targetY = 0;
             if (targetY > trackLength - height) targetY = trackLength - height;
 
-            // Aplica a translação de câmera no Matter.js
             Render.lookAt(render, {
                 min: { x: 0, y: targetY },
                 max: { x: width, y: targetY + height }
