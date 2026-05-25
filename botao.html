@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cavern Marble Race 9:16 - Ping Pong Edition</title>
+    <title>Cavern Marble Race 9:16 - Pure Chaos Edition</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
     <style>
         * {
@@ -142,7 +142,7 @@
         const height = container.clientHeight;
 
         const trackLength = 25000; 
-        const engine = Engine.create({ gravity: { y: 0.35 } }); // Gravidade menor para valorizar o efeito saltitante
+        const engine = Engine.create({ gravity: { y: 0.35 } }); 
         const world = engine.world;
 
         const render = Render.create({
@@ -160,19 +160,15 @@
         let raceStarted = false;
         let motorizedSeesaws = [];
 
-        // 1. LIMITES LATERAIS IRREGULARES (Paredes estilo Caverna)
-        // Criando estalactites, estalagmites e relevos pontudos nos cantos esquerdo e direito
+        // 1. LIMITES LATERAIS IRREGULARES (Caverna)
         for (let y = 100; y < trackLength; y += 120) {
-            // Larguras variadas para os relevos da caverna
             let leftWallWidth = 30 + Math.random() * 45;
             let rightWallWidth = 30 + Math.random() * 45;
 
-            // Bloco irregular da Esquerda
             let caveLeft = Bodies.polygon(leftWallWidth / 2, y, 3, leftWallWidth, {
                 isStatic: true, angle: Math.random(),
                 render: { fillStyle: '#1e293b' }
             });
-            // Bloco irregular da Direita
             let caveRight = Bodies.polygon(width - (rightWallWidth / 2), y + 60, 3, rightWallWidth, {
                 isStatic: true, angle: Math.random(),
                 render: { fillStyle: '#141b2d' }
@@ -181,25 +177,33 @@
             Composite.add(world, [caveLeft, caveRight]);
         }
 
-        // Paredes de colisão planas de segurança por trás do visual para evitar que as bolas saiam voando do mapa
         Composite.add(world, [
             Bodies.rectangle(-5, trackLength / 2, 10, trackLength, { isStatic: true, render: { visible: false } }),
             Bodies.rectangle(width + 5, trackLength / 2, 10, trackLength, { isStatic: true, render: { visible: false } })
         ]);
 
-        // 2. DISTRIBUIÇÃO DAS GANGORRAS AUTOMÁTICAS (Não travam a passagem)
-        // Elas ocupam menos espaço horizontal (35% da tela) permitindo vazão nas laterais
-        for (let y = 300; y < trackLength - 800; y += 220) {
-            let xPos = (y / 220) % 2 === 0 ? width * 0.35 : width * 0.65;
+        // 2. DISTRIBUIÇÃO TOTALMENTE ALEATÓRIA DAS GANGORRAS AUTOMÁTICAS
+        // Definimos a quantidade total de gangorras que queremos espalhar pelo mapa gigante
+        const totalSeesaws = 110; 
+
+        for (let i = 0; i < totalSeesaws; i++) {
+            // Sorteia o Y entre o início da pista (300) e antes da linha de chegada (trackLength - 800)
+            let randomY = 300 + Math.random() * (trackLength - 1100);
             
-            // Variando a velocidade inicial e o ângulo máximo do motor automático
-            let seesawData = createMotorizedSeesaw(xPos, y, width * 0.38, (Math.random() * 0.03) + 0.02);
+            // Sorteia o X mantendo uma margem segura das paredes da caverna para não prender a mecânica
+            let randomX = width * 0.2 + Math.random() * (width * 0.6);
+
+            // Sorteia tamanhos dinâmicos e velocidades diferentes para cada gangorra individualmente
+            let randomLength = width * 0.25 + Math.random() * (width * 0.15);
+            let randomSpeed = (Math.random() * 0.035) + 0.015;
+
+            let seesawData = createMotorizedSeesaw(randomX, randomY, randomLength, randomSpeed);
             motorizedSeesaws.push(seesawData);
         }
 
         function createMotorizedSeesaw(x, y, length, speed) {
             let bar = Bodies.rectangle(x, y, length, 12, {
-                isStatic: true, // Mantemos static e alteramos o ângulo via script para um movimento uniforme contínuo
+                isStatic: true,
                 render: { fillStyle: '#475569', strokeStyle: '#64748b', lineWidth: 1 }
             });
 
@@ -209,16 +213,15 @@
                 body: bar,
                 baseY: y,
                 speed: speed,
-                angleRange: 0.52, // Limite de inclinação (~30 graus) para nunca ficar totalmente em pé e trancar a bola
-                phase: Math.random() * Math.PI // Começam em posições de rotação diferentes
+                angleRange: 0.55, // Evita trancar as bolinhas na vertical
+                phase: Math.random() * Math.PI // Desincroniza os movimentos iniciais
             };
         }
 
-        // 3. ATUALIZAÇÃO DO MOVIMENTO AUTOMÁTICO DAS GANGORRAS
+        // 3. ATUALIZAÇÃO DO MOVIMENTO AUTOMÁTICO
         Events.on(engine, 'beforeUpdate', function(event) {
             let time = engine.timing.timestamp;
             motorizedSeesaws.forEach(seesaw => {
-                // Cálculo senoidal para fazer oscilar suavemente de um lado para o outro sozinhos
                 let newAngle = Math.sin(time * 0.05 * seesaw.speed + seesaw.phase) * seesaw.angleRange;
                 Body.setAngle(seesaw.body, newAngle);
             });
@@ -246,7 +249,7 @@
         });
         Composite.add(world, finishLine);
 
-        // 6. ADICIONAR E RECONFIGURAR AS BOLAS (FÍSICA DE PING-PONG)
+        // 6. ADICIONAR E RECONFIGURAR AS BOLAS (PING-PONG)
         function startRace() {
             if (ballA) Composite.remove(world, ballA);
             if (ballB) Composite.remove(world, ballB);
@@ -257,10 +260,10 @@
             document.getElementById('winner-announcement').style.display = 'none';
 
             let pingPongPhysics = {
-                restitution: 0.85,  // Altíssima elasticidade (Bate e pula muito longe)
-                friction: 0.005,    // Quase nenhum atrito na colisão
-                frictionAir: 0.008, // Leve resistência do ar para estabilizar o peso simulado
-                density: 0.0005     // Massa volumétrica baixa (Muito leve)
+                restitution: 0.85,  
+                friction: 0.005,    
+                frictionAir: 0.008, 
+                density: 0.0005     
             };
 
             ballA = Bodies.circle(width * 0.42, 80, 12, {
@@ -280,7 +283,7 @@
             raceStarted = true;
         }
 
-        // 7. ARREMATES DE COLISÃO (GOLS / CHEGADA)
+        // 7. ARREMATES DE COLISÃO
         Events.on(engine, 'collisionStart', function(event) {
             event.pairs.forEach(pair => {
                 let bodies = [pair.bodyA, pair.bodyB];
