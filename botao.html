@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Long Marble Race 9:16 - Pixel Forest Edition</title>
+    <title>Cavern Marble Race 9:16 - Ping Pong Edition</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
     <style>
         * {
@@ -13,7 +13,7 @@
         }
 
         body {
-            background-color: #0b0f19;
+            background-color: #080a10;
             font-family: 'Courier New', Courier, monospace;
             display: flex;
             justify-content: center;
@@ -28,25 +28,24 @@
             height: calc(100vw * 16 / 9);
             max-height: 100vh;
             max-width: calc(100vh * 9 / 16);
-            /* Gradiente inspirado na imagem enviada (Céu noturno florestal) */
-            background: linear-gradient(180deg, #0d1321, #131c31, #1b263b);
-            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            background: linear-gradient(180deg, #090d16, #111827, #070a0f);
+            box-shadow: 0 0 30px rgba(0,0,0,0.9);
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            border: 4px solid #3e5c76;
+            border: 4px solid #2d3748;
         }
 
         #scoreboard {
             display: flex;
             justify-content: space-around;
             align-items: center;
-            background: rgba(13, 19, 33, 0.95);
+            background: rgba(9, 13, 22, 0.95);
             padding: 12px;
-            color: #e0e1dd;
+            color: #cbd5e1;
             font-weight: bold;
             font-size: 1.1rem;
-            border-bottom: 4px solid #3e5c76;
+            border-bottom: 4px solid #2d3748;
             z-index: 10;
         }
 
@@ -59,11 +58,10 @@
 
         .score {
             font-size: 2rem;
-            font-family: monospace;
         }
 
-        #team-a-score { color: #52b788; text-shadow: 0 0 5px #52b788; }
-        #team-b-score { color: #ffadad; text-shadow: 0 0 5px #ffadad; }
+        #team-a-score { color: #38bdf8; text-shadow: 0 0 8px rgba(56,189,248,0.5); }
+        #team-b-score { color: #fb7185; text-shadow: 0 0 8px rgba(251,113,133,0.5); }
 
         #canvas-container {
             flex: 1;
@@ -86,14 +84,14 @@
         }
 
         .btn {
-            background-color: #3e5c76;
-            color: #e0e1dd;
-            border: 2px solid #748cab;
+            background-color: #1e293b;
+            color: #f8fafc;
+            border: 2px solid #475569;
             padding: 12px 30px;
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            border-radius: 4px;
         }
         
         #winner-announcement {
@@ -101,15 +99,15 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(11, 15, 25, 0.95);
-            color: #ffd166;
+            background: rgba(5, 5, 10, 0.95);
+            color: #fbbf24;
             padding: 25px;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: bold;
             text-align: center;
             z-index: 20;
             display: none;
-            border: 4px dashed #ffd166;
+            border: 4px dashed #fbbf24;
         }
     </style>
 </head>
@@ -118,44 +116,39 @@
     <div id="tiktok-container">
         <div id="scoreboard">
             <div class="team">
-                <span>BOLA VERDE</span>
+                <span>PING AZUL</span>
                 <span id="team-a-score" class="score">0 GOLS</span>
             </div>
-            <div style="color: #748cab;">VS</div>
+            <div style="color: #475569;">VS</div>
             <div class="team">
-                <span>BOLA ROSA</span>
+                <span>PONG ROSA</span>
                 <span id="team-b-score" class="score">0 GOLS</span>
             </div>
         </div>
 
         <div id="canvas-container"></div>
-        <div id="winner-announcement">FIM DE JOGO!</div>
+        <div id="winner-announcement">FIM DE PAPO!</div>
 
         <div id="control-panel">
-            <button class="btn" id="start-btn" onclick="startRace()">GERAR PARTIDA</button>
+            <button class="btn" id="start-btn" onclick="startRace()">SOLTAR BOLINHAS</button>
         </div>
     </div>
 
     <script>
-        const { Engine, Render, Runner, Bodies, Composite, Events, Constraint, Body } = Matter;
+        const { Engine, Render, Runner, Bodies, Composite, Events, Body } = Matter;
 
         const container = document.getElementById('canvas-container');
         const width = container.clientWidth;
         const height = container.clientHeight;
 
         const trackLength = 25000; 
-        const engine = Engine.create({ gravity: { y: 0.5 } }); 
+        const engine = Engine.create({ gravity: { y: 0.35 } }); // Gravidade menor para valorizar o efeito saltitante
         const world = engine.world;
 
         const render = Render.create({
             element: container,
             engine: engine,
-            options: {
-                width: width,
-                height: height,
-                wireframes: false,
-                background: 'transparent'
-            }
+            options: { width: width, height: height, wireframes: false, background: 'transparent' }
         });
 
         Render.run(render);
@@ -165,87 +158,95 @@
         let scoreA = 0, scoreB = 0;
         let ballA, ballB;
         let raceStarted = false;
+        let motorizedSeesaws = [];
 
-        // Limites Invisíveis das laterais
+        // 1. LIMITES LATERAIS IRREGULARES (Paredes estilo Caverna)
+        // Criando estalactites, estalagmites e relevos pontudos nos cantos esquerdo e direito
+        for (let y = 100; y < trackLength; y += 120) {
+            // Larguras variadas para os relevos da caverna
+            let leftWallWidth = 30 + Math.random() * 45;
+            let rightWallWidth = 30 + Math.random() * 45;
+
+            // Bloco irregular da Esquerda
+            let caveLeft = Bodies.polygon(leftWallWidth / 2, y, 3, leftWallWidth, {
+                isStatic: true, angle: Math.random(),
+                render: { fillStyle: '#1e293b' }
+            });
+            // Bloco irregular da Direita
+            let caveRight = Bodies.polygon(width - (rightWallWidth / 2), y + 60, 3, rightWallWidth, {
+                isStatic: true, angle: Math.random(),
+                render: { fillStyle: '#141b2d' }
+            });
+
+            Composite.add(world, [caveLeft, caveRight]);
+        }
+
+        // Paredes de colisão planas de segurança por trás do visual para evitar que as bolas saiam voando do mapa
         Composite.add(world, [
-            Bodies.rectangle(-10, trackLength / 2, 20, trackLength, { isStatic: true, render: { visible: false } }),
-            Bodies.rectangle(width + 10, trackLength / 2, 20, trackLength, { isStatic: true, render: { visible: false } })
+            Bodies.rectangle(-5, trackLength / 2, 10, trackLength, { isStatic: true, render: { visible: false } }),
+            Bodies.rectangle(width + 5, trackLength / 2, 10, trackLength, { isStatic: true, render: { visible: false } })
         ]);
 
-        // 1. DISTRIBUIÇÃO EM TODA A TELA (GANGORRAS + PLATAFORMAS ESTILO PIXEL)
-        // O loop varre toda a extensão preenchendo todos os cantos sem deixar pontos vazios
-        for (let y = 250; y < trackLength - 800; y += 180) {
+        // 2. DISTRIBUIÇÃO DAS GANGORRAS AUTOMÁTICAS (Não travam a passagem)
+        // Elas ocupam menos espaço horizontal (35% da tela) permitindo vazão nas laterais
+        for (let y = 300; y < trackLength - 800; y += 220) {
+            let xPos = (y / 220) % 2 === 0 ? width * 0.35 : width * 0.65;
             
-            // Decisão de layout alternada por nível para preencher extremidades esquerda/direita e centro
-            if ((y / 180) % 2 === 0) {
-                // Gangorra centralizada
-                createSeesaw(width / 2, y, width * 0.55);
-                
-                // Pequenas plataformas fixas musgosas nos cantos esquerdo e direito para não deixar áreas livres vazias
-                Composite.add(world, Bodies.rectangle(20, y + 60, 60, 15, { isStatic: true, render: { fillStyle: '#2d6a4f' } }));
-                Composite.add(world, Bodies.rectangle(width - 20, y + 60, 60, 15, { isStatic: true, render: { fillStyle: '#2d6a4f' } }));
-            } else {
-                // Duas gangorras menores dividindo as duas metades laterais simetricamente
-                createSeesaw(width * 0.25, y, width * 0.4);
-                createSeesaw(width * 0.75, y, width * 0.4);
-
-                // Pequena plataforma flutuante no meio estática para reter o fluxo direto
-                Composite.add(world, Bodies.rectangle(width / 2, y + 40, 40, 15, { isStatic: true, render: { fillStyle: '#1b4332' } }));
-            }
-
-            // Elementos visuais decorativos simulando árvores/nuvens do cenário pixel art no fundo
-            if (Math.random() > 0.6) {
-                Composite.add(world, Bodies.circle(Math.random() * width, y - 50, 12, { isStatic: true, isSensor: true, render: { fillStyle: '#40916c', opacity: 0.15 } }));
-            }
+            // Variando a velocidade inicial e o ângulo máximo do motor automático
+            let seesawData = createMotorizedSeesaw(xPos, y, width * 0.38, (Math.random() * 0.03) + 0.02);
+            motorizedSeesaws.push(seesawData);
         }
 
-        // Função auxiliar para construir uma estrutura gangorra funcional
-        function createSeesaw(x, y, length) {
-            // A barra que vai girar
+        function createMotorizedSeesaw(x, y, length, speed) {
             let bar = Bodies.rectangle(x, y, length, 12, {
-                frictionAir: 0.05,
-                render: { fillStyle: '#748cab', strokeStyle: '#3e5c76', lineWidth: 1 }
+                isStatic: true, // Mantemos static e alteramos o ângulo via script para um movimento uniforme contínuo
+                render: { fillStyle: '#475569', strokeStyle: '#64748b', lineWidth: 1 }
             });
 
-            // O pino central de suporte
-            let pivot = Bodies.circle(x, y, 5, { isStatic: true, render: { fillStyle: '#ffd166' } });
+            Composite.add(world, bar);
 
-            // Junta que prende a barra no pino impedindo que ela caia, mas permitindo rotação total
-            let joint = Constraint.create({
-                bodyA: bar,
-                pointB: { x: x, y: y },
-                stiffness: 1,
-                length: 0,
-                render: { visible: false }
-            });
-
-            Composite.add(world, [bar, pivot, joint]);
+            return {
+                body: bar,
+                baseY: y,
+                speed: speed,
+                angleRange: 0.52, // Limite de inclinação (~30 graus) para nunca ficar totalmente em pé e trancar a bola
+                phase: Math.random() * Math.PI // Começam em posições de rotação diferentes
+            };
         }
 
-        // 2. CONFIGURAÇÃO DOS 6 EVENTOS DE GOL (Portões de Energia Musgosa)
+        // 3. ATUALIZAÇÃO DO MOVIMENTO AUTOMÁTICO DAS GANGORRAS
+        Events.on(engine, 'beforeUpdate', function(event) {
+            let time = engine.timing.timestamp;
+            motorizedSeesaws.forEach(seesaw => {
+                // Cálculo senoidal para fazer oscilar suavemente de um lado para o outro sozinhos
+                let newAngle = Math.sin(time * 0.05 * seesaw.speed + seesaw.phase) * seesaw.angleRange;
+                Body.setAngle(seesaw.body, newAngle);
+            });
+        });
+
+        // 4. PORTÕES DE GOL
         const goalPositions = [4000, 8000, 12000, 16000, 20000, 23500];
-        
         goalPositions.forEach((yPos) => {
             let gateA = Bodies.rectangle(width * 0.25, yPos, width * 0.45, 25, {
                 isStatic: true, isSensor: true, label: 'gate_A',
-                render: { fillStyle: 'rgba(82, 183, 136, 0.15)', strokeStyle: '#52b788', lineWidth: 1 }
+                render: { fillStyle: 'rgba(56, 189, 248, 0.1)', strokeStyle: '#38bdf8', lineWidth: 1 }
             });
             let gateB = Bodies.rectangle(width * 0.75, yPos, width * 0.45, 25, {
                 isStatic: true, isSensor: true, label: 'gate_B',
-                render: { fillStyle: 'rgba(255, 173, 173, 0.15)', strokeStyle: '#ffadad', lineWidth: 1 }
+                render: { fillStyle: 'rgba(251, 113, 133, 0.1)', strokeStyle: '#fb7185', lineWidth: 1 }
             });
             Composite.add(world, [gateA, gateB]);
         });
 
-        // 3. LINHA DE CHEGADA SIMPLES
+        // 5. LINHA DE CHEGADA SIMPLES
         const finishY = trackLength - 300;
         const finishLine = Bodies.rectangle(width / 2, finishY, width, 8, {
             isStatic: true, isSensor: true, label: 'finish_line',
-            render: { fillStyle: '#e0e1dd' }
+            render: { fillStyle: '#475569' }
         });
         Composite.add(world, finishLine);
 
-        // 4. INICIAR FUNÇÃO DA PARTIDA
+        // 6. ADICIONAR E RECONFIGURAR AS BOLAS (FÍSICA DE PING-PONG)
         function startRace() {
             if (ballA) Composite.remove(world, ballA);
             if (ballB) Composite.remove(world, ballB);
@@ -255,15 +256,21 @@
             document.getElementById('team-b-score').innerText = "0 GOLS";
             document.getElementById('winner-announcement').style.display = 'none';
 
-            // Bolas baseadas no espectro verde e rosa do estilo pixel art florestal
-            ballA = Bodies.circle(width * 0.42, 80, 13, {
-                restitution: 0.3, friction: 0.02, label: 'ball_A',
-                render: { fillStyle: '#52b788', strokeStyle: '#fff', lineWidth: 1 }
+            let pingPongPhysics = {
+                restitution: 0.85,  // Altíssima elasticidade (Bate e pula muito longe)
+                friction: 0.005,    // Quase nenhum atrito na colisão
+                frictionAir: 0.008, // Leve resistência do ar para estabilizar o peso simulado
+                density: 0.0005     // Massa volumétrica baixa (Muito leve)
+            };
+
+            ballA = Bodies.circle(width * 0.42, 80, 12, {
+                ...pingPongPhysics, label: 'ball_A',
+                render: { fillStyle: '#38bdf8', strokeStyle: '#fff', lineWidth: 2 }
             });
 
-            ballB = Bodies.circle(width * 0.58, 80, 13, {
-                restitution: 0.3, friction: 0.02, label: 'ball_B',
-                render: { fillStyle: '#ffadad', strokeStyle: '#fff', lineWidth: 1 }
+            ballB = Bodies.circle(width * 0.58, 80, 12, {
+                ...pingPongPhysics, label: 'ball_B',
+                render: { fillStyle: '#fb7185', strokeStyle: '#fff', lineWidth: 2 }
             });
 
             ballA.crossedGates = new Set();
@@ -273,7 +280,7 @@
             raceStarted = true;
         }
 
-        // 5. DETECÇÃO DE PONTOS E ENCERRAMENTO
+        // 7. ARREMATES DE COLISÃO (GOLS / CHEGADA)
         Events.on(engine, 'collisionStart', function(event) {
             event.pairs.forEach(pair => {
                 let bodies = [pair.bodyA, pair.bodyB];
@@ -283,9 +290,9 @@
                 if (ball && target) {
                     if (target.label === 'finish_line' && raceStarted) {
                         raceStarted = false;
-                        let winnerText = scoreA > scoreB ? "BOLA VERDE VENCEU!" : (scoreB > scoreA ? "BOLA ROSA VENCEU!" : "EMPATE NA FLORESTA!");
+                        let winnerText = scoreA > scoreB ? "AZUL VENCEU!" : (scoreB > scoreA ? "ROSA VENCEU!" : "EMPATE NA CAVERNA!");
                         let el = document.getElementById('winner-announcement');
-                        el.innerText = `FIM DA DESCIDA!\n${winnerText}`;
+                        el.innerText = `FIM DA PROVA!\n${winnerText}`;
                         el.style.display = 'block';
                     }
 
@@ -303,7 +310,7 @@
             });
         });
 
-        // 6. CÂMERA DINÂMICA
+        // 8. CÂMERA SEGUIDORA
         Events.on(render, 'beforeRender', function() {
             if (!raceStarted || !ballA || !ballB) return;
 
