@@ -184,7 +184,68 @@
     .grade-table th, .grade-table td { border: 1px solid rgba(255,255,255,0.08); padding: 10px; text-align: center; }
     .grade-table th { color: var(--neon-blue); font-family: 'Orbitron'; text-shadow: 0 0 5px var(--neon-blue); }
     .ask-grade { font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 3.2vh; color: var(--neon-yellow); margin: 2vh 0; text-shadow: 0 0 10px var(--neon-yellow); }
-</style>
+/* EFEITO DE LUMINOSIDADE PASSANDO NAS LINHAS DO GRID */
+.quadrant::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1; /* Fica acima do fundo, mas abaixo dos textos e botões */
+    
+    /* Cria uma linha de luz diagonal suave */
+    background: linear-gradient(
+        135deg,
+        transparent 45%,
+        rgba(255, 255, 255, 0.0) 48%,
+        rgba(255, 255, 255, 0.12) 50%,
+        rgba(255, 255, 255, 0.0) 52%,
+        transparent 55%
+    );
+    
+    /* Força o tamanho do gradiente a ficar gigante para podermos movê-lo */
+    background-size: 300% 300%;
+    background-position: 0% 0%;
+    
+    /* Aplica a animação de corrida da luz */
+    animation: gridLaser 6s linear infinite;
+}
+
+/* Ajuste específico de cor do laser para cada setor (opcional, dá mais identidade) */
+.q-red::before {
+    background: linear-gradient(135deg, transparent 45%, rgba(255, 51, 51, 0) 47%, rgba(255, 51, 51, 0.25) 50%, rgba(255, 51, 51, 0) 53%, transparent 55%);
+    background-size: 300% 300%;
+}
+.q-blue::before {
+    background: linear-gradient(135deg, transparent 45%, rgba(0, 240, 255, 0) 47%, rgba(0, 240, 255, 0.25) 50%, rgba(0, 240, 255, 0) 53%, transparent 55%);
+    background-size: 300% 300%;
+}
+.q-green::before {
+    background: linear-gradient(135deg, transparent 45%, rgba(57, 255, 20, 0) 47%, rgba(57, 255, 20, 0.25) 50%, rgba(57, 255, 20, 0) 53%, transparent 55%);
+    background-size: 300% 300%;
+}
+.q-yellow::before {
+    background: linear-gradient(135deg, transparent 45%, rgba(255, 234, 0, 0) 47%, rgba(255, 234, 0, 0.25) 50%, rgba(255, 234, 0, 0) 53%, transparent 55%);
+    background-size: 300% 300%;
+}
+
+/* Animação que desloca o laser de um canto ao outro */
+@keyframes gridLaser {
+    0% {
+        background-position: 0% 0%;
+    }
+    100% {
+        background-position: 100% 100%;
+    }
+}
+
+/* Ajuste de segurança para garantir que o conteúdo fique acima do laser */
+.brand-watermark, .node-header, .question-text, .timer-line, .options-container {
+    position: relative;
+    z-index: 2;
+}
+
+    
+    </style>
 
 </head>
 <body>
