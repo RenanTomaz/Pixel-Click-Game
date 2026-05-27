@@ -463,25 +463,25 @@
     }
 
     function finalizarPergunta(corretoIdx, foiAcerto, activeIdx) {
-        const parent = document.getElementById(`options-${activeIdx}`);
-        if (parent.dataset.locked) return;
-        parent.dataset.locked = "true";
-        
-        const correctOption = parent.querySelectorAll('.option-btn')[corretoIdx];
-        correctOption.classList.add('correct');
+    const parent = document.getElementById(`options-${activeIdx}`);
+    if (parent.dataset.locked) return;
+    parent.dataset.locked = "true";
+    
+    const correctOption = parent.querySelectorAll('.option-btn')[corretoIdx];
+    correctOption.classList.add('correct');
 
+    // Toca o som de acerto apenas se o jogador realmente acertou
+    if (foiAcerto) {
         sfx.correct.play();
-        confetti({
-            particleCount: 80, spread: 60, origin: { y: 0.6 },
-            colors: ['#00a8ff', '#27ae60', '#f1c40f', '#d63031']
-        });
-
-        setTimeout(() => {
-            parent.removeAttribute('data-locked');
-            currentQ++;
-            executarRodada();
-        }, 2500);
     }
+
+    setTimeout(() => {
+        parent.removeAttribute('data-locked');
+        currentQ++;
+        executarRodada();
+    }, 2500);
+}
+
 
     function mostrarFinal() {
         // 1. Executa o efeito de Zoom Out (Câmera recua mostrando a visão geral esmaecida)
