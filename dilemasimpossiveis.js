@@ -1,4 +1,4 @@
-const dilemasImpossiveisBloco1 = [
+const dilemasImpossiveis = [
     { 
         q: "Você e outra pessoa estão presos em uma caverna desmoronando. Há oxigênio apenas para um de vocês sobreviver por 2 horas até o resgate chegar. Se você dormir, a outra pessoa pode gastar todo o ar. O que você faz?", 
         options: [
