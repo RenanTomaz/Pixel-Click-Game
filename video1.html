@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adulto Ney na Copa - Promo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial Black', Gadget, sans-serif;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Container do vídeo em background */
+        .video-bg-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            overflow: hidden;
+            opacity: 0.35; /* Vídeo sutil no fundo */
+        }
+
+        .video-bg-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Camada escura para dar contraste */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%);
+            z-index: 2;
+        }
+
+        /* Container principal de conteúdo */
+        .content-wrapper {
+            position: relative;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+        }
+
+        /* Estilização da imagem Pixel Art */
+        .pixel-art-img {
+            width: 180px;
+            height: auto;
+            margin-bottom: 30px;
+            image-rendering: pixelated; /* Mantém o charme do pixel art nítido */
+            filter: drop-shadow(0 0 15px rgba(255, 223, 0, 0.4));
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Sistema de texto rotativo com Fade */
+        .text-slider {
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .promo-text {
+            color: #fff;
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            position: absolute;
+            width: 90%;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.9);
+        }
+
+        .promo-text.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .highlight-gold {
+            color: #ffdf00;
+        }
+
+        .highlight-green {
+            color: #009c3b;
+        }
+
+        /* Botão de Ação */
+        .btn-cta {
+            background: linear-gradient(90deg, #009c3b, #ffdf00);
+            color: #000;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(255, 223, 0, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-cta:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 223, 0, 0.6);
+        }
+
+        .btn-cta:active {
+            transform: scale(0.98);
+        }
+
+        @media (max-width: 480px) {
+            .promo-text { font-size: 20px; }
+            .pixel-art-img { width: 140px; }
+            .btn-cta { font-size: 16px; padding: 12px 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Vídeo de Fundo Modificado -->
+    <div class="video-bg-container">
+        <video id="bgVideo" autoplay muted loop playsinline>
+            <source src="neyvideo.mp4" type="video/mp4">
+        </video>
+        <div class="overlay"></div>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <div class="content-wrapper">
+        
+        <!-- Imagem Pixel Art Fixa/Pulsante -->
+        <img src="aney.png" alt="Neymar Pixel Art" class="pixel-art-img">
+
+        <!-- Frases em Fade In / Fade Out -->
+        <div class="text-slider">
+            <div class="promo-text active">Faltam poucos dias para a <span class="highlight-gold">Estreia da Copa</span>...</div>
+            <div class="promo-text">O <span class="highlight-green">Adulto Ney</span> precisa da sua ajuda!</div>
+            <div class="promo-text">Entre na nossa corrente de energia ⚡</div>
+            <div class="promo-text">Não deixe o nosso camisa 10 na mão!</div>
+        </div>
+
+        <!-- Botão direcionando para o seu site principal -->
+        <a href="https://adultoney.com.br" class="btn-cta">Apoiar Agora</a>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const phrases = document.querySelectorAll('.promo-text');
+            let currentIndex = 0;
+            const displayTime = 2500; // Tempo que cada frase fica visível (em milissegundos)
+
+            function rotatePhrases() {
+                // Remove a classe ativa da frase atual (Fade Out)
+                phrases[currentIndex].classList.remove('active');
+                
+                // Vai para a próxima frase
+                currentIndex = (currentIndex + 1) % phrases.length;
+                
+                // Adiciona a classe ativa na nova frase (Fade In) após um mini delay
+                setTimeout(() => {
+                    phrases[currentIndex].classList.add('active');
+                }, 100); 
+            }
+
+            // Inicia o loop de alternância das palavras
+            setInterval(rotatePhrases, displayTime + 800);
+            
+            // Garante que o vídeo rode em velocidade normal (1.0)
+            const video = document.getElementById('bgVideo');
+            if (video) {
+                video.playbackRate = 1.0;
+            }
+        });
+    </script>
+</body>
+</html>
