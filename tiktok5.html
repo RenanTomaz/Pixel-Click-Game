@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dilemas Impossíveis</title>
+    <style>
+        :root {
+            --bg-color: #0b0c10;
+            --card-color: #1f2833;
+            --text-color: #c5a059;
+            --text-secondary: #ffffff;
+            --accent-color: #45f3ff;
+            --button-hover: #2f3b4c;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-secondary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: var(--card-color);
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Progresso das perguntas (Ex: 1/3) */
+        .progress {
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        /* Caixa onde o Narrador "fala" */
+        .narrator-box {
+            font-style: italic;
+            color: var(--text-color);
+            font-size: 1.15rem;
+            line-height: 1.6;
+            margin-bottom: 35px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Caixa de opções */
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option-btn {
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            padding: 18px 25px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s ease;
+            line-height: 1.4;
+        }
+
+        .option-btn:hover {
+            background-color: var(--button-hover);
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        /* Área da CTA Final */
+        .hidden {
+            display: none !important;
+        }
+
+        .cta-title {
+            color: var(--accent-color);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .cta-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            color: var(--text-color);
+        }
+
+        .comment-section-mock {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Tela do Jogo/Narrador -->
+        <div id="quiz-screen">
+            <div class="progress" id="progress-text">Pergunta 1 de 3</div>
+            <div class="narrator-box" id="narrator-text">
+                <!-- A fala do narrador será injetada aqui -->
+            </div>
+            <div class="options-container" id="options-block">
+                <!-- Os botões das alternativas serão injetados aqui -->
+            </div>
+        </div>
+
+        <!-- Tela de CTA Final -->
+        <div id="cta-screen" class="hidden">
+            <h2 class="cta-title">O veredito final!</h2>
+            <p class="cta-text" id="cta-narrator-text">
+                <!-- Fala final do narrador será injetada aqui -->
+            </p>
+            
+            <!-- Espaço reservado para sua caixa de comentários real do site -->
+            <div class="comment-section-mock">
+                [ Espaço para a Caixa de Comentários do seu Site ]
+            </div>
+        </div>
+    </div>
+
+    <!-- 1. Importa o seu banco de dados de perguntas -->
+    <script src="dilemasimpossiveis.js"></script>
+
+    <!-- 2. Script de Controle da Página -->
+    <script>
+        // Configuração fixa da CTA (caso não esteja no seu arquivo .js)
+        const ctaFinalConfig = {
+            falaNarrador: "Chegamos ao fim. Essas escolhas dizem muito sobre quem você é. Agora eu quero saber de você: qual desses três dilemas foi o mais impossível? Deixe suas respostas nos comentários abaixo e defenda seu ponto de vista! Vamos ver quem tem coragem de debater."
+        };
+
+        let perguntasDaRodada = [];
+        let indexAtual = 0;
+
+        // Função executada assim que a página carrega
+        function iniciarQuiz() {
+            // Verifica se o banco de dados do seu arquivo foi carregado com sucesso
+            if (typeof dilemasImpossivels === 'undefined' || dilemasImpossivels.length < 3) {
+                document.getElementById('narrator-text').innerText = "Erro: O arquivo 'dilemasimpossiveis.js' não foi encontrado ou possui menos de 3 perguntas.";
+                return;
+            }
+
+            // Lógica para embaralhar o seu banco e pegar apenas 3 sem repetir
+            const embaralhadas = [...dilemasImpossivels].sort(() => Math.random() - 0.5);
+            perguntasDaRodada = embaralhadas.slice(0, 3);
+
+            mostrarPergunta();
+        }
+
+        // Função responsável por renderizar a pergunta e as opções atuais
+        function mostrarPergunta() {
+            const perguntaAtual = perguntasDaRodada[indexAtual];
+            
+            // Atualiza o contador do topo
+            document.getElementById('progress-text').innerText = `Dilema ${indexAtual + 1} de 3`;
+            
+            // Injeta a fala do narrador correspondente à pergunta
+            document.getElementById('narrator-text').innerText = `"${perguntaAtual.falaNarrador}"`;
+            
+            // Limpa as opções anteriores e injeta as novas
+            const containerOpcoes = document.getElementById('options-block');
+            containerOpcoes.innerHTML = '';
+
+            perguntaAtual.options.forEach((opcao, i) => {
+                const botao = document.createElement('button');
+                botao.classList.add('option-btn');
+                botao.innerText = opcao;
+                
+                // Evento de clique que apenas passa para a próxima, sem julgar certo ou errado
+                botao.onclick = () => proximaPergunta();
+                
+                containerOpcoes.appendChild(botao);
+            });
+        }
+
+        // Função para avançar o fluxo do quiz
+        function proximaPergunta() {
+            indexAtual++;
+
+            if (indexAtual < 3) {
+                mostrarPergunta();
+            } else {
+                finalizarQuiz();
+            }
+        }
+
+        // Função que esconde o quiz e mostra a chamada para ação dos comentários
+        function finalizarQuiz() {
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('cta-screen').classList.remove('hidden');
+            
+            // Exibe a fala de encerramento do narrador convocando para os comentários
+            document.getElementById('cta-narrator-text').innerText = `"${ctaFinalConfig.falaNarrador}"`;
+        }
+
+        // Inicializa o motor da página
+        window.onload = iniciarQuiz;
+    </script>
+</body>
+</html>
