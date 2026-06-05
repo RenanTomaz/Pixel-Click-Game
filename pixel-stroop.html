@@ -11,199 +11,365 @@
     <meta property="og:image" content="https://www.pixelclick.fun/thumb.png"> 
     <style>
         :root { 
-    --bg-color: #121212; 
-    --border-normal: 4px solid #fff; 
-    --accent: #3498db; /* Mudado de #2ed573 para o azul do Hub */
-    --accent-glow: 0 0 15px #3498db;
+    --bg-color: #060713; /* Fundo espacial profundo */
+    --card-inner: rgba(15, 18, 36, 0.6); /* Painel de vidro translúcido */
+    --border-color: rgba(255, 255, 255, 0.08);
+    --accent: #00f0ff; /* Ciano Cibernético Neon */
+    --accent-glow: 0 0 15px rgba(0, 240, 255, 0.4);
+    
+    /* Cores dos Botões de Opções Convertidas para Neon */
+    --g-red: #ff007f;
+    --g-blue: #00f0ff;
+    --g-green: #00ff66;
+    --g-yellow: #bd00ff;
 }
-        #screen-over button {
-    margin-top: 15px !important; /* Força o mesmo espaço para todos os botões */
-    margin-bottom: 0;
+
+/* ==========================================
+   ELEMENTOS GLOBAIS
+   ========================================== */
+* {
+    box-sizing: border-box;
 }
-        #ad-gameover img {
-    max-width: 300px !important;
-    max-height: 250px !important;
-    object-fit: contain; /* Ajusta a imagem sem distorcer */
-}
-        body { 
+
+body { 
     background-color: var(--bg-color); 
-    color: white; 
-    font-family: 'Courier New', monospace; 
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(0, 240, 255, 0.03) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(189, 0, 255, 0.03) 0px, transparent 50%);
+    color: #e2e8f0; 
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
     margin: 0; 
     display: flex; 
     flex-direction: column; 
     align-items: center;
-    justify-content: flex-start; /* Alinha ao topo para permitir rolagem natural */
+    justify-content: flex-start; 
     min-height: 100vh; 
-    overflow-y: auto; /* Habilita a rolagem para os anúncios abaixo */
+    overflow-y: auto; 
     user-select: none;
     touch-action: manipulation;
 }
 
-        #lang-selector { position: absolute; top: 15px; right: 15px; display: flex; gap: 12px; z-index: 200; }
-        .lang-btn { width: 40px; height: 30px; cursor: pointer; filter: grayscale(0.8); transition: 0.3s; border: 2px solid transparent; }
-        .lang-btn.active { filter: grayscale(0); transform: scale(1.2); border-color: white; }
-        .lang-btn img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
-
-        #game-container { 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    justify-content: center; 
-    width: 95%;
-    max-width: 400px;
-    height: 80vh; /* Define que o jogo ocupa 80% da altura da tela */
-    margin-top: 2vh; /* Pequeno respiro no topo */
-}
-
-        #ui-header { width: 100%; display: flex; justify-content: space-between; font-size: 1.3rem; margin-bottom: 10px; font-weight: bold;}
-        #timer-box { width: 100%; height: 22px; border: var(--border-normal); background: #333; margin-bottom: 10px; position: relative; overflow: hidden; }
-        #timer-bar { height: 100%; width: 100%; background: var(--accent); position: absolute; left: 0; top: 0; }
-        
-        #question { font-size: 1.6rem; text-align: center; height: 80px; font-weight: bold; margin-bottom: 20px; display: flex; align-items: center; justify-content: center;}
-        #question-color-text { margin-left: 10px; padding: 5px 10px; background: rgba(255,255,255,0.1); border-radius: 4px;}
-
-        #grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-bottom: 10px; }
-        .btn { aspect-ratio: 1/1; border: var(--border-normal); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: bold; cursor: pointer; text-transform: uppercase; color: #fff; text-shadow: 2px 2px #000; }
-        
-        #opt-0 { background: #ff4757; } #opt-1 { background: #2e86de; } 
-        #opt-2 { background: #2ed573; } #opt-3 { background: #eccc68; }
-
-        #champion-spotlight {
-    width: 90%; 
-    max-width: 400px; 
-    background: #1a1a1a;
-    padding: 15px; 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid #333; 
-    border-radius: 12px; 
-    /* Aumentamos a margem inferior para criar o vácuo para o anúncio */
-    margin-bottom: 20px; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-}
-
-        /* --- Estilo Identêntico ao Pixel Stroop --- */
-#champion-spotlight {
-    width: 95%; 
-    max-width: 400px; 
-    background: #1a1a1a;
-    padding: 15px; 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid #333; 
-    border-radius: 12px; 
-    margin: 20px 0; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    box-sizing: border-box;
-}
-
-#champ-title { 
-    font-size: 0.9rem; 
-    color: var(--accent); 
-    margin: 0 0 5px 0; 
-    font-weight: bold; 
-    text-shadow: var(--accent-glow); 
-    text-transform: uppercase; 
-}
-
-#champ-info { 
-    font-size: 1.4rem; 
-    font-weight: bold; 
-    display: flex; 
-    align-items: center; 
-    gap: 12px; 
-}
-
-#champ-score { 
-    color: #feca57; /* Dourado do Champion Spotlight */
-}
-
-        .overlay { 
-    position: fixed; 
-    inset: 0; 
-    background: rgba(0,0,0,0.96); 
-    display: flex; 
-    flex-direction: column; 
-    /* Centraliza horizontalmente */
-    align-items: center; 
-    /* CENTRALIZA VERTICALMENTE (Mude de flex-start para center) */
-    justify-content: center; 
-    z-index: 100; 
-    text-align: center; 
-    /* Remova ou ajuste o padding de topo para não deslocar o centro */
-    padding: 20px; 
-    overflow-y: auto; 
-}
-        input { padding: 12px; font-size: 1.2rem; margin: 15px 0; width: 85%; max-width: 260px; text-align: center; background: #222; color: #fff; border: 2px solid var(--accent); font-family: inherit;}
-        button { padding: 15px 20px; font-size: 1.1rem; cursor: pointer; font-family: inherit; margin-top: 10px; border: 4px solid #000; font-weight: bold; width: 85%; max-width: 260px; text-transform: uppercase; }
-        .retry-btn { background: var(--accent); color: #fff; }
-        .save-btn { background: #3498db; color: #fff; }
-
-        @media (max-width: 600px) {
-            /* Move o seletor para o topo e centraliza horizontalmente */
-            #lang-selector { 
-                top: 5px; 
-                bottom: auto; 
-                left: 50%;
-                right: auto;
-                transform: translateX(-50%); 
-                gap: 8px; 
-            }
-
-            /* Reduz o tamanho das bandeiras no telemóvel */
-            .lang-btn {
-                width: 32px;
-                height: 20px;
-            }
-            
-            #question { 
-                font-size: 1.3rem; 
-            }
-
-            /* Empurra o cabeçalho (Score) para baixo para não bater nas bandeiras */
-            #ui-header {
-                margin-top: 50px;
-            }
-        }
-        /* Estilo do Botão Home */
+/* ==========================================
+   NAVEGAÇÃO (TOP BAR)
+   ========================================== */
 #home-button {
-    position: absolute;
-    top: 15px; /* Alinhado com as bandeiras */
-    left: 15px;
-    width: 40px; /* Mantém a área de clique */
-    height: 30px;
+    position: fixed;
+    top: 20px; 
+    left: 20px;
+    width: 45px; 
+    height: 35px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    z-index: 200;
-    transition: 0.3s;
-    background: transparent; /* Fundo transparente */
-    border: none; /* REMOVE A BORDA QUADRADA */
-    color: white; /* Cor inicial do ícone */
+    transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    background: rgba(255, 255, 255, 0.03); 
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: #64748b; 
+    z-index: 10001 !important;
 }
 
 #home-button:hover {
-    background: var(--accent);
-    color: black;
-    transform: scale(1.1);
+    background: transparent;
+    color: white;
+    border-color: var(--accent);
+    box-shadow: var(--accent-glow);
+    transform: translateY(-2px);
 }
 
-/* Ajuste para Mobile */
-@media (max-width: 600px) {
-    #home-button {
-        top: 5px;
-        left: 10px; /* Ajustado para não bater no notch/bordas */
-        width: 35px;
-        height: 25px;
-    }
+#lang-selector { 
+    position: fixed; 
+    top: 20px; 
+    right: 20px; 
+    display: flex; 
+    gap: 12px; 
+    z-index: 10001 !important; 
 }
-/* Container da Moeda */
+
+.lang-btn { 
+    width: 32px; 
+    height: 22px; 
+    cursor: pointer; 
+    filter: grayscale(0.9) opacity(0.5); 
+    transition: 0.3s ease; 
+    border: 1px solid rgba(255, 255, 255, 0.1); 
+    border-radius: 3px; 
+    overflow: hidden; 
+}
+
+.lang-btn.active { 
+    filter: grayscale(0) opacity(1); 
+    border-color: var(--accent); 
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.lang-btn img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    pointer-events: none; 
+}
+
+/* ==========================================
+   CONTAINER DO JOGO
+   ========================================== */
+#game-container { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    width: 90%;
+    max-width: 420px;
+    height: 80vh; 
+    margin-top: 2vh; 
+}
+
+#ui-header { 
+    width: 100%; 
+    display: flex; 
+    justify-content: space-between; 
+    font-size: 1.1rem; 
+    margin-bottom: 15px; 
+    font-weight: 700; 
+    letter-spacing: 1px;
+    color: #94a3b8;
+    font-family: 'Courier New', monospace;
+}
+
+/* Barra de Tempo HUD */
+#timer-box { 
+    width: 100%; 
+    height: 12px; 
+    border: 1px solid rgba(255, 255, 255, 0.1); 
+    background: rgba(0, 0, 0, 0.4); 
+    border-radius: 6px;
+    margin-bottom: 25px; 
+    position: relative; 
+    overflow: hidden; 
+}
+
+#timer-bar { 
+    height: 100%; 
+    width: 100%; 
+    background: linear-gradient(90deg, var(--accent), #bd00ff); 
+    position: absolute; 
+    left: 0; 
+    top: 0; 
+    box-shadow: var(--accent-glow);
+}
+
+/* Pergunta e Identificador Técnico */
+#question { 
+    font-size: 1.5rem; 
+    text-align: center; 
+    height: 80px; 
+    font-weight: 800; 
+    margin-bottom: 20px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    color: #fff;
+}
+
+#question-color-text { 
+    margin-left: 10px; 
+    padding: 6px 14px; 
+    background: rgba(255, 255, 255, 0.05); 
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 1.1rem;
+}
+
+/* ==========================================
+   GRID DE RESPOSTAS (BOTÕES)
+   ========================================== */
+#grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 16px; 
+    width: 100%; 
+    margin-bottom: 15px; 
+}
+
+.btn { 
+    aspect-ratio: 1/1; 
+    border: 1px solid rgba(255, 255, 255, 0.08); 
+    border-radius: 16px;
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-size: 1.6rem; 
+    font-weight: 800; 
+    cursor: pointer; 
+    text-transform: uppercase; 
+    color: #fff; 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn:hover {
+    transform: scale(1.03) translateY(-2px);
+}
+
+/* Cores Translúcidas com Hover Neon Brilhante */
+#opt-0 { background: rgba(255, 0, 127, 0.15); border-color: rgba(255, 0, 127, 0.3); }
+#opt-0:hover { background: var(--g-red); color: #000; box-shadow: 0 0 25px rgba(255, 0, 127, 0.6); border-color: transparent; }
+
+#opt-1 { background: rgba(0, 240, 255, 0.15); border-color: rgba(0, 240, 255, 0.3); }
+#opt-1:hover { background: var(--g-blue); color: #000; box-shadow: 0 0 25px rgba(0, 240, 255, 0.6); border-color: transparent; }
+
+#opt-2 { background: rgba(0, 255, 102, 0.15); border-color: rgba(0, 255, 102, 0.3); }
+#opt-2:hover { background: var(--g-green); color: #000; box-shadow: 0 0 25px rgba(0, 255, 102, 0.6); border-color: transparent; }
+
+#opt-3 { background: rgba(189, 0, 255, 0.15); border-color: rgba(189, 0, 255, 0.3); }
+#opt-3:hover { background: var(--g-yellow); color: #fff; box-shadow: 0 0 25px rgba(189, 0, 255, 0.6); border-color: transparent; }
+
+/* ==========================================
+   CHAMPION SPOTLIGHT
+   ========================================== */
+#champion-spotlight {
+    width: 100%; 
+    max-width: 420px; 
+    background: var(--card-inner);
+    padding: 20px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-color); 
+    border-radius: 16px; 
+    margin: 20px 0; 
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    box-sizing: border-box;
+}
+
+#champ-title { 
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem; 
+    color: var(--accent); 
+    margin: 0 0 8px 0; 
+    font-weight: bold; 
+    letter-spacing: 2px;
+    text-transform: uppercase; 
+}
+
+#champ-info { 
+    font-size: 1.3rem; 
+    font-weight: 800; 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+    color: white;
+}
+
+#champ-score { 
+    color: #f1c40f; 
+    text-shadow: 0 0 10px rgba(241, 196, 15, 0.4);
+}
+
+/* ==========================================
+   OVERLAYS / TELAS DE FEEDBACK (SCREEN OVER)
+   ========================================== */
+.overlay { 
+    position: fixed; 
+    inset: 0; 
+    background: rgba(4, 5, 13, 0.96); 
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    z-index: 100; 
+    text-align: center; 
+    padding: 20px; 
+    overflow-y: auto; 
+}
+
+/* Campos de Input nos Menus */
+input { 
+    padding: 14px; 
+    font-size: 1.1rem; 
+    margin: 20px 0; 
+    width: 85%; 
+    max-width: 260px; 
+    text-align: center; 
+    background: rgba(0, 0, 0, 0.4); 
+    color: #fff; 
+    border: 1px solid var(--border-color); 
+    border-radius: 10px;
+    font-family: inherit;
+    box-sizing: border-box; 
+    outline: none; 
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: var(--accent);
+    box-shadow: var(--accent-glow);
+}
+
+/* Botões do Painel Geral */
+button { 
+    padding: 16px 25px; 
+    font-size: 1rem; 
+    cursor: pointer; 
+    font-family: inherit; 
+    border: 1px solid rgba(255,255,255,0.1); 
+    border-radius: 12px;
+    font-weight: 700; 
+    width: 85%; 
+    max-width: 260px; 
+    text-transform: uppercase; 
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+#screen-over button {
+    margin-top: 15px !important; 
+    margin-bottom: 0;
+}
+
+.retry-btn { 
+    background: var(--accent); 
+    color: #000; 
+    box-shadow: var(--accent-glow);
+    border: none !important;
+}
+.retry-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 25px rgba(0, 240, 255, 0.6);
+}
+
+.save-btn { 
+    background: rgba(255, 255, 255, 0.05); 
+    color: #fff; 
+}
+.save-btn:hover {
+    background: #fff;
+    color: #000;
+    transform: translateY(-2px);
+}
+
+/* ==========================================
+   ÁREA DE ANÚNCIOS (ADS CONTAINER)
+   ========================================== */
+#ad-gameover img {
+    max-width: 300px !important;
+    max-height: 250px !important;
+    object-fit: contain; 
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+/* ==========================================
+   SISTEMA DE MOEDA / APOIO PIX
+   ========================================== */
 .pix-support-container {
     margin-top: 25px;
     display: flex;
@@ -214,30 +380,62 @@
 }
 
 .pix-support-container:hover {
-    transform: scale(1.1);
+    transform: scale(1.08);
 }
 
-/* Estilo da Moeda com animação */
 .pixel-coin {
     font-size: 2.2rem;
-    margin-bottom: 5px;
-    filter: drop-shadow(0 0 8px #f1c40f);
-    animation: coinBounce 1.5s infinite ease-in-out;
+    margin-bottom: 6px;
+    filter: drop-shadow(0 0 10px rgba(241, 196, 15, 0.6));
+    animation: coinBounce 1.8s infinite ease-in-out;
 }
 
 .pix-label {
+    font-family: 'Courier New', monospace;
     font-size: 0.75rem;
-    color: #f1c40f; /* Dourado igual ao recorde */
+    color: #f1c40f; 
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 1px;
-    font-family: 'Courier New', monospace;
+    text-shadow: 0 0 8px rgba(241, 196, 15, 0.3);
 }
 
-/* Efeito de pulo */
 @keyframes coinBounce {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+    50% { transform: translateY(-8px); }
+}
+
+/* ==========================================
+   MEDIA QUERIES (OTIMIZAÇÃO MOBILE COLETIVA)
+   ========================================== */
+@media (max-width: 750px) {
+    #lang-selector { 
+        top: 12px; 
+        left: 50%; 
+        right: auto; 
+        transform: translateX(-50%); 
+        gap: 8px; 
+    }
+
+    .lang-btn {
+        width: 32px;
+        height: 20px;
+    }
+    
+    #home-button {
+        top: 12px;
+        left: 15px;
+        width: 38px;
+        height: 32px;
+    }
+    
+    #ui-header {
+        margin-top: 55px;
+    }
+
+    #question { 
+        font-size: 1.3rem; 
+    }
 }
     </style>
 </head>

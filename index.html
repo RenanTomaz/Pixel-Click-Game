@@ -48,252 +48,468 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
     :root { 
-        --bg-color: #121212; 
-        --card-inner: #1a1a1a;
-        --accent-trivia: #3498db; 
-        --g-red: #ff4757;
-        --g-blue: #2e86de;
-        --g-yellow: #eccc68;
-        --g-green: #2ed573;
-    }
-
-    body { 
-        background-color: var(--bg-color); 
-        color: white; 
-        font-family: 'Courier New', monospace; 
-        margin: 0; 
-        display: flex; 
-        flex-direction: column; 
-        align-items: center;
-        min-height: 100vh;
-        user-select: none;
-    }
-
-    /* --- Top Bar & Lang --- */
-    #top-bar {
-        width: 100%;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        padding: 15px 20px;
-        box-sizing: border-box;
-        position: absolute;
-        top: 0;
-        z-index: 1000;
-    }
-
-    #lang-selector { display: flex; align-items: center; gap: 10px; }
-    .lang-btn { width: 35px; height: 25px; cursor: pointer; filter: grayscale(0.8); transition: 0.3s; border: 2px solid transparent; border-radius: 4px; overflow: hidden; }
-    .lang-btn.active { filter: grayscale(0); transform: scale(1.1); border-color: white; }
-    .lang-btn img { width: 100%; height: 100%; object-fit: cover; }
-
-    /* --- Logo Area --- */
-    header { margin-top: 70px; text-align: center; }
-    .main-logo { 
-        font-size: 3rem; 
-        font-weight: 900; 
-        letter-spacing: -2px; 
-        margin: 0;
-        background: linear-gradient(to bottom, #fff, #888);
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
-    #ui-hub-subtitle {
-        font-size: 1rem;
-        color: #eee;
-        text-transform: uppercase;
-        letter-spacing: 4px;
-        font-weight: bold;
-        margin-top: 10px;
-        opacity: 0.8;
-    }
-
-    /* --- Cards Grid --- */
-    .hub-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 25px;
-        width: 90%;
-        max-width: 1100px;
-        margin: 50px auto;
-        flex-grow: 1;
-    }
-
-    .game-card {
-        background: var(--card-inner);
-        border: 2px solid #333;
-        border-radius: 24px;
-        padding: 40px 30px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .game-card:hover { transform: translateY(-10px); }
-
-    .card-pixel:hover { border-color: var(--g-red); box-shadow: 0 10px 30px rgba(255, 71, 87, 0.15); }
-    .card-trivia:hover { border-color: var(--g-blue); box-shadow: 0 10px 30px rgba(52, 152, 219, 0.15); }
-    .card-genius:hover { border-color: var(--g-yellow); box-shadow: 0 10px 30px rgba(236, 204, 104, 0.15); }
-
-    .tag { font-size: 1.4rem; font-weight: 900; margin-bottom: 10px; letter-spacing: 1px; }
-    .card-pixel .tag { color: var(--g-red); }
-    .card-trivia .tag { color: var(--g-blue); }
-    .card-genius .tag { color: var(--g-yellow); }
-
-    p { font-size: 0.95rem; color: #aaa; line-height: 1.6; margin-bottom: 30px; font-family: sans-serif; }
-
-    .play-btn {
-        width: 100%;
-        padding: 16px;
-        font-size: 1rem;
-        font-family: 'Courier New', monospace;
-        font-weight: bold;
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        background: #3498db;
-        color: #ffffff;
-        transition: 0.3s;
-    }
+    --bg-color: #060713; /* Fundo espacial profundo, quase preto */
+    --card-inner: rgba(15, 18, 36, 0.7); /* Vidro escuro translúcido */
+    --border-color: rgba(255, 255, 255, 0.08);
     
-    .game-card:hover .play-btn { background: #3498db; transform: scale(1.05); }
+    /* Cores Neon Futuristas */
+    --g-red: #ff007f;     /* Rosa Choque Neon (Stroop/Pixel) */
+    --g-blue: #00f0ff;    /* Ciano Cibernético (Trivia) */
+    --g-yellow: #bd00ff;  /* Roxo Laser / Ultravioleta (Genius) */
+    --g-green: #00ff66;   /* Verde Quântico (Status/Sucesso) */
+}
 
-    /* --- Mobile Styles --- */
-    @media (max-width: 750px) {
-        header { margin-top: 100px; }
-        .main-logo { font-size: 2.2rem; }
-        .hub-container {
-            display: flex;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            gap: 20px;
-            padding: 20px 10% 50px 10%;
-            width: 100%;
-            box-sizing: border-box;
-            margin-top: 20px;
-            -webkit-overflow-scrolling: touch;
-        }
-        .game-card { min-width: 80vw; scroll-snap-align: center; }
-        #top-bar { justify-content: center; background: rgba(18,18,18,0.9); position: fixed; }
-    }
+/* ==========================================
+   ELEMENTOS GLOBAIS
+   ========================================== */
+* {
+    box-sizing: border-box;
+}
 
-    /* --- Indicators (Mobile Only) --- */
-    .carousel-indicators {
-        display: none; justify-content: center; gap: 12px; margin-top: 20px; margin-bottom: 5px; z-index: 10;
-    }
-    .dot {
-        width: 6px; height: 6px; border-radius: 50%; background: #333;
-        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    .dot.active { transform: scale(1.3); }
-    .dot-pixel.active { background: var(--g-red) !important; box-shadow: 0 0 15px var(--g-red); }
-    .dot-trivia.active { background: var(--g-blue) !important; box-shadow: 0 0 15px var(--g-blue); }
-    .dot-genius.active { background: var(--g-yellow) !important; box-shadow: 0 0 15px var(--g-yellow); }
+body { 
+    background-color: var(--bg-color); 
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(0, 240, 255, 0.05) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(189, 0, 255, 0.05) 0px, transparent 50%);
+    color: #e2e8f0; 
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+    margin: 0; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center;
+    min-height: 100vh;
+    user-select: none;
+    overflow-x: hidden;
+}
 
-    @media (max-width: 750px) { .carousel-indicators { display: flex; } }
+p { 
+    font-size: 0.95rem; 
+    color: #8fa0dd; 
+    line-height: 1.6; 
+    margin-bottom: 30px; 
+}
 
-    /* --- SEO Section Styles --- */
-    .seo-header-wrapper {
-        width: 90%; max-width: 1100px; margin: 20px auto 15px auto;
-        display: flex; justify-content: center; align-items: center;
-    }
-    .seo-display-title {
-        font-family: 'Courier New', monospace; font-size: 1.1rem; color: #eee;
-        text-transform: uppercase; letter-spacing: 2px; margin: 0; text-align: center;
-    }
-    .seo-container-advanced {
-        position: relative; width: 90%; max-width: 1100px; margin: 20px auto 60px auto;
-        padding: 2px; background: linear-gradient(90deg, var(--g-red), var(--g-blue), var(--g-yellow));
-        border-radius: 20px; overflow: hidden; box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-    }
-    .seo-grid {
-        display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 2px; background: #000; border-radius: 18px; overflow: hidden;
-    }
-    .seo-scanline {
-        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        background: linear-gradient(to bottom, transparent, rgba(46, 134, 222, 0.05), transparent);
-        animation: scanline 4s linear infinite; pointer-events: none; z-index: 5;
-    }
-    @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(100%); } }
-
-    .seo-box {
-        background: rgba(26, 26, 26, 0.95); padding: 35px 30px; position: relative;
-        display: flex; flex-direction: column; justify-content: flex-start;
-    }
-    .box-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
-    .status-dot {
-        width: 8px; height: 8px; flex-shrink: 0; border-radius: 50%;
-        background: #2ed573; box-shadow: 0 0 10px #2ed573; animation: pulse 1.5s infinite;
-    }
-    .seo-box h3 {
-        margin: 0; font-size: 1.05rem; letter-spacing: 1px; font-family: 'Courier New', monospace;
-        font-weight: bold; text-align: left; line-height: 1.2;
-    }
-    .stroop-box h3 { color: var(--g-red); }
-    .trivia-box h3 { color: var(--g-blue); }
-    .genius-box h3 { color: var(--g-yellow); }
-    .seo-box p { font-size: 0.9rem; color: #ccc; line-height: 1.7; margin: 0; font-family: sans-serif; text-align: justify; }
-    .box-footer { margin-top: auto; padding-top: 25px; font-size: 0.6rem; color: #444; letter-spacing: 2px; text-align: right; }
-
-    @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
-
-    /* --- Mobile SEO Adjustments --- */
-    @media (max-width: 750px) {
-        .seo-header-wrapper { flex-direction: column; align-items: flex-start; gap: 10px; }
-        .seo-display-title { font-size: 0.9rem; padding: 0 10px; }
-        .seo-box { padding: 25px; }
-        .seo-box p { text-align: left; }
-    }
-
-    /* --- Footer --- */
-    .game-footer {
-        width: 100%; padding: 40px 20px; background: #0f0f0f; text-align: center; border-top: 1px solid #222;
-    }
-    .game-footer p { margin: 0; font-size: 14px; color: #666; }
-    .game-footer a { color: #888; text-decoration: none; font-size: 12px; margin-top: 10px; display: inline-block; }
-
-    /* --- Install Button --- */
-    #installBtn {
-        width: 35px; height: 35px; border: 2px solid #fff; border-radius: 50%;
-        display: none; align-items: center; justify-content: center;
-        cursor: pointer; background: transparent; margin-right: 10px;
-    }
-    .social-section {
+/* ==========================================
+   TOP BAR & IDIOMA
+   ========================================== */
+#top-bar {
     width: 100%;
-    margin: 30px 0 50px 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 20px 40px;
+    position: absolute;
+    top: 0;
+    z-index: 1000;
+}
+
+#installBtn {
+    width: 38px; 
+    height: 38px; 
+    border: 1px solid rgba(255, 255, 255, 0.2); 
+    border-radius: 50%;
+    display: none; 
+    align-items: center; 
+    justify-content: center;
+    cursor: pointer; 
+    background: rgba(255, 255, 255, 0.05); 
+    color: #fff;
+    margin-right: 15px;
+    backdrop-filter: blur(5px);
+    transition: 0.3s;
+}
+#installBtn:hover {
+    border-color: var(--g-blue);
+    box-shadow: 0 0 15px var(--g-blue);
+}
+
+#lang-selector { 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+}
+
+.lang-btn { 
+    width: 32px; 
+    height: 22px; 
+    cursor: pointer; 
+    filter: grayscale(0.9) opacity(0.6); 
+    transition: 0.3s ease; 
+    border: 1px solid rgba(255, 255, 255, 0.1); 
+    border-radius: 3px; 
+    overflow: hidden; 
+}
+
+.lang-btn.active { 
+    filter: grayscale(0) opacity(1); 
+    transform: translateY(-2px); 
+    border-color: var(--g-blue); 
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+}
+
+.lang-btn img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+}
+
+/* ==========================================
+   HEADER & LOGO
+   ========================================== */
+header { 
+    margin-top: 100px; 
+    text-align: center; 
+}
+
+.main-logo { 
+    font-size: 3.5rem; 
+    font-weight: 900; 
+    letter-spacing: -1px; 
+    margin: 0;
+    background: linear-gradient(135deg, #fff 30%, #a5b4fc 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+}
+
+#ui-hub-subtitle {
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: var(--g-blue);
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    font-weight: bold;
+    margin-top: 12px;
+    text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+}
+
+/* ==========================================
+   GRID DE JOGOS (CARDS)
+   ========================================== */
+.hub-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    width: 90%;
+    max-width: 1100px;
+    margin: 60px auto;
+    flex-grow: 1;
+}
+
+.game-card {
+    background: var(--card-inner);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 45px 35px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Brilho e elevação futurista nos Hovers */
+.game-card:hover { 
+    transform: translateY(-8px) scale(1.01); 
+    background: rgba(20, 25, 48, 0.85);
+}
+
+.card-pixel:hover { border-color: var(--g-red); box-shadow: 0 15px 40px rgba(255, 0, 127, 0.2); }
+.card-trivia:hover { border-color: var(--g-blue); box-shadow: 0 15px 40px rgba(0, 240, 255, 0.2); }
+.card-genius:hover { border-color: var(--g-yellow); box-shadow: 0 15px 40px rgba(189, 0, 255, 0.2); }
+
+/* Tags Holográficas */
+.tag { 
+    font-size: 1.5rem; 
+    font-weight: 800; 
+    margin-bottom: 12px; 
+    letter-spacing: -0.5px;
+}
+.card-pixel .tag { color: var(--g-red); text-shadow: 0 0 15px rgba(255, 0, 127, 0.4); }
+.card-trivia .tag { color: var(--g-blue); text-shadow: 0 0 15px rgba(0, 240, 255, 0.4); }
+.card-genius .tag { color: var(--g-yellow); text-shadow: 0 0 15px rgba(189, 0, 255, 0.4); }
+
+/* Botões de Ação Futuristas */
+.play-btn {
+    width: 100%;
+    padding: 16px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.03);
+    color: #ffffff;
+    backdrop-filter: blur(5px);
+    transition: all 0.4s ease;
+}
+
+/* O botão herda a cor neon correspondente ao card no hover */
+.card-pixel:hover .play-btn { background: var(--g-red); color: #000; box-shadow: 0 0 20px var(--g-red); border-color: transparent; }
+.card-trivia:hover .play-btn { background: var(--g-blue); color: #000; box-shadow: 0 0 20px var(--g-blue); border-color: transparent; }
+.card-genius:hover .play-btn { background: var(--g-yellow); color: #fff; box-shadow: 0 0 20px var(--g-yellow); border-color: transparent; }
+
+/* Carousel Indicators (Mobile) */
+.carousel-indicators {
+    display: none; 
+    justify-content: center; 
+    gap: 12px; 
+    margin-top: 20px; 
+    z-index: 10;
+}
+
+.dot {
+    width: 25px; 
+    height: 3px; 
+    border-radius: 2px; 
+    background: rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.dot.active { transform: scaleY(1.5); }
+.dot-pixel.active { background: var(--g-red); box-shadow: 0 0 10px var(--g-red); }
+.dot-trivia.active { background: var(--g-blue); box-shadow: 0 0 10px var(--g-blue); }
+.dot-genius.active { background: var(--g-yellow); box-shadow: 0 0 10px var(--g-yellow); }
+
+/* ==========================================
+   SEÇÃO SEO & REQUISITOS (INTERFACE HUD)
+   ========================================== */
+.seo-header-wrapper {
+    width: 90%; 
+    max-width: 1100px; 
+    margin: 40px auto 15px auto;
+    display: flex; 
+    justify-content: center; 
+}
+
+.seo-display-title {
+    font-family: 'Courier New', monospace; 
+    font-size: 1rem; 
+    color: #64748b;
+    text-transform: uppercase; 
+    letter-spacing: 3px; 
+    margin: 0;
+}
+
+.seo-container-advanced {
+    position: relative; 
+    width: 90%; 
+    max-width: 1100px; 
+    margin: 20px auto 80px auto;
+    padding: 1px; 
+    background: linear-gradient(90deg, rgba(255,0,127,0.3), rgba(0,240,255,0.3), rgba(189,0,255,0.3));
+    border-radius: 16px; 
+    overflow: hidden; 
+}
+
+.seo-grid {
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1px; 
+    background: #090b16; 
+    border-radius: 15px; 
+    overflow: hidden;
+}
+
+.seo-scanline {
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    background: linear-gradient(to bottom, transparent 95%, rgba(0, 240, 255, 0.08) 100%);
+    background-size: 100% 4px; /* Linhas de scan horizontais sutis fixed */
+    pointer-events: none; 
+    z-index: 5;
+}
+
+.seo-box {
+    background: rgba(13, 16, 32, 0.8); 
+    padding: 35px; 
+    position: relative;
+    display: flex; 
+    flex-direction: column;
+}
+
+.box-header { 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+    margin-bottom: 20px; 
+}
+
+.status-dot {
+    width: 6px; 
+    height: 6px; 
+    border-radius: 50%;
+    background: var(--g-green); 
+    box-shadow: 0 0 10px var(--g-green); 
+    animation: pulse 2s infinite;
+}
+
+.seo-box h3 {
+    margin: 0; 
+    font-size: 1rem; 
+    letter-spacing: 1px; 
+    font-weight: 700; 
+    text-transform: uppercase;
+}
+
+.stroop-box h3 { color: var(--g-red); }
+.trivia-box h3 { color: var(--g-blue); }
+.genius-box h3 { color: var(--g-yellow); }
+
+.seo-box p { 
+    font-size: 0.9rem; 
+    color: #94a3b8; 
+    line-height: 1.7; 
+    margin: 0; 
+    text-align: justify; 
+}
+
+.box-footer { 
+    margin-top: auto; 
+    padding-top: 25px; 
+    font-family: 'Courier New', monospace;
+    font-size: 0.65rem; 
+    color: #334155; 
+    letter-spacing: 2px; 
+}
+
+/* ==========================================
+   MÍDIAS SOCIAIS (LINKS FLUTUANTES)
+   ========================================== */
+.social-section {
+    width: 100%;
+    margin: 20px 0 60px 0;
     display: flex;
     justify-content: center;
 }
 
 .social-container {
     display: flex;
-    gap: 30px; /* Espaço entre as logos */
+    gap: 35px;
     align-items: center;
 }
 
 .social-link {
-    color: #555; /* Cor discreta inicial */
-    font-size: 1.8rem; /* Tamanho das logos */
-    transition: 0.3s;
+    color: #475569;
+    font-size: 1.6rem;
+    transition: all 0.3s ease;
     text-decoration: none;
 }
 
-/* Cores ao passar o mouse (Hover) */
 .social-link:hover {
-    transform: translateY(-3px);
+    transform: translateY(-4px);
 }
 
-.social-link[aria-label="TikTok"]:hover { color: #ff0050; text-shadow: 0 0 10px rgba(255, 0, 80, 0.5); }
-.social-link[aria-label="Instagram"]:hover { color: #e1306c; text-shadow: 0 0 10px rgba(225, 48, 108, 0.5); }
-.social-link[aria-label="Discord"]:hover { color: #5865f2; text-shadow: 0 0 10px rgba(88, 101, 242, 0.5); }
-.social-link[aria-label="YouTube"]:hover { color: #ff0000; text-shadow: 0 0 10px rgba(255, 0, 0, 0.5); }
+.social-link[aria-label="TikTok"]:hover { color: var(--g-red); filter: drop-shadow(0 0 8px var(--g-red)); }
+.social-link[aria-label="Instagram"]:hover { color: #ff00bb; filter: drop-shadow(0 0 8px #ff00bb); }
+.social-link[aria-label="Discord"]:hover { color: #5865f2; filter: drop-shadow(0 0 8px #5865f2); }
+.social-link[aria-label="YouTube"]:hover { color: #ff0000; filter: drop-shadow(0 0 8px #ff0000); }
+
+/* ==========================================
+   RODAPÉ (FOOTER ESPACIAL)
+   ========================================== */
+.game-footer {
+    width: 100%; 
+    padding: 40px 20px; 
+    background: #03040b; 
+    text-align: center; 
+    border-top: 1px solid rgba(255,255,255,0.03);
+}
+
+.game-footer p { 
+    margin: 0; 
+    font-size: 13px; 
+    color: #475569; 
+}
+
+.game-footer a { 
+    color: #64748b; 
+    text-decoration: none; 
+    font-size: 12px; 
+    margin-top: 12px; 
+    display: inline-block; 
+    transition: 0.3s;
+}
+.game-footer a:hover {
+    color: var(--g-blue);
+}
+
+/* ==========================================
+   ANIMAÇÕES COLETIVAS
+   ========================================== */
+@keyframes pulse { 
+    0%, 100% { opacity: 0.3; } 
+    50% { opacity: 1; } 
+}
+
+/* ==========================================
+   MEDIA QUERIES (OTIMIZAÇÃO MOBILE)
+   ========================================== */
+@media (max-width: 750px) {
+    #top-bar { 
+        justify-content: center; 
+        background: rgba(6, 7, 19, 0.85); 
+        backdrop-filter: blur(10px);
+        position: fixed; 
+        padding: 15px;
+    }
+
+    header { 
+        margin-top: 120px; 
+    }
+
+    .main-logo { 
+        font-size: 2.4rem; 
+    }
+
+    .hub-container {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 20px;
+        padding: 20px 8% 40px 8%;
+        width: 100%;
+        margin-top: 30px;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Remove o efeito 3D pesado no mobile para melhor performance */
+    .game-card { 
+        min-width: 84vw; 
+        scroll-snap-align: center; 
+        padding: 35px 25px;
+    }
+    .game-card:hover {
+        transform: none;
+    }
+
+    .carousel-indicators { 
+        display: flex; 
+    }
+
+    .seo-header-wrapper { 
+        justify-content: flex-start;
+        padding-left: 5%;
+    }
+
+    .seo-box { 
+        padding: 25px; 
+    }
+
+    .seo-box p { 
+        text-align: left; 
+    }
+}
     </style>
 </head>
 <body>

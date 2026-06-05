@@ -6,47 +6,198 @@
     <title>Política de Privacidade | Pixel Click</title>
     <style>
         :root { 
-            --bg-color: #121212; 
-            --accent: #3498db; 
-        }
-        body { 
-            background-color: var(--bg-color); 
-            color: #ccc; 
-            font-family: sans-serif; 
-            line-height: 1.6; 
-            margin: 0; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            min-height: 100vh;
-        }
-        
-        /* Container do Texto */
-        #policy-container { padding: 80px 20px 40px 20px; max-width: 800px; width: 100%; box-sizing: border-box; }
-        
-        h1 { color: white; font-family: 'Courier New', monospace; border-bottom: 2px solid var(--accent); padding-bottom: 10px; }
-        h2 { color: var(--accent); font-family: 'Courier New', monospace; margin-top: 30px; }
-        a { color: var(--accent); text-decoration: none; }
-        a:hover { text-decoration: underline; }
+    --bg-color: #060713; /* Fundo espacial profundo */
+    --card-inner: rgba(15, 18, 36, 0.6); /* Painel de vidro escuro translúcido */
+    --border-color: rgba(255, 255, 255, 0.08);
+    --accent: #00f0ff; /* Ciano Cibernético Neon */
+    --accent-glow: rgba(0, 240, 255, 0.3);
+}
 
-        /* Navegação */
-        #home-button { position: fixed; top: 15px; left: 15px; width: 40px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10001 !important; transition: 0.3s; color: white; }
-        #home-button:hover { transform: scale(1.1); color: var(--accent); }
-        
-        #lang-selector { position: fixed; top: 15px; right: 15px; display: flex; gap: 12px; z-index: 10001 !important; }
-        .lang-btn { width: 40px; height: 30px; cursor: pointer; filter: grayscale(0.8); transition: 0.3s; border: 2px solid transparent; }
-        .lang-btn.active { filter: grayscale(0); transform: scale(1.2); border-color: white; }
-        .lang-btn img { width: 100%; height: 100%; object-fit: cover; }
+/* ==========================================
+   ELEMENTOS GLOBAIS
+   ========================================== */
+* {
+    box-sizing: border-box;
+}
 
-        /* Footer Ajustado */
-        .game-footer { width: 100%; margin-top: auto; padding: 30px 20px; background-color: #161616; border-top: 1px solid #333; text-align: center; box-sizing: border-box; }
-        .footer-content p { color: #888; font-size: 13px; margin: 5px 0; }
+body { 
+    background-color: var(--bg-color); 
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(0, 240, 255, 0.03) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(189, 0, 255, 0.03) 0px, transparent 50%);
+    color: #94a3b8; /* Texto cinza azulado suave, muito mais moderno */
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+    line-height: 1.7; 
+    margin: 0; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    min-height: 100vh;
+}
 
-        @media (max-width: 600px) {
-            #lang-selector { top: 5px; left: 50%; right: auto; transform: translateX(-50%); }
-            #home-button { top: 5px; left: 10px; }
-            #policy-container { padding-top: 60px; }
-        }
+/* ==========================================
+   PAINEL DE TEXTO (GLASSMORPHISM)
+   ========================================== */
+#policy-container { 
+    padding: 40px; 
+    max-width: 850px; 
+    width: 90%; 
+    margin: 120px auto 60px auto; /* Espaço para o menu fixo no topo */
+    background: var(--card-inner);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+/* Tipografia Avançada */
+h1 { 
+    color: white; 
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+    padding-bottom: 20px; 
+    margin-top: 0;
+}
+
+h2 { 
+    color: var(--accent); 
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-top: 40px; 
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px var(--accent-glow);
+}
+
+a { 
+    color: var(--accent); 
+    text-decoration: none; 
+    transition: 0.3s ease;
+    border-bottom: 1px dashed transparent;
+}
+
+a:hover { 
+    border-color: var(--accent);
+    text-shadow: 0 0 8px var(--accent-glow);
+}
+
+/* ==========================================
+   NAVEGAÇÃO (MENU FIXO)
+   ========================================== */
+#home-button { 
+    position: fixed; 
+    top: 20px; 
+    left: 30px; 
+    width: 45px; 
+    height: 35px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    cursor: pointer; 
+    z-index: 10001 !important; 
+    transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+    color: #64748b; 
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    backdrop-filter: blur(5px);
+}
+
+#home-button:hover { 
+    transform: translateY(-2px); 
+    color: white; 
+    border-color: var(--accent);
+    box-shadow: 0 0 15px var(--accent-glow);
+}
+
+#lang-selector { 
+    position: fixed; 
+    top: 20px; 
+    right: 30px; 
+    display: flex; 
+    gap: 12px; 
+    z-index: 10001 !important; 
+}
+
+.lang-btn { 
+    width: 32px; 
+    height: 22px; 
+    cursor: pointer; 
+    filter: grayscale(0.9) opacity(0.5); 
+    transition: 0.3s ease; 
+    border: 1px solid rgba(255, 255, 255, 0.1); 
+    border-radius: 3px; 
+    overflow: hidden;
+}
+
+.lang-btn.active { 
+    filter: grayscale(0) opacity(1); 
+    transform: translateY(-2px); 
+    border-color: var(--accent); 
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+}
+
+.lang-btn img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+}
+
+/* ==========================================
+   RODAPÉ (FOOTER ESPACIAL)
+   ========================================== */
+.game-footer { 
+    width: 100%; 
+    margin-top: auto; 
+    padding: 40px 20px; 
+    background-color: #03040b; 
+    border-top: 1px solid rgba(255, 255, 255, 0.03); 
+    text-align: center; 
+}
+
+.footer-content p { 
+    color: #475569; 
+    font-size: 13px; 
+    margin: 5px 0; 
+}
+
+/* ==========================================
+   MEDIA QUERIES (OTIMIZAÇÃO MOBILE)
+   ========================================== */
+@media (max-width: 750px) {
+    /* Barra superior mobile consolidada para o topo */
+    #lang-selector { 
+        top: 12px; 
+        left: 50%; 
+        right: auto; 
+        transform: translateX(-50%); 
+    }
+    
+    #home-button { 
+        top: 12px; 
+        left: 15px; 
+        width: 38px;
+        height: 32px;
+    }
+    
+    #policy-container { 
+        margin-top: 90px; 
+        padding: 30px 20px; 
+        width: 92%;
+        border-radius: 16px;
+    }
+    
+    h1 {
+        font-size: 1.7rem;
+    }
+    
+    h2 {
+        font-size: 1.15rem;
+    }
+}
     </style>
 </head>
 <body>
@@ -72,6 +223,7 @@
     <footer class="game-footer">
         <div class="footer-content">
             <p id="footer-text"></p>
+            <p id="footer-subtext"></p>
         </div>
     </footer>
 
@@ -81,7 +233,8 @@
                 title: "Política de Privacidade",
                 date: "Última atualização: Abril de 2026.",
                 footerMain: "<strong>Pixel Click®</strong> - Desafios de Agilidade e Conhecimento",
-                    html: `
+                footerSub: "Desenvolvido para testar os seus limites.",
+                html: `
                     <p>A sua privacidade é importante para nós. Esta política explica como o <strong>Pixel Click</strong> lida com seus dados.</p>
                     <h2>1. Coleta de Dados</h2>
                     <p>Não coletamos informações de identificação pessoal (como nome ou e-mail) a menos que você as forneça voluntariamente. Coletamos dados técnicos básicos como seu endereço IP e recordes obtidos nos jogos para fins de estatística e ranking local.</p>
@@ -96,7 +249,8 @@
                 title: "Privacy Policy",
                 date: "Last update: April 2026.",
                 footerMain: "<strong>Pixel Click®</strong> - Agility and Knowledge Challenges",
-                    html: `
+                footerSub: "Developed to test your limits.",
+                html: `
                     <p>Your privacy is important to us. This policy explains how <strong>Pixel Click</strong> handles your data.</p>
                     <h2>1. Data Collection</h2>
                     <p>We do not collect personally identifiable information (such as name or email) unless you provide it voluntarily. We collect basic technical data like your IP address and game records for statistics and local ranking purposes.</p>
@@ -111,7 +265,8 @@
                 title: "Politique de Confidentialité",
                 date: "Dernière mise à jour : Avril 2026.",
                 footerMain: "<strong>Pixel Click®</strong> - Défis d'Agilité et de Connaissances",
-                    html: `
+                footerSub: "Développé pour tester vos limites.",
+                html: `
                     <p>Votre vie privée est importante pour nous. Cette politique explique comment <strong>Pixel Click</strong> gère vos données.</p>
                     <h2>1. Collecte de Données</h2>
                     <p>Nous ne collectons pas d'informations d'identification personnelle. Nous collectons des données techniques de base comme votre adresse IP et vos scores pour des statistiques et le classement local.</p>
@@ -126,7 +281,8 @@
                 title: "Política de Privacidad",
                 date: "Última actualización: Abril de 2026.",
                 footerMain: "<strong>Pixel Click®</strong> - Desafíos de Agilidad y Conocimiento",
-                    html: `
+                footerSub: "Desarrollado para poner a prueba tus límites.",
+                html: `
                     <p>Su privacidad es importante para nosotros. Esta política explica cómo <strong>Pixel Click</strong> maneja sus datos.</p>
                     <h2>1. Recolección de Datos</h2>
                     <p>No recolectamos información de identificación personal. Recolectamos datos técnicos básicos como su dirección IP y récords para fines de estadísticas y ranking local.</p>
