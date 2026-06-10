@@ -21,7 +21,7 @@
     --g-red: #ff007f;
     --g-blue: #00f0ff;
     --g-green: #00ff66;
-    --g-yellow: #bd00ff;
+    --g-yellow: #fff700;
 }
 
 /* ==========================================
@@ -216,18 +216,49 @@ body {
 }
 
 /* Cores Translúcidas com Hover Neon Brilhante */
-#opt-0 { background: rgba(255, 0, 127, 0.15); border-color: rgba(255, 0, 127, 0.3); }
-#opt-0:hover { background: var(--g-red); color: #000; box-shadow: 0 0 25px rgba(255, 0, 127, 0.6); border-color: transparent; }
+#opt-0 { 
+    background: rgba(255, 0, 127, 0.15); 
+    border-color: rgba(255, 0, 127, 0.3); 
+}
+#opt-0:hover { 
+    background: var(--g-red); 
+    color: #000; 
+    box-shadow: 0 0 25px rgba(255, 0, 127, 0.6); 
+    border-color: transparent; 
+}
 
-#opt-1 { background: rgba(0, 240, 255, 0.15); border-color: rgba(0, 240, 255, 0.3); }
-#opt-1:hover { background: var(--g-blue); color: #000; box-shadow: 0 0 25px rgba(0, 240, 255, 0.6); border-color: transparent; }
+#opt-1 { 
+    background: rgba(0, 240, 255, 0.15); 
+    border-color: rgba(0, 240, 255, 0.3); 
+}
+#opt-1:hover { 
+    background: var(--g-blue); 
+    color: #000; 
+    box-shadow: 0 0 25px rgba(0, 240, 255, 0.6); 
+    border-color: transparent; 
+}
 
-#opt-2 { background: rgba(0, 255, 102, 0.15); border-color: rgba(0, 255, 102, 0.3); }
-#opt-2:hover { background: var(--g-green); color: #000; box-shadow: 0 0 25px rgba(0, 255, 102, 0.6); border-color: transparent; }
+#opt-2 { 
+    background: rgba(0, 255, 102, 0.15); 
+    border-color: rgba(0, 255, 102, 0.3); 
+}
+#opt-2:hover { 
+    background: var(--g-green); 
+    color: #000; 
+    box-shadow: 0 0 25px rgba(0, 255, 102, 0.6); 
+    border-color: transparent; 
+}
 
-#opt-3 { background: rgba(189, 0, 255, 0.15); border-color: rgba(189, 0, 255, 0.3); }
-#opt-3:hover { background: var(--g-yellow); color: #fff; box-shadow: 0 0 25px rgba(189, 0, 255, 0.6); border-color: transparent; }
-
+#opt-3 { 
+    background: rgba(255, 247, 0, 0.15); /* Corrigido para Amarelo (#fff700) */
+    border-color: rgba(255, 247, 0, 0.3); /* Corrigido para Amarelo (#fff700) */
+}
+#opt-3:hover { 
+    background: var(--g-yellow); 
+    color: #000; /* Alterado para preto para dar contraste com o fundo amarelo brilhante */
+    box-shadow: 0 0 25px rgba(255, 247, 0, 0.6); /* Corrigido para Amarelo (#fff700) */
+    border-color: transparent; 
+}
 /* ==========================================
    CHAMPION SPOTLIGHT
    ========================================== */
