@@ -3,89 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CopaNews Studio - Pro Edition</title>
+    <title>CopaNews Studio - Exportador MP4</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/RecordRTC/5.6.2/RecordRTC.js"></script>
     <style>
         /* Reset e Base */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background-color: #050505; color: #fff; font-family: 'Montserrat', sans-serif; overflow: hidden; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        body { background-color: #050505; color: #fff; font-family: 'Montserrat', sans-serif; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
 
         /* PAINEL DE CONFIGURAÇÃO */
         .setup-container {
             background: #111; padding: 30px; border-radius: 20px; border: 1px solid #222;
-            width: 100%; max-width: 400px; z-index: 100; box-shadow: 0 10px 50px rgba(0,0,0,0.8);
+            width: 100%; max-width: 400px; box-shadow: 0 10px 50px rgba(0,0,0,0.8);
+            position: relative;
         }
         .setup-container h2 { color: #ffd700; text-align: center; margin-bottom: 20px; font-size: 1.5rem; text-transform: uppercase; }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; font-size: 12px; color: #888; margin-bottom: 5px; text-transform: uppercase; }
         .form-group input { width: 100%; padding: 12px; background: #1a1a1a; border: 1px solid #333; border-radius: 8px; color: #fff; outline: none; }
+        
         .btn-gerar { width: 100%; padding: 15px; background: linear-gradient(135deg, #ffd700, #b8860b); border: none; border-radius: 8px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
         .btn-gerar:hover { filter: brightness(1.2); transform: scale(1.02); }
+        .btn-gerar:disabled { background: #444; color: #888; cursor: not-allowed; }
 
-        /* TELA DE PREVIEW (TIKTOK 9:16) */
-        .preview-screen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; display: none; justify-content: center; align-items: center; z-index: 999; }
-        .canvas-9-16 { width: calc(100vh * (9 / 16)); height: 100vh; max-width: 100vw; position: relative; overflow: hidden; background: #000; }
+        /* Status de Renderização */
+        #statusMsg { text-align: center; color: #ffd700; font-weight: bold; margin-top: 15px; display: none; font-size: 14px; }
+
+        /* CONTAINER OFF-SCREEN (Onde a mágica acontece escondida) */
+        .render-box {
+            position: absolute; top: -9999px; left: -9999px; /* Joga para fora da tela para o usuário não ver */
+            width: 540px; height: 960px; /* Resolução nativa estável TikTok 9:16 */
+        }
+        .canvas-9-16 { width: 100%; height: 100%; position: relative; background: #000; }
         video { width: 100%; height: 100%; object-fit: cover; }
 
         /* MOLDURA DOURADA */
         .golden-frame {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10;
-            border: 6px solid transparent;
-            border-image: linear-gradient(135deg, #b8860b 0%, #ffd700 25%, #fff8dc 50%, #ffd700 75%, #b8860b 100%) 6;
-            box-shadow: inset 0 0 40px rgba(0,0,0,0.8);
+            border: 12px solid transparent;
+            border-image: linear-gradient(135deg, #b8860b 0%, #ffd700 25%, #fff8dc 50%, #ffd700 75%, #b8860b 100%) 12;
+            box-shadow: inset 0 0 60px rgba(0,0,0,0.9);
         }
 
-        /* LOGO NEYLOGO (SUPERIOR DIREITO) */
-        .neylogo-btn {
-            position: absolute; top: 30px; right: 25px; width: 85px; height: 85px;
-            border-radius: 50%; overflow: hidden; border: 3px solid #ffd700;
-            z-index: 20; cursor: pointer; pointer-events: auto; background: #000;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5); transition: 0.3s;
+        /* LOGO NEYLOGO */
+        .neylogo-frame {
+            position: absolute; top: 60px; right: 40px; width: 120px; height: 120px;
+            border-radius: 50%; overflow: hidden; border: 4px solid #ffd700; z-index: 20; background: #000;
         }
-        .neylogo-btn img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.1); }
-        .neylogo-btn:hover { transform: rotate(10deg) scale(1.1); }
+        .neylogo-frame img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.1); }
 
-        /* BARRA DE NOTÍCIAS (MODELO ENVIADO) */
+        /* BARRA DE NOTÍCIAS */
         .news-bar-container {
-            position: absolute; bottom: 260px; /* Acima da zona de legenda do TikTok */
-            width: 100%; display: flex; flex-direction: column; align-items: center; z-index: 20;
+            position: absolute; bottom: 180px; width: 100%; display: flex; flex-direction: column; align-items: center; z-index: 20;
         }
 
-        /* BARRA AZUL (SUBTÍTULO) */
+        /* BARRA DOURADA (SUBTÍTULO) */
         .bar-subtitle {
-            background: linear-gradient(90deg, #000d1a 0%, #003366 50%, #001a33 100%);
-            padding: 12px 50px;
-            transform: skewX(-20deg);
-            border-right: 4px solid #ffd700;
-            box-shadow: 10px 10px 20px rgba(0,0,0,0.5);
-            min-width: 320px;
-            display: flex; justify-content: center; align-items: center;
+            background: linear-gradient(90deg, #8a6f27 0%, #ffd700 50%, #b8860b 100%);
+            padding: 16px 60px; transform: skewX(-20deg); border-right: 6px solid #ffffff; min-width: 420px; display: flex; justify-content: center; align-items: center;
         }
         .bar-subtitle span {
-            color: #fff; font-family: 'Arial', sans-serif; font-weight: 600;
-            font-size: 16px; transform: skewX(20deg); /* Desfaz o skew para o texto */
-            text-transform: uppercase; letter-spacing: 1px; text-align: center;
+            color: #000000; font-family: 'Arial', sans-serif; font-weight: 800; font-size: 20px; transform: skewX(20deg); text-transform: uppercase; text-align: center;
         }
 
-        /* BARRA BRANCA (TÍTULO/MANCHETE) */
+        /* BARRA INFERIOR (TÍTULO/MANCHETE) */
         .bar-title {
-            background: #ffffff;
-            padding: 8px 30px;
-            transform: skewX(-20deg) translateY(-5px) translateX(-20px);
-            min-width: 280px;
-            box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
-            display: flex; justify-content: center; align-items: center;
+            background: #ffffff; padding: 12px 40px; transform: skewX(-20deg) translateY(-8px) translateX(-30px); min-width: 380px; display: flex; justify-content: center; align-items: center;
         }
         .bar-title span {
-            color: #000; font-family: 'Arial Black', 'Impact', sans-serif;
-            font-weight: 900; font-size: 20px; transform: skewX(20deg);
-            text-transform: uppercase; text-align: center;
+            color: #000; font-family: 'Impact', 'Arial Black', sans-serif; font-weight: 900; font-size: 26px; transform: skewX(20deg); text-transform: uppercase; text-align: center;
         }
     </style>
 </head>
 <body>
 
-    <div class="setup-container" id="setupPanel">
-        <h2>CopaNews 2026</h2>
+    <div class="setup-container">
+        <h2>CopaNews Export</h2>
         <div class="form-group">
             <label>Vídeo da Notícia:</label>
             <input type="file" id="videoInput" accept="video/*">
@@ -95,75 +87,91 @@
             <input type="text" id="titleInput" placeholder="Ex: NEYMAR VOLTOU!">
         </div>
         <div class="form-group">
-            <label>Subtítulo (Barra Azul):</label>
+            <label>Subtítulo (Barra Dourada):</label>
             <input type="text" id="subtitleInput" placeholder="Ex: VEJA O GOLAÇO NO TREINO">
         </div>
-        <button class="btn-gerar" onclick="gerarPreview()">⚡ Gerar Notícia</button>
+        <button class="btn-gerar" id="btnGerar" onclick="processarEDownload()">🎬 Gerar e Baixar MP4</button>
+        <div id="statusMsg">Processando vídeo... Aguarde o término automático.</div>
     </div>
 
-    <div class="preview-screen" id="previewScreen">
-        
-        <div class="neylogo-btn" onclick="voltar()" title="Clique para editar">
-            <img src="neylogo.png" alt="Logo">
-        </div>
-
-        <div class="canvas-9-16">
-            <video id="videoPlayer" loop muted autoplay></video>
-            
+    <div class="render-box" id="renderBox">
+        <div class="canvas-9-16" id="captureTarget">
+            <video id="videoPlayer" muted></video>
             <div class="golden-frame"></div>
-
+            <div class="neylogo-frame">
+                <img src="neylogo.png" alt="Logo">
+            </div>
             <div class="news-bar-container">
                 <div class="bar-subtitle">
-                    <span id="outSubtitle">LOREM IPSUM DOLOR SIT</span>
+                    <span id="outSubtitle">SUBTÍTULO</span>
                 </div>
                 <div class="bar-title">
-                    <span id="outTitle">HEADLINE TEXT HERE</span>
+                    <span id="outTitle">MANCHETE PRINCIPAL</span>
                 </div>
             </div>
-
         </div>
     </div>
 
     <script>
-        function gerarPreview() {
+        function processarEDownload() {
             const videoIn = document.getElementById('videoInput');
             const titleIn = document.getElementById('titleInput').value;
             const subtitleIn = document.getElementById('subtitleInput').value;
+            const btn = document.getElementById('btnGerar');
+            const statusMsg = document.getElementById('statusMsg');
 
             if(!videoIn.files[0]) {
                 alert("Selecione um vídeo primeiro!");
                 return;
             }
 
-            // Configurar Vídeo
+            btn.disabled = true;
+            statusMsg.style.display = "block";
+
             const player = document.getElementById('videoPlayer');
             player.src = URL.createObjectURL(videoIn.files[0]);
 
-            // Configurar Textos
+            // Atualiza os textos internos da área secreta de renderização
             document.getElementById('outTitle').innerText = titleIn ? titleIn : "MANCHETE PRINCIPAL";
             document.getElementById('outSubtitle').innerText = subtitleIn ? subtitleIn : "DETALHES DA NOTÍCIA";
 
-            // Trocar Telas
-            document.getElementById('setupPanel').style.display = 'none';
-            document.getElementById('previewScreen').style.display = 'flex';
+            player.onloadeddata = function() {
+                player.play();
 
-            // Tela Cheia
-            if (document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen();
-            }
-            player.play();
-        }
+                // Captura o stream do elemento HTML que junta o vídeo + as barras douradas
+                const elementToCapture = document.getElementById('captureTarget');
+                
+                // Mágica do RecordRTC: Transforma o elemento visual em dados de vídeo comprimidos
+                const recorder = RecordRTC(elementToCapture, {
+                    type: 'canvas',
+                    showRecordingDuration: false,
+                    mimeType: 'video/mp4', // Força a conversão para MP4
+                    bitsPerSecond: 12000000 // Alta qualidade de bitrate (12Mbps) para o TikTok
+                });
 
-        function voltar() {
-            const player = document.getElementById('videoPlayer');
-            player.pause();
-            
-            if (document.exitFullscreen && document.fullscreenElement) {
-                document.exitFullscreen();
-            }
+                recorder.startRecording();
 
-            document.getElementById('previewScreen').style.display = 'none';
-            document.getElementById('setupPanel').style.display = 'block';
+                // Quando o vídeo original terminar de rodar, ele para de gravar e baixa
+                player.onended = function() {
+                    recorder.stopRecording(function() {
+                        const blob = recorder.getBlob();
+                        
+                        // Executa o download automático do MP4 para o seu computador/celular
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `copanews_${Date.now()}.mp4`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+
+                        // Reseta a interface
+                        btn.disabled = false;
+                        statusMsg.style.display = "none";
+                        alert("Vídeo MP4 exportado com sucesso para a sua pasta de downloads!");
+                    });
+                };
+            };
         }
     </script>
 </body>
