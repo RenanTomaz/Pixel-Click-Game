@@ -3,314 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CopaNews - Gerador de Conteúdo Profissional</title>
+    <title>CopaNews Studio - Pro Edition</title>
     <style>
-        /* Configurações Gerais de Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* Reset e Base */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: #050505; color: #fff; font-family: 'Montserrat', sans-serif; overflow: hidden; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
 
-        body {
-            background-color: #0d0d0d;
-            color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            font-family: 'Segoe UI', -apple-system, Roboto, sans-serif;
-            overflow: hidden;
-        }
-
-        /* PAINEL DE CONFIGURAÇÃO (TELA INICIAL) */
+        /* PAINEL DE CONFIGURAÇÃO */
         .setup-container {
-            background: #161616;
-            padding: 35px;
-            border-radius: 24px;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8);
-            width: 100%;
-            max-width: 460px;
-            border: 1px solid #262626;
-            z-index: 10;
+            background: #111; padding: 30px; border-radius: 20px; border: 1px solid #222;
+            width: 100%; max-width: 400px; z-index: 100; box-shadow: 0 10px 50px rgba(0,0,0,0.8);
+        }
+        .setup-container h2 { color: #ffd700; text-align: center; margin-bottom: 20px; font-size: 1.5rem; text-transform: uppercase; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 12px; color: #888; margin-bottom: 5px; text-transform: uppercase; }
+        .form-group input { width: 100%; padding: 12px; background: #1a1a1a; border: 1px solid #333; border-radius: 8px; color: #fff; outline: none; }
+        .btn-gerar { width: 100%; padding: 15px; background: linear-gradient(135deg, #ffd700, #b8860b); border: none; border-radius: 8px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+        .btn-gerar:hover { filter: brightness(1.2); transform: scale(1.02); }
+
+        /* TELA DE PREVIEW (TIKTOK 9:16) */
+        .preview-screen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; display: none; justify-content: center; align-items: center; z-index: 999; }
+        .canvas-9-16 { width: calc(100vh * (9 / 16)); height: 100vh; max-width: 100vw; position: relative; overflow: hidden; background: #000; }
+        video { width: 100%; height: 100%; object-fit: cover; }
+
+        /* MOLDURA DOURADA */
+        .golden-frame {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10;
+            border: 6px solid transparent;
+            border-image: linear-gradient(135deg, #b8860b 0%, #ffd700 25%, #fff8dc 50%, #ffd700 75%, #b8860b 100%) 6;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.8);
         }
 
-        .setup-container h2 {
-            margin-bottom: 25px;
-            text-align: center;
-            color: #ffd700;
-            text-transform: uppercase;
-            font-size: 22px;
-            letter-spacing: 1.5px;
-            font-weight: 800;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 13px;
-            color: #aaa;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .form-group input[type="text"],
-        .form-group input[type="file"] {
-            width: 100%;
-            padding: 14px;
-            background: #222;
-            border: 1px solid #333;
-            border-radius: 12px;
-            color: white;
-            outline: none;
-            font-size: 15px;
-            transition: 0.3s;
-        }
-
-        .form-group input[type="text"]:focus {
-            border-color: #ffd700;
-            box-shadow: 0 0 8px rgba(255, 215, 0, 0.2);
-        }
-
-        .btn-gerar {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #ffd700, #b8860b);
-            border: none;
-            border-radius: 12px;
-            color: #000;
-            font-size: 16px;
-            font-weight: 800;
-            cursor: pointer;
-            transition: 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 10px;
-        }
-
-        .btn-gerar:hover {
-            filter: brightness(1.2);
-            transform: translateY(-2px);
-        }
-
-        /* TELA DE PREVIEW (MOCKUP TIKTOK) */
-        .preview-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: #000;
-            display: none; 
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-
-        /* Canvas estrito em 9:16 - Idêntico ao Render de Smartphone */
-        .video-player-9-16 {
-            width: calc(100vh * (9 / 16));
-            height: 100vh;
-            max-width: 100vw;
-            position: relative;
-            background: #000;
-            overflow: hidden;
-        }
-
-        /* Ajuste do Vídeo em Corte Central */
-        .video-player-9-16 video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1;
-        }
-
-        /* MOLDURA DOURADA COPA NEWS */
-        .golden-interface {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
-            pointer-events: none;
-            /* Borda metálica baseada no anel da foto */
-            border: 8px solid transparent;
-            border-image: linear-gradient(135deg, #b8860b 0%, #ffd700 25%, #fff8dc 50%, #ffd700 75%, #b8860b 100%) 8;
-            box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.9);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0px 20px;
-        }
-
-        /* BOTÃO NEYLOGO (MÁSCARA CIRCULAR PERFEITA) */
+        /* LOGO NEYLOGO (SUPERIOR DIREITO) */
         .neylogo-btn {
-            position: absolute;
-            top: 120px; /* Alinhado abaixo do menu superior padrão do TikTok */
-            right: 25px;
-            width: 70px;
-            height: 70px;
-            z-index: 10;
-            cursor: pointer;
-            pointer-events: auto;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 2.5px solid #ffd700;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-            transition: transform 0.2s;
-            background-color: #000;
+            position: absolute; top: 30px; right: 25px; width: 85px; height: 85px;
+            border-radius: 50%; overflow: hidden; border: 3px solid #ffd700;
+            z-index: 20; cursor: pointer; pointer-events: auto; background: #000;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5); transition: 0.3s;
+        }
+        .neylogo-btn img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.1); }
+        .neylogo-btn:hover { transform: rotate(10deg) scale(1.1); }
+
+        /* BARRA DE NOTÍCIAS (MODELO ENVIADO) */
+        .news-bar-container {
+            position: absolute; bottom: 260px; /* Acima da zona de legenda do TikTok */
+            width: 100%; display: flex; flex-direction: column; align-items: center; z-index: 20;
         }
 
-        /* Recorte para pegar apenas o círculo dourado interno da imagem */
-        .neylogo-btn img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transform: scale(1.02); /* Elimina qualquer borda quadrada residual */
+        /* BARRA AZUL (SUBTÍTULO) */
+        .bar-subtitle {
+            background: linear-gradient(90deg, #000d1a 0%, #003366 50%, #001a33 100%);
+            padding: 12px 50px;
+            transform: skewX(-20deg);
+            border-right: 4px solid #ffd700;
+            box-shadow: 10px 10px 20px rgba(0,0,0,0.5);
+            min-width: 320px;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .bar-subtitle span {
+            color: #fff; font-family: 'Arial', sans-serif; font-weight: 600;
+            font-size: 16px; transform: skewX(20deg); /* Desfaz o skew para o texto */
+            text-transform: uppercase; letter-spacing: 1px; text-align: center;
         }
 
-        .neylogo-btn:hover {
-            transform: scale(1.08);
+        /* BARRA BRANCA (TÍTULO/MANCHETE) */
+        .bar-title {
+            background: #ffffff;
+            padding: 8px 30px;
+            transform: skewX(-20deg) translateY(-5px) translateX(-20px);
+            min-width: 280px;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+            display: flex; justify-content: center; align-items: center;
         }
-
-        /* PADRÃO DE TEXTO GRANDES CANAIS (MANCHETE NO TOPO) */
-        .hud-top {
-            width: 90%;
-            text-align: center;
-            margin-top: 115px; /* Recuo exato para fugir do "Seguindo / Para Você" */
-        }
-
-        .hud-top h1 {
-            font-family: 'Impact', 'Arial Black', sans-serif;
-            color: #ffffff;
-            font-size: 32px;
-            text-transform: uppercase;
-            line-height: 1.1;
-            letter-spacing: 0.5px;
-            /* Sombra projetada pesada para dar leitura sobre qualquer fundo de vídeo */
-            filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 1)) drop-shadow(0px 0px 15px rgba(0,0,0,0.6));
-        }
-
-        /* PADRÃO DE TEXTO (LEGENDA DINÂMICA NA BASE) */
-        .hud-bottom {
-            width: 100%;
-            text-align: center;
-            margin-bottom: 240px; /* Recuo para ficar livre dos textos nativos do TikTok (@user e tags) */
-            padding: 0 10px;
-        }
-
-        .hud-bottom p {
-            font-family: 'Arial Black', sans-serif;
-            color: #ffffff;
-            font-size: 16px;
-            font-weight: 900;
-            text-transform: uppercase;
-            display: inline-block;
-            background: #ffd700;
-            color: #000000; /* Texto preto no fundo amarelo gera alto contraste e retenção */
-            padding: 10px 18px;
-            border-radius: 4px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.5);
-            max-width: 95%;
-            line-height: 1.3;
-            letter-spacing: -0.3px;
+        .bar-title span {
+            color: #000; font-family: 'Arial Black', 'Impact', sans-serif;
+            font-weight: 900; font-size: 20px; transform: skewX(20deg);
+            text-transform: uppercase; text-align: center;
         }
     </style>
 </head>
 <body>
 
     <div class="setup-container" id="setupPanel">
-        <h2>CopaNews Studio</h2>
-        
+        <h2>CopaNews 2026</h2>
         <div class="form-group">
-            <label for="videoInput">Vídeo Bruto (16:9 ou 9:16):</label>
+            <label>Vídeo da Notícia:</label>
             <input type="file" id="videoInput" accept="video/*">
         </div>
-
         <div class="form-group">
-            <label for="titleInput">Manchete de Impacto (Topo):</label>
-            <input type="text" id="titleInput" placeholder="Ex: FALHA BISONHA ABRE O PLACAR!">
+            <label>Título (Barra Branca):</label>
+            <input type="text" id="titleInput" placeholder="Ex: NEYMAR VOLTOU!">
         </div>
-
         <div class="form-group">
-            <label for="subtitleInput">Subtítulo Retenção (Base):</label>
-            <input type="text" id="subtitleInput" placeholder="Ex: QUIÑONES DEIXA O MÉXICO NA FRENTE">
+            <label>Subtítulo (Barra Azul):</label>
+            <input type="text" id="subtitleInput" placeholder="Ex: VEJA O GOLAÇO NO TREINO">
         </div>
-
-        <button class="btn-gerar" onclick="gerarVideo()">⚡ Gerar Formato TikTok</button>
+        <button class="btn-gerar" onclick="gerarPreview()">⚡ Gerar Notícia</button>
     </div>
 
     <div class="preview-screen" id="previewScreen">
         
-        <div class="neylogo-btn" onclick="fecharPreview()" title="Clique na Logo para voltar">
-            <img src="neylogo.png" alt="CopaNews Voltar">
+        <div class="neylogo-btn" onclick="voltar()" title="Clique para editar">
+            <img src="neylogo.png" alt="Logo">
         </div>
-        
-        <div class="video-player-9-16">
-            <video id="mainVideo" controls loop></video>
 
-            <div class="golden-interface">
-                <div class="hud-top">
-                    <h1 id="displayTitle">TÍTULO</h1>
+        <div class="canvas-9-16">
+            <video id="videoPlayer" loop muted autoplay></video>
+            
+            <div class="golden-frame"></div>
+
+            <div class="news-bar-container">
+                <div class="bar-subtitle">
+                    <span id="outSubtitle">LOREM IPSUM DOLOR SIT</span>
                 </div>
-                
-                <div class="hud-bottom">
-                    <p id="displaySubtitle">SUBTÍTULO</p>
+                <div class="bar-title">
+                    <span id="outTitle">HEADLINE TEXT HERE</span>
                 </div>
             </div>
+
         </div>
     </div>
 
     <script>
-        function gerarVideo() {
-            const videoInput = document.getElementById('videoInput');
-            const titleInput = document.getElementById('titleInput').value;
-            const subtitleInput = document.getElementById('subtitleInput').value;
-            
-            const mainVideo = document.getElementById('mainVideo');
-            const displayTitle = document.getElementById('displayTitle');
-            const displaySubtitle = document.getElementById('displaySubtitle');
+        function gerarPreview() {
+            const videoIn = document.getElementById('videoInput');
+            const titleIn = document.getElementById('titleInput').value;
+            const subtitleIn = document.getElementById('subtitleInput').value;
 
-            if (!videoInput.files[0]) {
-                alert("Por favor, faça o upload de um vídeo antes.");
+            if(!videoIn.files[0]) {
+                alert("Selecione um vídeo primeiro!");
                 return;
             }
 
-            // Transforma o arquivo de vídeo local em uma URL reproduzível pelo navegador
-            const file = videoInput.files[0];
-            const fileURL = URL.createObjectURL(file);
-            mainVideo.src = fileURL;
+            // Configurar Vídeo
+            const player = document.getElementById('videoPlayer');
+            player.src = URL.createObjectURL(videoIn.files[0]);
 
-            // Injeta as informações tratando textos vazios
-            displayTitle.innerText = titleInput ? titleInput : "URGENTE DA COPA";
-            displaySubtitle.innerText = subtitleInput ? subtitleInput : "SE LIGA NO LANCE!";
+            // Configurar Textos
+            document.getElementById('outTitle').innerText = titleIn ? titleIn : "MANCHETE PRINCIPAL";
+            document.getElementById('outSubtitle').innerText = subtitleIn ? subtitleIn : "DETALHES DA NOTÍCIA";
 
-            // Alterna os painéis na tela
+            // Trocar Telas
             document.getElementById('setupPanel').style.display = 'none';
             document.getElementById('previewScreen').style.display = 'flex';
-            
-            // Força a tela cheia nativa do dispositivo
-            let elem = document.documentElement;
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen();
-            }
 
-            mainVideo.play();
+            // Tela Cheia
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            }
+            player.play();
         }
 
-        function fecharPreview() {
-            const mainVideo = document.getElementById('mainVideo');
-            mainVideo.pause();
-
+        function voltar() {
+            const player = document.getElementById('videoPlayer');
+            player.pause();
+            
             if (document.exitFullscreen && document.fullscreenElement) {
                 document.exitFullscreen();
             }
