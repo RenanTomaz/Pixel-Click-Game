@@ -260,17 +260,42 @@ header {
 
 #ui-hub-subtitle {
     font-family: 'Courier New', monospace;
-    font-size: 0.85rem;
-    color: var(--g-blue);
+    font-size: 0.9rem; /* Aumentado ligeiramente para melhor leitura */
+    color: #fff;       /* Miolo do texto em branco para contraste máximo */
     text-transform: uppercase;
-    letter-spacing: 6px;
-    font-weight: bold;
-    margin-top: 12px;
-    text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+    letter-spacing: 8px; /* Espalha as letras para visual minimalista premium */
+    font-weight: 800;
+    margin-top: 16px;
+    position: relative;
+    display: inline-block;
+    padding: 0 15px;
+    
+    /* Brilho neon ciano intenso projetado atrás do texto */
+    text-shadow: 
+        0 0 4px var(--g-blue),
+        0 0 12px rgba(0, 240, 255, 0.6);
+}
+
+/* Elemento decorativo esquerdo: adiciona um colchete tático futurista [ ] */
+#ui-hub-subtitle::before {
+    content: "[";
+    color: var(--g-blue);
+    margin-right: 10px;
+    font-weight: 400;
+    text-shadow: 0 0 8px var(--g-blue);
+}
+
+/* Elemento decorativo direito: fecha o colchete tático */
+#ui-hub-subtitle::after {
+    content: "]";
+    color: var(--g-blue);
+    margin-left: 2px; /* Ajuste fino por causa do letter-spacing */
+    font-weight: 400;
+    text-shadow: 0 0 8px var(--g-blue);
 }
 
 /* ==========================================
-   GRID DE JOGOS (CARDS)
+   GRID DE JOGOS (CARDS) - ALTO CONTRASTE PREMIUM
    ========================================== */
 .hub-container {
     display: grid;
@@ -282,8 +307,9 @@ header {
     flex-grow: 1;
 }
 
+/* Modificação: Fundo com gradiente profundo e transição ultra fluida */
 .game-card {
-    background: var(--card-inner);
+    background: linear-gradient(145deg, #0a0c16 0%, #12162e 100%);
     border: 1px solid var(--border-color);
     border-radius: 20px;
     padding: 45px 35px;
@@ -297,14 +323,30 @@ header {
     overflow: hidden;
 }
 
+/* Estado Inicial: Pequeno brilho neon constante nas bordas para descolar do fundo */
+.card-pixel { border-color: rgba(255, 0, 127, 0.25); box-shadow: 0 4px 20px rgba(255, 0, 127, 0.05); }
+.card-trivia { border-color: rgba(0, 240, 255, 0.25); box-shadow: 0 4px 20px rgba(0, 240, 255, 0.05); }
+.card-genius { border-color: rgba(189, 0, 255, 0.25); box-shadow: 0 4px 20px rgba(189, 0, 255, 0.05); }
+
+/* Modificação: Escurece o fundo e aumenta o scale no hover para sensação de proximidade */
 .game-card:hover { 
-    transform: translateY(-8px) scale(1.01); 
-    background: rgba(20, 25, 48, 0.85);
+    transform: translateY(-8px) scale(1.02); 
+    background: linear-gradient(145deg, #0e101f 0%, #181d3a 100%);
 }
 
-.card-pixel:hover { border-color: var(--g-red); box-shadow: 0 15px 40px rgba(255, 0, 127, 0.2); }
-.card-trivia:hover { border-color: var(--g-blue); box-shadow: 0 15px 40px rgba(0, 240, 255, 0.2); }
-.card-genius:hover { border-color: var(--g-yellow); box-shadow: 0 15px 40px rgba(189, 0, 255, 0.2); }
+/* Modificação: Explosão de luz neon externa com reflexo interno (inset) ao passar o mouse */
+.card-pixel:hover { 
+    border-color: #ff66b2; 
+    box-shadow: 0 15px 40px rgba(255, 0, 127, 0.35), inset 0 0 15px rgba(255, 0, 127, 0.2); 
+}
+.card-trivia:hover { 
+    border-color: #99f5ff; 
+    box-shadow: 0 15px 40px rgba(0, 240, 255, 0.35), inset 0 0 15px rgba(0, 240, 255, 0.2); 
+}
+.card-genius:hover { 
+    border-color: #df99ff; 
+    box-shadow: 0 15px 40px rgba(189, 0, 255, 0.35), inset 0 0 15px rgba(189, 0, 255, 0.2); 
+}
 
 .tag { 
     font-size: 1.5rem; 
@@ -316,19 +358,20 @@ header {
 .card-trivia .tag { color: var(--g-blue); text-shadow: 0 0 15px rgba(0, 240, 255, 0.4); }
 .card-genius .tag { color: var(--g-yellow); text-shadow: 0 0 15px rgba(189, 0, 255, 0.4); }
 
+/* Modificação: Botão com borda mais nítida e transição de tempo combinando com o card */
 .play-btn {
     width: 100%;
     padding: 16px;
     font-size: 0.95rem;
-    font-weight: bold;
+    font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 2px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.02);
     color: #ffffff;
     backdrop-filter: blur(5px);
-    transition: all 0.4s ease;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .card-pixel:hover .play-btn { background: var(--g-red); color: #000; box-shadow: 0 0 20px var(--g-red); border-color: transparent; }
@@ -355,7 +398,6 @@ header {
 .dot-pixel.active { background: var(--g-red); box-shadow: 0 0 10px var(--g-red); }
 .dot-trivia.active { background: var(--g-blue); box-shadow: 0 0 10px var(--g-blue); }
 .dot-genius.active { background: var(--g-yellow); box-shadow: 0 0 10px var(--g-yellow); }
-
 /* ==========================================
    SEÇÃO SEO & REQUISITOS (INTERFACE HUD)
    ========================================== */
