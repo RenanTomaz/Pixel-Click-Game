@@ -45,23 +45,19 @@
       }
     }
     </script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-    :root { 
-    --bg-color: #060713; /* Fundo espacial profundo, quase preto */
-    --card-inner: rgba(15, 18, 36, 0.7); /* Vidro escuro translúcido */
+:root { 
+    --bg-color: #060713; 
+    --card-inner: rgba(15, 18, 36, 0.7); 
     --border-color: rgba(255, 255, 255, 0.08);
     
-    /* Cores Neon Futuristas */
-    --g-red: #ff007f;     /* Rosa Choque Neon (Stroop/Pixel) */
-    --g-blue: #00f0ff;    /* Ciano Cibernético (Trivia) */
-    --g-yellow: #bd00ff;  /* Roxo Laser / Ultravioleta (Genius) */
-    --g-green: #00ff66;   /* Verde Quântico (Status/Sucesso) */
+    --g-red: #ff007f;     
+    --g-blue: #00f0ff;    
+    --g-yellow: #bd00ff;  
+    --g-green: #00ff66;   
 }
 
-/* ==========================================
-   ELEMENTOS GLOBAIS
-   ========================================== */
 * {
     box-sizing: border-box;
 }
@@ -90,6 +86,87 @@ p {
 }
 
 /* ==========================================
+   CUBOS 3D ESPACIAIS (CORES SÓLIDAS E BRILHANTES)
+   ========================================== */
+.cube-bg-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+    perspective: 1200px; 
+}
+
+.cube-parallax-wrapper {
+    position: absolute;
+    width: var(--size, 60px);
+    height: var(--size, 60px);
+    transform-style: preserve-3d;
+}
+
+.cube3d {
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    animation: floatGravity var(--time, 6s) infinite linear;
+}
+
+.cube3d .face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 2px solid #fff; 
+}
+
+.cube3d .front  { transform: rotateY(0deg) translateZ(calc(var(--size, 60px) / 2)); }
+.cube3d .back   { transform: rotateY(180deg) translateZ(calc(var(--size, 60px) / 2)); }
+.cube3d .right  { transform: rotateY(90deg) translateZ(calc(var(--size, 60px) / 2)); }
+.cube3d .left   { transform: rotateY(-90deg) translateZ(calc(var(--size, 60px) / 2)); }
+.cube3d .top    { transform: rotateX(90deg) translateZ(calc(var(--size, 60px) / 2)); }
+.cube3d .bottom { transform: rotateX(-90deg) translateZ(calc(var(--size, 60px) / 2)); }
+
+.cb-red .face { 
+    background: linear-gradient(135deg, #ff0055 0%, #aa0044 100%); 
+    border-color: #ff66b2;
+    box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.4), 0 0 10px var(--g-red), 0 0 30px rgba(255, 0, 127, 0.4); 
+}
+.cb-blue .face { 
+    background: linear-gradient(135deg, #00d8ff 0%, #007799 100%); 
+    border-color: #99f5ff;
+    box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.4), 0 0 10px var(--g-blue), 0 0 30px rgba(0, 240, 255, 0.4); 
+}
+.cb-yellow .face { 
+    background: linear-gradient(135deg, #9d00ff 0%, #5500aa 100%); 
+    border-color: #df99ff;
+    box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.4), 0 0 10px var(--g-yellow), 0 0 30px rgba(189, 0, 255, 0.4); 
+}
+.cb-green .face { 
+    background: linear-gradient(135deg, #00ff55 0%, #008833 100%); 
+    border-color: #99ffbb;
+    box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.4), 0 0 10px var(--g-green), 0 0 30px rgba(0, 255, 102, 0.3); 
+}
+
+@keyframes floatGravity {
+    0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) translateY(0px); }
+    50% { transform: rotateX(180deg) rotateY(180deg) rotateZ(90deg) translateY(-15px); }
+    100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg) translateY(0px); }
+}
+
+.c1 { --size: 45px; --time: 8s; top: 12%; left: 5%; }
+.c2 { --size: 75px; --time: 14s; top: 42%; left: 11%; }
+.c3 { --size: 35px; --time: 6s; top: 78%; left: 7%; }
+.c4 { --size: 65px; --time: 10s; top: 22%; left: 24%; }
+.c5 { --size: 40px; --time: 9s; top: 62%; left: 18%; }
+.c6 { --size: 90px; --time: 16s; top: 10%; right: 5%; }
+.c7 { --size: 35px; --time: 7s;  top: 35%; right: 15%; }
+.c8 { --size: 75px; --time: 12s; top: 70%; right: 6%; }
+.c9 { --size: 60px; --time: 11s; top: 50%; right: 25%; }
+.c10 { --size: 40px; --time: 8s; top: 85%; right: 16%; }
+
+/* ==========================================
    TOP BAR & IDIOMA
    ========================================== */
 #top-bar {
@@ -101,6 +178,11 @@ p {
     position: absolute;
     top: 0;
     z-index: 1000;
+    background: rgba(15, 18, 36, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 240, 255, 0.15);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 #installBtn {
@@ -162,15 +244,18 @@ header {
 }
 
 .main-logo { 
-    font-size: 3.5rem; 
+    font-size: 3.8rem; 
     font-weight: 900; 
-    letter-spacing: -1px; 
+    letter-spacing: 4px; 
     margin: 0;
-    background: linear-gradient(135deg, #fff 30%, #a5b4fc 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+    color: transparent;
+    -webkit-text-stroke: 2px #fff; 
+    animation: neonPulse 3s infinite ease-in-out;
+}
+
+@keyframes neonPulse {
+    0%, 100% { filter: drop-shadow(0 0 5px var(--g-blue)) drop-shadow(0 0 15px var(--g-blue)); }
+    50% { filter: drop-shadow(0 0 10px var(--g-yellow)) drop-shadow(0 0 25px var(--g-yellow)); -webkit-text-stroke: 2px #e2e8f0; }
 }
 
 #ui-hub-subtitle {
@@ -208,12 +293,10 @@ header {
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    cursor: pointer;
     position: relative;
     overflow: hidden;
 }
 
-/* Brilho e elevação futurista nos Hovers */
 .game-card:hover { 
     transform: translateY(-8px) scale(1.01); 
     background: rgba(20, 25, 48, 0.85);
@@ -223,7 +306,6 @@ header {
 .card-trivia:hover { border-color: var(--g-blue); box-shadow: 0 15px 40px rgba(0, 240, 255, 0.2); }
 .card-genius:hover { border-color: var(--g-yellow); box-shadow: 0 15px 40px rgba(189, 0, 255, 0.2); }
 
-/* Tags Holográficas */
 .tag { 
     font-size: 1.5rem; 
     font-weight: 800; 
@@ -234,7 +316,6 @@ header {
 .card-trivia .tag { color: var(--g-blue); text-shadow: 0 0 15px rgba(0, 240, 255, 0.4); }
 .card-genius .tag { color: var(--g-yellow); text-shadow: 0 0 15px rgba(189, 0, 255, 0.4); }
 
-/* Botões de Ação Futuristas */
 .play-btn {
     width: 100%;
     padding: 16px;
@@ -244,19 +325,16 @@ header {
     letter-spacing: 2px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 10px;
-    cursor: pointer;
     background: rgba(255, 255, 255, 0.03);
     color: #ffffff;
     backdrop-filter: blur(5px);
     transition: all 0.4s ease;
 }
 
-/* O botão herda a cor neon correspondente ao card no hover */
 .card-pixel:hover .play-btn { background: var(--g-red); color: #000; box-shadow: 0 0 20px var(--g-red); border-color: transparent; }
 .card-trivia:hover .play-btn { background: var(--g-blue); color: #000; box-shadow: 0 0 20px var(--g-blue); border-color: transparent; }
 .card-genius:hover .play-btn { background: var(--g-yellow); color: #fff; box-shadow: 0 0 20px var(--g-yellow); border-color: transparent; }
 
-/* Carousel Indicators (Mobile) */
 .carousel-indicators {
     display: none; 
     justify-content: center; 
@@ -325,7 +403,7 @@ header {
     width: 100%; 
     height: 100%;
     background: linear-gradient(to bottom, transparent 95%, rgba(0, 240, 255, 0.08) 100%);
-    background-size: 100% 4px; /* Linhas de scan horizontais sutis fixed */
+    background-size: 100% 4px; 
     pointer-events: none; 
     z-index: 5;
 }
@@ -384,7 +462,7 @@ header {
 }
 
 /* ==========================================
-   MÍDIAS SOCIAIS (LINKS FLUTUANTES)
+   MÍDIAS SOCIAIS
    ========================================== */
 .social-section {
     width: 100%;
@@ -416,14 +494,17 @@ header {
 .social-link[aria-label="YouTube"]:hover { color: #ff0000; filter: drop-shadow(0 0 8px #ff0000); }
 
 /* ==========================================
-   RODAPÉ (FOOTER ESPACIAL)
+   RODAPÉ
    ========================================== */
 .game-footer {
     width: 100%; 
     padding: 40px 20px; 
-    background: #03040b; 
     text-align: center; 
-    border-top: 1px solid rgba(255,255,255,0.03);
+    margin-top: auto; 
+    background: rgba(15, 18, 36, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(255, 0, 127, 0.15);
 }
 
 .game-footer p { 
@@ -444,9 +525,6 @@ header {
     color: var(--g-blue);
 }
 
-/* ==========================================
-   ANIMAÇÕES COLETIVAS
-   ========================================== */
 @keyframes pulse { 
     0%, 100% { opacity: 0.3; } 
     50% { opacity: 1; } 
@@ -456,21 +534,16 @@ header {
    MEDIA QUERIES (OTIMIZAÇÃO MOBILE)
    ========================================== */
 @media (max-width: 750px) {
-    #top-bar { 
-        justify-content: center; 
-        background: rgba(6, 7, 19, 0.85); 
-        backdrop-filter: blur(10px);
+    #top-bar {
         position: fixed; 
         padding: 15px;
+        justify-content: center; 
+        background: rgba(6, 7, 19, 0.85); 
+        border-bottom: 1px solid rgba(0, 240, 255, 0.1);
     }
 
-    header { 
-        margin-top: 120px; 
-    }
-
-    .main-logo { 
-        font-size: 2.4rem; 
-    }
+    header { margin-top: 120px; }
+    .main-logo { font-size: 2.4rem; }
 
     .hub-container {
         display: flex;
@@ -483,54 +556,71 @@ header {
         -webkit-overflow-scrolling: touch;
     }
     
-    /* Remove o efeito 3D pesado no mobile para melhor performance */
     .game-card { 
         min-width: 84vw; 
         scroll-snap-align: center; 
         padding: 35px 25px;
+        opacity: 1 !important; 
+        transform: none !important;
     }
-    .game-card:hover {
-        transform: none;
-    }
+    .game-card:hover { transform: none !important; }
 
-    .carousel-indicators { 
-        display: flex; 
-    }
+    .carousel-indicators { display: flex; }
+    .seo-header-wrapper { justify-content: flex-start; padding-left: 5%; }
+    .seo-box { padding: 25px; }
+    .seo-box p { text-align: left; }
+}
 
-    .seo-header-wrapper { 
-        justify-content: flex-start;
-        padding-left: 5%;
-    }
-
-    .seo-box { 
-        padding: 25px; 
-    }
-
-    .seo-box p { 
-        text-align: left; 
+/* Configurações do Cursor Customizado no Desktop */
+@media (min-width: 751px) {
+    html, body, a, button, .game-card {
+        cursor: none !important; /* Esconde o mouse padrão */
     }
 }
-    </style>
+
+#pixel-cursor-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    pointer-events: none; 
+    z-index: 99999; 
+}
+</style>
 </head>
 <body>
+    <canvas id="pixel-cursor-canvas"></canvas>
+
+    <div class="cube-bg-container">
+        <div class="cube-parallax-wrapper c1 cb-red"><div class="cube3d"><div class="face front"></div><div class="face back"></div><div class="face right"></div><div class="face left"></div><div class="face top"></div><div class="face bottom"></div></div></div>
+        <div class="cube-parallax-wrapper c2 cb-blue"><div class="cube3d"><div class="face front"></div><div class="face back"></div><div class="face right"></div><div class="face left"></div><div class="face top"></div><div class="face bottom"></div></div></div>
+        <div class="cube-parallax-wrapper c3 cb-yellow"><div class="cube3d"><div class="face front"></div><div class="face back"></div><div class="face right"></div><div class="face left"></div><div class="face top"></div><div class="face bottom"></div></div></div>
+        <div class="cube-parallax-wrapper c4 cb-green"><div class="cube3d"><div class="face front"></div><div class="face back"></div><div class="face right"></div><div class="face left"></div><div class="face top"></div><div class="face bottom"></div></div></div>
+        <div class="cube-parallax-wrapper c5 cb-red"><div class="cube3d"><div class="face front"></div><div class="face back"></div><div class="face right"></div><div class="face left"></div><div class="face top"></div><div class="face bottom"></div></div></div>
+        <div class="cube-parallax-wrapper c6 cb-blue"><div class="cube3d"><div class="face front"></div><div class="face back"></div><div class="face right"></div><div class="face left"></div><div class="face top"></div><div class="face bottom"></div></div></div>
+        <div class="cube-parallax-wrapper c7 cb-yellow"><div class="cube3d"><div class="face front"></div><div class="face back"></div><div class="face right"></div><div class="face left"></div><div class="face top"></div><div class="face bottom"></div></div></div>
+        <div class="cube-parallax-wrapper c8 cb-green"><div class="cube3d"><div class="face front"></div><div class="face back"></div><div class="face right"></div><div class="face left"></div><div class="face top"></div><div class="face bottom"></div></div></div>
+        <div class="cube-parallax-wrapper c9 cb-red"><div class="cube3d"><div class="face front"></div><div class="face back"></div><div class="face right"></div><div class="face left"></div><div class="face top"></div><div class="face bottom"></div></div></div>
+        <div class="cube-parallax-wrapper c10 cb-blue"><div class="cube3d"><div class="face front"></div><div class="face back"></div><div class="face right"></div><div class="face left"></div><div class="face top"></div><div class="face bottom"></div></div></div>
+    </div>
 
     <div id="top-bar">
         <button id="installBtn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M12 5V19M12 19L5 12M12 19L19 12"/></svg>
         </button>
         <div id="lang-selector">
-    <div class="lang-btn" onclick="setLang('pt')" id="btn-pt"><img src="https://flagcdn.com/w40/br.png" alt="Português"></div>
-    <div class="lang-btn" onclick="setLang('en')" id="btn-en"><img src="https://flagcdn.com/w40/gb.png" alt="English"></div>
-    <div class="lang-btn" onclick="setLang('fr')" id="btn-fr"><img src="https://flagcdn.com/w40/fr.png" alt="Français"></div>
-    <div class="lang-btn" onclick="setLang('es')" id="btn-es"><img src="https://flagcdn.com/w40/es.png" alt="Español"></div>
-</div>
+            <div class="lang-btn" onclick="setLang('pt')" id="btn-pt"><img src="https://flagcdn.com/w40/br.png" alt="Português"></div>
+            <div class="lang-btn" onclick="setLang('en')" id="btn-en"><img src="https://flagcdn.com/w40/gb.png" alt="English"></div>
+            <div class="lang-btn" onclick="setLang('fr')" id="btn-fr"><img src="https://flagcdn.com/w40/fr.png" alt="Français"></div>
+            <div class="lang-btn" onclick="setLang('es')" id="btn-es"><img src="https://flagcdn.com/w40/es.png" alt="Español"></div>
+        </div>
     </div>
 
     <header>
         <div class="ad-container" style="min-height: 50px;">
         <div id="ad-slot-1">
             <script type="text/javascript">
-                // Definimos as opções imediatamente
                 atOptions = {
                     'key' : 'bb557b67f71226964f1b1330d040727d',
                     'format' : 'iframe',
@@ -541,101 +631,107 @@ header {
             </script>
             <script type="text/javascript" async src="https://www.highperformanceformat.com/bb557b67f71226964f1b1330d040727d/invoke.js"></script>
         </div>
-    <h1 class="main-logo">PIXEL CLICK</h1>
-    <div id="ui-hub-subtitle">ESCOLHA SEU DESAFIO</div>
-    </div>
-</header>
+        <h1 class="main-logo">PIXEL CLICK</h1>
+        <div id="ui-hub-subtitle">ESCOLHA SEU DESAFIO</div>
+        </div>
+    </header>
 
     <div class="carousel-wrapper" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
     
-    <div class="carousel-indicators">
-    <div class="dot dot-pixel active"></div>
-    <div class="dot dot-trivia"></div>
-    <div class="dot dot-genius"></div>
-</div>
-
-    <div class="hub-container">
-        <div class="game-card card-pixel" onclick="location.href='pixel-stroop.html'">
-            <div>
-                <div id="ui-stroop-tag" class="tag">PIXEL STROOP</div>
-                <p id="ui-pixel-desc">Teste seus reflexos neste desafio de cores e números.</p>
-            </div>
-            <button class="play-btn" id="ui-pixel-btn">JOGAR</button>
+        <div class="carousel-indicators">
+            <div class="dot dot-pixel active"></div>
+            <div class="dot dot-trivia"></div>
+            <div class="dot dot-genius"></div>
         </div>
 
-        <div class="game-card card-trivia" onclick="location.href='pixel-trivia.html'">
-            <div>
-                <div id="ui-trivia-tag" class="tag">PIXEL TRIVIA</div>
-                <p id="ui-trivia-desc">Escolha uma categoria e desafie seus conhecimentos contra o relógio.</p>
+        <div class="hub-container">
+            <div class="game-card card-pixel" onclick="location.href='pixel-stroop.html'">
+                <div>
+                    <div id="ui-stroop-tag" class="tag">PIXEL STROOP</div>
+                    <p id="ui-pixel-desc">Teste seus reflexos neste desafio de cores e números.</p>
+                </div>
+                <button class="play-btn" id="ui-pixel-btn">JOGAR</button>
             </div>
-            <button class="play-btn" id="ui-trivia-btn">JOGAR</button>
-        </div>
 
-        <div class="game-card card-genius" onclick="location.href='pixel-genius.html'">
-            <div>
-                <div id="ui-genius-tag" class="tag">PIXEL GENIUS</div>
-                <p id="ui-genius-desc">O clássico desafio de memória. Siga a sequência de cores.</p>
+            <div class="game-card card-trivia" onclick="location.href='pixel-trivia.html'">
+                <div>
+                    <div id="ui-trivia-tag" class="tag">PIXEL TRIVIA</div>
+                    <p id="ui-trivia-desc">Escolha uma categoria e desafie seus conhecimentos contra o relógio.</p>
+                </div>
+                <button class="play-btn" id="ui-trivia-btn">JOGAR</button>
             </div>
-            <button class="play-btn" id="ui-genius-btn">JOGAR</button>
+
+            <div class="game-card card-genius" onclick="location.href='pixel-genius.html'">
+                <div>
+                    <div id="ui-genius-tag" class="tag">PIXEL GENIUS</div>
+                    <p id="ui-genius-desc">O clássico desafio de memória. Siga a sequência de cores.</p>
+                </div>
+                <button class="play-btn" id="ui-genius-btn">JOGAR</button>
+            </div>
         </div>
     </div>
+
     <div class="seo-header-wrapper">
-    <h2 id="ui-seo-main-title" class="seo-display-title">Entenda os nossos desafios cognitivos</h2>
-</div>
-
-<section class="seo-container-advanced">
-    <div class="seo-scanline"></div>
-    <div class="seo-grid">
-        
-        <article class="seo-box stroop-box">
-            <div class="box-header">
-                <span class="status-dot"></span>
-                <h3 id="ui-seo-stroop-title">O QUE É O EFEITO STROOP?</h3>
-            </div>
-            <p id="ui-seo-stroop-text">
-                O Pixel Stroop baseia-se num famoso teste neuropsicológico que mede a sua flexibilidade cognitiva. O Efeito Stroop ocorre quando o seu cérebro precisa processar informações conflitantes. Treinar com esses desafios ajuda a melhorar sua atenção seletiva e a velocidade de reação mental.
-            </p>
-        </article>
-
-        <article class="seo-box trivia-box">
-            <div class="box-header">
-                <span class="status-dot"></span>
-                <h3 id="ui-seo-trivia-title">BENEFÍCIOS DA TRIVIA</h3>
-            </div>
-            <p id="ui-seo-trivia-text">
-                Jogar Pixel Trivia e responder a quizzes de conhecimentos gerais estimula a memória de longo prazo e reduz o estresse. É o exercício cerebral perfeito para manter sua mente ativa, promovendo aprendizagem rápida e foco em um ambiente competitivo.
-            </p>
-        </article>
-
-        <article class="seo-box genius-box">
-            <div class="box-header">
-                <span class="status-dot"></span>
-                <h3 id="ui-seo-genius-title">COMO TREINAR A MEMÓRIA?</h3>
-            </div>
-            <p id="ui-seo-genius-text">
-                O Pixel Genius é um desafio de memória sequencial inspirado em testes de retenção visual. Ao repetir padrões de cores e sons, você exercita sua memória de curto prazo e concentração. Jogos de repetição são ferramentas essenciais para fortalecer conexões neurais.
-            </p>
-        </article>
-
+        <h2 id="ui-seo-main-title" class="seo-display-title">Entenda os nossos desafios cognitivos</h2>
     </div>
-</section>
-<section class="social-section">
-    <div class="social-container">
-        <a href="https://www.tiktok.com/@pixelclick.fun" target="_blank" class="social-link" aria-label="TikTok">
-            <i class="fab fa-tiktok"></i>
-        </a>
-        <span class="social-link disabled" aria-label="Instagram">
-            <i class="fab fa-instagram"></i>
-        </span>
-        <span class="social-link disabled" aria-label="Discord">
-            <i class="fab fa-discord"></i>
-        </span>
-        <a href="https://www.youtube.com/@pixelclick_fun" target="_blank" class="social-link" aria-label="YouTube">
-            <i class="fab fa-youtube"></i>
-        </a>
-    </div>
-</section>
-</section>
+
+    <section class="seo-container-advanced">
+        <div class="seo-scanline"></div>
+        <div class="seo-grid">
+            
+            <article class="seo-box stroop-box">
+                <div class="box-header">
+                    <span class="status-dot"></span>
+                    <h3 id="ui-seo-stroop-title">O QUE É O EFEITO STROOP?</h3>
+                </div>
+                <p id="ui-seo-stroop-text">
+                    O Pixel Stroop baseia-se num famoso teste neuropsicológico que mede a sua flexibilidade cognitiva. O Efeito Stroop ocorre quando o seu cérebro precisa processar informações conflitantes. Treinar com esses desafios ajuda a melhorar sua attention seletiva e a velocidade de reação mental.
+                </p>
+                <div class="box-footer" id="ui-seo-stroop-footer">DATA_STREAM // STROOP_CORE</div>
+            </article>
+
+            <article class="seo-box trivia-box">
+                <div class="box-header">
+                    <span class="status-dot"></span>
+                    <h3 id="ui-seo-trivia-title">BENEFÍCIOS DA TRIVIA</h3>
+                </div>
+                <p id="ui-seo-trivia-text">
+                    Jogar Pixel Trivia e responder a quizzes de conhecimentos gerais estimula a memória de longo prazo e reduz o estresse. É o exercício cerebral perfeito para manter sua mente active, promovendo aprendizagem rápida e foco em um ambiente competitivo.
+                </p>
+                <div class="box-footer" id="ui-seo-trivia-footer">DATA_STREAM // TRIVIA_CORE</div>
+            </article>
+
+            <article class="seo-box genius-box">
+                <div class="box-header">
+                    <span class="status-dot"></span>
+                    <h3 id="ui-seo-genius-title">COMO TREINAR A MEMÓRIA?</h3>
+                </div>
+                <p id="ui-seo-genius-text">
+                    O Pixel Genius é um desafio de memória sequencial inspirado em testes de retenção visual. Ao repetir padrões de cores e sons, você exercita sua memória de curto prazo e concentração. Jogos de repetição são ferramentas essenciais para fortalecer conexões neurais.
+                </p>
+                <div class="box-footer" id="ui-seo-genius-footer">DATA_STREAM // GENIUS_CORE</div>
+            </article>
+
+        </div>
+    </section>
+
+    <section class="social-section">
+        <div class="social-container">
+            <a href="https://www.tiktok.com/@pixelclick.fun" target="_blank" class="social-link" aria-label="TikTok">
+                <i class="fab fa-tiktok"></i>
+            </a>
+            <span class="social-link disabled" aria-label="Instagram">
+                <i class="fab fa-instagram"></i>
+            </span>
+            <span class="social-link disabled" aria-label="Discord">
+                <i class="fab fa-discord"></i>
+            </span>
+            <a href="https://www.youtube.com/@pixelclick_fun" target="_blank" class="social-link" aria-label="YouTube">
+                <i class="fab fa-youtube"></i>
+            </a>
+        </div>
+    </section>
+
     <footer class="game-footer">
         <p id="footer-text">Pixel Click® - Jogos de Raciocínio</p>
         <a href="politica.html" id="footer-policy">Política de Privacidade</a>
@@ -646,132 +742,122 @@ header {
         <button onclick="acceptCookies()" style="background: #fff; color: #000; border: none; padding: 10px 25px; font-weight: bold; cursor: pointer; border-radius: 8px; font-family: sans-serif;">ACEITAR</button>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
     <script>
     const hubLangs = {
     pt: { 
-        subtitle: "ESCOLHA SEU DESAFIO", 
-        stroop: "PIXEL STROOP", 
-        pixelDesc: "Teste seus reflexos neste desafio de cores e números.", 
-        triviaTag: "PIXEL TRIVIA", 
-        triviaDesc: "Escolha uma categoria e desafie seus conhecimentos contra o relógio.", 
-        geniusTag: "PIXEL GENIUS", 
-        geniusDesc: "O clássico desafio de memória. Siga a sequência de cores.", 
-        play: "JOGAR", 
-        footerMain: "Pixel Click® - Jogos de Raciocínio", 
-        footerPolicy: "Política de Privacidade",
-        // Campos de SEO
-        seoTitle: "Entenda os nossos desafios cognitivos",
-        seoStroopH: "O QUE É O PIXEL STROOP?", 
-        seoStroopP: "O Pixel Stroop baseia-se num famoso teste neuropsicológico que mede a sua flexibilidade cognitiva. O Efeito Stroop ocorre quando o seu cérebro precisa processar informações conflitantes. Treinar com esses desafios ajuda a melhorar sua atenção seletiva e a velocidade de reação mental.",
-        seoTriviaH: "BENEFÍCIOS DO PIXEL TRIVIA", 
-        seoTriviaP: "Jogar Pixel Trivia e responder a quizzes de conhecimentos gerais estimula a memória de longo prazo e reduz o estresse. É o exercício cerebral perfeito para manter sua mente ativa através de um ambiente competitivo.",
-        seoGeniusH: "COMO TREINAR A MEMÓRIA?", 
-        seoGeniusP: "O Pixel Genius é um desafio de memória sequencial inspirado em testes de retenção visual. Ao repetir padrões de cores e luzes, você exercita sua memória de curto prazo e concentração. Jogos de repetição são excelentes para fortalecer conexões neurais."
+        subtitle: "ESCOLHA SEU DESAFIO", stroop: "PIXEL STROOP", pixelDesc: "Teste seus reflexos neste desafio de cores e números.", triviaTag: "PIXEL TRIVIA", triviaDesc: "Escolha uma categoria e desafie seus conhecimentos contra o relógio.", geniusTag: "PIXEL GENIUS", geniusDesc: "O clássico desafio de memória. Siga a sequência de cores.", play: "JOGAR", footerMain: "Pixel Click® - Jogos de Raciocínio", footerPolicy: "Política de Privacidade", seoTitle: "Entenda os nossos desafios cognitivos", seoStroopH: "O QUE É O PIXEL STROOP?", seoStroopP: "O Pixel Stroop baseia-se num famoso teste neuropsicológico que mede a sua flexibilidade cognitiva. O Efeito Stroop ocorre quando o seu cérebro precisa processar informações conflitantes. Treinar com esses desafios ajuda a melhorar sua atenção seletiva e a velocidade de reação mental.", seoStroopF: "DATA_STREAM // STROOP_CORE", seoTriviaH: "BENEFÍCIOS DO PIXEL TRIVIA", seoTriviaP: "Jogar Pixel Trivia e responder a quizzes de conhecimentos gerais estimula a memória de longo prazo e reduz o estresse. É o exercício cerebral perfeito para manter sua mente ativa através de um ambiente competitivo.", seoTriviaF: "DATA_STREAM // TRIVIA_CORE", seoGeniusH: "COMO TREINAR A MEMÓRIA?", seoGeniusP: "O Pixel Genius é um desafio de memória sequencial inspirado em testes de retenção visual. Ao repetir padrões de cores e luzes, você exercita sua memória de curto prazo e concentration. Jogos de repetição são excelentes para fortalecer conexões neurais.", seoGeniusF: "DATA_STREAM // GENIUS_CORE"
     },
     en: { 
-        subtitle: "CHOOSE YOUR CHALLENGE", 
-        stroop: "PIXEL STROOP", 
-        pixelDesc: "Test your reflexes in this colors and numbers challenge.", 
-        triviaTag: "PIXEL TRIVIA", 
-        triviaDesc: "Pick a category and challenge your knowledge against the clock!", 
-        geniusTag: "PIXEL GENIUS", 
-        geniusDesc: "The classic memory challenge. Follow the sequence of colors.", 
-        play: "PLAY NOW", 
-        footerMain: "Pixel Click® - Brain Games", 
-        footerPolicy: "Privacy Policy",
-        // SEO Fields
-        seoTitle: "Understand our cognitive challenges",
-        seoStroopH: "WHAT IS PIXEL STROOP?", 
-        seoStroopP: "Pixel Stroop is based on a famous neuropsychological test that measures your cognitive flexibility. The Stroop Effect occurs when your brain processes conflicting information. Training helps improve selective attention and reaction speed.",
-        seoTriviaH: "BENEFITS OF PIXEL TRIVIA", 
-        seoTriviaP: "Playing Pixel Trivia and answering general knowledge quizzes stimulates long-term memory and reduces stress. It's the perfect brain exercise to keep your mind active in a competitive environment.",
-        seoGeniusH: "HOW TO TRAIN MEMORY?", 
-        seoGeniusP: "Pixel Genius is a sequential memory challenge inspired by visual retention tests. By repeating patterns of colors and lights, you exercise your short-term memory and focus. Great for neural connections."
+        subtitle: "CHOOSE YOUR CHALLENGE", stroop: "PIXEL STROOP", pixelDesc: "Test your reflexes in this colors and numbers challenge.", triviaTag: "PIXEL TRIVIA", triviaDesc: "Pick a category and challenge your knowledge against the clock!", geniusTag: "PIXEL GENIUS", geniusDesc: "The classic memory challenge. Follow the sequence of colors.", play: "PLAY NOW", footerMain: "Pixel Click® - Brain Games", footerPolicy: "Privacy Policy", seoTitle: "Understand our cognitive challenges", seoStroopH: "WHAT IS PIXEL STROOP?", seoStroopP: "Pixel Stroop is based on a famous neuropsychological test that measures your cognitive flexibility. The Stroop Effect occurs when your brain processes conflicting information. Training helps improve selective attention and reaction speed.", seoStroopF: "DATA_STREAM // CHOOSE_CORE", seoTriviaH: "BENEFITS OF PIXEL TRIVIA", seoTriviaP: "Playing Pixel Trivia and answering general knowledge quizzes stimulates long-term memory and reduces stress. It's the perfect brain exercise to keep your mind active in a competitive environment.", seoTriviaF: "DATA_STREAM // TRIVIA_CORE", seoGeniusH: "HOW TO TRAIN MEMORY?", seoGeniusP: "Pixel Genius is a sequential memory challenge inspired by visual retention tests. By repeating patterns of colors and lights, you exercise your short-term memory and focus. Great for neural connections.", seoGeniusF: "DATA_STREAM // GENIUS_CORE"
     },
     fr: { 
-        subtitle: "CHOISISSEZ VOTRE DÉFI", 
-        stroop: "PIXEL STROOP", 
-        pixelDesc: "Testez vos réflexes dans ce défi de couleurs et de nombres.", 
-        triviaTag: "PIXEL TRIVIA", 
-        triviaDesc: "Choisissez une catégorie et défiez vos connaissances contre la montre.", 
-        geniusTag: "PIXEL GENIUS", 
-        geniusDesc: "Le défi classique de mémoire. Suivez la séquence de couleurs.", 
-        play: "JOUER", 
-        footerMain: "Pixel Click® - Jeux de Réflexion", 
-        footerPolicy: "Politique de Confidentialité",
-        // Champs SEO
-        seoTitle: "Comprendre nos défis cognitifs",
-        seoStroopH: "QU'EST-CE QUE LE PIXEL STROOP ?", 
-        seoStroopP: "Le Pixel Stroop est basé sur un test neuropsychologique célèbre. L'effet Stroop se produit lorsque votre cerveau traite des informations conflictuelles. L'entraînement aide à améliorer l'attention sélective.",
-        seoTriviaH: "AVANTAGES DE PIXEL TRIVIA", 
-        seoTriviaP: "Jouer à Pixel Trivia stimule la mémoire à long terme et réduit le stress. C'est l'exercice cérébral parfait pour rester actif grâce à un environnement compétitif.",
-        seoGeniusH: "COMMENT ENTRAÎNER LA MÉMOIRE ?", 
-        seoGeniusP: "Pixel Genius est un défi de mémoire séquentielle. En répétant les motifs, vous exercez votre mémoire à court terme et votre concentration. Outils essentiels pour renforcer les connexions neuronales."
+        subtitle: "CHOISISSEZ VOTRE DÉFI", stroop: "PIXEL STROOP", pixelDesc: "Testez vos réflexes dans ce défi de couleurs et de niches.", triviaTag: "PIXEL TRIVIA", triviaDesc: "Choisissez une catégorie et défiez vos connaissances contre la montre.", geniusTag: "PIXEL GENIUS", geniusDesc: "Le défi classique de mémoire. Suivez la séquence de couleurs.", play: "JOUER", footerMain: "Pixel Click® - Jeux de Réflexion", footerPolicy: "Politique de Confidentialité", seoTitle: "Comprendre nos défis cognitifs", seoStroopH: "QU'EST-CE QUE LE PIXEL STROOP ?", seoStroopP: "Le Pixel Stroop est basé sur un test neuropsychologique célèbre. L'effet Stroop se produit lorsque votre cerveau traite des informations conflictuelles. L'entraînement aide à améliorer l'attention sélective.", seoStroopF: "DATA_STREAM // STROOP_CORE", seoTriviaH: "AVANTAGES DE PIXEL TRIVIA", seoTriviaP: "Jouer à Pixel Trivia est idéal para stimuler la mémoire à long terme. C'est l'exercice cérébral parfait pour rester actif grâce à un environnement compétitif.", seoTriviaF: "DATA_STREAM // TRIVIA_CORE", seoGeniusH: "COMMENT ENTRAÎNER LA MÉMOIRE ?", seoGeniusP: "Pixel Genius é um desafio de mémoire sequencial. Ao repetir padrões de cores et luzes, vous exercez votre mémoire à court terme.", seoGeniusF: "DATA_STREAM // GENIUS_CORE"
     },
     es: { 
-        subtitle: "ELIGE TU DESAFÍO", 
-        stroop: "PIXEL STROOP", 
-        pixelDesc: "Pon a prueba tus reflejos en este desafío de colores y números.", 
-        triviaTag: "PIXEL TRIVIA", 
-        triviaDesc: "Elige una categoría y desafía tus conocimientos contra el reloj.", 
-        geniusTag: "PIXEL GENIUS", 
-        geniusDesc: "El clásico desafío de memoria. Sigue la secuencia de colores.", 
-        play: "JUGAR", 
-        footerMain: "Pixel Click® - Juegos Mentales", 
-        footerPolicy: "Política de Privacidad",
-        // Campos SEO
-        seoTitle: "Entiende nuestros desafíos cognitivos",
-        seoStroopH: "¿QUÉ ES PIXEL STROOP?", 
-        seoStroopP: "Pixel Stroop se basa en un famoso test neuropsicológico. El efecto Stroop ocurre cuando el cerebro procesa información conflictiva. Entrenar ayuda a mejorar la atención selectiva y la rapidez mental.",
-        seoTriviaH: "BENEFICIOS DE PIXEL TRIVIA", 
-        seoTriviaP: "Jugar Pixel Trivia estimula la memoria a largo plazo y reduce el estrés. Es el ejercicio cerebral perfecto para mantener la mente activa en un entorno competitivo.",
-        seoGeniusH: "¿CÓMO ENTRENAR LA MEMORIA?", 
-        seoGeniusP: "Pixel Genius es un desafío de memoria secuencial. Al repetir patrones de colores y luces, ejercitas tu memoria a corto plazo y concentración. Ideal para fortalecer las conexiones neuronales."
+        subtitle: "ELIGE TU DESAFÍO", stroop: "PIXEL STROOP", pixelDesc: "Pon a prueba tus reflejos en este desafío de colores y números.", triviaTag: "PIXEL TRIVIA", triviaDesc: "Elige una categoría y desafía tus conocimientos contra el reloj.", geniusTag: "PIXEL GENIUS", geniusDesc: "El clásico desafío de memoria. Sigue la sequência de colores.", play: "JUGAR", footerMain: "Pixel Click® - Juegos Mentales", footerPolicy: "Política de Privacidad", seoTitle: "Entiende nuestros desafíos cognitivos", seoStroopH: "¿QUÉ ES PIXEL STROOP?", seoStroopP: "Pixel Stroop se basa en un famoso test neuropsicológico. El efeito Stroop ocurre cuando el cerebro procesa información conflictiva. Entrenar ayuda a melhorar la atención selectiva y la rapidez mental.", seoStroopF: "DATA_STREAM // STROOP_CORE", seoTriviaH: "BENEFICIOS DE PIXEL TRIVIA", seoTriviaP: "Jugar Pixel Trivia demana memória de llarg termini e reduz el estrés. Es el ejercicio cerebral perfecto para mantener la mente activa en un entorno competitivo.", seoTriviaF: "DATA_STREAM // TRIVIA_CORE", seoGeniusH: "¿CÓMO ENTRENAR LA MEMÓRIA?", seoGeniusP: "Pixel Genius es un desafío de memoria secuencial. Al repetir patrones de colores y luces, ejercitas tu memoria a corto prazo.", seoGeniusF: "DATA_STREAM // GENIUS_CORE"
     }
 };
 
     function setLang(l) {
-    localStorage.setItem('userLanguage', l);
-    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-    if(document.getElementById('btn-' + l)) document.getElementById('btn-' + l).classList.add('active');
+        localStorage.setItem('userLanguage', l);
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+        if(document.getElementById('btn-' + l)) document.getElementById('btn-' + l).classList.add('active');
 
-    const ui = hubLangs[l];
+        const ui = hubLangs[l];
 
-    // --- Tradução do Hub de Jogos ---
-    document.getElementById('ui-hub-subtitle').textContent = ui.subtitle;
-    document.getElementById('ui-stroop-tag').textContent = ui.stroop;
-    document.getElementById('ui-pixel-desc').textContent = ui.pixelDesc;
-    document.getElementById('ui-pixel-btn').textContent = ui.play;
-    document.getElementById('ui-trivia-tag').textContent = ui.triviaTag;
-    document.getElementById('ui-trivia-desc').textContent = ui.triviaDesc;
-    document.getElementById('ui-trivia-btn').textContent = ui.play;
-    document.getElementById('ui-genius-tag').textContent = ui.geniusTag;
-    document.getElementById('ui-genius-desc').textContent = ui.geniusDesc;
-    document.getElementById('ui-genius-btn').textContent = ui.play;
-    document.getElementById('footer-text').textContent = ui.footerMain;
-    document.getElementById('footer-policy').textContent = ui.footerPolicy;
+        document.getElementById('ui-hub-subtitle').textContent = ui.subtitle;
+        document.getElementById('ui-stroop-tag').textContent = ui.stroop;
+        document.getElementById('ui-pixel-desc').textContent = ui.pixelDesc;
+        document.getElementById('ui-pixel-btn').textContent = ui.play;
+        document.getElementById('ui-trivia-tag').textContent = ui.triviaTag;
+        document.getElementById('ui-trivia-desc').textContent = ui.triviaDesc;
+        document.getElementById('ui-trivia-btn').textContent = ui.play;
+        document.getElementById('ui-genius-tag').textContent = ui.geniusTag;
+        document.getElementById('ui-genius-desc').textContent = ui.geniusDesc;
+        document.getElementById('ui-genius-btn').textContent = ui.play;
+        document.getElementById('footer-text').textContent = ui.footerMain;
+        document.getElementById('footer-policy').textContent = ui.footerPolicy;
 
-    // --- Tradução da Seção SEO ---
-    document.getElementById('ui-seo-main-title').textContent = ui.seoTitle;    
-    // Stroop SEO
-    document.getElementById('ui-seo-stroop-title').textContent = ui.seoStroopH;
-    document.getElementById('ui-seo-stroop-text').textContent = ui.seoStroopP;
-    document.getElementById('ui-seo-stroop-footer').textContent = ui.seoStroopF;
-    
-    // Trivia SEO
-    document.getElementById('ui-seo-trivia-title').textContent = ui.seoTriviaH;
-    document.getElementById('ui-seo-trivia-text').textContent = ui.seoTriviaP;
-    document.getElementById('ui-seo-trivia-footer').textContent = ui.seoTriviaF;
-    
-    // Genius SEO
-    document.getElementById('ui-seo-genius-title').textContent = ui.seoGeniusH;
-    document.getElementById('ui-seo-genius-text').textContent = ui.seoGeniusP;
-    document.getElementById('ui-seo-genius-footer').textContent = ui.seoGeniusF;
-}
+        document.getElementById('ui-seo-main-title').textContent = ui.seoTitle;    
+        document.getElementById('ui-seo-stroop-title').textContent = ui.seoStroopH;
+        document.getElementById('ui-seo-stroop-text').textContent = ui.seoStroopP;
+        document.getElementById('ui-seo-stroop-footer').textContent = ui.seoStroopF;
+        
+        document.getElementById('ui-seo-trivia-title').textContent = ui.seoTriviaH;
+        document.getElementById('ui-seo-trivia-text').textContent = ui.seoTriviaP;
+        document.getElementById('ui-seo-trivia-footer').textContent = ui.seoTriviaF;
+        
+        document.getElementById('ui-seo-genius-title').textContent = ui.seoGeniusH;
+        document.getElementById('ui-seo-genius-text').textContent = ui.seoGeniusP;
+        document.getElementById('ui-seo-genius-footer').textContent = ui.seoGeniusF;
+    }
 
     function acceptCookies() {
         localStorage.setItem('cookiesAccepted', 'true');
         document.getElementById('cookie-banner').style.display = 'none';
+    }
+
+    // CONTROLADOR DINÂMICO DO MOUSE (CANVAS)
+    const canvas = document.getElementById("pixel-cursor-canvas");
+    const ctx = canvas.getContext("2d");
+
+    let mouseX = 0; let mouseY = 0;
+    let targetX = 0; let targetY = 0;
+    let isMobile = window.innerWidth <= 750;
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+
+    if (!isMobile) {
+        window.addEventListener("resize", () => {
+            isMobile = window.innerWidth <= 750;
+            if(!isMobile) resizeCanvas();
+        });
+        resizeCanvas();
+
+        window.addEventListener("mousemove", (e) => {
+            targetX = e.clientX;
+            targetY = e.clientY;
+        });
+
+        function drawCursor() {
+            if (isMobile) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            mouseX += (targetX - mouseX) * 0.3;
+            mouseY += (targetY - mouseY) * 0.3;
+
+            const neonColor = "#00f0ff";
+            
+            ctx.save();
+            ctx.translate(mouseX, mouseY);
+
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = neonColor;
+            ctx.fillStyle = "rgba(0, 240, 255, 0.3)";
+            ctx.fillRect(-3, -3, 6, 6);
+
+            ctx.shadowBlur = 0; 
+            ctx.fillStyle = "#ffffff"; 
+            
+            ctx.fillRect(-2, -2, 4, 4);
+            ctx.fillRect(-2, -14, 4, 6);
+            ctx.fillRect(-2, 8, 4, 6);
+            ctx.fillRect(-14, -2, 6, 4);
+            ctx.fillRect(8, -2, 6, 4);
+
+            ctx.restore();
+            requestAnimationFrame(drawCursor);
+        }
+        requestAnimationFrame(drawCursor);
+    } else {
+        // Se for mobile remove o canvas para evitar interceptação de cliques por cima das camadas
+        canvas.remove();
     }
 
     window.onload = () => {
@@ -779,6 +865,47 @@ header {
         setLang(savedLang);
         if (!localStorage.getItem('cookiesAccepted')) {
             document.getElementById('cookie-banner').style.display = 'block';
+        }
+        
+        // ANIMAÇÃO DE SCROLL (GSAP) EXCLUSIVA PARA DESKTOP
+        if (window.innerWidth > 750) {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // 1. Animação de Surgimento dos Cards
+            gsap.set(".game-card", { opacity: 0, y: 50 });
+            gsap.to(".game-card", {
+                scrollTrigger: {
+                    trigger: ".carousel-wrapper", 
+                    start: "top 85%",             
+                    toggleActions: "play none none reverse" 
+                },
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                stagger: 0.2,                     
+                ease: "power2.out"
+            });
+
+            // 2. Movimento Parallax Físico no Scroll
+            gsap.to(".c1, .c5, .c9", {
+                scrollTrigger: { trigger: "html", start: "top top", end: "bottom bottom", scrub: 0.8 },
+                y: -350, x: -60, ease: "none"
+            });
+
+            gsap.to(".c2, .c6", {
+                scrollTrigger: { trigger: "html", start: "top top", end: "bottom bottom", scrub: 1.5 },
+                y: -200, x: 50, ease: "none"
+            });
+
+            gsap.to(".c3, .c7", {
+                scrollTrigger: { trigger: "html", start: "top top", end: "bottom bottom", scrub: 0.5 },
+                y: -500, x: -30, ease: "none"
+            });
+
+            gsap.to(".c4, .c8, .c10", {
+                scrollTrigger: { trigger: "html", start: "top top", end: "bottom bottom", scrub: 2 },
+                y: -150, x: 80, ease: "none"
+            });
         }
     };
 
@@ -797,23 +924,24 @@ header {
             if (outcome === 'accepted') deferredPrompt = null;
         }
     });
-        // Lógica para atualizar os indicadores do carrossel
-const hubContainer = document.querySelector('.hub-container');
-const dots = document.querySelectorAll('.dot');
 
-hubContainer.addEventListener('scroll', () => {
-    const scrollLeft = hubContainer.scrollLeft;
-    const cardWidth = hubContainer.querySelector('.game-card').offsetWidth + 20; // 20 é o gap
-    const activeIndex = Math.round(scrollLeft / cardWidth);
+    // Lógica para carrossel mobile
+    const hubContainer = document.querySelector('.hub-container');
+    const dots = document.querySelectorAll('.dot');
 
-    dots.forEach((dot, index) => {
-        if (index === activeIndex) {
-            dot.classList.add('active');
-        } else {
-            dot.classList.remove('active');
-        }
+    hubContainer.addEventListener('scroll', () => {
+        const scrollLeft = hubContainer.scrollLeft;
+        const cardWidth = hubContainer.querySelector('.game-card').offsetWidth + 20; 
+        const activeIndex = Math.round(scrollLeft / cardWidth);
+
+        dots.forEach((dot, index) => {
+            if (index === activeIndex) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
     });
-});
     </script>
 </body>
 </html>
