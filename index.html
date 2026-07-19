@@ -248,9 +248,13 @@ header {
     font-weight: 900; 
     letter-spacing: 4px; 
     margin: 0;
-    color: transparent;
-    -webkit-text-stroke: 2px #fff; 
-    animation: neonPulse 3s infinite ease-in-out;
+    
+    /* MODIFICAÇÕES AQUI: */
+    color: #ffffff;                 /* Preenche a letra inteira com branco */
+    -webkit-text-stroke: none;       /* Remove o contorno antigo */
+    
+    will-change: filter; 
+    animation: neonPulse 10s infinite ease-in-out;
 }
 
 @keyframes neonPulse {
@@ -275,25 +279,6 @@ header {
         0 0 4px var(--g-blue),
         0 0 12px rgba(0, 240, 255, 0.6);
 }
-
-/* Elemento decorativo esquerdo: adiciona um colchete tático futurista [ ] */
-#ui-hub-subtitle::before {
-    content: "[";
-    color: var(--g-blue);
-    margin-right: 10px;
-    font-weight: 400;
-    text-shadow: 0 0 8px var(--g-blue);
-}
-
-/* Elemento decorativo direito: fecha o colchete tático */
-#ui-hub-subtitle::after {
-    content: "]";
-    color: var(--g-blue);
-    margin-left: 2px; /* Ajuste fino por causa do letter-spacing */
-    font-weight: 400;
-    text-shadow: 0 0 8px var(--g-blue);
-}
-
 /* ==========================================
    GRID DE JOGOS (CARDS) - ALTO CONTRASTE PREMIUM
    ========================================== */
@@ -410,12 +395,21 @@ header {
 }
 
 .seo-display-title {
-    font-family: 'Courier New', monospace; 
-    font-size: 1rem; 
-    color: #64748b;
-    text-transform: uppercase; 
-    letter-spacing: 3px; 
-    margin: 0;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem; /* Aumentado ligeiramente para melhor leitura */
+    color: #fff;       /* Miolo do texto em branco para contraste máximo */
+    text-transform: uppercase;
+    letter-spacing: 8px; /* Espalha as letras para visual minimalista premium */
+    font-weight: 800;
+    margin-top: 16px;
+    position: relative;
+    display: inline-block;
+    padding: 0 15px;
+    
+    /* Brilho neon ciano intenso projetado atrás do texto */
+    text-shadow: 
+        0 0 4px var(--g-blue),
+        0 0 12px rgba(0, 240, 255, 0.6);
 }
 
 .seo-container-advanced {
@@ -567,9 +561,19 @@ header {
     color: var(--g-blue);
 }
 
-@keyframes pulse { 
-    0%, 100% { opacity: 0.3; } 
-    50% { opacity: 1; } 
+@keyframes floatGravity {
+    0% { 
+        transform: rotateX(0deg) rotateY(0deg) translateY(0px) translateX(0px); 
+    }
+    33% { 
+        transform: rotateX(120deg) rotateY(60deg) translateY(-30px) translateX(15px); 
+    }
+    66% { 
+        transform: rotateX(240deg) rotateY(300deg) translateY(15px) translateX(-15px); 
+    }
+    100% { 
+        transform: rotateX(360deg) rotateY(360deg) translateY(0px) translateX(0px); 
+    }
 }
 
 /* ==========================================
@@ -712,49 +716,6 @@ header {
             </div>
         </div>
     </div>
-
-    <div class="seo-header-wrapper">
-        <h2 id="ui-seo-main-title" class="seo-display-title">Entenda os nossos desafios cognitivos</h2>
-    </div>
-
-    <section class="seo-container-advanced">
-        <div class="seo-scanline"></div>
-        <div class="seo-grid">
-            
-            <article class="seo-box stroop-box">
-                <div class="box-header">
-                    <span class="status-dot"></span>
-                    <h3 id="ui-seo-stroop-title">O QUE É O EFEITO STROOP?</h3>
-                </div>
-                <p id="ui-seo-stroop-text">
-                    O Pixel Stroop baseia-se num famoso teste neuropsicológico que mede a sua flexibilidade cognitiva. O Efeito Stroop ocorre quando o seu cérebro precisa processar informações conflitantes. Treinar com esses desafios ajuda a melhorar sua attention seletiva e a velocidade de reação mental.
-                </p>
-                <div class="box-footer" id="ui-seo-stroop-footer">DATA_STREAM // STROOP_CORE</div>
-            </article>
-
-            <article class="seo-box trivia-box">
-                <div class="box-header">
-                    <span class="status-dot"></span>
-                    <h3 id="ui-seo-trivia-title">BENEFÍCIOS DA TRIVIA</h3>
-                </div>
-                <p id="ui-seo-trivia-text">
-                    Jogar Pixel Trivia e responder a quizzes de conhecimentos gerais estimula a memória de longo prazo e reduz o estresse. É o exercício cerebral perfeito para manter sua mente active, promovendo aprendizagem rápida e foco em um ambiente competitivo.
-                </p>
-                <div class="box-footer" id="ui-seo-trivia-footer">DATA_STREAM // TRIVIA_CORE</div>
-            </article>
-
-            <article class="seo-box genius-box">
-                <div class="box-header">
-                    <span class="status-dot"></span>
-                    <h3 id="ui-seo-genius-title">COMO TREINAR A MEMÓRIA?</h3>
-                </div>
-                <p id="ui-seo-genius-text">
-                    O Pixel Genius é um desafio de memória sequencial inspirado em testes de retenção visual. Ao repetir padrões de cores e sons, você exercita sua memória de curto prazo e concentração. Jogos de repetição são ferramentas essenciais para fortalecer conexões neurais.
-                </p>
-                <div class="box-footer" id="ui-seo-genius-footer">DATA_STREAM // GENIUS_CORE</div>
-            </article>
-
-        </div>
     </section>
 
     <section class="social-section">
