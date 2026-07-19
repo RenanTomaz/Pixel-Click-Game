@@ -215,50 +215,27 @@ body {
     transform: scale(1.03) translateY(-2px);
 }
 
-/* Cores Translúcidas com Hover Neon Brilhante */
-#opt-0 { 
-    background: rgba(255, 0, 127, 0.15); 
-    border-color: rgba(255, 0, 127, 0.3); 
-}
-#opt-0:hover { 
-    background: var(--g-red); 
-    color: #000; 
-    box-shadow: 0 0 25px rgba(255, 0, 127, 0.6); 
-    border-color: transparent; 
+/* ==========================================
+   CORES DOS BOTÕES (COM DESFAZIMENTO IMEDIATO)
+   ========================================== */
+#opt-0 { background: rgba(255, 0, 127, 0.15); border-color: rgba(255, 0, 127, 0.3); }
+#opt-1 { background: rgba(0, 240, 255, 0.15); border-color: rgba(0, 240, 255, 0.3); }
+#opt-2 { background: rgba(0, 255, 102, 0.15); border-color: rgba(0, 255, 102, 0.3); }
+#opt-3 { background: rgba(255, 247, 0, 0.15); border-color: rgba(255, 247, 0, 0.3); }
+
+/* Ativa o brilho ao passar o mouse APENAS no Desktop */
+@media (hover: hover) {
+    #opt-0:hover { background: var(--g-red); color: #000; box-shadow: 0 0 25px rgba(255, 0, 127, 0.6); border-color: transparent; }
+    #opt-1:hover { background: var(--g-blue); color: #000; box-shadow: 0 0 25px rgba(0, 240, 255, 0.6); border-color: transparent; }
+    #opt-2:hover { background: var(--g-green); color: #000; box-shadow: 0 0 25px rgba(0, 255, 102, 0.6); border-color: transparent; }
+    #opt-3:hover { background: var(--g-yellow); color: #000; box-shadow: 0 0 25px rgba(255, 247, 0, 0.6); border-color: transparent; }
 }
 
-#opt-1 { 
-    background: rgba(0, 240, 255, 0.15); 
-    border-color: rgba(0, 240, 255, 0.3); 
-}
-#opt-1:hover { 
-    background: var(--g-blue); 
-    color: #000; 
-    box-shadow: 0 0 25px rgba(0, 240, 255, 0.6); 
-    border-color: transparent; 
-}
-
-#opt-2 { 
-    background: rgba(0, 255, 102, 0.15); 
-    border-color: rgba(0, 255, 102, 0.3); 
-}
-#opt-2:hover { 
-    background: var(--g-green); 
-    color: #000; 
-    box-shadow: 0 0 25px rgba(0, 255, 102, 0.6); 
-    border-color: transparent; 
-}
-
-#opt-3 { 
-    background: rgba(255, 247, 0, 0.15); /* Corrigido para Amarelo (#fff700) */
-    border-color: rgba(255, 247, 0, 0.3); /* Corrigido para Amarelo (#fff700) */
-}
-#opt-3:hover { 
-    background: var(--g-yellow); 
-    color: #000; /* Alterado para preto para dar contraste com o fundo amarelo brilhante */
-    box-shadow: 0 0 25px rgba(255, 247, 0, 0.6); /* Corrigido para Amarelo (#fff700) */
-    border-color: transparent; 
-}
+/* Efeito ativo do clique: Desfaz o brilho imediatamente quando o usuário solta o botão */
+#opt-0:active { background: var(--g-red) !important; color: #000 !important; box-shadow: 0 0 35px rgba(255, 0, 127, 0.9) !important; border-color: transparent !important; transform: scale(0.96); }
+#opt-1:active { background: var(--g-blue) !important; color: #000 !important; box-shadow: 0 0 35px rgba(0, 240, 255, 0.9) !important; border-color: transparent !important; transform: scale(0.96); }
+#opt-2:active { background: var(--g-green) !important; color: #000 !important; box-shadow: 0 0 35px rgba(0, 255, 102, 0.9) !important; border-color: transparent !important; transform: scale(0.96); }
+#opt-3:active { background: var(--g-yellow) !important; color: #000 !important; box-shadow: 0 0 35px rgba(255, 247, 0, 0.9) !important; border-color: transparent !important; transform: scale(0.96); }
 /* ==========================================
    CHAMPION SPOTLIGHT
    ========================================== */
