@@ -342,9 +342,8 @@ header {
 .card-pixel .tag { color: var(--g-red); text-shadow: 0 0 15px rgba(255, 0, 127, 0.4); }
 .card-trivia .tag { color: var(--g-blue); text-shadow: 0 0 15px rgba(0, 240, 255, 0.4); }
 .card-genius .tag { color: var(--g-yellow); text-shadow: 0 0 15px rgba(189, 0, 255, 0.4); }
-
 /* ==========================================
-   ESTILO DO BOTÃO: SPARKLE BLAST (MINIMALISTA)
+   ESTILO BASE DO BOTÃO (MINIMALISTA)
    ========================================== */
 .play-btn {
     position: relative;
@@ -354,7 +353,6 @@ header {
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 3px;
-    border: 1px solid rgba(255, 0, 183, 0.5);
     border-radius: 12px;
     background: rgba(15, 18, 36, 0.6);
     color: #ffffff;
@@ -362,7 +360,6 @@ header {
     overflow: hidden;
     z-index: 1;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 0 12px rgba(255, 0, 183, 0.15);
 }
 
 /* Linha de luz sutil passando devagar */
@@ -376,7 +373,7 @@ header {
     background: linear-gradient(
         90deg, 
         transparent, 
-        rgba(255, 255, 255, 0.25), 
+        rgba(255, 255, 255, 0.3), 
         transparent
     );
     transform: skewX(-20deg);
@@ -388,23 +385,54 @@ header {
     30%, 100% { left: 150%; }
 }
 
-/* Interatividade Suave */
-.play-btn:hover {
-    color: #ffffff;
-    border-color: #ff00b7;
-    background: rgba(255, 0, 183, 0.12);
-    box-shadow: 0 0 25px rgba(255, 0, 183, 0.4), inset 0 0 10px rgba(255, 0, 183, 0.2);
-    transform: translateY(-2px);
-}
-
 .play-btn:hover::after {
-    animation-duration: 1.5s; /* Agiliza o brilho ao passar o mouse */
+    animation-duration: 1.5s;
 }
 
 .play-btn:active {
     transform: translateY(0) scale(0.98);
 }
 
+/* ==========================================
+   CORES PERSONALIZADAS POR CARD
+   ========================================== */
+
+/* 1. Card Pixel Stroop (Rosa/Red) */
+.card-pixel .play-btn {
+    border: 1px solid rgba(255, 0, 127, 0.5);
+    box-shadow: 0 0 12px rgba(255, 0, 127, 0.15);
+}
+.card-pixel .play-btn:hover {
+    border-color: var(--g-red);
+    background: rgba(255, 0, 127, 0.12);
+    box-shadow: 0 0 25px rgba(255, 0, 127, 0.4), inset 0 0 10px rgba(255, 0, 127, 0.2);
+    transform: translateY(-2px);
+}
+
+/* 2. Card Pixel Trivia (Ciano/Blue) */
+.card-trivia .play-btn {
+    border: 1px solid rgba(0, 240, 255, 0.5);
+    box-shadow: 0 0 12px rgba(0, 240, 255, 0.15);
+}
+.card-trivia .play-btn:hover {
+    border-color: var(--g-blue);
+    background: rgba(0, 240, 255, 0.12);
+    box-shadow: 0 0 25px rgba(0, 240, 255, 0.4), inset 0 0 10px rgba(0, 240, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* 3. Card Pixel Genius (Roxo/Yellow) */
+.card-genius .play-btn {
+    border: 1px solid rgba(189, 0, 255, 0.5);
+    box-shadow: 0 0 12px rgba(189, 0, 255, 0.15);
+}
+.card-genius .play-btn:hover {
+    border-color: var(--g-yellow);
+    background: rgba(189, 0, 255, 0.12);
+    box-shadow: 0 0 25px rgba(189, 0, 255, 0.4), inset 0 0 10px rgba(189, 0, 255, 0.2);
+    transform: translateY(-2px);
+}
+ 
         
 .card-pixel:hover .play-btn { background: var(--g-red); color: #000; box-shadow: 0 0 20px var(--g-red); border-color: transparent; }
 .card-trivia:hover .play-btn { background: var(--g-blue); color: #000; box-shadow: 0 0 20px var(--g-blue); border-color: transparent; }
