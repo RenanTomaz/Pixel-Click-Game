@@ -343,89 +343,68 @@ header {
 .card-trivia .tag { color: var(--g-blue); text-shadow: 0 0 15px rgba(0, 240, 255, 0.4); }
 .card-genius .tag { color: var(--g-yellow); text-shadow: 0 0 15px rgba(189, 0, 255, 0.4); }
 
-/* Modificação: Botão com borda mais nítida e transição de tempo combinando com o card */
 /* ==========================================
-   ESTILO DO BOTÃO: SPARKLE BLAST
+   ESTILO DO BOTÃO: SPARKLE BLAST (MINIMALISTA)
    ========================================== */
 .play-btn {
     position: relative;
     width: 100%;
     padding: 16px 20px;
-    font-size: 1.05rem;
-    font-weight: 900;
+    font-size: 0.95rem;
+    font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 3px;
-    border: 2px solid #ff00b7;
-    border-radius: 14px;
-    background: rgba(255, 0, 127, 0.15);
+    border: 1px solid rgba(255, 0, 183, 0.5);
+    border-radius: 12px;
+    background: rgba(15, 18, 36, 0.6);
     color: #ffffff;
     cursor: pointer;
     overflow: hidden;
     z-index: 1;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 0 15px rgba(255, 0, 183, 0.4), inset 0 0 15px rgba(255, 0, 183, 0.2);
-    text-shadow: 0 0 8px #ffffff, 0 0 12px #ff00b7;
+    box-shadow: 0 0 12px rgba(255, 0, 183, 0.15);
 }
 
-/* Fundo com efeito de brilhos cintilantes */
-.play-btn::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 0, 183, 0.4) 20%, transparent 60%),
-                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.9) 0%, rgba(0, 240, 255, 0.5) 15%, transparent 50%),
-                radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.7) 0%, rgba(255, 0, 127, 0.5) 15%, transparent 50%);
-    background-size: 100% 100%;
-    opacity: 0.6;
-    z-index: -1;
-    animation: sparkleBlastAnim 3s infinite linear;
-    transition: opacity 0.4s ease;
-}
-
-/* Flash/Varredura de luz ao passar o mouse */
+/* Linha de luz sutil passando devagar */
 .play-btn::after {
     content: '';
     position: absolute;
     top: 0;
-    left: -100%;
-    width: 100%;
+    left: -150%;
+    width: 50%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
-    transition: left 0.6s ease;
-    z-index: -1;
+    background: linear-gradient(
+        90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.25), 
+        transparent
+    );
+    transform: skewX(-20deg);
+    animation: minimalShimmer 4s infinite ease-in-out;
 }
 
-@keyframes sparkleBlastAnim {
-    0% { transform: rotate(0deg) scale(1); }
-    50% { transform: rotate(180deg) scale(1.15); }
-    100% { transform: rotate(360deg) scale(1); }
+@keyframes minimalShimmer {
+    0% { left: -150%; }
+    30%, 100% { left: 150%; }
 }
 
-/* Interatividade (Hover e Clique) */
+/* Interatividade Suave */
 .play-btn:hover {
     color: #ffffff;
-    border-color: #ffffff;
-    background: rgba(255, 0, 183, 0.35);
-    box-shadow: 0 0 30px rgba(255, 0, 183, 0.8), 0 0 50px rgba(0, 240, 255, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.4);
-    transform: scale(1.03);
-    text-shadow: 0 0 10px #ffffff, 0 0 20px #ff00b7, 0 0 30px #00f0ff;
-}
-
-.play-btn:hover::before {
-    opacity: 1;
-    animation-duration: 1.5s;
+    border-color: #ff00b7;
+    background: rgba(255, 0, 183, 0.12);
+    box-shadow: 0 0 25px rgba(255, 0, 183, 0.4), inset 0 0 10px rgba(255, 0, 183, 0.2);
+    transform: translateY(-2px);
 }
 
 .play-btn:hover::after {
-    left: 100%;
+    animation-duration: 1.5s; /* Agiliza o brilho ao passar o mouse */
 }
 
 .play-btn:active {
-    transform: scale(0.97);
+    transform: translateY(0) scale(0.98);
 }
+
 
 .card-pixel:hover .play-btn { background: var(--g-red); color: #000; box-shadow: 0 0 20px var(--g-red); border-color: transparent; }
 .card-trivia:hover .play-btn { background: var(--g-blue); color: #000; box-shadow: 0 0 20px var(--g-blue); border-color: transparent; }
